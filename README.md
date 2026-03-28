@@ -115,19 +115,19 @@ The following vulnerabilities are currently assessed:
 
 | CVE | Package | Status | Justification |
 |-----|---------|--------|---------------|
-| CVE-2022-0839 / GHSA-jvfv-hrrc-6q72 | org.liquibase:liquibase-core | not_affected | code_not_present |
-| CVE-2014-8180 | com.liquibase.ext:liquibase-commercial-mongodb | not_affected | code_not_present |
-| CVE-2022-0839 | com.liquibase:liquibase-license-utility | not_affected | code_not_present |
-| CVE-2023-36415 | com.azure:azure-identity | not_affected | code_not_present |
-| CVE-2024-35255 | com.azure:azure-identity | not_affected | code_not_present |
-| CVE-2024-35255 | com.microsoft.azure:msal4j | not_affected | code_not_present |
-| CVE-2024-45394 | com.instaclustr:cassandra-driver-kerberos | not_affected | code_not_present |
+| CVE-2022-0839 / GHSA-jvfv-hrrc-6q72 | org.liquibase:liquibase-core | not_affected | vulnerable_code_not_present |
+| CVE-2014-8180 | com.liquibase.ext:liquibase-commercial-mongodb | not_affected | component_not_present |
+| CVE-2022-0839 | com.liquibase:liquibase-license-utility | not_affected | component_not_present |
+| CVE-2023-36415 | com.azure:azure-identity | not_affected | vulnerable_code_not_present |
+| CVE-2024-35255 | com.azure:azure-identity | not_affected | vulnerable_code_not_present |
+| CVE-2024-35255 | com.microsoft.azure:msal4j | not_affected | vulnerable_code_not_present |
+| CVE-2024-45394 | com.instaclustr:cassandra-driver-kerberos | not_affected | component_not_present |
 
 ## Verifying VEX documents manually
 
 ```bash
 # Inspect the OpenVEX document
-jq '.statements[] | {vuln: .vulnerability["@id"], status, justification}' \
+jq '.statements[] | {vuln: .vulnerability.name, status, justification}' \
   pkg/maven/org.liquibase/liquibase-core/vex.openvex.json
 
 # Inspect the CycloneDX VEX document

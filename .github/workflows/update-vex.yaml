@@ -28,7 +28,7 @@ jobs:
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
           secret-ids: |
-            ,/vault/liquibase
+            LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
       - name: Get GitHub App token
@@ -53,16 +53,16 @@ jobs:
 
       - name: Install vexctl
         run: |
-          curl -sSfL "https://github.com/openvex/vexctl/releases/download/v0.3.0/vexctl-linux-amd64" -o /usr/local/bin/vexctl
+          sudo curl -sSfL "https://github.com/openvex/vexctl/releases/download/v0.3.0/vexctl-linux-amd64" -o /usr/local/bin/vexctl
           echo "cd7f8b57d20642166ed4eb3dd1fd849bbb30bbd7c5b9f5b0316b6003b57ceaba  /usr/local/bin/vexctl" | sha256sum -c -
-          chmod +x /usr/local/bin/vexctl
+          sudo chmod +x /usr/local/bin/vexctl
           vexctl version
 
       - name: Install yq
         run: |
-          curl -sSfL "https://github.com/mikefarah/yq/releases/download/v4.44.6/yq_linux_amd64" -o /usr/local/bin/yq
+          sudo curl -sSfL "https://github.com/mikefarah/yq/releases/download/v4.44.6/yq_linux_amd64" -o /usr/local/bin/yq
           echo "0c2b24e645b57d8e7c0566d18643a6d4f5580feeea3878127354a46f2a1e4598  /usr/local/bin/yq" | sha256sum -c -
-          chmod +x /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
           yq --version
 
       - name: Generate VEX repo content
