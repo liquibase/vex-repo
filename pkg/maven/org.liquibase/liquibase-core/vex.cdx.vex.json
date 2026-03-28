@@ -1,0 +1,155 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "GHSA-jvfv-hrrc-6q72",
+      "description": "CVE-2022-0839 is an XML External Entity (XXE) vulnerability in Liquibase Core versions prior to 4.8.0 via the SAXParser. An attacker could exploit this to read arbitrary files or perform server-side request forgery (SSRF) through crafted XML changelog files.",
+      "recommendation": "No action required. Liquibase Secure 4.8.0+ includes the fix. All current Liquibase Secure distributions are built from source with the patched SAXParser configuration.",
+      "workaround": "If using Liquibase < 4.8.0, disable XML changelog parsing or upgrade to 4.8.0+. Alternatively, ensure all changelog files come from trusted sources only.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Code path containing the vulnerability is not present in Liquibase Secure builds. NVD score reflects theoretical maximum; contextual score reflects actual exploitability."
+        }
+      ],
+      "cwes": [
+        611
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jvfv-hrrc-6q72",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-0839",
+          "title": "NVD Entry"
+        }
+      ],
+      "references": [
+        {
+          "id": "CVE-2022-0839",
+          "source": {
+            "name": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-0839"
+          }
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "XXE vulnerability fixed in Liquibase 4.8.0. Our liquibase-core is built from source with the fix included. Scanner incorrectly matches the non-semantic version format (master-<sha>).",
+        "justification": "code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-03-17T00:00:00Z",
+        "lastUpdated": "2026-03-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.liquibase/liquibase-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2014-8180",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. liquibase-commercial-mongodb is a Liquibase extension, not MongoDB server. The vulnerability applies to MongoDB server only.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.liquibase.ext/liquibase-commercial-mongodb"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-0839",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. liquibase-license-utility is not liquibase-core. The vulnerability only affects liquibase-core versions < 4.8.0.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.liquibase/liquibase-license-utility"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-36415",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.azure/msal4j"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-45394",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
+        }
+      ]
+    }
+  ]
+}
