@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b5061561683a8bd92d5cafc5ea5e8f8be234877dc1b831dc4df244ffc6b3c3ba",
+  "@id": "merged-vex-0fd9189e2c876fb0ed5855bc0a4b5929eaca6315fa70f7fb9d6d429d1488f661",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-03-30T08:46:28.369256223Z",
+  "timestamp": "2026-04-08T05:02:51.565203632Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2014-8180"
       },
-      "timestamp": "2026-03-30T08:46:28.137572827Z",
+      "timestamp": "2026-04-08T05:02:51.089948641Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -28,7 +28,7 @@
       "vulnerability": {
         "name": "CVE-2022-0839"
       },
-      "timestamp": "2026-03-30T08:46:28.18032073Z",
+      "timestamp": "2026-04-08T05:02:51.144025729Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -45,9 +45,28 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2022-40897"
+      },
+      "timestamp": "2026-04-08T05:02:51.448111575Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/setuptools"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GraalVM Python setuptools ReDoS vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to parse HTML during package lookup; no package lookups occur since all packages are pre-installed at build time via Maven graalpy-maven-plugin."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2023-36415"
       },
-      "timestamp": "2026-03-30T08:46:28.221589972Z",
+      "timestamp": "2026-04-08T05:02:51.195475136Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -66,7 +85,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-03-30T08:46:28.263944725Z",
+      "timestamp": "2026-04-08T05:02:51.244235119Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -85,7 +104,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-03-30T08:46:28.308607252Z",
+      "timestamp": "2026-04-08T05:02:51.294645072Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -104,7 +123,7 @@
       "vulnerability": {
         "name": "CVE-2024-45394"
       },
-      "timestamp": "2026-03-30T08:46:28.353372253Z",
+      "timestamp": "2026-04-08T05:02:51.345501985Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -121,12 +140,69 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2024-6345"
+      },
+      "timestamp": "2026-04-08T05:02:51.497883584Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/setuptools"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-47273"
+      },
+      "timestamp": "2026-04-08T05:02:51.546399157Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/setuptools"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-59250"
+      },
+      "timestamp": "2026-04-08T05:02:51.396484274Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump."
+    },
+    {
+      "vulnerability": {
         "name": "GHSA-jvfv-hrrc-6q72",
         "aliases": [
           "CVE-2022-0839"
         ]
       },
-      "timestamp": "2026-03-30T08:46:28.095746282Z",
+      "timestamp": "2026-04-08T05:02:51.036078072Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
