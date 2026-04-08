@@ -75,6 +75,47 @@ trivy image --vex repo --show-suppressed liquibase/liquibase:latest
 Trivy will automatically download and cache the VEX documents from this
 repository, suppressing any CVEs that have been assessed as not exploitable.
 
+## How to use with Grype
+
+Download the OpenVEX file and configure Grype to use it:
+
+```bash
+# Download the VEX file
+mkdir -p /tmp/liquibase-vex
+curl -sSfL "https://raw.githubusercontent.com/liquibase/vex-repo/main/pkg/maven/org.liquibase/liquibase-core/vex.openvex.json" \
+  -o /tmp/liquibase-vex/vex.openvex.json
+
+# Scan with VEX suppression
+grype liquibase/liquibase:latest --vex /tmp/liquibase-vex/vex.openvex.json
+```
+
+Or configure permanently in `~/.grype.yaml`:
+
+```yaml
+# ~/.grype.yaml
+vex-documents:
+  - /path/to/vex.openvex.json
+ignore:
+  - vex-status: not_affected
+  - vex-status: fixed
+```
+
+Then every `grype` scan automatically applies the VEX suppressions.
+
+## How to use with Docker Scout
+
+Download the VEX file to a local directory and point Scout to it:
+
+```bash
+# Download the VEX file
+mkdir -p ./vex
+curl -sSfL "https://raw.githubusercontent.com/liquibase/vex-repo/main/pkg/maven/org.liquibase/liquibase-core/vex.openvex.json" \
+  -o ./vex/liquibase-core.vex.json
+
+# Scan with VEX suppression
+docker scout cves --vex-location ./vex liquibase/liquibase:latest
+```
+
 ## Formats available
 
 Two VEX formats are generated for each package:
@@ -122,6 +163,13 @@ The following vulnerabilities are currently assessed:
 | CVE-2024-35255 | com.azure:azure-identity | not_affected | vulnerable_code_not_present |
 | CVE-2024-35255 | com.microsoft.azure:msal4j | not_affected | vulnerable_code_not_present |
 | CVE-2024-45394 | com.instaclustr:cassandra-driver-kerberos | not_affected | component_not_present |
+| CVE-2025-59250 | com.microsoft.sqlserver:mssql-jdbc | not_affected | vulnerable_code_not_present |
+| CVE-2022-40897 | setuptools (GraalVM Python) | not_affected | vulnerable_code_not_in_execute_path |
+| CVE-2024-6345 | setuptools (GraalVM Python) | not_affected | vulnerable_code_not_in_execute_path |
+| CVE-2025-47273 | setuptools (GraalVM Python) | not_affected | vulnerable_code_not_in_execute_path |
+| CVE-2026-33870 | io.netty:netty-codec-http | not_affected | vulnerable_code_not_in_execute_path |
+| CVE-2026-33871 | io.netty:netty-codec-http2 | not_affected | vulnerable_code_not_in_execute_path |
+| GHSA-2m67-wjpj-xhg9 | tools.jackson.core:jackson-core | not_affected | vulnerable_code_not_in_execute_path |
 
 ## Verifying VEX documents manually
 
