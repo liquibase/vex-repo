@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-97a5153aad5fc6f198834f6b66bd703a0483feaaed413b7228372184669731a4",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-08T07:21:25.9713773Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "GHSA-2m67-wjpj-xhg9"
+      },
+      "timestamp": "2026-04-08T07:21:25.971378542Z",
+      "products": [
+        {
+          "@id": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Jackson Core 3.x StreamReadConstraints.maxDocumentLength check can be bypassed in multiple code paths, weakening DoS protection for applications that rely on it.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Document length constraint bypass in Jackson Core 3.x. The StreamReadConstraints.maxDocumentLength check can be bypassed in blocking parsers, async parsers, and DataInput path. jackson-core 3.x is a transitive dependency from Spring Boot 4.0.3 in liquibase-license-utility. Liquibase does not set maxDocumentLength (zero usages in codebase), does not process untrusted JSON input from external sources, and is a CLI tool — not a network-facing service. The constraint bypass only matters if relied upon for DoS protection, which Liquibase does not."
+    }
+  ]
+}

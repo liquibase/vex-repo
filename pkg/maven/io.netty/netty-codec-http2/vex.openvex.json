@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-08ae61913ef76deaced8770afa1a18ba62215e233924d48e6d61442c41dc6a1d",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-08T07:21:25.679060806Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33871"
+      },
+      "timestamp": "2026-04-08T07:21:25.679061899Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener."
+    }
+  ]
+}

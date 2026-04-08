@@ -1,0 +1,51 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "GHSA-2m67-wjpj-xhg9",
+      "description": "Jackson Core 3.x StreamReadConstraints.maxDocumentLength check can be bypassed in multiple code paths, weakening DoS protection for applications that rely on it.",
+      "recommendation": "No action required. Liquibase does not rely on maxDocumentLength for protection.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not use StreamReadConstraints.maxDocumentLength and does not process untrusted JSON input.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/FasterXML/jackson-core/security/advisories/GHSA-2m67-wjpj-xhg9",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Document length constraint bypass in Jackson Core 3.x. The StreamReadConstraints.maxDocumentLength check can be bypassed in blocking parsers, async parsers, and DataInput path. jackson-core 3.x is a transitive dependency from Spring Boot 4.0.3 in liquibase-license-utility. Liquibase does not set maxDocumentLength (zero usages in codebase), does not process untrusted JSON input from external sources, and is a CLI tool — not a network-facing service. The constraint bypass only matters if relied upon for DoS protection, which Liquibase does not.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ]
+    }
+  ]
+}

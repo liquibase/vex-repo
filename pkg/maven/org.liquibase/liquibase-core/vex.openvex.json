@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ef5518588f7d46f95769296d1cc03b66355fe31ffa7fe9600086aaffa6e4150c",
+  "@id": "merged-vex-1d910cfdda030cc40d45dd4678d1592a56bf6afb191de0570a993d9cf03f5f19",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-08T05:20:51.928283534Z",
+  "timestamp": "2026-04-08T07:21:21.922535756Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2014-8180"
       },
-      "timestamp": "2026-04-08T05:20:51.443813051Z",
+      "timestamp": "2026-04-08T07:21:21.307663218Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -28,7 +28,7 @@
       "vulnerability": {
         "name": "CVE-2022-0839"
       },
-      "timestamp": "2026-04-08T05:20:51.4912445Z",
+      "timestamp": "2026-04-08T07:21:21.355145607Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -47,7 +47,7 @@
       "vulnerability": {
         "name": "CVE-2022-40897"
       },
-      "timestamp": "2026-04-08T05:20:51.806987038Z",
+      "timestamp": "2026-04-08T07:21:21.654921749Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -66,7 +66,7 @@
       "vulnerability": {
         "name": "CVE-2023-36415"
       },
-      "timestamp": "2026-04-08T05:20:51.547896267Z",
+      "timestamp": "2026-04-08T07:21:21.40140084Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -85,7 +85,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-08T05:20:51.604798804Z",
+      "timestamp": "2026-04-08T07:21:21.446386151Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -104,7 +104,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-08T05:20:51.65307776Z",
+      "timestamp": "2026-04-08T07:21:21.498355942Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -123,7 +123,7 @@
       "vulnerability": {
         "name": "CVE-2024-45394"
       },
-      "timestamp": "2026-04-08T05:20:51.704608692Z",
+      "timestamp": "2026-04-08T07:21:21.54919796Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -142,7 +142,7 @@
       "vulnerability": {
         "name": "CVE-2024-6345"
       },
-      "timestamp": "2026-04-08T05:20:51.856085461Z",
+      "timestamp": "2026-04-08T07:21:21.704121553Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -161,7 +161,7 @@
       "vulnerability": {
         "name": "CVE-2025-47273"
       },
-      "timestamp": "2026-04-08T05:20:51.911202442Z",
+      "timestamp": "2026-04-08T07:21:21.751360657Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -180,7 +180,7 @@
       "vulnerability": {
         "name": "CVE-2025-59250"
       },
-      "timestamp": "2026-04-08T05:20:51.755837566Z",
+      "timestamp": "2026-04-08T07:21:21.602901008Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -197,12 +197,72 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-33870"
+      },
+      "timestamp": "2026-04-08T07:21:21.802123065Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/io.netty/netty-codec-http"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33871"
+      },
+      "timestamp": "2026-04-08T07:21:21.856505451Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/io.netty/netty-codec-http2"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener."
+    },
+    {
+      "vulnerability": {
+        "name": "GHSA-2m67-wjpj-xhg9"
+      },
+      "timestamp": "2026-04-08T07:21:21.903953026Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/tools.jackson.core/jackson-core"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Jackson Core 3.x StreamReadConstraints.maxDocumentLength check can be bypassed in multiple code paths, weakening DoS protection for applications that rely on it.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Document length constraint bypass in Jackson Core 3.x. The StreamReadConstraints.maxDocumentLength check can be bypassed in blocking parsers, async parsers, and DataInput path. jackson-core 3.x is a transitive dependency from Spring Boot 4.0.3 in liquibase-license-utility. Liquibase does not set maxDocumentLength (zero usages in codebase), does not process untrusted JSON input from external sources, and is a CLI tool — not a network-facing service. The constraint bypass only matters if relied upon for DoS protection, which Liquibase does not."
+    },
+    {
+      "vulnerability": {
         "name": "GHSA-jvfv-hrrc-6q72",
         "aliases": [
           "CVE-2022-0839"
         ]
       },
-      "timestamp": "2026-04-08T05:20:51.399894107Z",
+      "timestamp": "2026-04-08T07:21:21.257632171Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
