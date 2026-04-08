@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-64be4b546f42e02c66641f72312592024f083744b8d954bc12c0c8904488323b",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-08T07:21:25.392232307Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33870"
+      },
+      "timestamp": "2026-04-08T07:21:25.3922336Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
+    }
+  ]
+}
