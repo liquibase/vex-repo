@@ -1,0 +1,23 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-672088b1fd7040ffc03ced7ae2d1578c5b39fa6547eb5db1fbab2f692a05c3bc",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-16T06:18:36.256526357Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22235"
+      },
+      "timestamp": "2026-04-16T06:18:36.256532923Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.boot/spring-boot"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Spring Boot EndpointRequest.to() creates a security matcher for null/** instead of the actuator endpoint path when the endpoint is disabled. Requires a running Spring Boot web application with Spring Security and actuator endpoint configuration. Liquibase is a CLI tool that never starts a Spring application context, never runs an HTTP server, never exposes actuator endpoints, and never configures Spring Security."
+    }
+  ]
+}

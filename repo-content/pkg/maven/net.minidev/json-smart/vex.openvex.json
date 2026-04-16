@@ -1,0 +1,37 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-de216d12676a1a744c172f121a7c0a03a5c439476c69279ad47998447569b975",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-16T06:18:32.198985956Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2023-1370"
+      },
+      "timestamp": "2026-04-16T06:18:32.183240042Z",
+      "products": [
+        {
+          "@id": "pkg:maven/net.minidev/json-smart"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Stack exhaustion DoS in json-smart via unlimited recursive parsing of deeply nested JSON arrays and objects. Requires parsing attacker-controlled untrusted JSON input. Liquibase is a CLI tool that only processes JSON from local operator-controlled configuration files and database metadata. No network-facing JSON parsing surface exists."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-57699"
+      },
+      "timestamp": "2026-04-16T06:18:32.131354947Z",
+      "products": [
+        {
+          "@id": "pkg:maven/net.minidev/json-smart"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Stack exhaustion DoS in json-smart via deeply nested JSON with many { characters (incomplete fix for CVE-2023-1370). Requires parsing attacker-controlled untrusted JSON input. Liquibase is a CLI tool that only processes JSON from local operator-controlled configuration files and database metadata. No network-facing JSON parsing surface exists."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-eb436e337bbaf4f05238feea6a12eeedfc82dd3ac5f96df42b8004d678df8dd2",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-16T06:18:35.458904502Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-49146"
+      },
+      "timestamp": "2026-04-16T06:18:35.458905518Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.postgresql/postgresql"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "PostgreSQL JDBC driver channel binding bypass. The vulnerability only triggers when the JDBC connection property channelBinding is explicitly set to \"require\" (default is \"prefer\"). Liquibase does not configure channelBinding=require in any default configuration. The vulnerable enforcement code path in ConnectionFactoryImpl.doAuthentication() is not reachable under Liquibase's default configuration."
+    }
+  ]
+}
