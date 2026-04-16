@@ -46,6 +46,50 @@
           "ref": "pkg:maven/tools.jackson.core/jackson-core"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-29062",
+      "description": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
+      "recommendation": "No action required. Liquibase does not parse untrusted JSON input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase only parses operator-controlled JSON files and does not rely on StreamReadConstraints for protection.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6v53-7c9g-w56r",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ]
     }
   ]
 }

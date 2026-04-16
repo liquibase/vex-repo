@@ -545,6 +545,195 @@
       ]
     },
     {
+      "id": "CVE-2026-24734",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete OCSP verification in Tomcat's FFM/OpenSSL TLS integration. Requires an active TLS listener with client certificate authentication and OCSP validation configured. Liquibase is a CLI tool that never starts a Tomcat server or binds any TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the TLS and OCSP subsystems are never initialized.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-24813",
+      "description": "Apache Tomcat RCE via Default Servlet partial PUT — file fragments uploaded to predictable temp paths trigger deserialization of assembled content. Also enables reading security-sensitive files.",
+      "recommendation": "No action required. Liquibase does not start a Tomcat server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side RCE requiring HTTP PUT to a running Tomcat servlet container. Liquibase never starts Tomcat or accepts HTTP requests.\n"
+        }
+      ],
+      "cwes": [
+        502
+      ],
+      "advisories": [
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat Security"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-24813",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Remote code execution and information disclosure via Tomcat Default Servlet partial PUT support. Requires an HTTP PUT request to a running Tomcat servlet container with partial PUT enabled. Liquibase is a CLI tool that never starts the Tomcat HTTP server, never deploys any servlet, and never opens any network port. The Default Servlet, partial PUT handling, and file session persistence code paths are never activated.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-48988",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Denial of service via excessive memory consumption in Tomcat multipart upload processing. Requires sending a crafted multipart/form-data HTTP POST to a running Tomcat instance. Liquibase is a CLI tool that never starts a Tomcat server and never accepts HTTP requests. The multipart parsing code path is completely inactive.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-48989",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Denial of service via HTTP/2 stream reset memory leak in Tomcat. Requires an HTTP/2 connection to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and accepts no inbound network connections.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-52520",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Denial of service via integer overflow in Tomcat multipart upload file size limit validation. Requires sending a crafted multipart HTTP upload to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server and never processes inbound HTTP requests or multipart uploads.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-53506",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Denial of service via uncontrolled resource consumption in Tomcat HTTP/2 stream management. Requires an HTTP/2 client connecting to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and never binds a network port.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-55752",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Path traversal and potential RCE via regression in Tomcat Rewrite Valve URL normalization. Requires an HTTP request to a running Tomcat server with the Rewrite Valve configured. Liquibase is a CLI tool that never starts a Tomcat server, never configures the Rewrite Valve, and never accepts HTTP requests.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-29062",
+      "description": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
+      "recommendation": "No action required. Liquibase does not parse untrusted JSON input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase only parses operator-controlled JSON files and does not rely on StreamReadConstraints for protection.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6v53-7c9g-w56r",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-24970",
       "analysis": {
         "state": "not_affected",
@@ -569,19 +758,6 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },

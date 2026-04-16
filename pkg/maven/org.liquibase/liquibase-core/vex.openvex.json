@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ed0d172b912f21836dcf9fb873f911b6b31b3a57198b3c5592b9c2cc4051b93c",
+  "@id": "merged-vex-a405ccd57011135c5f87c4d59c05268e992f7dd078fe99da2de92979566041ed",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-16T05:39:19.342408177Z",
+  "timestamp": "2026-04-16T06:00:13.226690804Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2014-8180"
       },
-      "timestamp": "2026-04-16T05:39:17.65655073Z",
+      "timestamp": "2026-04-16T06:00:11.574019676Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -34,7 +34,7 @@
       "vulnerability": {
         "name": "CVE-2022-0839"
       },
-      "timestamp": "2026-04-16T05:39:17.706979247Z",
+      "timestamp": "2026-04-16T06:00:11.614442378Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -59,7 +59,7 @@
       "vulnerability": {
         "name": "CVE-2022-40897"
       },
-      "timestamp": "2026-04-16T05:39:18.025601036Z",
+      "timestamp": "2026-04-16T06:00:11.858541785Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2023-36415"
       },
-      "timestamp": "2026-04-16T05:39:17.758946015Z",
+      "timestamp": "2026-04-16T06:00:11.655407248Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -109,7 +109,7 @@
       "vulnerability": {
         "name": "CVE-2023-43804"
       },
-      "timestamp": "2026-04-16T05:39:18.850662878Z",
+      "timestamp": "2026-04-16T06:00:12.5147919Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -134,7 +134,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-16T05:39:17.820384024Z",
+      "timestamp": "2026-04-16T06:00:11.696535449Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -159,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-16T05:39:17.872843034Z",
+      "timestamp": "2026-04-16T06:00:11.736602525Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -184,7 +184,7 @@
       "vulnerability": {
         "name": "CVE-2024-4340"
       },
-      "timestamp": "2026-04-16T05:39:18.900093269Z",
+      "timestamp": "2026-04-16T06:00:12.555552828Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -209,7 +209,7 @@
       "vulnerability": {
         "name": "CVE-2024-45394"
       },
-      "timestamp": "2026-04-16T05:39:17.924690298Z",
+      "timestamp": "2026-04-16T06:00:11.776559308Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -234,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2024-6345"
       },
-      "timestamp": "2026-04-16T05:39:18.081930258Z",
+      "timestamp": "2026-04-16T06:00:11.899524351Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -257,9 +257,35 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-24813"
+      },
+      "timestamp": "2026-04-16T06:00:12.883609374Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Apache Tomcat RCE via Default Servlet partial PUT — file fragments uploaded to predictable temp paths trigger deserialization of assembled content. Also enables reading security-sensitive files.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Remote code execution and information disclosure via Tomcat Default Servlet partial PUT support. Requires an HTTP PUT request to a running Tomcat servlet container with partial PUT enabled. Liquibase is a CLI tool that never starts the Tomcat HTTP server, never deploys any servlet, and never opens any network port. The Default Servlet, partial PUT handling, and file session persistence code paths are never activated."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-24970"
       },
-      "timestamp": "2026-04-16T05:39:19.272733473Z",
+      "timestamp": "2026-04-16T06:00:13.171557092Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -284,7 +310,7 @@
       "vulnerability": {
         "name": "CVE-2025-47273"
       },
-      "timestamp": "2026-04-16T05:39:18.136002198Z",
+      "timestamp": "2026-04-16T06:00:11.939915462Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -307,9 +333,109 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-48988"
+      },
+      "timestamp": "2026-04-16T06:00:12.924547519Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via excessive memory consumption in Tomcat multipart upload processing. Requires sending a crafted multipart/form-data HTTP POST to a running Tomcat instance. Liquibase is a CLI tool that never starts a Tomcat server and never accepts HTTP requests. The multipart parsing code path is completely inactive."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-48989"
+      },
+      "timestamp": "2026-04-16T06:00:12.965766179Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via HTTP/2 stream reset memory leak in Tomcat. Requires an HTTP/2 connection to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and accepts no inbound network connections."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-52520"
+      },
+      "timestamp": "2026-04-16T06:00:13.006205155Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via integer overflow in Tomcat multipart upload file size limit validation. Requires sending a crafted multipart HTTP upload to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server and never processes inbound HTTP requests or multipart uploads."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-53506"
+      },
+      "timestamp": "2026-04-16T06:00:13.048560187Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via uncontrolled resource consumption in Tomcat HTTP/2 stream management. Requires an HTTP/2 client connecting to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and never binds a network port."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-55163"
       },
-      "timestamp": "2026-04-16T05:39:19.324166498Z",
+      "timestamp": "2026-04-16T06:00:13.212645179Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -332,9 +458,34 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-55752"
+      },
+      "timestamp": "2026-04-16T06:00:13.089745057Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Path traversal and potential RCE via regression in Tomcat Rewrite Valve URL normalization. Requires an HTTP request to a running Tomcat server with the Rewrite Valve configured. Liquibase is a CLI tool that never starts a Tomcat server, never configures the Rewrite Valve, and never accepts HTTP requests."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-58183"
       },
-      "timestamp": "2026-04-16T05:39:18.593442106Z",
+      "timestamp": "2026-04-16T06:00:12.310528963Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -359,7 +510,7 @@
       "vulnerability": {
         "name": "CVE-2025-59250"
       },
-      "timestamp": "2026-04-16T05:39:17.974301471Z",
+      "timestamp": "2026-04-16T06:00:11.81785056Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -384,7 +535,7 @@
       "vulnerability": {
         "name": "CVE-2025-61726"
       },
-      "timestamp": "2026-04-16T05:39:18.442942781Z",
+      "timestamp": "2026-04-16T06:00:12.185763395Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -409,7 +560,7 @@
       "vulnerability": {
         "name": "CVE-2025-61728"
       },
-      "timestamp": "2026-04-16T05:39:18.493207781Z",
+      "timestamp": "2026-04-16T06:00:12.228441601Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -434,7 +585,7 @@
       "vulnerability": {
         "name": "CVE-2025-61729"
       },
-      "timestamp": "2026-04-16T05:39:18.542250268Z",
+      "timestamp": "2026-04-16T06:00:12.269471181Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -459,7 +610,7 @@
       "vulnerability": {
         "name": "CVE-2025-66418"
       },
-      "timestamp": "2026-04-16T05:39:18.697033174Z",
+      "timestamp": "2026-04-16T06:00:12.391927987Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -484,7 +635,7 @@
       "vulnerability": {
         "name": "CVE-2025-66471"
       },
-      "timestamp": "2026-04-16T05:39:18.749579876Z",
+      "timestamp": "2026-04-16T06:00:12.43330103Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -509,7 +660,7 @@
       "vulnerability": {
         "name": "CVE-2025-68121"
       },
-      "timestamp": "2026-04-16T05:39:18.391533782Z",
+      "timestamp": "2026-04-16T06:00:12.1447196Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -534,7 +685,7 @@
       "vulnerability": {
         "name": "CVE-2025-68973"
       },
-      "timestamp": "2026-04-16T05:39:18.645365859Z",
+      "timestamp": "2026-04-16T06:00:12.351965856Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -559,7 +710,7 @@
       "vulnerability": {
         "name": "CVE-2026-21441"
       },
-      "timestamp": "2026-04-16T05:39:18.800569975Z",
+      "timestamp": "2026-04-16T06:00:12.474307306Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -582,9 +733,34 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-24734"
+      },
+      "timestamp": "2026-04-16T06:00:12.843532453Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Incomplete OCSP verification in Tomcat's FFM/OpenSSL TLS integration. Requires an active TLS listener with client certificate authentication and OCSP validation configured. Liquibase is a CLI tool that never starts a Tomcat server or binds any TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the TLS and OCSP subsystems are never initialized."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-24880"
       },
-      "timestamp": "2026-04-16T05:39:19.005544339Z",
+      "timestamp": "2026-04-16T06:00:12.640734549Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -609,7 +785,7 @@
       "vulnerability": {
         "name": "CVE-2026-25679"
       },
-      "timestamp": "2026-04-16T05:39:18.339265004Z",
+      "timestamp": "2026-04-16T06:00:12.103140331Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -632,9 +808,35 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-29062"
+      },
+      "timestamp": "2026-04-16T06:00:13.13103661Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/tools.jackson.core/jackson-core"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-29129"
       },
-      "timestamp": "2026-04-16T05:39:19.060238379Z",
+      "timestamp": "2026-04-16T06:00:12.681064119Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -659,7 +861,7 @@
       "vulnerability": {
         "name": "CVE-2026-29145"
       },
-      "timestamp": "2026-04-16T05:39:18.950539084Z",
+      "timestamp": "2026-04-16T06:00:12.60013854Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -685,7 +887,7 @@
       "vulnerability": {
         "name": "CVE-2026-29146"
       },
-      "timestamp": "2026-04-16T05:39:19.114713615Z",
+      "timestamp": "2026-04-16T06:00:12.722538682Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -710,7 +912,7 @@
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-04-16T05:39:18.184877865Z",
+      "timestamp": "2026-04-16T06:00:11.98013631Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -736,7 +938,7 @@
       "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-04-16T05:39:18.235510869Z",
+      "timestamp": "2026-04-16T06:00:12.020948974Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -762,7 +964,7 @@
       "vulnerability": {
         "name": "CVE-2026-34483"
       },
-      "timestamp": "2026-04-16T05:39:19.167773784Z",
+      "timestamp": "2026-04-16T06:00:12.763287577Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -787,7 +989,7 @@
       "vulnerability": {
         "name": "CVE-2026-34487"
       },
-      "timestamp": "2026-04-16T05:39:19.220074123Z",
+      "timestamp": "2026-04-16T06:00:12.803660005Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -812,7 +1014,7 @@
       "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-04-16T05:39:18.28630438Z",
+      "timestamp": "2026-04-16T06:00:12.062542018Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -841,7 +1043,7 @@
           "CVE-2022-0839"
         ]
       },
-      "timestamp": "2026-04-16T05:39:17.605005096Z",
+      "timestamp": "2026-04-16T06:00:11.532528017Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",

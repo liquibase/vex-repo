@@ -1,15 +1,114 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7a73d4cfb42e6976489ac7f6f8c12aaeda2a4a1afb8b6e635b3be80c04752414",
+  "@id": "merged-vex-aa6ff50261ad4fa9b92ee5d256e61a952b9d86ff7fbd0f60551c312037b4198d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-16T05:39:29.527953335Z",
+  "timestamp": "2026-04-16T06:00:23.633369291Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-24813"
+      },
+      "timestamp": "2026-04-16T06:00:23.397153978Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Apache Tomcat RCE via Default Servlet partial PUT — file fragments uploaded to predictable temp paths trigger deserialization of assembled content. Also enables reading security-sensitive files.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Remote code execution and information disclosure via Tomcat Default Servlet partial PUT support. Requires an HTTP PUT request to a running Tomcat servlet container with partial PUT enabled. Liquibase is a CLI tool that never starts the Tomcat HTTP server, never deploys any servlet, and never opens any network port. The Default Servlet, partial PUT handling, and file session persistence code paths are never activated."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-48988"
+      },
+      "timestamp": "2026-04-16T06:00:23.438354136Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via excessive memory consumption in Tomcat multipart upload processing. Requires sending a crafted multipart/form-data HTTP POST to a running Tomcat instance. Liquibase is a CLI tool that never starts a Tomcat server and never accepts HTTP requests. The multipart parsing code path is completely inactive."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-48989"
+      },
+      "timestamp": "2026-04-16T06:00:23.479708539Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via HTTP/2 stream reset memory leak in Tomcat. Requires an HTTP/2 connection to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and accepts no inbound network connections."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-52520"
+      },
+      "timestamp": "2026-04-16T06:00:23.520798949Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via integer overflow in Tomcat multipart upload file size limit validation. Requires sending a crafted multipart HTTP upload to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server and never processes inbound HTTP requests or multipart uploads."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-53506"
+      },
+      "timestamp": "2026-04-16T06:00:23.56308596Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Denial of service via uncontrolled resource consumption in Tomcat HTTP/2 stream management. Requires an HTTP/2 client connecting to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and never binds a network port."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-55752"
+      },
+      "timestamp": "2026-04-16T06:00:23.60631929Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Path traversal and potential RCE via regression in Tomcat Rewrite Valve URL normalization. Requires an HTTP request to a running Tomcat server with the Rewrite Valve configured. Liquibase is a CLI tool that never starts a Tomcat server, never configures the Rewrite Valve, and never accepts HTTP requests."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-24734"
+      },
+      "timestamp": "2026-04-16T06:00:23.35647006Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Incomplete OCSP verification in Tomcat's FFM/OpenSSL TLS integration. Requires an active TLS listener with client certificate authentication and OCSP validation configured. Liquibase is a CLI tool that never starts a Tomcat server or binds any TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the TLS and OCSP subsystems are never initialized."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-24880"
       },
-      "timestamp": "2026-04-16T05:39:29.294140566Z",
+      "timestamp": "2026-04-16T06:00:23.148225831Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -23,7 +122,7 @@
       "vulnerability": {
         "name": "CVE-2026-29129"
       },
-      "timestamp": "2026-04-16T05:39:29.346881927Z",
+      "timestamp": "2026-04-16T06:00:23.188891725Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -37,7 +136,7 @@
       "vulnerability": {
         "name": "CVE-2026-29145"
       },
-      "timestamp": "2026-04-16T05:39:29.243308934Z",
+      "timestamp": "2026-04-16T06:00:23.10667603Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -52,7 +151,7 @@
       "vulnerability": {
         "name": "CVE-2026-29146"
       },
-      "timestamp": "2026-04-16T05:39:29.397246235Z",
+      "timestamp": "2026-04-16T06:00:23.231003666Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -66,7 +165,7 @@
       "vulnerability": {
         "name": "CVE-2026-34483"
       },
-      "timestamp": "2026-04-16T05:39:29.448296516Z",
+      "timestamp": "2026-04-16T06:00:23.272641883Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -80,7 +179,7 @@
       "vulnerability": {
         "name": "CVE-2026-34487"
       },
-      "timestamp": "2026-04-16T05:39:29.498561891Z",
+      "timestamp": "2026-04-16T06:00:23.314891466Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
