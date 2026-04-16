@@ -414,6 +414,137 @@
       ]
     },
     {
+      "id": "CVE-2026-29145",
+      "description": "Apache Tomcat authentication bypass where OCSP validation soft-fails even when soft-fail is explicitly disabled, allowing revoked client certificates to authenticate.",
+      "recommendation": "No action required. Liquibase does not start a Tomcat server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side TLS authentication vulnerability. Liquibase never starts a Tomcat server or binds an HTTPS connector. tomcat-embed-core is a transitive dependency present in the distribution JAR but never initialized.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-29145",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Authentication bypass due to CLIENT_CERT soft fail misconfiguration in Tomcat's OCSP validation. Requires an active HTTPS connector configured with CLIENT_CERT authentication and an OCSP responder. Liquibase is a database migration CLI tool that uses picocli for command-line parsing and never starts a Spring application context or Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No connector, no authenticator, no OCSP — the code is inert.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-24880",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP request/response smuggling via invalid chunk extension in Tomcat HTTP/1.1 parser. Requires an active HTTP listener processing inbound requests. Liquibase is a CLI tool that never starts a Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the HTTP parser is never invoked.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-29129",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "TLS 1.3 cipher suite preference order not preserved in Tomcat's SSL connector configuration. Requires an active TLS connector performing cipher negotiation. Liquibase is a CLI tool that never starts a Tomcat server or binds a TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; no TLS handshakes occur.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-29146",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Information disclosure via padding oracle vulnerability in Tomcat EncryptInterceptor (clustering component). Requires Tomcat clustering with EncryptInterceptor enabled. Liquibase is a CLI tool that never starts a Tomcat server or initializes clustering. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; EncryptInterceptor is never instantiated.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-36415",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34483",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Information disclosure via improper encoding in Tomcat JsonAccessLogValve. Requires an active HTTP connector with JsonAccessLogValve configured and non-default relaxedPathChars/relaxedQueryChars values. Liquibase is a CLI tool that never starts a Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; no access log valves are configured or initialized.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34487",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Information disclosure via sensitive data in Tomcat log files from the Kubernetes cloud membership provider (clustering). Requires Tomcat clustering with Kubernetes membership enabled. Liquibase is a CLI tool that never starts a Tomcat server or initializes clustering. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; Kubernetes cluster membership is never initialized.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-24970",
       "analysis": {
         "state": "not_affected",
@@ -438,19 +569,6 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2023-36415",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
