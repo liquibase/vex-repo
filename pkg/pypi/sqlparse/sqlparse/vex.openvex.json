@@ -1,0 +1,23 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-46207f4c6071deb58f33aef4f79a463469c62f73a463c7baf350341e4daca174",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-16T04:38:26.476136666Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-4340"
+      },
+      "timestamp": "2026-04-16T04:38:26.476137648Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/sqlparse"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "sqlparse ReDoS vulnerability. sqlparse is bundled as a transitive dependency within GraalVM Python extensions but its SQL parsing functionality is never invoked at runtime. Liquibase uses its own Java SQL parser; the Python sqlparse module is never called."
+    }
+  ]
+}

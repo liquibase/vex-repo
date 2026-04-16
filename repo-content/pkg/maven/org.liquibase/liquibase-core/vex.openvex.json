@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-41a8a2382f2dccbb7bd71a593f47a9d15f2759618c95c411cc76b513750e9171",
+  "@id": "merged-vex-f81634cb1065e3f9a4b21d36270579809481b60a0a97fb31ac9fe2ae5a3f27b7",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-10T04:55:17.656745053Z",
+  "timestamp": "2026-04-16T04:38:16.877663237Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2014-8180"
       },
-      "timestamp": "2026-04-10T04:55:17.058136471Z",
+      "timestamp": "2026-04-16T04:38:15.546631788Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -34,7 +34,7 @@
       "vulnerability": {
         "name": "CVE-2022-0839"
       },
-      "timestamp": "2026-04-10T04:55:17.106246577Z",
+      "timestamp": "2026-04-16T04:38:15.596277956Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -59,7 +59,7 @@
       "vulnerability": {
         "name": "CVE-2022-40897"
       },
-      "timestamp": "2026-04-10T04:55:17.394876495Z",
+      "timestamp": "2026-04-16T04:38:15.900003187Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2023-36415"
       },
-      "timestamp": "2026-04-10T04:55:17.15247153Z",
+      "timestamp": "2026-04-16T04:38:15.646343785Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -107,9 +107,34 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2023-43804"
+      },
+      "timestamp": "2026-04-16T04:38:16.706873503Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/urllib3"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "urllib3 cookie header leak vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. No HTTP requests are made via Python at runtime."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-10T04:55:17.202231658Z",
+      "timestamp": "2026-04-16T04:38:15.696826544Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -134,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2024-35255"
       },
-      "timestamp": "2026-04-10T04:55:17.250647883Z",
+      "timestamp": "2026-04-16T04:38:15.748415777Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -157,9 +182,34 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2024-4340"
+      },
+      "timestamp": "2026-04-16T04:38:16.756563741Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/sqlparse"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "sqlparse ReDoS vulnerability. sqlparse is bundled as a transitive dependency within GraalVM Python extensions but its SQL parsing functionality is never invoked at runtime. Liquibase uses its own Java SQL parser; the Python sqlparse module is never called."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2024-45394"
       },
-      "timestamp": "2026-04-10T04:55:17.299526349Z",
+      "timestamp": "2026-04-16T04:38:15.800383608Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -184,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2024-6345"
       },
-      "timestamp": "2026-04-10T04:55:17.442975203Z",
+      "timestamp": "2026-04-16T04:38:15.950198977Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -207,9 +257,34 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-24970"
+      },
+      "timestamp": "2026-04-16T04:38:16.808398228Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/io.netty/netty-handler"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty SslHandler resource exhaustion vulnerability via SSLEngine. This is a server-side vulnerability requiring an attacker to send malicious SSL/TLS data to a Netty server. Liquibase is a database migration CLI tool that does not run a TLS server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-47273"
       },
-      "timestamp": "2026-04-10T04:55:17.491193817Z",
+      "timestamp": "2026-04-16T04:38:15.999455515Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -232,9 +307,59 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-55163"
+      },
+      "timestamp": "2026-04-16T04:38:16.858839681Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:maven/io.netty/netty-codec-http2"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty HTTP/2 CONTINUATION frame validation bypass in codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-58183"
+      },
+      "timestamp": "2026-04-16T04:38:16.454650444Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-59250"
       },
-      "timestamp": "2026-04-10T04:55:17.346033338Z",
+      "timestamp": "2026-04-16T04:38:15.850494156Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -257,9 +382,234 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-61726"
+      },
+      "timestamp": "2026-04-16T04:38:16.303331967Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-61728"
+      },
+      "timestamp": "2026-04-16T04:38:16.354068982Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-61729"
+      },
+      "timestamp": "2026-04-16T04:38:16.403795851Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-66418"
+      },
+      "timestamp": "2026-04-16T04:38:16.555832368Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/urllib3"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-66471"
+      },
+      "timestamp": "2026-04-16T04:38:16.606595973Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/urllib3"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-68121"
+      },
+      "timestamp": "2026-04-16T04:38:16.252106668Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-68973"
+      },
+      "timestamp": "2026-04-16T04:38:16.50552413Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/ubuntu/gnupg2"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuPG vulnerability in OS packages (dirmngr, gnupg, gpg, gpg-agent, gpgconf, gpgsm, gpgv, keyboxd, gnupg-utils). GnuPG is installed in the Docker image for package signature verification during build but is not invoked at runtime by Liquibase. The Liquibase application does not call any GnuPG binaries."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-21441"
+      },
+      "timestamp": "2026-04-16T04:38:16.656320573Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/urllib3"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-25679"
+      },
+      "timestamp": "2026-04-16T04:38:16.201692555Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.liquibase/liquibase-core",
+          "subcomponents": [
+            {
+              "@id": "pkg:golang/stdlib"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase"
+        },
+        {
+          "@id": "pkg:docker/liquibase/liquibase-secure"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-04-10T04:55:17.53835222Z",
+      "timestamp": "2026-04-16T04:38:16.048552054Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -285,7 +635,7 @@
       "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-04-10T04:55:17.58650813Z",
+      "timestamp": "2026-04-16T04:38:16.098890251Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -311,7 +661,7 @@
       "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-04-10T04:55:17.638938995Z",
+      "timestamp": "2026-04-16T04:38:16.151300473Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
@@ -340,7 +690,7 @@
           "CVE-2022-0839"
         ]
       },
-      "timestamp": "2026-04-10T04:55:17.010524681Z",
+      "timestamp": "2026-04-16T04:38:15.497380206Z",
       "products": [
         {
           "@id": "pkg:maven/org.liquibase/liquibase-core",
