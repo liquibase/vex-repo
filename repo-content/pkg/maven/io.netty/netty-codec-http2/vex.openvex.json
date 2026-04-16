@@ -1,15 +1,29 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-efb1b2670a19bdde5a0e33ac67c9d52996d1e54aabbd16fa1ceffbb9d70e6b3e",
+  "@id": "merged-vex-5c5534b5463fdeb0cd910864b02696e6a4bdeeb334425a3966f136ebf999593a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-10T04:55:21.062268829Z",
+  "timestamp": "2026-04-16T04:38:24.414700679Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-55163"
+      },
+      "timestamp": "2026-04-16T04:38:24.397827184Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty HTTP/2 CONTINUATION frame validation bypass in codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-04-10T04:55:21.062271484Z",
+      "timestamp": "2026-04-16T04:38:24.281028536Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
