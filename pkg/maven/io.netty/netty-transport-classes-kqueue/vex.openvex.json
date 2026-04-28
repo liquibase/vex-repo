@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-a3da4f2b04699a2c2697319cbde4b2cfc7162f91d101b71674f4add33b4554ed",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-28T09:51:45.554189505Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33870"
+      },
+      "timestamp": "2026-04-28T09:51:45.173431622Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33871"
+      },
+      "timestamp": "2026-04-28T09:51:45.228630765Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-kqueue is the macOS/BSD kqueue native transport — no HTTP/2 frame decoder. CPE-based propagation only."
+    }
+  ]
+}

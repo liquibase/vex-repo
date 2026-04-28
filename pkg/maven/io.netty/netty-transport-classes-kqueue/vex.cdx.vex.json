@@ -1,0 +1,95 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-kqueue is the macOS/BSD kqueue native transport — no HTTP/2 frame decoder. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    }
+  ]
+}
