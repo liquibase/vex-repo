@@ -1,0 +1,95 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    }
+  ]
+}
