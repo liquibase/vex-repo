@@ -268,6 +268,182 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-epoll is the Linux epoll native transport — no HTTP/2 frame decoder. CPE-based scanners propagate the CVE here despite the artifact not containing the vulnerable parser.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-kqueue is the macOS/BSD kqueue native transport — no HTTP/2 frame decoder. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
       "id": "GHSA-2m67-wjpj-xhg9",
       "description": "Jackson Core 3.x StreamReadConstraints.maxDocumentLength check can be bypassed in multiple code paths, weakening DoS protection for applications that rely on it.",
       "recommendation": "No action required. Liquibase does not rely on maxDocumentLength for protection.",
@@ -308,6 +484,19 @@
       "affects": [
         {
           "ref": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-0839",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. liquibase-license-utility is not liquibase-core. The vulnerability only affects liquibase-core versions < 4.8.0.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.liquibase/liquibase-license-utility"
         }
       ]
     },
@@ -364,19 +553,6 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2022-0839",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False CPE match. liquibase-license-utility is not liquibase-core. The vulnerability only affects liquibase-core versions < 4.8.0.",
-        "justification": "code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.liquibase/liquibase-license-utility"
         }
       ]
     },
@@ -465,6 +641,19 @@
       ]
     },
     {
+      "id": "CVE-2023-36415",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -517,19 +706,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/gpg"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2023-36415",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
@@ -618,6 +794,19 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -670,19 +859,6 @@
       "affects": [
         {
           "ref": "pkg:pypi/urllib3"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
@@ -805,6 +981,19 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.azure/msal4j"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-34483",
       "analysis": {
         "state": "not_affected",
@@ -891,19 +1080,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.azure/msal4j"
         }
       ]
     },
@@ -1022,6 +1198,19 @@
       ]
     },
     {
+      "id": "CVE-2024-45394",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-24970",
       "analysis": {
         "state": "not_affected",
@@ -1074,19 +1263,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.springframework.boot/spring-boot"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-45394",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
-        "justification": "code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
         }
       ]
     },

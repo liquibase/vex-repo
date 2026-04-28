@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-66131b3ea516d15c89608b75af9d61b80c361558b83b31fd61c327ff4629d30e",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-04-28T09:51:44.346176421Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33870"
+      },
+      "timestamp": "2026-04-28T09:51:43.951186733Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-33871"
+      },
+      "timestamp": "2026-04-28T09:51:44.007347077Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-epoll is the Linux epoll native transport — no HTTP/2 frame decoder. CPE-based scanners propagate the CVE here despite the artifact not containing the vulnerable parser."
+    }
+  ]
+}
