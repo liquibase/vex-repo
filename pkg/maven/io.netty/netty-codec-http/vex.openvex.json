@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-f94044d4637a3e3342bdd625d91a4a36611c14aec6442b899fd792901b20057d",
+  "@id": "merged-vex-5ed12301fa6b3f8329dacc1bdabedbba94d56c49d450386669b448cd7babf50a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-04-28T07:30:14.509247762Z",
+  "timestamp": "2026-05-07T19:58:19.410979674Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-04-28T07:30:14.509248613Z",
+      "timestamp": "2026-05-07T19:58:18.917414397Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -19,6 +19,34 @@
       "status_notes": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42584"
+      },
+      "timestamp": "2026-05-07T19:58:19.297832405Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty HTTP codec vulnerability fixed in 4.1.133.Final / 4.2.13.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42587"
+      },
+      "timestamp": "2026-05-07T19:58:19.35221327Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty HTTP codec vulnerability fixed in 4.1.133.Final / 4.2.13.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
     }
   ]
 }
