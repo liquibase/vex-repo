@@ -1508,6 +1508,48 @@
       ]
     },
     {
+      "id": "CVE-2026-42198",
+      "description": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count.",
+      "recommendation": "No action required for builds using the current source dependency set; pgjdbc is managed at the fixed 42.7.11 version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42198",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pgjdbc client-side SCRAM-SHA-256 denial-of-service is fixed in 42.7.11. The current source sets postgresql.version to 42.7.11 (pom.xml:55), and the distribution dependency uses that managed version (dist/pom.xml:117). The fixed version is therefore present in the current Liquibase Secure build source even though the scanner reported 42.7.9 for this image.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.postgresql/postgresql",
+          "versions": [
+            {
+              "range": "vers:maven/>=42.2.0|<42.7.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-22235",
       "analysis": {
         "state": "not_affected",
@@ -1536,6 +1578,90 @@
       ]
     },
     {
+      "id": "CVE-2026-40976",
+      "description": "In certain circumstances, Spring Boot's default web security is ineffective allowing unauthorized access to all endpoints. For an application to be vulnerable, it must be a servlet-based web application, have no Spring Security configuration of its own and rely on the default web security filter chain, depend on spring-boot-actuator-autoconfigure, and not depend on spring-boot-health.",
+      "recommendation": "No action required. Liquibase does not include the actuator autoconfigure dependency required by this vulnerability.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        862
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40976",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Spring Boot default web security bypass requires the application to depend on spring-boot-actuator-autoconfigure and not depend on spring-boot-health. The repository's Spring Boot declarations are spring-boot-autoconfigure provided for Pro integration (pro/pom.xml:78) and spring-boot-starter-web in the license utility (tools/liquibase-license-utility/pom.xml:44); grep for spring-boot-actuator-autoconfigure, spring-boot-starter-actuator, and spring-boot-health across pom.xml files returned no matches.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-05-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.boot/spring-boot",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40973",
+      "description": "A local attacker on the same host as the application may be able to take control of the directory used by ApplicationTemp. When server.servlet.session.persistent is set to true and the attack persists across application restarts, this may allow the attacker to read session information and hijack authenticated users or deploy a gadget chain and execute code as the application's user.",
+      "recommendation": "No action required. Liquibase Secure does not configure persistent servlet sessions required to trigger this vulnerability.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "cwes": [
+        377
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40973",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Spring Boot ApplicationTemp exploitation requires server.servlet.session.persistent=true and persistence across application restarts. Liquibase Secure's Docker image starts the Liquibase CLI entrypoint (docker/Dockerfile:68), and grep for server.servlet.session.persistent, ApplicationTemp, persistent=true, and setPersistent across Java, XML, properties, YAML, and YML files returned no matches.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.boot/spring-boot",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2024-57699",
       "analysis": {
         "state": "not_affected",
@@ -1560,6 +1686,55 @@
       "affects": [
         {
           "ref": "pkg:maven/net.minidev/json-smart"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42198",
+      "description": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count. With a large enough value, the client spends an unbounded amount of CPU time inside PBKDF2 before authentication can fail. A single attempt ties up a CPU core. Repeated or concurrent attempts exhaust client CPU and can wedge connection pools. In affected versions, loginTimeout did not fully mitigate this problem. When loginTimeout expired, the caller could stop waiting, but the worker thread performing the connection attempt could continue running and burning CPU inside the SCRAM PBKDF2 computation. This issue has been patched in version 42.7.11.",
+      "recommendation": "No action required. Liquibase Secure distribution builds use PostgreSQL JDBC driver 42.7.11, which includes the fix.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-98qh-xjc8-98pq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42198",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PostgreSQL JDBC SCRAM-SHA-256 client-side denial of service fixed in 42.7.11. Liquibase Secure distribution declares postgresql.version as 42.7.11 (dist/pom.xml:23) and uses that property for the org.postgresql:postgresql dependency (dist/pom.xml:115, dist/pom.xml:117), so the vulnerable 42.7.9 code reported by the scanner is not present in the current distribution build.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.postgresql/postgresql",
+          "versions": [
+            {
+              "range": "vers:maven/>=42.2.0|<42.7.11",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

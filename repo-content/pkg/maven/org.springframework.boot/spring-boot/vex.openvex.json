@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-41275a09971753b1a44d0ecc5c4906ed364894e3d54571153e786300caa59461",
+  "@id": "merged-vex-d20590af627ca818c62f76f0d841a46041b4c2e8b5eba222e18c5e8404cf0e65",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-05-07T19:58:32.981903637Z",
+  "timestamp": "2026-05-08T15:52:48.978127672Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-22235"
       },
-      "timestamp": "2026-05-07T19:58:32.98190488Z",
+      "timestamp": "2026-05-08T15:52:48.828467989Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot"
@@ -18,6 +18,36 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Spring Boot EndpointRequest.to() creates a security matcher for null/** instead of the actuator endpoint path when the endpoint is disabled. Requires a running Spring Boot web application with Spring Security and actuator endpoint configuration. Liquibase is a CLI tool that never starts a Spring application context, never runs an HTTP server, never exposes actuator endpoints, and never configures Spring Security."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40973"
+      },
+      "timestamp": "2026-05-08T15:52:48.941779919Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.boot/spring-boot"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A local attacker on the same host as the application may be able to take control of the directory used by ApplicationTemp. When server.servlet.session.persistent is set to true and the attack persists across application restarts, this may allow the attacker to read session information and hijack authenticated users or deploy a gadget chain and execute code as the application's user.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Spring Boot ApplicationTemp exploitation requires server.servlet.session.persistent=true and persistence across application restarts. Liquibase Secure's Docker image starts the Liquibase CLI entrypoint (docker/Dockerfile:68), and grep for server.servlet.session.persistent, ApplicationTemp, persistent=true, and setPersistent across Java, XML, properties, YAML, and YML files returned no matches."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40976"
+      },
+      "timestamp": "2026-05-08T15:52:48.887835273Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.boot/spring-boot"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In certain circumstances, Spring Boot's default web security is ineffective allowing unauthorized access to all endpoints. For an application to be vulnerable, it must be a servlet-based web application, have no Spring Security configuration of its own and rely on the default web security filter chain, depend on spring-boot-actuator-autoconfigure, and not depend on spring-boot-health.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Spring Boot default web security bypass requires the application to depend on spring-boot-actuator-autoconfigure and not depend on spring-boot-health. The repository's Spring Boot declarations are spring-boot-autoconfigure provided for Pro integration (pro/pom.xml:78) and spring-boot-starter-web in the license utility (tools/liquibase-license-utility/pom.xml:44); grep for spring-boot-actuator-autoconfigure, spring-boot-starter-actuator, and spring-boot-health across pom.xml files returned no matches."
     }
   ]
 }
