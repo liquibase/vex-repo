@@ -1,0 +1,59 @@
+name: Trigger Trivy Scan
+
+# Mirror of liquibase-pro/.github/workflows/vex-repo-dispatch.yml in the
+# reverse direction: when published VEX content changes here, trigger the
+# trivy-scan-published-images workflow in liquibase-pro so the next scan
+# picks up the new statements without waiting for the weekday cron.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pkg/**'
+      - 'index.json'
+      - 'vex-repository.json'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+
+concurrency:
+  group: trigger-trivy-scan
+  cancel-in-progress: true
+
+jobs:
+  trigger:
+    name: Trigger trivy-scan-published-images in liquibase-pro
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        with:
+          role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Get secrets from vault
+        uses: aws-actions/aws-secretsmanager-get-secrets@3a411b6ec5cace3d626412dd917e7bfeac242cfa # v3.0.0
+        with:
+          secret-ids: |
+            LIQUIBASE,/vault/liquibase
+          parse-json-secrets: true
+
+      - name: Get GitHub App token (actions:write on liquibase-pro)
+        id: get-token
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
+        with:
+          app-id: ${{ env.LIQUIBASE_LIQUIBASE_GITHUB_APP_ID }}
+          private-key: ${{ env.LIQUIBASE_LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: liquibase-pro
+          permission-actions: write
+
+      - name: Dispatch trivy-scan-published-images.yml
+        uses: the-actions-org/workflow-dispatch@3133c5d135c7dbe4be4f9793872b6ef331b53bc7 # v4.0.0
+        with:
+          workflow: trivy-scan-published-images.yml
+          token: ${{ steps.get-token.outputs.token }}
+          repo: liquibase/liquibase-pro
+          ref: main
+          wait-for-completion: false
