@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-c6245bf1e95690c3ae970115039e69c1ace34a9076d4b86f3a5c20801dc4888f",
+  "@id": "merged-vex-10f80dc1f400a9175c052f509cd8ca636b81adbfa4ae62c148749eaad4b3004a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-05-07T19:58:31.905244747Z",
+  "timestamp": "2026-05-08T15:52:47.489429049Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-49146"
       },
-      "timestamp": "2026-05-07T19:58:31.905245759Z",
+      "timestamp": "2026-05-08T15:52:47.329698341Z",
       "products": [
         {
           "@id": "pkg:maven/org.postgresql/postgresql"
@@ -18,6 +18,36 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "PostgreSQL JDBC driver channel binding bypass. The vulnerability only triggers when the JDBC connection property channelBinding is explicitly set to \"require\" (default is \"prefer\"). Liquibase does not configure channelBinding=require in any default configuration. The vulnerable enforcement code path in ConnectionFactoryImpl.doAuthentication() is not reachable under Liquibase's default configuration."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42198"
+      },
+      "timestamp": "2026-05-08T15:52:47.381752091Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.postgresql/postgresql"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "pgjdbc client-side SCRAM-SHA-256 denial-of-service is fixed in 42.7.11. The current source sets postgresql.version to 42.7.11 (pom.xml:55), and the distribution dependency uses that managed version (dist/pom.xml:117). The fixed version is therefore present in the current Liquibase Secure build source even though the scanner reported 42.7.9 for this image."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42198"
+      },
+      "timestamp": "2026-05-08T15:52:47.473294387Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.postgresql/postgresql"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count. With a large enough value, the client spends an unbounded amount of CPU time inside PBKDF2 before authentication can fail. A single attempt ties up a CPU core. Repeated or concurrent attempts exhaust client CPU and can wedge connection pools. In affected versions, loginTimeout did not fully mitigate this problem. When loginTimeout expired, the caller could stop waiting, but the worker thread performing the connection attempt could continue running and burning CPU inside the SCRAM PBKDF2 computation. This issue has been patched in version 42.7.11.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "PostgreSQL JDBC SCRAM-SHA-256 client-side denial of service fixed in 42.7.11. Liquibase Secure distribution declares postgresql.version as 42.7.11 (dist/pom.xml:23) and uses that property for the org.postgresql:postgresql dependency (dist/pom.xml:115, dist/pom.xml:117), so the vulnerable 42.7.9 code reported by the scanner is not present in the current distribution build."
     }
   ]
 }
