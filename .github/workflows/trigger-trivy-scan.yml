@@ -50,10 +50,10 @@ jobs:
           permission-actions: write
 
       - name: Dispatch trivy-scan-published-images.yml
-        uses: the-actions-org/workflow-dispatch@3133c5d135c7dbe4be4f9793872b6ef331b53bc7 # v4.0.0
+        uses: liquibase/build-logic/.github/actions/dispatch-and-wait@main
         with:
           workflow: trivy-scan-published-images.yml
-          token: ${{ steps.get-token.outputs.token }}
           repo: liquibase/liquibase-pro
           ref: main
-          wait-for-completion: false
+          wait: 'false'
+          gh-token: ${{ steps.get-token.outputs.token }}
