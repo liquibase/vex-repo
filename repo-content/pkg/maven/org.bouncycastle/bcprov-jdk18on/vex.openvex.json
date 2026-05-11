@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-69cea7574d3ff5ba9d2aa31882b835ca98b1fae57ecbe0547beaabd560474f0f",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-05-11T16:18:50.460207117Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5598"
+      },
+      "timestamp": "2026-05-11T16:18:50.460208239Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Covert timing channel vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA core on all (core modules). This vulnerability is associated with program files FrodoEngine.Java.\nThis issue affects BC-JAVA: from 1.71 before 1.84.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Bouncy Castle BC-JAVA FrodoEngine covert timing channel affects versions 1.71 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1318), but grep for FrodoEngine, Frodo, org.bouncycastle.pqc, pqc.crypto.frodo, and BCPQC across Java sources returned no matches, so the vulnerable Frodo post-quantum cryptography code path is not reachable."
+    }
+  ]
+}

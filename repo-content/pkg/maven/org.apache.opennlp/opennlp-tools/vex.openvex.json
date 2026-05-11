@@ -1,0 +1,54 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-8d4b0cb985c8a0830cfe885c5ebcc0a133eb53370cb5b97a70c5a835c08e4538",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-05-11T16:18:45.521765608Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40682"
+      },
+      "timestamp": "2026-05-11T16:18:45.388884658Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "XML External Entity (XXE) via Unsanitized Dictionary Parsing in Apache OpenNLP DictionaryEntryPersistor. Versions before 2.5.9 and before 3.0.0-M3 initialize dictionary XML parsing without secure processing or DTD restrictions, allowing attacker-supplied dictionary files to trigger local file disclosure or server-side request forgery during SAX parsing.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "OpenNLP DictionaryEntryPersistor XXE vulnerability fixed in 2.5.9. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.8 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but the vulnerable dictionary XML parsing API is not imported or called. The only production OpenNLP usage found is document categorization and tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24)."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42027"
+      },
+      "timestamp": "2026-05-11T16:18:45.446486622Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Apache OpenNLP ExtensionLoader is vulnerable to arbitrary class instantiation via attacker-controlled input passed to the extension loading mechanism, potentially allowing remote code execution.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Apache OpenNLP ExtensionLoader arbitrary class instantiation vulnerability. The ExtensionLoader API is not imported or called anywhere in Liquibase Secure. The only production OpenNLP usage is document categorization and tokenization via DoccatModel, DocumentCategorizerME, and WhitespaceTokenizer in OpenNLPSentimentDetector.java; no extension loading or dynamic class instantiation occurs."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42440"
+      },
+      "timestamp": "2026-05-11T16:18:45.504850248Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Apache OpenNLP AbstractModelReader allocates unbounded memory when reading model files, allowing a malicious or malformed model file to cause an out-of-memory denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Apache OpenNLP AbstractModelReader OOM denial-of-service vulnerability via unbounded memory allocation during model loading. Exploitation requires loading an attacker-controlled or malformed model file. Liquibase Secure bundles pre-packaged, trusted OpenNLP model files at build time; no model files are loaded from external or user-controlled sources at runtime. AbstractModelReader is not imported or called directly in Liquibase code."
+    }
+  ]
+}
