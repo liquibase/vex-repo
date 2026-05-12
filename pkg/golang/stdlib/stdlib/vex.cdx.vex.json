@@ -32,6 +32,200 @@
       ]
     },
     {
+      "id": "CVE-2026-39836",
+      "description": "The Dial and LookupPort functions panic on Windows when provided with an input containing a NUL (0).",
+      "recommendation": "No action required for Liquibase Secure Docker images. The vulnerable behavior requires a Windows runtime environment, while the assessed image is Linux-based.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Windows, but the assessed Docker image uses a Linux base image.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39836",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4971",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib Dial and LookupPort panic vulnerability requires Windows when processing input containing a NUL byte. The assessed Liquibase Secure Docker image uses the Linux base image eclipse-temurin:21-jre-noble (docker/Dockerfile:2), so the vulnerable Windows runtime environment is absent.",
+        "justification": "requires_environment",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33811",
+      "description": "When using LookupCNAME with the cgo DNS resolver, a very long CNAME response can trigger a double-free of C memory and a crash.",
+      "recommendation": "No action required. lpm does not call LookupCNAME and the cgo DNS resolver is not active on Linux.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "lpm never calls LookupCNAME. Hostname resolution for HTTP downloads uses LookupIPAddr. The cgo DNS resolver is not the default on Linux.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib LookupCNAME double-free in the cgo DNS resolver when processing a very long CNAME response. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it downloads Liquibase extension driver JARs from GitHub release assets via HTTP. lpm never calls LookupCNAME — standard HTTP hostname resolution uses LookupIPAddr/LookupHost, not the CNAME-specific API. Additionally, the vulnerability requires the cgo DNS resolver, which is not the default on Linux; the pure-Go DNS resolver is active in the eclipse-temurin:21-jre-noble container.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33814",
+      "description": "When processing HTTP/2 SETTINGS frames, transport will enter an infinite loop of writing CONTINUATION frames if it receives a SETTINGS_MAX_FRAME_SIZE with a value of 0.",
+      "recommendation": "No action required. lpm only connects to trusted GitHub release servers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Exploitation requires a server to send SETTINGS_MAX_FRAME_SIZE=0. lpm only connects to trusted GitHub release CDN endpoints; no attacker-reachable server is in the execution path.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/2 transport infinite loop when a server sends SETTINGS_MAX_FRAME_SIZE with a value of 0. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it makes HTTP/2 connections to GitHub release servers to download Liquibase extension driver JARs. Exploitation requires a server to send the malformed SETTINGS_MAX_FRAME_SIZE=0 frame. lpm only connects to trusted GitHub release CDN endpoints (URLs and checksums fixed in docker/Dockerfile:35-55); no attacker- controlled server endpoint exists in lpm's execution path.",
+        "justification": "protected_by_mitigating_control",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39820",
+      "description": "Well-crafted inputs reaching ParseAddress, ParseAddressList, and ParseDate were able to trigger excessive CPU exhaustion and memory allocations.",
+      "recommendation": "No action required. lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "lpm performs no email parsing. The net/mail code path is completely unreachable from any lpm operation.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/mail CPU exhaustion via pathological inputs to ParseAddress, ParseAddressList, and ParseDate. lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail parsing functions are not called by lpm at any point during package installation or management operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42499",
+      "description": "Pathological inputs could cause DoS through consumePhrase when parsing an email address according to RFC 5322.",
+      "recommendation": "No action required. lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "lpm performs no email parsing. The net/mail consumePhrase code path is completely unreachable from any lpm operation.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/mail DoS via pathological email address inputs reaching the consumePhrase parser (RFC 5322 phrase parsing). lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail consumePhrase code path is not reachable from any lpm operation.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61726",
       "analysis": {
         "state": "not_affected",
