@@ -1,0 +1,162 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-40682",
+      "description": "XML External Entity (XXE) via Unsanitized Dictionary Parsing in Apache OpenNLP DictionaryEntryPersistor. Versions before 2.5.9 and before 3.0.0-M3 initialize dictionary XML parsing without secure processing or DTD restrictions, allowing attacker-supplied dictionary files to trigger local file disclosure or server-side request forgery during SAX parsing.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP dictionary parsing API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        611
+      ],
+      "advisories": [
+        {
+          "url": "https://lists.apache.org/thread/r6jpt0qr9nj67gqhppqg7jxf8vsbo0w6",
+          "title": "Apache Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40682",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "OpenNLP DictionaryEntryPersistor XXE vulnerability fixed in 2.5.9. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.8 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but the vulnerable dictionary XML parsing API is not imported or called. The only production OpenNLP usage found is document categorization and tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42027",
+      "description": "Apache OpenNLP ExtensionLoader is vulnerable to arbitrary class instantiation via attacker-controlled input passed to the extension loading mechanism, potentially allowing remote code execution.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP ExtensionLoader API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not invoke the OpenNLP ExtensionLoader. Only pre-bundled document categorization and tokenization APIs are used.\n"
+        }
+      ],
+      "cwes": [
+        470
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42027",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache OpenNLP ExtensionLoader arbitrary class instantiation vulnerability. The ExtensionLoader API is not imported or called anywhere in Liquibase Secure. The only production OpenNLP usage is document categorization and tokenization via DoccatModel, DocumentCategorizerME, and WhitespaceTokenizer in OpenNLPSentimentDetector.java; no extension loading or dynamic class instantiation occurs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42440",
+      "description": "Apache OpenNLP AbstractModelReader allocates unbounded memory when reading model files, allowing a malicious or malformed model file to cause an out-of-memory denial of service.",
+      "recommendation": "No action required for Liquibase Secure. OpenNLP models are pre-bundled trusted artifacts; no attacker-controlled model loading occurs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not load model files from untrusted sources. Pre-bundled trusted models are used; AbstractModelReader is not directly invoked by Liquibase code.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42440",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache OpenNLP AbstractModelReader OOM denial-of-service vulnerability via unbounded memory allocation during model loading. Exploitation requires loading an attacker-controlled or malformed model file. Liquibase Secure bundles pre-packaged, trusted OpenNLP model files at build time; no model files are loaded from external or user-controlled sources at runtime. AbstractModelReader is not imported or called directly in Liquibase code.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

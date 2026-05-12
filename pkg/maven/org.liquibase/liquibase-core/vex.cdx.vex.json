@@ -613,6 +613,103 @@
       ]
     },
     {
+      "id": "CVE-2026-32281",
+      "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32281",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 certificate policy mapping DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32283",
+      "description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32283",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls TLS 1.3 key update DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-36415",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -637,19 +734,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/dirmngr"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2023-36415",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.10.0. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
@@ -766,6 +850,19 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -790,19 +887,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/gpgv"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
@@ -953,6 +1037,19 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.azure/msal4j"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29129",
       "analysis": {
         "state": "not_affected",
@@ -977,19 +1074,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.azure/msal4j"
         }
       ]
     },
@@ -1140,6 +1224,19 @@
       ]
     },
     {
+      "id": "CVE-2024-45394",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-55752",
       "analysis": {
         "state": "not_affected",
@@ -1194,19 +1291,6 @@
       "affects": [
         {
           "ref": "pkg:maven/tools.jackson.core/jackson-core"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-45394",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
-        "justification": "code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
         }
       ]
     },
@@ -1446,6 +1530,20 @@
       ]
     },
     {
+      "id": "CVE-2025-59250",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42577",
       "recommendation": "No action required. Liquibase does not run a Netty server.",
       "ratings": [
@@ -1490,20 +1588,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.postgresql/postgresql"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-59250",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
         }
       ]
     },
@@ -1749,6 +1833,199 @@
       "affects": [
         {
           "ref": "pkg:pypi/setuptools"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-5598",
+      "description": "Covert timing channel vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA core on all (core modules). This vulnerability is associated with program files FrodoEngine.Java.\nThis issue affects BC-JAVA: from 1.71 before 1.84.",
+      "recommendation": "No action required. Liquibase Secure does not use the affected Bouncy Castle Frodo post-quantum cryptography APIs.",
+      "cwes": [
+        385
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5598",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/bcgit/bc-java/wiki/CVE%E2%80%902026%E2%80%905598",
+          "title": "Bouncy Castle Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Bouncy Castle BC-JAVA FrodoEngine covert timing channel affects versions 1.71 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1318), but grep for FrodoEngine, Frodo, org.bouncycastle.pqc, pqc.crypto.frodo, and BCPQC across Java sources returned no matches, so the vulnerable Frodo post-quantum cryptography code path is not reachable.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.bouncycastle/bcprov-jdk18on",
+          "versions": [
+            {
+              "range": "vers:maven/>=1.71|<1.84",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40682",
+      "description": "XML External Entity (XXE) via Unsanitized Dictionary Parsing in Apache OpenNLP DictionaryEntryPersistor. Versions before 2.5.9 and before 3.0.0-M3 initialize dictionary XML parsing without secure processing or DTD restrictions, allowing attacker-supplied dictionary files to trigger local file disclosure or server-side request forgery during SAX parsing.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP dictionary parsing API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        611
+      ],
+      "advisories": [
+        {
+          "url": "https://lists.apache.org/thread/r6jpt0qr9nj67gqhppqg7jxf8vsbo0w6",
+          "title": "Apache Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40682",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "OpenNLP DictionaryEntryPersistor XXE vulnerability fixed in 2.5.9. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.8 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but the vulnerable dictionary XML parsing API is not imported or called. The only production OpenNLP usage found is document categorization and tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42027",
+      "description": "Apache OpenNLP ExtensionLoader is vulnerable to arbitrary class instantiation via attacker-controlled input passed to the extension loading mechanism, potentially allowing remote code execution.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP ExtensionLoader API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not invoke the OpenNLP ExtensionLoader. Only pre-bundled document categorization and tokenization APIs are used.\n"
+        }
+      ],
+      "cwes": [
+        470
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42027",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache OpenNLP ExtensionLoader arbitrary class instantiation vulnerability. The ExtensionLoader API is not imported or called anywhere in Liquibase Secure. The only production OpenNLP usage is document categorization and tokenization via DoccatModel, DocumentCategorizerME, and WhitespaceTokenizer in OpenNLPSentimentDetector.java; no extension loading or dynamic class instantiation occurs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42440",
+      "description": "Apache OpenNLP AbstractModelReader allocates unbounded memory when reading model files, allowing a malicious or malformed model file to cause an out-of-memory denial of service.",
+      "recommendation": "No action required for Liquibase Secure. OpenNLP models are pre-bundled trusted artifacts; no attacker-controlled model loading occurs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not load model files from untrusted sources. Pre-bundled trusted models are used; AbstractModelReader is not directly invoked by Liquibase code.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42440",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache OpenNLP AbstractModelReader OOM denial-of-service vulnerability via unbounded memory allocation during model loading. Exploitation requires loading an attacker-controlled or malformed model file. Liquibase Secure bundles pre-packaged, trusted OpenNLP model files at build time; no model files are loaded from external or user-controlled sources at runtime. AbstractModelReader is not imported or called directly in Liquibase code.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

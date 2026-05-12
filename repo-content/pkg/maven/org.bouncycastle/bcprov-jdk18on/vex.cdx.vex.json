@@ -1,0 +1,45 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-5598",
+      "description": "Covert timing channel vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA core on all (core modules). This vulnerability is associated with program files FrodoEngine.Java.\nThis issue affects BC-JAVA: from 1.71 before 1.84.",
+      "recommendation": "No action required. Liquibase Secure does not use the affected Bouncy Castle Frodo post-quantum cryptography APIs.",
+      "cwes": [
+        385
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5598",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/bcgit/bc-java/wiki/CVE%E2%80%902026%E2%80%905598",
+          "title": "Bouncy Castle Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Bouncy Castle BC-JAVA FrodoEngine covert timing channel affects versions 1.71 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1318), but grep for FrodoEngine, Frodo, org.bouncycastle.pqc, pqc.crypto.frodo, and BCPQC across Java sources returned no matches, so the vulnerable Frodo post-quantum cryptography code path is not reachable.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.bouncycastle/bcprov-jdk18on",
+          "versions": [
+            {
+              "range": "vers:maven/>=1.71|<1.84",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
