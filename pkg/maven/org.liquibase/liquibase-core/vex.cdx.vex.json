@@ -92,6 +92,83 @@
       ]
     },
     {
+      "id": "CVE-2026-44431",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-44432",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43515",
+      "description": "Improper Authorization vulnerability when multiple method constraints define an HTTP method for the same extension in Apache Tomcat.\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109.\nUsers are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118 which fix the issue.",
+      "recommendation": "No action required. Liquibase Secure pins tomcat-embed-core to 11.0.22, which includes the fix for the Tomcat 11.x affected range.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        285
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5m62-pw8w-7w9f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43515",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache Tomcat improper authorization vulnerability fixed in 11.0.22. Liquibase Secure pins tomcat-embed-core through tomcat.version 11.0.22 (tools/liquibase-license-utility/pom.xml:26), and the dependency uses that property (tools/liquibase-license-utility/pom.xml:52). The fixed version is therefore present and the vulnerable 11.0.21 code is not.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33870",
       "description": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
       "recommendation": "No action required. Liquibase does not run an HTTP server.",
@@ -1251,6 +1328,306 @@
       ]
     },
     {
+      "id": "CVE-2026-41284",
+      "description": "Allocation of Resources Without Limits or Throttling vulnerability in Apache Tomcat. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117. Older, unsupported versions may also be affected. Users are recommended to upgrade to version [FIXED_VERSION], which fixes the issue.",
+      "recommendation": "No action required for Liquibase Secure unless the license utility is customized to enable Tomcat WebDAV handling. Upgrade tomcat-embed-core to 11.0.22 or later if WebDAV support is added.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Tomcat WebDAV LOCK and PROPFIND handlers require WebDAV servlet/configuration that is not present in the license utility.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gx5v-xp9w-j4cg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41284",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Unbounded request body reads in Tomcat WebDAV LOCK and PROPFIND handling affect Tomcat 11.x before 11.0.22. The license utility pins tomcat-embed-core to 11.0.21 (tools/liquibase-license-utility/pom.xml:26, tools/liquibase-license-utility/pom.xml:52) through spring-boot-starter-web (tools/liquibase-license-utility/pom.xml:60) and starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20), but no WebDAV servlet, WebDAV mapping, or PROPFIND/LOCK handler is configured in tools/liquibase-license-utility/src/main or its application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1).",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41293",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat: HTTP/2 request headers were not validated, which may have triggered unexpected application behavior. Affects Apache Tomcat 11.0.0-M1 through 11.0.21, 10.1.0-M1 through 10.1.54, 9.0.0.M1 through 9.0.117, and 10.0.0-M1 through 10.0.27. Fixed in 11.0.22, 10.1.55, and 9.0.118.",
+      "recommendation": "No action required for Liquibase Secure unless the license utility is customized to enable Tomcat HTTP/2 support.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "HTTP/2 is not enabled in the license utility, and tomcat-embed-core is pinned at the fixed version 11.0.22. Apache rates this CVE as Low severity in the Tomcat 11 security advisory.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r29c-68gh-xp6x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41293",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP/2 request header validation gap in Tomcat 11.x before 11.0.22. Exploitation requires HTTP/2 connections to a running Tomcat server. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not enable HTTP/2 — application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) sets no server.http2.enabled property and declares no HTTP/2 connector, and the codebase contains no HTTP/2-specific Tomcat configuration. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26), so the fixed version is installed regardless.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42498",
+      "description": "Exposure of HTTP Authentication Header to unexpected hosts during WebSocket authentication in Apache Tomcat. Affects Apache Tomcat 11.0.0-M1 through 11.0.21, 10.1.0-M1 through 10.1.54, 9.0.2 through 9.0.117, 8.5.24 through 8.5.100, and 7.0.83 through 7.0.109. Fixed in 11.0.22, 10.1.55, and 9.0.118.",
+      "recommendation": "No action required for Liquibase Secure unless the license utility is customized to act as a Tomcat WebSocket client or server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Tomcat WebSocket APIs are not used by the license utility, and tomcat-embed-core is pinned at the fixed version 11.0.22. Apache rates this CVE as Low severity in the Tomcat 11 security advisory.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fv25-8xcx-gqjc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42498",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exposure of HTTP authentication headers to unexpected hosts during WebSocket authentication in Tomcat 11.x before 11.0.22. Exploitation requires a WebSocket client following an HTTP redirect during authentication. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not use the Tomcat WebSocket client or server APIs. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no WebSocket endpoint definitions, and the codebase contains no ClientEndpoint/ServerEndpoint annotations or other WebSocket-related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43512",
+      "description": "Authentication Bypass Issues vulnerability in digest authentication in Apache Tomcat. Affects Apache Tomcat 11.0.0-M1 through 11.0.21, 10.1.0-M1 through 10.1.54, 9.0.0.M1 through 9.0.117, and 8.5.0 through 8.5.100. Fixed in 11.0.22, 10.1.55, and 9.0.118.",
+      "recommendation": "No action required for Liquibase Secure unless the license utility is customized to enable Tomcat digest authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Tomcat digest authentication is not configured in the license utility, and tomcat-embed-core is pinned at the fixed version 11.0.22. Apache rates this CVE as Moderate severity in the Tomcat 11 security advisory.\n"
+        }
+      ],
+      "cwes": [
+        592
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h6fc-48rj-7qqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43512",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Authentication bypass in Tomcat digest authentication, where any unknown user presenting the password \"null\" was authenticated. Affects Tomcat 11.x before 11.0.22. Exploitation requires Tomcat to be configured to use DigestAuthenticator. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not configure any Tomcat realm or authenticator. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no realm/authenticator definitions, and the codebase contains no DigestAuthenticator or related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43513",
+      "description": "Improper Handling of Case Sensitivity in LockOutRealm in Apache Tomcat. Affects Apache Tomcat 11.0.0-M1 through 11.0.21, 10.1.0-M1 through 10.1.54, 9.0.0.M1 through 9.0.117, 8.5.0 through 8.5.100, and 7.0.0 through 7.0.109. Fixed in 11.0.22, 10.1.55, and 9.0.118.",
+      "recommendation": "No action required for Liquibase Secure unless the license utility is customized to enable LockOutRealm or any other Tomcat realm.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Tomcat realms (including LockOutRealm) are not configured in the license utility, and tomcat-embed-core is pinned at the fixed version 11.0.22. Apache rates this CVE as Low severity in the Tomcat 11 security advisory.\n"
+        }
+      ],
+      "cwes": [
+        178
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5mp6-jrq3-r938",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43513",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "LockOutRealm treats user names as case-sensitive, reducing its effectiveness against brute-force attacks. Affects Tomcat 11.x before 11.0.22. Exploitation requires Tomcat to be configured to use LockOutRealm. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not configure any Tomcat realm. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no realm definitions, and the codebase contains no LockOutRealm or related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-05-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29062",
       "description": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
       "recommendation": "No action required. Liquibase does not parse untrusted JSON input.",
@@ -1353,6 +1730,20 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-59250",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
         }
       ]
     },
@@ -1530,20 +1921,6 @@
       ]
     },
     {
-      "id": "CVE-2025-59250",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-42577",
       "recommendation": "No action required. Liquibase does not run a Netty server.",
       "ratings": [
@@ -1658,6 +2035,20 @@
       "affects": [
         {
           "ref": "pkg:maven/org.springframework/spring-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-40897",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools ReDoS vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to parse HTML during package lookup; no package lookups occur since all packages are pre-installed at build time via Maven graalpy-maven-plugin.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -1819,20 +2210,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2022-40897",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools ReDoS vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to parse HTML during package lookup; no package lookups occur since all packages are pre-installed at build time via Maven graalpy-maven-plugin.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -2080,6 +2457,20 @@
       ]
     },
     {
+      "id": "CVE-2024-6345",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33811",
       "description": "When using LookupCNAME with the cgo DNS resolver, a very long CNAME response can trigger a double-free of C memory and a crash.",
       "recommendation": "No action required. lpm does not call LookupCNAME and the cgo DNS resolver is not active on Linux.",
@@ -2224,44 +2615,242 @@
       ]
     },
     {
-      "id": "CVE-2026-44431",
+      "id": "GHSA-57rv-r2g8-2cj3",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-57rv-r2g8-2cj3",
+          "title": "GitHub Advisory"
+        }
+      ],
       "analysis": {
         "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "detail": "Netty HTTP codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-14T00:00:00Z"
       },
       "affects": [
         {
-          "ref": "pkg:pypi/urllib3"
+          "ref": "pkg:maven/io.netty/netty-codec-http"
         }
       ]
     },
     {
-      "id": "CVE-2024-6345",
+      "id": "GHSA-cm33-6792-r9fm",
+      "recommendation": "No action required. Liquibase does not expose a Netty DNS listener.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side DNS vulnerability. Liquibase never accepts inbound DNS connections; Netty DNS codec is only used for outbound resolution.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cm33-6792-r9fm",
+          "title": "GitHub Advisory"
+        }
+      ],
       "analysis": {
         "state": "not_affected",
-        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
+        "detail": "Netty DNS codec vulnerability fixed in 4.1.133.Final. Liquibase is a database migration CLI tool that does not run a DNS server or expose any DNS-processing listener. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. Netty's DNS codec is used internally for resolving outbound hostnames; no inbound DNS requests are accepted.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
+        "firstIssued": "2026-05-14T00:00:00Z"
       },
       "affects": [
         {
-          "ref": "pkg:pypi/setuptools"
+          "ref": "pkg:maven/io.netty/netty-codec-dns"
         }
       ]
     },
     {
-      "id": "CVE-2026-44432",
+      "id": "GHSA-f6hv-jmp6-3vwv",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f6hv-jmp6-3vwv",
+          "title": "GitHub Advisory"
+        }
+      ],
       "analysis": {
         "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "detail": "Netty HTTP codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-14T00:00:00Z"
       },
       "affects": [
         {
-          "ref": "pkg:pypi/urllib3"
+          "ref": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-f6hv-jmp6-3vwv",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f6hv-jmp6-3vwv",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty HTTP/2 codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no inbound HTTP/2 listener.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-mj4r-2hfc-f8p6",
+      "recommendation": "No action required. Liquibase does not run a Netty server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side vulnerability. Liquibase never accepts inbound connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mj4r-2hfc-f8p6",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty codec vulnerability fixed in 4.1.133.Final. Liquibase is a database migration CLI tool that does not run any network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no inbound socket for an attacker to exploit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-rwm7-x88c-3g2p",
+      "recommendation": "No action required. Liquibase does not run a Netty server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side transport vulnerability. Liquibase never accepts inbound connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rwm7-x88c-3g2p",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty epoll native transport vulnerability fixed in 4.2.13.Final. Liquibase is a database migration CLI tool that does not run any network server. netty-transport-native-epoll provides the Linux epoll(7) native transport for outbound client connections. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound socket for an attacker to exploit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-native-epoll"
         }
       ]
     }
