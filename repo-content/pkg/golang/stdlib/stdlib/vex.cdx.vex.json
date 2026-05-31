@@ -226,6 +226,301 @@
       ]
     },
     {
+      "id": "CVE-2025-61724",
+      "description": "The Reader.ReadResponse function constructs a response string through repeated string concatenation of lines. When the number of lines in a response is large, this can cause excessive CPU consumption.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ReadResponse, net/textproto, or net/http usage.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61724",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4015",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib Reader.ReadResponse CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ReadResponse, net/textproto, or net/http usage, so the vulnerable API is not directly reachable from lpm source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61725",
+      "description": "The ParseAddress function constructs domain-literal address components through repeated string concatenation. When parsing large domain-literal components, this can cause excessive CPU consumption.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10 and lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ParseAddress or net/mail usage.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61725",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4006",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib ParseAddress CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ParseAddress or net/mail usage, so the vulnerable email parsing API is not reachable from lpm source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61727",
+      "description": "An excluded subdomain constraint in a certificate chain does not restrict the usage of wildcard SANs in the leaf certificate. For example a constraint that excludes the subdomain test.example.com does not prevent a leaf certificate from claiming the SAN *.example.com.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The lpm binary installed by the current Dockerfile is built from a Go toolchain version that includes the crypto/x509 fix.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61727",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4175",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/8FJoBkPddm4",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 name constraints vulnerability fixed in Go 1.24.11 and 1.25.5. Current Liquibase Secure Docker builds install lpm 0.3.4 (docker/Dockerfile:35), and liquibase-package-manager v0.3.4 declares go 1.25.10 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.11|>=1.25.0|<1.25.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39823",
+      "description": "CVE-2026-27142 fixed a vulnerability in which URLs were not correctly escaped inside of a <meta> tag's <content> attribute. If the URL content were to insert ASCII whitespaces around the '=' rune inside of the <content> attribute, the escaper would fail to similarly escape it, leading to XSS.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10, and lpm does not use html/template.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The html/template code path is not used by lpm, and the currently installed lpm release is built with the fixed Go toolchain.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39823",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4982",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template escaping vulnerability fixed in Go 1.25.10 and 1.26.3. Current Liquibase Secure Docker builds install lpm 0.3.4 (docker/Dockerfile:35), and liquibase-package-manager v0.3.4 declares go 1.25.10 (liquibase-package-manager/go.mod:3), which includes the fix. Defense in depth: lpm source contains no html/template usage, and the Liquibase Secure Docker entrypoint only calls lpm for optional driver installation when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39825",
+      "description": "ReverseProxy can forward queries containing parameters not visible to Rewrite functions. When used with a Rewrite function, or a Director function which parses query parameters, ReverseProxy sanitizes the forwarded request to remove query parameters which are not parsed by url.ParseQuery. ReverseProxy does not take ParseQuery's limit on the total number of query parameters (controlled by GODEBUG=urlmaxqueryparams=N) into account. This can permit ReverseProxy to forward a request containing a query parameter that is not visible to the Rewrite function. For example, the query \"a1=x&a2=x&...&a10000=x&hidden=y\" can forward the parameter \"hidden=y\" while hiding it from the proxy's Rewrite function.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10, and lpm does not use ReverseProxy.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The net/http/httputil ReverseProxy code path is not used by lpm, and the currently installed lpm release is built with the fixed Go toolchain.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39825",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4976",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http/httputil ReverseProxy query sanitization vulnerability fixed in Go 1.25.10 and 1.26.3. Current Liquibase Secure Docker builds install lpm 0.3.4 (docker/Dockerfile:35), and liquibase-package-manager v0.3.4 declares go 1.25.10 (liquibase-package-manager/go.mod:3), which includes the fix. Defense in depth: lpm source contains no ReverseProxy or net/http/httputil usage, and the Liquibase Secure Docker entrypoint only calls lpm for optional driver installation when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61726",
       "analysis": {
         "state": "not_affected",
@@ -236,6 +531,69 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39826",
+      "description": "If a trusted template author were to write a <script> tag containing an empty 'type' attribute or a 'type' attribute with an ASCII whitespace, the execution of the template would incorrectly escape any data passed into the <script> block.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10, and lpm does not use html/template.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The html/template code path is not used by lpm, and the currently installed lpm release is built with the fixed Go toolchain.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39826",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4980",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template script escaping vulnerability fixed in Go 1.25.10 and 1.26.3. Current Liquibase Secure Docker builds install lpm 0.3.4 (docker/Dockerfile:35), and liquibase-package-manager v0.3.4 declares go 1.25.10 (liquibase-package-manager/go.mod:3), which includes the fix. Defense in depth: lpm source contains no html/template usage, and the Liquibase Secure Docker entrypoint only calls lpm for optional driver installation when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
