@@ -375,6 +375,73 @@
       ]
     },
     {
+      "id": "CVE-2026-42504",
+      "description": "Decoding a maliciously-crafted MIME header containing many invalid encoded-words can consume excessive CPU.",
+      "recommendation": "No action required. Liquibase Secure Docker uses lpm only as an optional package-manager helper, and the vulnerable MIME header decoding path is not reachable from the Docker runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure Docker does not expose lpm to untrusted MIME header input, and the vulnerable WordDecoder.DecodeHeader code path is not used by the Docker runtime.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h524-452v-82p9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42504",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-5038",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/tKs3rmcBcKw",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib mime.WordDecoder.DecodeHeader quadratic complexity vulnerability fixed in Go 1.25.11 and 1.26.4. Current Liquibase Secure Docker builds install lpm 0.3.4 (docker/Dockerfile:35) from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49). The Docker entrypoint only calls lpm for optional driver installation when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4). A reachability grep across docker and core found no WordDecoder.DecodeHeader, mime.WordDecoder, encoded-word, MIME header, net/mail, ReadMIMEHeader, or textproto usage, so the vulnerable MIME header decoding path is not reachable from the Liquibase Secure Docker runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.11|>=1.26.0|<1.26.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-39825",
       "description": "ReverseProxy can forward queries containing parameters not visible to Rewrite functions. When used with a Rewrite function, or a Director function which parses query parameters, ReverseProxy sanitizes the forwarded request to remove query parameters which are not parsed by url.ParseQuery. ReverseProxy does not take ParseQuery's limit on the total number of query parameters (controlled by GODEBUG=urlmaxqueryparams=N) into account. This can permit ReverseProxy to forward a request containing a query parameter that is not visible to the Rewrite function. For example, the query \"a1=x&a2=x&...&a10000=x&hidden=y\" can forward the parameter \"hidden=y\" while hiding it from the proxy's Rewrite function.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10, and lpm does not use ReverseProxy.",
