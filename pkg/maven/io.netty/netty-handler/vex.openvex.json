@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-3ad1eb096e89f4c81f1f96d41a9bb82865aafded1c5e19f069dbb33c38bb4fe1",
+  "@id": "merged-vex-f0ba1f3fb6c4c43a7d639e14cd0b532806fe78942809f906d64436b62392288a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-06-08T16:06:28.536011581Z",
+  "timestamp": "2026-06-09T15:15:23.498128246Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-24970"
       },
-      "timestamp": "2026-06-08T16:06:28.536012764Z",
+      "timestamp": "2026-06-09T15:15:22.859450327Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -18,6 +18,36 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty SslHandler resource exhaustion vulnerability via SSLEngine. This is a server-side vulnerability requiring an attacker to send malicious SSL/TLS data to a Netty server. Liquibase is a database migration CLI tool that does not run a TLS server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-44249"
+      },
+      "timestamp": "2026-06-09T15:15:23.395440382Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An attacker can bypass IPv6 subnet rules due to an incorrect masking operation in IpSubnetFilterRule.compareTo(). Valid public IP addresses can bypass the restrictions. The io.netty.handler.ipfilter.IpSubnetFilterRule#compareTo(java.net.InetSocketAddress) method performs a bitwise AND between the incoming IP address and the configured networkAddress, instead of the subnetMask.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty IpSubnetFilterRule IPv6 subnet filtering vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:308, commercial-databases/liquibase-commercial-bigquery/pom.xml:73, commercial-databases/liquibase-cassandra/pom.xml:60, cloud-integrations/liquibase-azure-deps/pom.xml:51), so this assessment does not rely on a version-fixed claim. The vulnerable access-control API is not reachable: a focused grep for IpSubnetFilterRule, io.netty.handler.ipfilter, RuleBasedIpFilter, UniqueIpFilter, and IpFilterRule across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45416"
+      },
+      "timestamp": "2026-06-09T15:15:23.479493366Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "SslClientHelloHandler.decode() reads the 24-bit TLS handshake length and, when the ClientHello does not fit in the first record, eagerly allocates ctx.alloc().buffer(handshakeLength). Common SniHandler and AbstractSniHandler constructors can disable the length guard and timeout, allowing a 16 MiB request to cause immediate huge or unpooled allocation retained until the channel closes.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty SslClientHelloHandler/SniHandler allocation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:308, commercial-databases/liquibase-commercial-bigquery/pom.xml:73, commercial-databases/liquibase-cassandra/pom.xml:60, cloud-integrations/liquibase-azure-deps/pom.xml:51), so this assessment does not rely on a version-fixed claim. The vulnerable server-side SNI path is not reachable: a focused grep for SniHandler, AbstractSniHandler, SslClientHelloHandler, netty.handler.ssl.Sni, ClientHello, SNIMatcher, and SNIHostName across Java and XML sources returned zero hits."
     }
   ]
 }
