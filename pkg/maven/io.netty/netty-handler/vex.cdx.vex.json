@@ -16,6 +16,125 @@
           "ref": "pkg:maven/io.netty/netty-handler"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-44249",
+      "description": "An attacker can bypass IPv6 subnet rules due to an incorrect masking operation in IpSubnetFilterRule.compareTo(). Valid public IP addresses can bypass the restrictions. The io.netty.handler.ipfilter.IpSubnetFilterRule#compareTo(java.net.InetSocketAddress) method performs a bitwise AND between the incoming IP address and the configured networkAddress, instead of the subnetMask.",
+      "recommendation": "No action required. Liquibase does not import or configure Netty IpSubnetFilter access-control rules.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable IpSubnetFilterRule access-control path is not imported or configured by Liquibase.\n"
+        }
+      ],
+      "cwes": [
+        284,
+        697
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3qp7-7mw8-wx86",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-3qp7-7mw8-wx86",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty IpSubnetFilterRule IPv6 subnet filtering vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:308, commercial-databases/liquibase-commercial-bigquery/pom.xml:73, commercial-databases/liquibase-cassandra/pom.xml:60, cloud-integrations/liquibase-azure-deps/pom.xml:51), so this assessment does not rely on a version-fixed claim. The vulnerable access-control API is not reachable: a focused grep for IpSubnetFilterRule, io.netty.handler.ipfilter, RuleBasedIpFilter, UniqueIpFilter, and IpFilterRule across Java and XML sources returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.134.Final|>=4.2.0.Final|<=4.2.14.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-45416",
+      "description": "SslClientHelloHandler.decode() reads the 24-bit TLS handshake length and, when the ClientHello does not fit in the first record, eagerly allocates ctx.alloc().buffer(handshakeLength). Common SniHandler and AbstractSniHandler constructors can disable the length guard and timeout, allowing a 16 MiB request to cause immediate huge or unpooled allocation retained until the channel closes.",
+      "recommendation": "No action required. Liquibase does not import or configure Netty SNI handlers or TLS ClientHello server-side processing.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Netty SNI and TLS ClientHello server-side path is not imported or configured by Liquibase.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x4gw-5cx5-pgmh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-x4gw-5cx5-pgmh",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty SslClientHelloHandler/SniHandler allocation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:308, commercial-databases/liquibase-commercial-bigquery/pom.xml:73, commercial-databases/liquibase-cassandra/pom.xml:60, cloud-integrations/liquibase-azure-deps/pom.xml:51), so this assessment does not rely on a version-fixed claim. The vulnerable server-side SNI path is not reachable: a focused grep for SniHandler, AbstractSniHandler, SslClientHelloHandler, netty.handler.ssl.Sni, ClientHello, SNIMatcher, and SNIHostName across Java and XML sources returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.134.Final|>=4.2.0.Final|<=4.2.14.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
