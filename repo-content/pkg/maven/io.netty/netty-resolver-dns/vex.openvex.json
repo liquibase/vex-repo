@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-9315958b3c849ec08fb05c290af612812b3e985b986b2a75d92b0ff729aa1a4b",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-06-15T14:30:17.499101336Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45674"
+      },
+      "timestamp": "2026-06-15T14:30:17.377569924Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-resolver-dns"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's DnsResolveContext fails to validate the origin (bailiwick) of CNAME records in DNS responses. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty DnsResolveContext CNAME bailiwick validation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (commercial-databases/liquibase-cassandra/pom.xml:60, commercial-databases/liquibase-commercial-bigquery/pom.xml:73), so this assessment does not rely on a version-fixed claim. The Azure extension directly manages netty-resolver-dns at the fixed 4.1.135.Final release (cloud-integrations/liquibase-azure-extension/pom.xml:65, cloud-integrations/liquibase-azure-extension/pom.xml:102, cloud-integrations/liquibase-azure-extension/pom.xml:103), and other Netty dependency management also pins fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-deps/pom.xml:51, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable DNS resolver path is not reachable from Liquibase code: a focused grep for DnsResolveContext, AuthoritativeNameServerList, DnsNameResolver, DnsNameResolverBuilder, DnsServerAddressStreamProvider, authoritativeDnsServerCache, and io.netty.resolver.dns across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47691"
+      },
+      "timestamp": "2026-06-15T14:30:17.465490926Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-resolver-dns"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's `DnsResolveContext` insufficiently validates the bailiwick of NS records, enabling DNS Cache Poisoning. An attacker controlling an authoritative name server for a subdomain can poison the cache for parent domains (like `.co.uk`). In `io.netty.resolver.dns.DnsResolveContext.AuthoritativeNameServerList#add` method accepts any NS record from the AUTHORITY section as long as the record's name is a suffix of the questionName. Subsequently, the `handleWithAdditional` method caches the associated A records from the ADDITIONAL section directly into the `authoritativeDnsServerCache` under the parent domain's key. This bypasses standard bailiwick rules, where a server authoritative for a subdomain should not be trusted to provide authoritative records for its parent. The poisoned cache is then used for all future resolutions under the parent domain's key. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty DnsResolveContext NS-record bailiwick validation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (commercial-databases/liquibase-cassandra/pom.xml:60, commercial-databases/liquibase-commercial-bigquery/pom.xml:73), so this assessment does not rely on a version-fixed claim. The Azure extension directly manages netty-resolver-dns at the fixed 4.1.135.Final release (cloud-integrations/liquibase-azure-extension/pom.xml:65, cloud-integrations/liquibase-azure-extension/pom.xml:102, cloud-integrations/liquibase-azure-extension/pom.xml:103), and other Netty dependency management also pins fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-deps/pom.xml:51, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable DNS resolver path is not reachable from Liquibase code: a focused grep for DnsResolveContext, AuthoritativeNameServerList, DnsNameResolver, DnsNameResolverBuilder, DnsServerAddressStreamProvider, authoritativeDnsServerCache, and io.netty.resolver.dns across Java and XML sources returned zero hits."
+    }
+  ]
+}
