@@ -135,6 +135,69 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-50010",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, SimpleTrustManagerFactory.engineGetTrustManagers() and related paths wrap any user-supplied plain X509TrustManager in X509TrustManagerWrapper, which extends X509ExtendedTrustManager but implements the 3-arg checkServerTrusted(chain, authType, SSLEngine) by discarding the SSLEngine and calling the 2-arg delegate. Because the object now IS an X509ExtendedTrustManager, neither SunJSSE's internal AbstractTrustManagerWrapper nor Netty's own OpenSslX509TrustManagerWrapper will re-wrap it to add endpoint-identification. Consequently, even though Netty 4.2 sets endpointIdentificationAlgorithm=\"HTTPS\" by default, a client built with `SslContextBuilder.forClient().trustManager(somePlainX509TrustManager)` performs no hostname verification at all. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
+      "recommendation": "No action required. Liquibase Secure does not construct Netty client SSL contexts with a plain X509TrustManager, and current source imports patched Netty BOM versions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not call the Netty SSL builder or custom X509TrustManager APIs required to trigger this hostname verification bypass, so the vulnerable path is not reachable from application code.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c653-97m9-rcg9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-c653-97m9-rcg9",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty hostname verification can be bypassed when client code passes a plain X509TrustManager through SslContextBuilder.forClient().trustManager(...). The scanner reported io.netty:netty-handler 4.1.133.Final, which is listed in the commercial distribution license metadata (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:526), but the source build now imports the patched Netty 4.1.135.Final BOM (pom.xml:114, pom.xml:116) and the liquibase-checks module imports the patched Netty 4.2.15.Final BOM (tools/liquibase-checks/liquibase-checks/pom.xml:306, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for SslContextBuilder, SimpleTrustManagerFactory, trustManager(, and X509TrustManager returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.134.Final|>=4.2.0.Final|<4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

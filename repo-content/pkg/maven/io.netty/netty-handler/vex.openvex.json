@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c594a70c3f846a2e70dc27825932194d0fc49c3968707e94bf44e0ab92ae9b0f",
+  "@id": "merged-vex-300371124c303e02c0ca0793477ef42fdf707fa57efed72874dffa241e931780",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-06-15T14:42:28.788811619Z",
+  "timestamp": "2026-06-16T15:34:56.295149668Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-24970"
       },
-      "timestamp": "2026-06-15T14:42:28.104603747Z",
+      "timestamp": "2026-06-16T15:34:55.548237996Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2026-44249"
       },
-      "timestamp": "2026-06-15T14:42:28.652907259Z",
+      "timestamp": "2026-06-16T15:34:56.076807303Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2026-45416"
       },
-      "timestamp": "2026-06-15T14:42:28.758475222Z",
+      "timestamp": "2026-06-16T15:34:56.181069654Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -48,6 +48,21 @@
       "status_notes": "SslClientHelloHandler.decode() reads the 24-bit TLS handshake length and, when the ClientHello does not fit in the first record, eagerly allocates ctx.alloc().buffer(handshakeLength). Common SniHandler and AbstractSniHandler constructors can disable the length guard and timeout, allowing a 16 MiB request to cause immediate huge or unpooled allocation retained until the channel closes.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty SslClientHelloHandler/SniHandler allocation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:308, commercial-databases/liquibase-commercial-bigquery/pom.xml:73, commercial-databases/liquibase-cassandra/pom.xml:60, cloud-integrations/liquibase-azure-deps/pom.xml:51), so this assessment does not rely on a version-fixed claim. The vulnerable server-side SNI path is not reachable: a focused grep for SniHandler, AbstractSniHandler, SslClientHelloHandler, netty.handler.ssl.Sni, ClientHello, SNIMatcher, and SNIHostName across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-50010"
+      },
+      "timestamp": "2026-06-16T15:34:56.276262224Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, SimpleTrustManagerFactory.engineGetTrustManagers() and related paths wrap any user-supplied plain X509TrustManager in X509TrustManagerWrapper, which extends X509ExtendedTrustManager but implements the 3-arg checkServerTrusted(chain, authType, SSLEngine) by discarding the SSLEngine and calling the 2-arg delegate. Because the object now IS an X509ExtendedTrustManager, neither SunJSSE's internal AbstractTrustManagerWrapper nor Netty's own OpenSslX509TrustManagerWrapper will re-wrap it to add endpoint-identification. Consequently, even though Netty 4.2 sets endpointIdentificationAlgorithm=\"HTTPS\" by default, a client built with `SslContextBuilder.forClient().trustManager(somePlainX509TrustManager)` performs no hostname verification at all. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty hostname verification can be bypassed when client code passes a plain X509TrustManager through SslContextBuilder.forClient().trustManager(...). The scanner reported io.netty:netty-handler 4.1.133.Final, which is listed in the commercial distribution license metadata (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:526), but the source build now imports the patched Netty 4.1.135.Final BOM (pom.xml:114, pom.xml:116) and the liquibase-checks module imports the patched Netty 4.2.15.Final BOM (tools/liquibase-checks/liquibase-checks/pom.xml:306, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for SslContextBuilder, SimpleTrustManagerFactory, trustManager(, and X509TrustManager returned zero hits."
     }
   ]
 }
