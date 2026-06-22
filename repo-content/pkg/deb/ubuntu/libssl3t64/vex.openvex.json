@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-4b8fc203dd10c0570dea720cd8c2caca4c779cf30ca57e5eb03cf70760d235f6",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-06-22T13:54:01.06949547Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45447"
+      },
+      "timestamp": "2026-06-22T13:54:01.069497323Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy reports the Ubuntu Noble package under the libssl3t64 name.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: libssl3t64 is Ubuntu Noble's time64 ABI transition rename of libssl3 (see sibling assessment above). The same not_affected rationale applies — Liquibase Secure does not process PKCS#7 or S/MIME signed messages through OpenSSL PKCS#7 APIs, and no PKCS7_verify, PKCS7_, S/MIME, or related call sites exist in repository sources."
+    }
+  ]
+}

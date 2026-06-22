@@ -1,0 +1,64 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-45447",
+      "description": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy also flags the openssl CLI tools package.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the openssl CLI or OpenSSL PKCS#7/S/MIME APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure never executes the openssl CLI or calls OpenSSL PKCS#7 APIs, so the vulnerable code path is not reachable.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f684-cpcq-j565",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45447",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260609.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The openssl package provides the OpenSSL command-line tools (the openssl(1) binary). The vulnerable code path is in the PKCS#7/S/MIME signature verification API (PKCS7_verify), which is only reachable if an application calls that API or a user invokes `openssl smime` / `openssl pkcs7` sub-commands. Liquibase Secure never executes the openssl CLI at runtime — the Docker entrypoint dispatches to user- supplied commands or /liquibase/liquibase (docker/docker-entrypoint.sh:8, docker/docker-entrypoint.sh:109, docker/docker-entrypoint.sh:119, docker/docker-entrypoint.sh:121). A focused grep for openssl, smime, pkcs7, and PKCS7 across repository sources (excluding test resources) returned zero hits on call sites that invoke the openssl CLI.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/openssl"
+        }
+      ]
+    }
+  ]
+}
