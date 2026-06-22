@@ -1,0 +1,64 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-45447",
+      "description": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy reports the Ubuntu Noble package under the libssl3t64 name.",
+      "recommendation": "No action required. Liquibase Secure does not process PKCS#7 or S/MIME signed messages through OpenSSL PKCS#7 APIs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not invoke OpenSSL PKCS#7/S/MIME verification APIs, so the vulnerable code path is not reachable from the application.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f684-cpcq-j565",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45447",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260609.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: libssl3t64 is Ubuntu Noble's time64 ABI transition rename of libssl3 (see sibling assessment above). The same not_affected rationale applies — Liquibase Secure does not process PKCS#7 or S/MIME signed messages through OpenSSL PKCS#7 APIs, and no PKCS7_verify, PKCS7_, S/MIME, or related call sites exist in repository sources.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-06-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64"
+        }
+      ]
+    }
+  ]
+}

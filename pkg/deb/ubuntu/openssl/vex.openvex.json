@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-38184d1c00611763c1361ca5395144ae3bec75d9839412e9f66a39ce8506fc62",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-06-22T13:54:03.866985001Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45447"
+      },
+      "timestamp": "2026-06-22T13:54:03.866986193Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy also flags the openssl CLI tools package.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the OpenSSL command-line tools (the openssl(1) binary). The vulnerable code path is in the PKCS#7/S/MIME signature verification API (PKCS7_verify), which is only reachable if an application calls that API or a user invokes `openssl smime` / `openssl pkcs7` sub-commands. Liquibase Secure never executes the openssl CLI at runtime — the Docker entrypoint dispatches to user- supplied commands or /liquibase/liquibase (docker/docker-entrypoint.sh:8, docker/docker-entrypoint.sh:109, docker/docker-entrypoint.sh:119, docker/docker-entrypoint.sh:121). A focused grep for openssl, smime, pkcs7, and PKCS7 across repository sources (excluding test resources) returned zero hits on call sites that invoke the openssl CLI."
+    }
+  ]
+}
