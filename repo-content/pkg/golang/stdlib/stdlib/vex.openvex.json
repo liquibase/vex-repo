@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-d318bfd59000ea72355d64f7fc92543171996469983ede6b6cf8d632c2886074",
+  "@id": "merged-vex-09764cdfa238f0ae9be6d65c02be9e0f4a339037424e2220f318e055a12fefa8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-06-24T14:06:23.770225651Z",
+  "timestamp": "2026-06-25T13:44:59.617056387Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-58183"
       },
-      "timestamp": "2026-06-24T14:06:21.657296826Z",
+      "timestamp": "2026-06-25T13:44:57.348274656Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2025-61724"
       },
-      "timestamp": "2026-06-24T14:06:23.084993552Z",
+      "timestamp": "2026-06-25T13:44:58.814996641Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2025-61725"
       },
-      "timestamp": "2026-06-24T14:06:23.163188904Z",
+      "timestamp": "2026-06-25T13:44:58.896602151Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -53,7 +53,7 @@
       "vulnerability": {
         "name": "CVE-2025-61726"
       },
-      "timestamp": "2026-06-24T14:06:21.412882459Z",
+      "timestamp": "2026-06-25T13:44:57.099879751Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -67,7 +67,7 @@
       "vulnerability": {
         "name": "CVE-2025-61727"
       },
-      "timestamp": "2026-06-24T14:06:23.336127348Z",
+      "timestamp": "2026-06-25T13:44:59.078347345Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -82,7 +82,7 @@
       "vulnerability": {
         "name": "CVE-2025-61728"
       },
-      "timestamp": "2026-06-24T14:06:21.495115635Z",
+      "timestamp": "2026-06-25T13:44:57.180897336Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -96,7 +96,7 @@
       "vulnerability": {
         "name": "CVE-2025-61729"
       },
-      "timestamp": "2026-06-24T14:06:21.5756823Z",
+      "timestamp": "2026-06-25T13:44:57.26527795Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -110,7 +110,7 @@
       "vulnerability": {
         "name": "CVE-2025-68121"
       },
-      "timestamp": "2026-06-24T14:06:21.333170074Z",
+      "timestamp": "2026-06-25T13:44:57.018537772Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -124,7 +124,7 @@
       "vulnerability": {
         "name": "CVE-2026-25679"
       },
-      "timestamp": "2026-06-24T14:06:21.25479899Z",
+      "timestamp": "2026-06-25T13:44:56.937469236Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -136,9 +136,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-27145"
+      },
+      "timestamp": "2026-06-25T13:44:59.323295887Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "(*x509.Certificate).VerifyHostname previously called matchHostnames in a loop over all DNS Subject Alternative Name (SAN) entries. This caused strings.Split(host, \".\") to execute repeatedly on the same input hostname. With a large DNS SAN list, verification costs scaled quadratically based on the number of SAN entries multiplied by the hostname's label count. Because x509.Verify validates hostnames before building the certificate chain, this overhead occurred even for untrusted certificates.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Go stdlib crypto/x509 VerifyHostname quadratic complexity vulnerability fixed in Go 1.25.11 and 1.26.4. The scanner reported affected Go stdlib versions in the lpm helper bundled in published Liquibase Secure Docker images. The Secure Dockerfile installs lpm as an optional helper (docker/Dockerfile:35, docker/Dockerfile:49), but the Docker entrypoint only invokes lpm when INSTALL_MYSQL is explicitly configured (docker/docker-entrypoint.sh:4); otherwise it executes the Java Liquibase CLI directly (docker/docker-entrypoint.sh:119). A focused grep across the Docker runtime files found no direct VerifyHostname, Certificate.Verify, matchHostnames, HostnameError, or crypto/x509 usage. Defense in depth: current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and liquibase-package-manager v0.3.5 declares go 1.25.11 (liquibase-package-manager/go.mod:3), which includes the fix."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-32280"
       },
-      "timestamp": "2026-06-24T14:06:21.736955056Z",
+      "timestamp": "2026-06-25T13:44:57.429793839Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -152,7 +167,7 @@
       "vulnerability": {
         "name": "CVE-2026-32281"
       },
-      "timestamp": "2026-06-24T14:06:21.898475018Z",
+      "timestamp": "2026-06-25T13:44:57.593957625Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -167,7 +182,7 @@
       "vulnerability": {
         "name": "CVE-2026-32282"
       },
-      "timestamp": "2026-06-24T14:06:21.816438818Z",
+      "timestamp": "2026-06-25T13:44:57.510460213Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -181,7 +196,7 @@
       "vulnerability": {
         "name": "CVE-2026-32283"
       },
-      "timestamp": "2026-06-24T14:06:21.979028178Z",
+      "timestamp": "2026-06-25T13:44:57.674302157Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -196,7 +211,7 @@
       "vulnerability": {
         "name": "CVE-2026-33811"
       },
-      "timestamp": "2026-06-24T14:06:22.770312392Z",
+      "timestamp": "2026-06-25T13:44:58.487299017Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -211,7 +226,7 @@
       "vulnerability": {
         "name": "CVE-2026-33814"
       },
-      "timestamp": "2026-06-24T14:06:22.848359182Z",
+      "timestamp": "2026-06-25T13:44:58.569403255Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -226,7 +241,7 @@
       "vulnerability": {
         "name": "CVE-2026-39820"
       },
-      "timestamp": "2026-06-24T14:06:22.926679636Z",
+      "timestamp": "2026-06-25T13:44:58.650090618Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -241,7 +256,7 @@
       "vulnerability": {
         "name": "CVE-2026-39823"
       },
-      "timestamp": "2026-06-24T14:06:23.413299254Z",
+      "timestamp": "2026-06-25T13:44:59.160128693Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -256,7 +271,7 @@
       "vulnerability": {
         "name": "CVE-2026-39825"
       },
-      "timestamp": "2026-06-24T14:06:23.569752663Z",
+      "timestamp": "2026-06-25T13:44:59.405792877Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -271,7 +286,7 @@
       "vulnerability": {
         "name": "CVE-2026-39826"
       },
-      "timestamp": "2026-06-24T14:06:23.648638719Z",
+      "timestamp": "2026-06-25T13:44:59.487461779Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -286,7 +301,7 @@
       "vulnerability": {
         "name": "CVE-2026-39836"
       },
-      "timestamp": "2026-06-24T14:06:22.691479772Z",
+      "timestamp": "2026-06-25T13:44:58.403542342Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -301,7 +316,7 @@
       "vulnerability": {
         "name": "CVE-2026-42499"
       },
-      "timestamp": "2026-06-24T14:06:23.005503953Z",
+      "timestamp": "2026-06-25T13:44:58.732296644Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -316,7 +331,7 @@
       "vulnerability": {
         "name": "CVE-2026-42504"
       },
-      "timestamp": "2026-06-24T14:06:23.490005664Z",
+      "timestamp": "2026-06-25T13:44:59.242228953Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
