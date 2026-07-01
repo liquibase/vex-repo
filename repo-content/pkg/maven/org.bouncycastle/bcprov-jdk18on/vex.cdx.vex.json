@@ -40,6 +40,69 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-14813",
+      "description": "Use of a Broken or Risky Cryptographic Algorithm vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA bcprov on all (core modules).\nThis vulnerability is associated with program files G3413CTRBlockCipher.\nThis issue affects BC-JAVA: from 1.59 before 1.80.2, from 1.81 before 1.81.1, from 1.82 before 1.84.",
+      "recommendation": "No action required. Liquibase Secure does not use the affected Bouncy Castle GOST 28147 CTR mode cipher APIs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not call the Bouncy Castle GOST 28147 CTR mode cipher classes or related GOST APIs required to reach this keystream reuse vulnerability, so the vulnerable path is not reachable from application code.\n"
+        }
+      ],
+      "cwes": [
+        327
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-574f-3g2m-x479",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14813",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/bcgit/bc-java/wiki/CVE%E2%80%902025%E2%80%9014813",
+          "title": "Bouncy Castle Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Bouncy Castle BC-JAVA GOST 28147 CTR mode keystream reuse affects bcprov-jdk18on versions from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1298), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, and GOST28147ParameterSpec returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.bouncycastle/bcprov-jdk18on",
+          "versions": [
+            {
+              "range": "vers:maven/>=1.59|<1.80.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
