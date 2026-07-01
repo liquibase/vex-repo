@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-b4bb18604cce6c516701e2f494ce879430ff4693be78bc5fb9d9fda3fb354754",
+  "@id": "merged-vex-c1de4ccf3628558082d0358d947e42f8811d200b080e2682f03ef4dbd5b4d739",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-06-25T13:46:14.213131431Z",
+  "timestamp": "2026-07-01T14:35:30.910635235Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-14813"
+      },
+      "timestamp": "2026-07-01T14:35:30.510405167Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Use of a Broken or Risky Cryptographic Algorithm vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA bcprov on all (core modules).\nThis vulnerability is associated with program files G3413CTRBlockCipher.\nThis issue affects BC-JAVA: from 1.59 before 1.80.2, from 1.81 before 1.81.1, from 1.82 before 1.84.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Bouncy Castle BC-JAVA GOST 28147 CTR mode keystream reuse affects bcprov-jdk18on versions from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1298), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, and GOST28147ParameterSpec returned zero hits."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-5598"
       },
-      "timestamp": "2026-06-25T13:46:14.213132893Z",
+      "timestamp": "2026-07-01T14:35:30.429487853Z",
       "products": [
         {
           "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
