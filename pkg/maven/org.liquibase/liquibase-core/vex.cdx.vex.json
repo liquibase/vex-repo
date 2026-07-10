@@ -1497,6 +1497,73 @@
       ]
     },
     {
+      "id": "CVE-2026-39822",
+      "description": "On Unix systems, opening a file in an os.Root improperly follows symlinks to locations outside of the Root when the final path component of the path is a symbolic link and the path ends in /. For example, root.Open(\"symlink/\") will open \"symlink\" even when \"symlink\" is a symbolic link pointing outside of the root.",
+      "recommendation": "No action required. The lpm helper bundled with Liquibase Secure Docker images does not call the os.Root API, and lpm is only invoked when INSTALL_MYSQL is explicitly configured — the default runtime path never executes it.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "liquibase-package-manager does not import or call the os.Root / OpenRoot APIs anywhere in its source, so the vulnerable symlink resolution path is unreachable regardless of the underlying Go stdlib version. lpm is also only invoked from the Docker entrypoint when INSTALL_MYSQL is explicitly configured.\n"
+        }
+      ],
+      "cwes": [
+        61
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xcgv-8mv7-v8c7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39822",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4970",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/OrmQE_Yp5Sc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib os.Root symlink-following vulnerability fixed in Go 1.25.12, 1.26.5, and 1.27.0-rc.2. The scanner reported affected Go stdlib version v1.26.4 in the lpm helper bundled in published Liquibase Secure Docker images (docker/Dockerfile:35, docker/Dockerfile:49) — confirmed by extracting the released liquibase-package-manager v0.3.5 binary and running `go version` on it, which reports go1.26.4, matching the scanner's reported installed version exactly. The vulnerable API, os.Root (and OpenRoot), is a defensive filesystem-sandboxing API added in Go 1.24; a source-level grep of the liquibase-package-manager v0.3.5 repository for os.Root, OpenRoot, and .Root( returned zero hits, so lpm does not use the vulnerable API at all. Defense in depth: the Secure Docker entrypoint only invokes lpm when INSTALL_MYSQL is explicitly configured (docker/docker-entrypoint.sh:4); the default runtime path executes the Java Liquibase CLI directly and never calls lpm (docker/docker-entrypoint.sh:119-121).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-10T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.12|>=1.26.0|<1.26.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33870",
       "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
       "recommendation": "No action required. Liquibase does not run an HTTP server.",
