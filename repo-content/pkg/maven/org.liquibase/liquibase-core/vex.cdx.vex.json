@@ -1564,6 +1564,106 @@
       ]
     },
     {
+      "id": "GHSA-r7wm-3cxj-wff9",
+      "description": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
+      "recommendation": "No action required. Liquibase does not run a reactive/async network-facing service that parses untrusted JSON with this parser. Track upstream fix (2.18.8 / 2.21.4 / 2.22.1) for the next dependency refresh.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Client-side use only, against trusted cloud-provider endpoints; no attacker-controlled JSON is parsed via the vulnerable non-blocking parser API.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r7wm-3cxj-wff9",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix for a prior number-length constraint bypass: Jackson's async/non-blocking parser (NonBlockingJsonParser / ByteArrayFeeder) silently buffers digit characters up to maxStringLength instead of enforcing maxNumberLength when input arrives in small chunks without a terminator byte. Found in jackson-core 2.22.0 bundled into liquibase-aws-extension.jar and liquibase-azure.jar. Both extensions are outbound clients that call AWS/Azure APIs and parse the responses those services return over TLS; neither extension's own code invokes Jackson's non-blocking parser API, and neither exposes a network-facing endpoint that accepts attacker-controlled JSON. Exploiting this would require an attacker already able to forge or MITM AWS/Azure API responses, at which point far more direct attacks are already available.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-07-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/<2.18.8|>=2.19.0|<2.21.4|>=2.22.0|<2.22.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GHSA-r7wm-3cxj-wff9",
+      "description": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
+      "recommendation": "No action required. Track upstream fix (3.1.4 / 3.2.1) for the next dependency refresh.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not use Jackson's non-blocking parser API and does not process untrusted JSON input.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r7wm-3cxj-wff9",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Same incomplete maxNumberLength fix as the sibling 2.x assessment above, affecting the Jackson 3.x line. Found as jackson-core 3.2.0, a transitive dependency from Spring Boot 4.0.3 via spring-boot-starter-web in liquibase-license-utility (same dependency chain already assessed for GHSA-2m67-wjpj-xhg9). liquibase-license-utility does not use Jackson's async/non-blocking parser API and does not process untrusted JSON input from external sources; it is an internal analytics reporting service, not a network-facing service accepting attacker-controlled JSON.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-07-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4|>=3.2.0|<3.2.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33870",
       "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
       "recommendation": "No action required. Liquibase does not run an HTTP server.",
