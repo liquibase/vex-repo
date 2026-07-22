@@ -90,6 +90,56 @@
           "ref": "pkg:maven/tools.jackson.core/jackson-core"
         }
       ]
+    },
+    {
+      "id": "GHSA-r7wm-3cxj-wff9",
+      "description": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
+      "recommendation": "No action required. Track upstream fix (3.1.4 / 3.2.1) for the next dependency refresh.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not use Jackson's non-blocking parser API and does not process untrusted JSON input.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r7wm-3cxj-wff9",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Same incomplete maxNumberLength fix as the sibling 2.x assessment above, affecting the Jackson 3.x line. Found as jackson-core 3.2.0, a transitive dependency from Spring Boot 4.0.3 via spring-boot-starter-web in liquibase-license-utility (same dependency chain already assessed for GHSA-2m67-wjpj-xhg9). liquibase-license-utility does not use Jackson's async/non-blocking parser API and does not process untrusted JSON input from external sources; it is an internal analytics reporting service, not a network-facing service accepting attacker-controlled JSON.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-07-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4|>=3.2.0|<3.2.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7cfd1b4170f4761f1c6b9c7f0f64989947db71e9c86082f17937953e40a9c4ee",
+  "@id": "merged-vex-65f401395f21dd4cd9d942b825a1b08910e5067dcf7112df249521cf6e7c860a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-10T21:10:38.941436144Z",
+  "timestamp": "2026-07-22T13:55:48.239878867Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-29062"
       },
-      "timestamp": "2026-07-10T21:10:38.238123937Z",
+      "timestamp": "2026-07-22T13:55:47.445899852Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-07-10T21:10:37.606800281Z",
+      "timestamp": "2026-07-22T13:55:46.825087631Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -34,6 +34,21 @@
       "status_notes": "Jackson Core 3.x StreamReadConstraints.maxDocumentLength check can be bypassed in multiple code paths, weakening DoS protection for applications that rely on it.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Document length constraint bypass in Jackson Core 3.x. The StreamReadConstraints.maxDocumentLength check can be bypassed in blocking parsers, async parsers, and DataInput path. jackson-core 3.x is a transitive dependency from Spring Boot 4.0.3 in liquibase-license-utility. Liquibase does not set maxDocumentLength (zero usages in codebase), does not process untrusted JSON input from external sources, and is a CLI tool — not a network-facing service. The constraint bypass only matters if relied upon for DoS protection, which Liquibase does not."
+    },
+    {
+      "vulnerability": {
+        "name": "GHSA-r7wm-3cxj-wff9"
+      },
+      "timestamp": "2026-07-22T13:55:48.222572216Z",
+      "products": [
+        {
+          "@id": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Same incomplete maxNumberLength fix as the sibling 2.x assessment above, affecting the Jackson 3.x line. Found as jackson-core 3.2.0, a transitive dependency from Spring Boot 4.0.3 via spring-boot-starter-web in liquibase-license-utility (same dependency chain already assessed for GHSA-2m67-wjpj-xhg9). liquibase-license-utility does not use Jackson's async/non-blocking parser API and does not process untrusted JSON input from external sources; it is an internal analytics reporting service, not a network-facing service accepting attacker-controlled JSON."
     }
   ]
 }

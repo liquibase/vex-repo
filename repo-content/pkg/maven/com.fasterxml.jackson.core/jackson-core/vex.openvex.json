@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-743ad521fe86a34edf2e05f11ac3c862696fcab54b81bdde721fecbf24c8258d",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-07-22T13:54:16.818363688Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "GHSA-r7wm-3cxj-wff9"
+      },
+      "timestamp": "2026-07-22T13:54:16.818364761Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Incomplete fix for a prior number-length constraint bypass: Jackson's async/non-blocking parser (NonBlockingJsonParser / ByteArrayFeeder) silently buffers digit characters up to maxStringLength instead of enforcing maxNumberLength when input arrives in small chunks without a terminator byte. Found in jackson-core 2.22.0 bundled into liquibase-aws-extension.jar and liquibase-azure.jar. Both extensions are outbound clients that call AWS/Azure APIs and parse the responses those services return over TLS; neither extension's own code invokes Jackson's non-blocking parser API, and neither exposes a network-facing endpoint that accepts attacker-controlled JSON. Exploiting this would require an attacker already able to forge or MITM AWS/Azure API responses, at which point far more direct attacks are already available."
+    }
+  ]
+}
