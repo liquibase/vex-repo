@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-4c16bf907131344d01910abdcf7184bfe4f86b05d72a11dac359639502851da6",
+  "@id": "merged-vex-9a6617d38baa83181a74793b874db3526b232eb928698ea906de01342ec56086",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-22T13:54:39.360195946Z",
+  "timestamp": "2026-07-24T17:55:47.847261688Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-42583"
       },
-      "timestamp": "2026-07-22T13:54:38.623226664Z",
+      "timestamp": "2026-07-24T17:55:46.9367755Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"
@@ -21,9 +21,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-59901"
+      },
+      "timestamp": "2026-07-24T17:55:47.818630099Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty: [Bzip2Decoder] Infinite Loop in RLE State Machine Leads to Event-Loop Thread Hang. The Bzip2Decoder handler in Netty's compression codec pipeline is vulnerable to a denial-of-service attack through a malformed bzip2 stream that permanently captures the event-loop thread in an infinite loop, in the run-length encoding (RLE) state machine within Bzip2BlockDecompressor.read().",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty Bzip2Decoder infinite loop in the RLE state machine on a malformed bzip2 stream, hanging the event-loop thread. Liquibase dependency management includes Netty versions below the fixed 4.1.136.Final release (pom.xml:124, commercial-databases/liquibase-cassandra/pom.xml:49), so this assessment does not rely on a version-fixed claim. Bzip2Decoder is an opt-in compression codec that must be explicitly added to a Netty pipeline; none of Liquibase's Netty consumers (Cassandra driver via netty-codec, or the Azure/AWS/MongoDB HTTP transports) configure bzip2 compression. A focused grep for Bzip2Decoder, Bzip2Encoder, and io.netty.handler.codec.compression.Bzip2 across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
         "name": "GHSA-mj4r-2hfc-f8p6"
       },
-      "timestamp": "2026-07-22T13:54:39.05864033Z",
+      "timestamp": "2026-07-24T17:55:47.396399451Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"

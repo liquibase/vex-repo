@@ -1664,6 +1664,163 @@
       ]
     },
     {
+      "id": "CVE-2026-55831",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame, allowing a remote SPDY/3.1 peer to send a syntactically valid roughly 2 MiB SETTINGS frame that creates 262144 map entries and amplifies network input into heap growth and ordered-map insertion work.",
+      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The vulnerable SPDY SETTINGS decoder path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6jqx-86gh-f27w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55831",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty SPDY SETTINGS decoder unbounded map amplification, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is the SPDY/3.1 protocol decoder (DefaultSpdySettingsFrame / SpdySettingsFrameDecoder), which is a legacy Google protocol that none of Liquibase's Netty consumers (Azure SDK, Cassandra driver, MongoDB driver, AWS SDK) negotiate or expose. A focused grep for SpdySettingsFrame, SpdyFrameCodec, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits, and Liquibase never runs a SPDY server or client.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55833",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty SPDY header decoding continues inflating zlib-compressed header blocks after the raw header parser has exceeded maxHeaderSize and marked the frame truncated in SpdyFrameCodec, allowing a remote peer to send a small compressed HEADERS block that expands into much larger raw header data and causes compression-amplified CPU and allocation churn.",
+      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The vulnerable SPDY header decompression path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mvh2-crg5-v77c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55833",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty SPDY zlib header block continues decoding expansion after maxHeaderSize truncation, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SPDY HEADERS frame zlib decompression in SpdyFrameCodec, part of the legacy SPDY/3.1 protocol decoder that none of Liquibase's Netty consumers negotiate. A focused grep for SpdyFrameCodec, SpdyHeaderBlockDecoder, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56745",
+      "description": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame with FLAG_FIN=0 and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream or the accumulated content exceeds maxContentLength, the decoder removes the entry but does not release the pooled ByteBuf, causing native memory exhaustion.",
+      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The vulnerable SpdyHttpDecoder path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jppx-w49h-x2qq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56745",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty SpdyHttpDecoder pooled ByteBuf reference leak on RST_STREAM, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SpdyHttpDecoder, the SPDY-to-HTTP translation codec, which none of Liquibase's Netty consumers negotiate (they speak HTTP/1.1 or HTTP/2 directly). A focused grep for SpdyHttpDecoder, io.netty.handler.codec.spdy, and SpdySessionHandler across Java and XML sources returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33870",
       "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
       "recommendation": "No action required. Liquibase does not run an HTTP server.",
@@ -1704,6 +1861,89 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59901",
+      "description": "Netty: [Bzip2Decoder] Infinite Loop in RLE State Machine Leads to Event-Loop Thread Hang. The Bzip2Decoder handler in Netty's compression codec pipeline is vulnerable to a denial-of-service attack through a malformed bzip2 stream that permanently captures the event-loop thread in an infinite loop, in the run-length encoding (RLE) state machine within Bzip2BlockDecompressor.read().",
+      "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The vulnerable Bzip2Decoder codec is never added to a pipeline by any Liquibase Netty consumer.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-558v-64gr-wgg4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59901",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty Bzip2Decoder infinite loop in the RLE state machine on a malformed bzip2 stream, hanging the event-loop thread. Liquibase dependency management includes Netty versions below the fixed 4.1.136.Final release (pom.xml:124, commercial-databases/liquibase-cassandra/pom.xml:49), so this assessment does not rely on a version-fixed claim. Bzip2Decoder is an opt-in compression codec that must be explicitly added to a Netty pipeline; none of Liquibase's Netty consumers (Cassandra driver via netty-codec, or the Azure/AWS/MongoDB HTTP transports) configure bzip2 compression. A focused grep for Bzip2Decoder, Bzip2Encoder, and io.netty.handler.codec.compression.Bzip2 across Java and XML sources returned zero hits.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59901",
+      "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-558v-64gr-wgg4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59901",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "See CVE-2026-59901 entry on netty-codec above — same root cause (Bzip2Decoder RLE infinite loop), mirrored here so scanners that flag netty-codec-compression (the module Bzip2Decoder lives in for Netty 4.2.x) receive the same not_affected statement. Liquibase dependency management includes Netty versions below the fixed 4.2.16.Final release (cloud-integrations/liquibase-azure-extension/pom.xml:65, cloud-integrations/liquibase-azure-deps/pom.xml:50, commercial-databases/liquibase-commercial-bigquery/pom.xml:72). No Liquibase Netty consumer adds Bzip2Decoder/Bzip2Encoder to a pipeline.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-07-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-compression"
         }
       ]
     },
