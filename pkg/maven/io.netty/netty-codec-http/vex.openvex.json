@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a4c450b029c64efca8e28981a4070a74ccb2a9cee7668e1299a3a674b5275f27",
+  "@id": "merged-vex-ef8e6732fdf1b4fc1c25884cc00c8a5016236171255d368009ec2bf72f6ed73e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-22T13:54:49.659713647Z",
+  "timestamp": "2026-07-24T17:55:59.867531396Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-07-22T13:54:48.040789253Z",
+      "timestamp": "2026-07-24T17:55:57.837412391Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-42584"
       },
-      "timestamp": "2026-07-22T13:54:48.80656515Z",
+      "timestamp": "2026-07-24T17:55:58.653023048Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2026-42587"
       },
-      "timestamp": "2026-07-22T13:54:48.890435336Z",
+      "timestamp": "2026-07-24T17:55:58.742403915Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -50,9 +50,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-55831"
+      },
+      "timestamp": "2026-07-24T17:55:59.639971914Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame, allowing a remote SPDY/3.1 peer to send a syntactically valid roughly 2 MiB SETTINGS frame that creates 262144 map entries and amplifies network input into heap growth and ordered-map insertion work.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty SPDY SETTINGS decoder unbounded map amplification, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is the SPDY/3.1 protocol decoder (DefaultSpdySettingsFrame / SpdySettingsFrameDecoder), which is a legacy Google protocol that none of Liquibase's Netty consumers (Azure SDK, Cassandra driver, MongoDB driver, AWS SDK) negotiate or expose. A focused grep for SpdySettingsFrame, SpdyFrameCodec, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits, and Liquibase never runs a SPDY server or client."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-55833"
+      },
+      "timestamp": "2026-07-24T17:55:59.731973761Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty SPDY header decoding continues inflating zlib-compressed header blocks after the raw header parser has exceeded maxHeaderSize and marked the frame truncated in SpdyFrameCodec, allowing a remote peer to send a small compressed HEADERS block that expands into much larger raw header data and causes compression-amplified CPU and allocation churn.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty SPDY zlib header block continues decoding expansion after maxHeaderSize truncation, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SPDY HEADERS frame zlib decompression in SpdyFrameCodec, part of the legacy SPDY/3.1 protocol decoder that none of Liquibase's Netty consumers negotiate. A focused grep for SpdyFrameCodec, SpdyHeaderBlockDecoder, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56745"
+      },
+      "timestamp": "2026-07-24T17:55:59.824026309Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame with FLAG_FIN=0 and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream or the accumulated content exceeds maxContentLength, the decoder removes the entry but does not release the pooled ByteBuf, causing native memory exhaustion.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty SpdyHttpDecoder pooled ByteBuf reference leak on RST_STREAM, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SpdyHttpDecoder, the SPDY-to-HTTP translation codec, which none of Liquibase's Netty consumers negotiate (they speak HTTP/1.1 or HTTP/2 directly). A focused grep for SpdyHttpDecoder, io.netty.handler.codec.spdy, and SpdySessionHandler across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
         "name": "GHSA-57rv-r2g8-2cj3"
       },
-      "timestamp": "2026-07-22T13:54:49.23938683Z",
+      "timestamp": "2026-07-24T17:55:59.115880863Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -66,7 +111,7 @@
       "vulnerability": {
         "name": "GHSA-f6hv-jmp6-3vwv"
       },
-      "timestamp": "2026-07-22T13:54:49.335098312Z",
+      "timestamp": "2026-07-24T17:55:59.218179786Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"

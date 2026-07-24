@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-dcf199d581743bcc8a095b5b369160ef8a521348073aebfdbcb55811a9c6c928",
+  "@id": "merged-vex-54c2182a7bf4dc33a81e4f9f35b514bb844c3f514d51ec718fd8a0dae75d0fed",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-22T13:54:42.083168178Z",
+  "timestamp": "2026-07-24T17:55:51.803938759Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-42583"
       },
-      "timestamp": "2026-07-22T13:54:42.08316926Z",
+      "timestamp": "2026-07-24T17:55:50.971188456Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-compression"
@@ -18,6 +18,20 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty codec-compression vulnerability fixed in 4.2.13.Final. Liquibase is a database migration CLI tool that does not run any network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no inbound socket for an attacker to exploit."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59901"
+      },
+      "timestamp": "2026-07-24T17:55:51.786417626Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-compression"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "See CVE-2026-59901 entry on netty-codec above — same root cause (Bzip2Decoder RLE infinite loop), mirrored here so scanners that flag netty-codec-compression (the module Bzip2Decoder lives in for Netty 4.2.x) receive the same not_affected statement. Liquibase dependency management includes Netty versions below the fixed 4.2.16.Final release (cloud-integrations/liquibase-azure-extension/pom.xml:65, cloud-integrations/liquibase-azure-deps/pom.xml:50, commercial-databases/liquibase-commercial-bigquery/pom.xml:72). No Liquibase Netty consumer adds Bzip2Decoder/Bzip2Encoder to a pipeline."
     }
   ]
 }
