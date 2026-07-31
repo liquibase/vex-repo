@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a318a2e97b13a403a00bfc8046e67018ff6476b08a09f981cff9ca76b5c70aff",
+  "@id": "merged-vex-1cb15f400eb8b861f95ffbdde25324b36588b8c30ce9723ab6ee4d03cd885222",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-31T17:45:25.493977567Z",
+  "timestamp": "2026-07-31T20:38:56.191086548Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-55163"
       },
-      "timestamp": "2026-07-31T17:45:24.342250409Z",
+      "timestamp": "2026-07-31T20:38:55.253385222Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-07-31T17:45:23.532433364Z",
+      "timestamp": "2026-07-31T20:38:54.490939223Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2026-42587"
       },
-      "timestamp": "2026-07-31T17:45:24.501851119Z",
+      "timestamp": "2026-07-31T20:38:55.40590386Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -52,7 +52,7 @@
       "vulnerability": {
         "name": "CVE-2026-56819"
       },
-      "timestamp": "2026-07-31T17:45:24.596855991Z",
+      "timestamp": "2026-07-31T20:38:55.494790945Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -61,20 +61,6 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty HTTP/2 decompression ByteBuf reference-count leak in DelegatingDecompressorFrameListener, fixed in 4.1.136.Final / 4.2.16.Final. A remote peer can leak one direct ByteBuf per HTTP/2 DATA frame when a stream's decompressor has already been closed and the error path fails to release the retained buffer — but only in applications that run an HTTP/2 server with content decompression explicitly enabled via DelegatingDecompressorFrameListener. Liquibase is a database migration CLI tool that does not run an HTTP/2 server and never enables HTTP/2 content decompression. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections."
-    },
-    {
-      "vulnerability": {
-        "name": "GHSA-f6hv-jmp6-3vwv"
-      },
-      "timestamp": "2026-07-31T17:45:25.035717426Z",
-      "products": [
-        {
-          "@id": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ],
-      "status": "not_affected",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty HTTP/2 codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no inbound HTTP/2 listener."
     }
   ]
 }
