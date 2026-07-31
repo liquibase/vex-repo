@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-2325cec72c250f95b5e7ec256897d54f72766e0e9f7ec9efb63f607b4ed04a51",
+  "@id": "merged-vex-f613c9d94ddb795ddd71d9a0cd97b34b413e0913991a0b363718f539e5bd47c2",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-24T17:56:17.340769848Z",
+  "timestamp": "2026-07-31T07:39:44.504573402Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-07-24T17:56:15.792653294Z",
+      "timestamp": "2026-07-31T07:39:42.874152178Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-transport"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-07-24T17:56:15.882640784Z",
+      "timestamp": "2026-07-31T07:39:42.96250972Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-transport"
@@ -34,6 +34,21 @@
       "status_notes": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42577"
+      },
+      "timestamp": "2026-07-31T07:39:43.796568274Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty's epoll transport fails to detect and close TCP connections that receive a RST after being half-closed, leading to stale channels that are never cleaned up and, in some code paths, a 100% CPU busy-loop in the event loop thread.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Scanner over-match: the vulnerable code lives in netty-transport-native-epoll (see the sibling assessment above). The NVD description itself scopes the bug to \"Netty's epoll transport\" — EpollSocketChannel's handling of a TCP RST received on a half-closed connection — which only exists in the native epoll(7) transport implementation. The cpe:2.3:a:netty:netty:* CPE causes CPE-based scanners to propagate the CVE onto every netty-transport-* artifact, including the base netty-transport module, which ships only the abstract channel/event-loop interfaces and the pure-Java NIO transport (NioSocketChannel) — no epoll-specific code at all. Independently, a repo-wide grep for Netty server bootstrap usage (`grep -rln \"ServerBootstrap\" --include=\"*.java\" .`) returns zero hits: Liquibase is a database migration CLI tool that never runs a network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver, used only as a client-side transport for outbound connections, so even the genuinely-affected epoll transport has no inbound socket for an attacker to exploit."
     }
   ]
 }
