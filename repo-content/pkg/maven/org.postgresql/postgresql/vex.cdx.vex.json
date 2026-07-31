@@ -18,48 +18,6 @@
       ]
     },
     {
-      "id": "CVE-2026-42198",
-      "description": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count.",
-      "recommendation": "No action required for builds using the current source dependency set; pgjdbc is managed at the fixed 42.7.11 version.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "cwes": [
-        770
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42198",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "pgjdbc client-side SCRAM-SHA-256 denial-of-service is fixed in 42.7.11. The current source sets postgresql.version to 42.7.11 (pom.xml:55), and the distribution dependency uses that managed version (dist/pom.xml:117). The fixed version is therefore present in the current Liquibase Secure build source even though the scanner reported 42.7.9 for this image.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-05-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.postgresql/postgresql",
-          "versions": [
-            {
-              "range": "vers:maven/>=42.2.0|<42.7.11",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-54291",
       "description": "channelBinding=require connections can be silently downgraded from SCRAM-SHA-256-PLUS with channel binding to plain SCRAM-SHA-256 without it. An attacker able to intercept the TLS connection could exploit this by presenting certificates with unsupported signature algorithms, causing the authentication mechanism to lose its man-in-the-middle protection.",
       "recommendation": "No action required for the default configuration, since Liquibase does not set channelBinding itself. Deployments that explicitly set channelBinding=require in their own JDBC URL should use a Liquibase Secure build on pgjdbc 42.7.12 or later (current source already pins 42.7.13); already-published images built before that bump remain exposed for that specific configuration until upgraded.",

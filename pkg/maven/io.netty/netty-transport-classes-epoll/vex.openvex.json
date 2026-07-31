@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-086f2f2b63a6feddef388c427a6e4748d3cae620dbb9b0e514c42089470244c3",
+  "@id": "merged-vex-191c0b5ec5addf48a9d35606c6a84abf3b9f110fb9a6c846ddecdd632596de1f",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-31T17:45:43.900561503Z",
+  "timestamp": "2026-07-31T20:39:13.090253614Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-07-31T17:45:42.21971514Z",
+      "timestamp": "2026-07-31T20:39:11.468714026Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-transport-classes-epoll"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-33871"
       },
-      "timestamp": "2026-07-31T17:45:42.318712773Z",
+      "timestamp": "2026-07-31T20:39:11.563662815Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-transport-classes-epoll"
@@ -34,6 +34,21 @@
       "status_notes": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-epoll is the Linux epoll native transport — no HTTP/2 frame decoder. CPE-based scanners propagate the CVE here despite the artifact not containing the vulnerable parser."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42577"
+      },
+      "timestamp": "2026-07-31T20:39:12.412257111Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty's epoll transport fails to detect and close TCP connections that receive a RST after being half-closed, leading to stale channels that are never cleaned up and, in some code paths, a 100% CPU busy-loop in the event loop thread.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Netty 4.2.x splits the epoll native transport into two Maven coordinates: netty-transport-classes-epoll (the Java-side channel/ event-loop implementation, including EpollSocketChannel) and netty-transport-native-epoll (the per-platform JNI bindings). Both ship as part of the same logical epoll transport as the sibling netty-transport-native-epoll assessment above, and the same reachability argument applies directly here — not as a scanner over-match like the netty-transport entry above, since this artifact genuinely contains the affected EpollSocketChannel RST-handling code. Confirmed present at the vulnerable version 4.2.9.Final on the published liquibase-secure:5.2.0 image (scan-results branch commit 8c9d0ffdf1, 2026-07-31 run, liquibase/liquibase-secure/5.2.0/trivy-deep.json), within the affected 4.2.0.Final-4.2.13.Final range. A repo-wide grep for Netty server bootstrap usage (`grep -rln \"ServerBootstrap\" --include=\"*.java\" .`) returns zero hits: Liquibase is a database migration CLI tool that never runs a network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver, used only as a client-side transport for outbound connections, so there is no inbound socket for an attacker to exploit."
     }
   ]
 }

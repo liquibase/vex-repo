@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-56dda8c3b6df344296a3f86ec616f7353922b7f4fc297bdc0f6df4d565596d77",
+  "@id": "merged-vex-8d2b36b17c945e20c3586977a527cf17c61f615b8ad34633313f6176f14c9029",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-31T17:45:19.812458339Z",
+  "timestamp": "2026-07-31T20:38:51.459162478Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33870"
       },
-      "timestamp": "2026-07-31T17:45:17.557200602Z",
+      "timestamp": "2026-07-31T20:38:49.58108132Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-42584"
       },
-      "timestamp": "2026-07-31T17:45:18.418925365Z",
+      "timestamp": "2026-07-31T20:38:50.396972695Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2026-42587"
       },
-      "timestamp": "2026-07-31T17:45:18.513372147Z",
+      "timestamp": "2026-07-31T20:38:50.486820508Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -52,7 +52,7 @@
       "vulnerability": {
         "name": "CVE-2026-55831"
       },
-      "timestamp": "2026-07-31T17:45:19.533415209Z",
+      "timestamp": "2026-07-31T20:38:51.195116844Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -67,7 +67,7 @@
       "vulnerability": {
         "name": "CVE-2026-55833"
       },
-      "timestamp": "2026-07-31T17:45:19.629323542Z",
+      "timestamp": "2026-07-31T20:38:51.287443981Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -82,7 +82,7 @@
       "vulnerability": {
         "name": "CVE-2026-56745"
       },
-      "timestamp": "2026-07-31T17:45:19.727177136Z",
+      "timestamp": "2026-07-31T20:38:51.378942608Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -92,34 +92,6 @@
       "status_notes": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame with FLAG_FIN=0 and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream or the accumulated content exceeds maxContentLength, the decoder removes the entry but does not release the pooled ByteBuf, causing native memory exhaustion.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty SpdyHttpDecoder pooled ByteBuf reference leak on RST_STREAM, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SpdyHttpDecoder, the SPDY-to-HTTP translation codec, which none of Liquibase's Netty consumers negotiate (they speak HTTP/1.1 or HTTP/2 directly). A focused grep for SpdyHttpDecoder, io.netty.handler.codec.spdy, and SpdySessionHandler across Java and XML sources returned zero hits."
-    },
-    {
-      "vulnerability": {
-        "name": "GHSA-57rv-r2g8-2cj3"
-      },
-      "timestamp": "2026-07-31T17:45:18.951417475Z",
-      "products": [
-        {
-          "@id": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ],
-      "status": "not_affected",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty HTTP codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
-    },
-    {
-      "vulnerability": {
-        "name": "GHSA-f6hv-jmp6-3vwv"
-      },
-      "timestamp": "2026-07-31T17:45:19.064348674Z",
-      "products": [
-        {
-          "@id": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ],
-      "status": "not_affected",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty HTTP codec vulnerability fixed in 4.1.133.Final. This is a server-side vulnerability requiring an attacker to send malicious HTTP requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit."
     }
   ]
 }

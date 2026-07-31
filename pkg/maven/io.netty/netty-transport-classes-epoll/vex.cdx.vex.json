@@ -90,6 +90,62 @@
           "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-42577",
+      "description": "Netty's epoll transport fails to detect and close TCP connections that receive a RST after being half-closed, leading to stale channels that are never cleaned up and, in some code paths, a 100% CPU busy-loop in the event loop thread.",
+      "recommendation": "No action required. Liquibase does not run a Netty server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase never accepts inbound connections on any Netty transport, including epoll; Netty is only used as a client transport for outbound database driver connections.\n"
+        }
+      ],
+      "cwes": [
+        772
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rwm7-x88c-3g2p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42577",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty 4.2.x splits the epoll native transport into two Maven coordinates: netty-transport-classes-epoll (the Java-side channel/ event-loop implementation, including EpollSocketChannel) and netty-transport-native-epoll (the per-platform JNI bindings). Both ship as part of the same logical epoll transport as the sibling netty-transport-native-epoll assessment above, and the same reachability argument applies directly here — not as a scanner over-match like the netty-transport entry above, since this artifact genuinely contains the affected EpollSocketChannel RST-handling code. Confirmed present at the vulnerable version 4.2.9.Final on the published liquibase-secure:5.2.0 image (scan-results branch commit 8c9d0ffdf1, 2026-07-31 run, liquibase/liquibase-secure/5.2.0/trivy-deep.json), within the affected 4.2.0.Final-4.2.13.Final range. A repo-wide grep for Netty server bootstrap usage (`grep -rln \"ServerBootstrap\" --include=\"*.java\" .`) returns zero hits: Liquibase is a database migration CLI tool that never runs a network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver, used only as a client-side transport for outbound connections, so there is no inbound socket for an attacker to exploit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-07-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.2.0.Final|<4.2.13.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
