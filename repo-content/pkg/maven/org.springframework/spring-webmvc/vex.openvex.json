@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-d99c89256b3aa10299be45fc0a3abf1367848b92d71b83851fedcccc29e83cd3",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-07-31T13:42:22.064578731Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41842"
+      },
+      "timestamp": "2026-07-31T13:42:21.945459025Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Denial of Service (DoS) attacks when resolving static resources.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Spring Framework 7.0.8 is newer than the affected 7.0.0 through 7.0.7.1 line for static resource resolution. Liquibase Secure's reactor pins <spring.version>7.0.8</spring.version> in core/pom.xml:79, and the web-facing module declares spring-boot-starter-web in tools/liquibase-license-utility/pom.xml:59."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41845"
+      },
+      "timestamp": "2026-07-31T13:42:22.034756635Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Due to incorrect escaping, the use of JavaScriptUtils.javaScriptEscape() may lead to JavaScript code injection in the browser, potentially resulting in a cross-site scripting (XSS) vulnerability.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Spring Web MVC is pulled in through spring-boot-starter-web in tools/liquibase-license-utility/pom.xml:59. Repo search found no JavaScriptUtils or javaScriptEscape() usage in any Java source, so the vulnerable escaping API is never called. The reactor also pins <spring.version>7.0.8</spring.version> in core/pom.xml:79, which is past the affected release line."
+    }
+  ]
+}

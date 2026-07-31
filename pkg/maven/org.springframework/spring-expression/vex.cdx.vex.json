@@ -1,0 +1,63 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-41850",
+      "description": "Applications that evaluate user-supplied Spring Expression Language (SpEL) expressions are vulnerable to an Algorithmic Denial of Service (DoS). By providing a specially crafted expression, an attacker can trigger excessive resource consumption during evaluation, leading to application degradation or unavailability.",
+      "recommendation": "No action required. Liquibase does not evaluate user-supplied SpEL expressions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase never evaluates Spring Expression Language input at runtime, so the algorithmic DoS path is unreachable.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://spring.io/security/cve-2026-41850",
+          "title": "Spring Security Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41850",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Spring Expression is pulled in through spring-boot-starter-web in tools/liquibase-license-utility/pom.xml:59. Repo search found no org.springframework.expression imports, no SpelExpressionParser, and no StandardEvaluationContext usage. The only parseExpression() hit is the custom tokenizer in commercial-databases/liquibase-commercial-couchbase/src/main/java/ liquibase/ext/couchbase/provider/ExpressionDocumentKeyProvider.java:38, which does not evaluate SpEL. The reactor also pins <spring.version>7.0.8</spring.version> in core/pom.xml:79.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-07-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-expression",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.18.1|>=7.0.0|<7.0.7.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
