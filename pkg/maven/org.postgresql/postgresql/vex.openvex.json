@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-8ebf54a268bba2156f09c13d387fc65097af1c9174409672bcadf9b0a706fd55",
+  "@id": "merged-vex-140780882a96389650b49520044d829160884e57fe5cf78b9ad65f0ab2bd8299",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-07-24T17:56:52.869935135Z",
+  "timestamp": "2026-07-31T07:40:19.934816658Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-49146"
       },
-      "timestamp": "2026-07-24T17:56:52.002955277Z",
+      "timestamp": "2026-07-31T07:40:19.018164288Z",
       "products": [
         {
           "@id": "pkg:maven/org.postgresql/postgresql"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2026-42198"
       },
-      "timestamp": "2026-07-24T17:56:52.094352103Z",
+      "timestamp": "2026-07-31T07:40:19.105706768Z",
       "products": [
         {
           "@id": "pkg:maven/org.postgresql/postgresql"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2026-42198"
       },
-      "timestamp": "2026-07-24T17:56:52.262114621Z",
+      "timestamp": "2026-07-31T07:40:19.356877924Z",
       "products": [
         {
           "@id": "pkg:maven/org.postgresql/postgresql"
@@ -48,6 +48,21 @@
       "status_notes": "pgjdbc is an open source postgresql JDBC Driver. From version 42.2.0 to before version 42.7.11, pgjdbc is vulnerable to a client-side denial of service during SCRAM-SHA-256 authentication. A malicious server can instruct the driver to perform SCRAM authentication with a very large iteration count. With a large enough value, the client spends an unbounded amount of CPU time inside PBKDF2 before authentication can fail. A single attempt ties up a CPU core. Repeated or concurrent attempts exhaust client CPU and can wedge connection pools. In affected versions, loginTimeout did not fully mitigate this problem. When loginTimeout expired, the caller could stop waiting, but the worker thread performing the connection attempt could continue running and burning CPU inside the SCRAM PBKDF2 computation. This issue has been patched in version 42.7.11.",
       "justification": "vulnerable_code_not_present",
       "impact_statement": "PostgreSQL JDBC SCRAM-SHA-256 client-side denial of service fixed in 42.7.11. Liquibase Secure distribution declares postgresql.version as 42.7.11 (dist/pom.xml:23) and uses that property for the org.postgresql:postgresql dependency (dist/pom.xml:115, dist/pom.xml:117), so the vulnerable 42.7.9 code reported by the scanner is not present in the current distribution build."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54291"
+      },
+      "timestamp": "2026-07-31T07:40:19.196114532Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.postgresql/postgresql"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "channelBinding=require connections can be silently downgraded from SCRAM-SHA-256-PLUS with channel binding to plain SCRAM-SHA-256 without it. An attacker able to intercept the TLS connection could exploit this by presenting certificates with unsupported signature algorithms, causing the authentication mechanism to lose its man-in-the-middle protection.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "pgjdbc channel-binding downgrade: connections configured with channelBinding=require can be silently downgraded from SCRAM-SHA-256-PLUS (with channel binding) to plain SCRAM-SHA-256 (without it) when the server presents a certificate with an unsupported signature algorithm, defeating the MITM protection channelBinding=require is meant to provide. Fixed in pgjdbc 42.7.12. channelBinding is a pgjdbc JDBC URL/connection property; a repo-wide grep (`grep -rn \"channelBinding\" --include=\"*.java\" --include=\"*.properties\" --include=\"*.yml\" .`) confirms Liquibase's own code never sets it. However, the --url argument is a raw user-supplied JDBC URL passed straight through with no property filtering (DbUrlConnectionCommandStep.java:107-120: `url = commandScope.getArgumentValue(URL_ARG)` flows unmodified into createDatabaseObject()), so a deployment where the user has appended channelBinding=require to their own connection URL — a deliberate, security-conscious choice some users make — remains exposed to this downgrade until the resolved pgjdbc version is 42.7.12+. This is therefore not reachable in Liquibase's *default* configuration, but is reachable if a user opts into channelBinding=require. Independently, the current source already pins the fix by default: pom.xml:62 sets postgresql.version to 42.7.13, and dist/pom.xml:123 consumes that managed version — the scanner reported 42.7.11 on the published 5.2.0 image (built before this version bump)."
     }
   ]
 }
