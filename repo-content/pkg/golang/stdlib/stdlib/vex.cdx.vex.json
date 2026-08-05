@@ -335,6 +335,20 @@
       ]
     },
     {
+      "id": "GO-2025-4013",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and the upstream liquibase-package-manager v0.3.5 go.mod declares go 1.25.11 (liquibase-package-manager/go.mod:3), which is newer than the scanner-reported Go 1.25.1 and includes the fix. GitHub code search for liquibase/liquibase-package-manager found no crypto/x509 imports or references, so the vulnerable certificate-chain path is not exercised by lpm source.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-08-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61727",
       "description": "An excluded subdomain constraint in a certificate chain does not restrict the usage of wildcard SANs in the leaf certificate. For example a constraint that excludes the subdomain test.example.com does not prevent a leaf certificate from claiming the SAN *.example.com.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
@@ -461,6 +475,20 @@
       ]
     },
     {
+      "id": "CVE-2025-61726",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42504",
       "description": "Decoding a maliciously-crafted MIME header containing many invalid encoded-words can consume excessive CPU.",
       "recommendation": "No action required. Liquibase Secure Docker uses lpm only as an optional package-manager helper, and the vulnerable MIME header decoding path is not reachable from the Docker runtime.",
@@ -524,20 +552,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61726",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
         }
       ]
     },

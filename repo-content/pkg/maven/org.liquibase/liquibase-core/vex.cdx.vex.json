@@ -92,6 +92,20 @@
       ]
     },
     {
+      "id": "GO-2025-4013",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and the upstream liquibase-package-manager v0.3.5 go.mod declares go 1.25.11 (liquibase-package-manager/go.mod:3), which is newer than the scanner-reported Go 1.25.1 and includes the fix. GitHub code search for liquibase/liquibase-package-manager found no crypto/x509 imports or references, so the vulnerable certificate-chain path is not exercised by lpm source.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-08-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-44431",
       "analysis": {
         "state": "not_affected",
@@ -550,6 +564,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-44249",
       "description": "An attacker can bypass IPv6 subnet rules due to an incorrect masking operation in IpSubnetFilterRule.compareTo(). Valid public IP addresses can bypass the restrictions. The io.netty.handler.ipfilter.IpSubnetFilterRule#compareTo(java.net.InetSocketAddress) method performs a bitwise AND between the incoming IP address and the configured networkAddress, instead of the subnetMask.",
       "recommendation": "No action required. Liquibase does not import or configure Netty IpSubnetFilter access-control rules.",
@@ -606,50 +664,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http"
         }
       ]
     },
@@ -1206,6 +1220,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33871",
+      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-54512",
       "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.10.0 until 2.18.8, 2.21.4, and 3.1.4, jackson-databind's PolymorphicTypeValidator (PTV) is the primary safety mechanism guarding polymorphic deserialization. When polymorphic typing is enabled and a type identifier contains generic parameters (i.e. the type ID string contains <), DatabindContext._resolveAndValidateGeneric() validates only the raw container class name (the substring before <) against the configured PTV. If the container type is approved, the method parses the full canonical type string via TypeFactory.constructFromCanonical() and returns the fully parameterized type without ever validating the nested type arguments against the PTV. The nested type arguments are then resolved, instantiated, and populated as beans during deserialization. An attacker who controls the type ID can therefore place a denied class as a generic type parameter of an allowed container — for example java.util.ArrayList<com.evil.Gadget> when only java.util.ArrayList is allow-listed. The container passes the PTV check; com.evil.Gadget is loaded via Class.forName(name, true, loader), instantiated, and its properties are set from attacker-controlled JSON. This completely bypasses an explicitly configured PTV allow-list. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
       "recommendation": "No action required. Liquibase Secure does not configure Jackson polymorphic typing or PolymorphicTypeValidator allow-lists required to trigger this vulnerability.",
@@ -1266,50 +1324,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33871",
-      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http2"
         }
       ]
     },
@@ -1784,6 +1798,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-41842",
       "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service (DoS) attacks when resolving static resources.",
       "recommendation": "No action required. The build is on Spring Framework 7.0.8, which is past the fixed 7.0.7.1 release line.",
@@ -1836,50 +1894,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
