@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-bbbe9a06f5cf4b13ba24a6e7053596ab92ad3ad9673da002ad06c97b170ec42f",
+  "@id": "merged-vex-22a18dbc2374f680a96ac7e8ed6cf15a33661b90aceba1404aecd1b6ca5cfabe",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-05T16:51:10.646719696Z",
+  "timestamp": "2026-08-06T14:14:58.688887277Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-58183"
       },
-      "timestamp": "2026-08-05T16:51:08.440860782Z",
+      "timestamp": "2026-08-06T14:14:55.436283541Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2025-61724"
       },
-      "timestamp": "2026-08-05T16:51:09.754612723Z",
+      "timestamp": "2026-08-06T14:14:57.084334341Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2025-61725"
       },
-      "timestamp": "2026-08-05T16:51:09.825169795Z",
+      "timestamp": "2026-08-06T14:14:57.172833836Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -53,7 +53,7 @@
       "vulnerability": {
         "name": "CVE-2025-61726"
       },
-      "timestamp": "2026-08-05T16:51:08.23154298Z",
+      "timestamp": "2026-08-06T14:14:55.171055024Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -67,7 +67,7 @@
       "vulnerability": {
         "name": "CVE-2025-61727"
       },
-      "timestamp": "2026-08-05T16:51:09.995810819Z",
+      "timestamp": "2026-08-06T14:14:57.383931356Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -82,7 +82,7 @@
       "vulnerability": {
         "name": "CVE-2025-61728"
       },
-      "timestamp": "2026-08-05T16:51:08.299551188Z",
+      "timestamp": "2026-08-06T14:14:55.260176128Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -96,7 +96,7 @@
       "vulnerability": {
         "name": "CVE-2025-61729"
       },
-      "timestamp": "2026-08-05T16:51:08.370632046Z",
+      "timestamp": "2026-08-06T14:14:55.347283527Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -108,9 +108,23 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-68119"
+      },
+      "timestamp": "2026-08-06T14:14:58.275366387Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go cmd/go toolchain code execution via malicious version strings is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). This repository does not invoke the go toolchain, module downloads, or GOTOOLCHAIN-based toolchain selection paths that the advisory requires."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-68121"
       },
-      "timestamp": "2026-08-05T16:51:08.16122382Z",
+      "timestamp": "2026-08-06T14:14:55.081235658Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -124,7 +138,7 @@
       "vulnerability": {
         "name": "CVE-2026-25679"
       },
-      "timestamp": "2026-08-05T16:51:08.091799154Z",
+      "timestamp": "2026-08-06T14:14:54.988539162Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -136,9 +150,37 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-27140"
+      },
+      "timestamp": "2026-08-06T14:14:58.400084369Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib cmd/go code smuggling via SWIG file names is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). This repository does not invoke the go toolchain or any SWIG-based build path that the advisory requires."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-27144"
+      },
+      "timestamp": "2026-08-06T14:14:58.486034621Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go compiler memory corruption in pointer unwrapping is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). The image does not run the Go compiler or perform cgo builds at runtime."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-27145"
       },
-      "timestamp": "2026-08-05T16:51:10.207561373Z",
+      "timestamp": "2026-08-06T14:14:57.655577155Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -153,7 +195,7 @@
       "vulnerability": {
         "name": "CVE-2026-32280"
       },
-      "timestamp": "2026-08-05T16:51:08.511758078Z",
+      "timestamp": "2026-08-06T14:14:55.523128429Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -167,7 +209,7 @@
       "vulnerability": {
         "name": "CVE-2026-32281"
       },
-      "timestamp": "2026-08-05T16:51:08.651543134Z",
+      "timestamp": "2026-08-06T14:14:55.696413957Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -182,7 +224,7 @@
       "vulnerability": {
         "name": "CVE-2026-32282"
       },
-      "timestamp": "2026-08-05T16:51:08.581107421Z",
+      "timestamp": "2026-08-06T14:14:55.609509625Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -196,7 +238,7 @@
       "vulnerability": {
         "name": "CVE-2026-32283"
       },
-      "timestamp": "2026-08-05T16:51:08.721333801Z",
+      "timestamp": "2026-08-06T14:14:55.783662915Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -211,7 +253,7 @@
       "vulnerability": {
         "name": "CVE-2026-33811"
       },
-      "timestamp": "2026-08-05T16:51:09.471505002Z",
+      "timestamp": "2026-08-06T14:14:56.729238123Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -226,7 +268,7 @@
       "vulnerability": {
         "name": "CVE-2026-33814"
       },
-      "timestamp": "2026-08-05T16:51:09.541175852Z",
+      "timestamp": "2026-08-06T14:14:56.82001454Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -241,7 +283,7 @@
       "vulnerability": {
         "name": "CVE-2026-39820"
       },
-      "timestamp": "2026-08-05T16:51:09.611233424Z",
+      "timestamp": "2026-08-06T14:14:56.905858571Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -256,7 +298,7 @@
       "vulnerability": {
         "name": "CVE-2026-39822"
       },
-      "timestamp": "2026-08-05T16:51:10.53717182Z",
+      "timestamp": "2026-08-06T14:14:58.063714623Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -271,7 +313,7 @@
       "vulnerability": {
         "name": "CVE-2026-39823"
       },
-      "timestamp": "2026-08-05T16:51:10.065933989Z",
+      "timestamp": "2026-08-06T14:14:57.473907869Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -286,7 +328,7 @@
       "vulnerability": {
         "name": "CVE-2026-39825"
       },
-      "timestamp": "2026-08-05T16:51:10.280463127Z",
+      "timestamp": "2026-08-06T14:14:57.744090987Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -301,7 +343,7 @@
       "vulnerability": {
         "name": "CVE-2026-39826"
       },
-      "timestamp": "2026-08-05T16:51:10.35028438Z",
+      "timestamp": "2026-08-06T14:14:57.831257235Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -316,7 +358,7 @@
       "vulnerability": {
         "name": "CVE-2026-39836"
       },
-      "timestamp": "2026-08-05T16:51:09.400670489Z",
+      "timestamp": "2026-08-06T14:14:56.641167964Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -331,7 +373,7 @@
       "vulnerability": {
         "name": "CVE-2026-42499"
       },
-      "timestamp": "2026-08-05T16:51:09.682162287Z",
+      "timestamp": "2026-08-06T14:14:56.995219436Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -346,7 +388,7 @@
       "vulnerability": {
         "name": "CVE-2026-42504"
       },
-      "timestamp": "2026-08-05T16:51:10.136317264Z",
+      "timestamp": "2026-08-06T14:14:57.567687597Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -359,9 +401,37 @@
     },
     {
       "vulnerability": {
+        "name": "GO-2025-4007"
+      },
+      "timestamp": "2026-08-06T14:14:58.58616249Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "crypto/x509 name-constraint quadratic behavior is not reachable in the Liquibase Secure container. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). A repo-wide search found no code path that parses attacker-controlled certificate chains or invokes the affected x509 name-constraint APIs at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "GO-2025-4009"
+      },
+      "timestamp": "2026-08-06T14:14:58.671368043Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "encoding/pem quadratic parsing behavior is not reachable in the Liquibase Secure container. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh: 4). A repo-wide search found no code path that parses untrusted PEM input at runtime."
+    },
+    {
+      "vulnerability": {
         "name": "GO-2025-4013"
       },
-      "timestamp": "2026-08-05T16:51:09.896640039Z",
+      "timestamp": "2026-08-06T14:14:57.260276613Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
