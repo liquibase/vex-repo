@@ -895,6 +895,126 @@
       ]
     },
     {
+      "id": "CVE-2025-58188",
+      "description": "Validating certificate chains which contain DSA public keys can cause programs to panic, due to a interface cast that assumes they implement the Equal method. This affects programs which validate arbitrary certificate chains.",
+      "recommendation": "No action required. Liquibase Secure does not load user-controlled certificate chains or custom PEM material in the lpm runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only runtime use of lpm is an outbound download helper. It does not accept attacker-controlled certificate chains or custom PEM inputs, so the DSA-chain panic path is not exercised.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7wwx-xj66-r44x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58188",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/4Emdl2iQ_bI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Validating certificate chains with DSA public keys is not a reachable input path for Liquibase Secure. NVD fixes this in Go 1.25.2, but the Docker image only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:35-55) and the entrypoint only invokes lpm when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Upstream lpm uses a default http.Client for downloads with no custom RootCAs or PEM loading logic (/tmp/gh-aw/agent/lpm/internal/app/utils/Http.go:13-25), so the arbitrary certificate-chain path described by the advisory is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61723",
+      "description": "The processing time for parsing some invalid inputs scales non-linearly with respect to the size of the input. This affects programs which parse untrusted PEM inputs.",
+      "recommendation": "No action required. Liquibase Secure does not parse user-controlled PEM material in the lpm runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only runtime use of lpm is an outbound download helper. It does not parse PEM input or accept attacker-controlled certificate data.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hjx7-fpxx-mj48",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61723",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/4Emdl2iQ_bI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Untrusted PEM parsing is not a reachable input path for Liquibase Secure. NVD fixes this in Go 1.25.2, but the Docker image only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:35-55) and the entrypoint only invokes lpm when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Upstream lpm uses a default http.Client for downloads with no PEM parsing or certificate-loader code (/tmp/gh-aw/agent/lpm/internal/app/utils/Http.go:13-25), so the invalid-PEM parsing path described by the advisory is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61729",
       "analysis": {
         "state": "not_affected",
