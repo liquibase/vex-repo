@@ -92,6 +92,223 @@
       ]
     },
     {
+      "id": "CVE-2026-33814",
+      "description": "When processing HTTP/2 SETTINGS frames, transport will enter an infinite loop of writing CONTINUATION frames if it receives a SETTINGS_MAX_FRAME_SIZE with a value of 0.",
+      "recommendation": "No action required. lpm only connects to trusted GitHub release servers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Exploitation requires a server to send SETTINGS_MAX_FRAME_SIZE=0. lpm only connects to trusted GitHub release CDN endpoints; no attacker-reachable server is in the execution path.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/2 transport infinite loop when a server sends SETTINGS_MAX_FRAME_SIZE with a value of 0. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it makes HTTP/2 connections to GitHub release servers to download Liquibase extension driver JARs. Exploitation requires a server to send the malformed SETTINGS_MAX_FRAME_SIZE=0 frame. lpm only connects to trusted GitHub release CDN endpoints (URLs and checksums fixed in docker/Dockerfile:35-55); no attacker- controlled server endpoint exists in lpm's execution path.",
+        "justification": "protected_by_mitigating_control",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39820",
+      "description": "Well-crafted inputs reaching ParseAddress, ParseAddressList, and ParseDate were able to trigger excessive CPU exhaustion and memory allocations.",
+      "recommendation": "No action required. lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "lpm performs no email parsing. The net/mail code path is completely unreachable from any lpm operation.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/mail CPU exhaustion via pathological inputs to ParseAddress, ParseAddressList, and ParseDate. lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail parsing functions are not called by lpm at any point during package installation or management operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42499",
+      "description": "Pathological inputs could cause DoS through consumePhrase when parsing an email address according to RFC 5322.",
+      "recommendation": "No action required. lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "lpm performs no email parsing. The net/mail consumePhrase code path is completely unreachable from any lpm operation.\n"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/mail DoS via pathological email address inputs reaching the consumePhrase parser (RFC 5322 phrase parsing). lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail consumePhrase code path is not reachable from any lpm operation.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61724",
+      "description": "The Reader.ReadResponse function constructs a response string through repeated string concatenation of lines. When the number of lines in a response is large, this can cause excessive CPU consumption.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ReadResponse, net/textproto, or net/http usage.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61724",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4015",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib Reader.ReadResponse CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ReadResponse, net/textproto, or net/http usage, so the vulnerable API is not directly reachable from lpm source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61725",
+      "description": "The ParseAddress function constructs domain-literal address components through repeated string concatenation. When parsing large domain-literal components, this can cause excessive CPU consumption.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10 and lpm has no email parsing functionality.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ParseAddress or net/mail usage.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61725",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4006",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib ParseAddress CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ParseAddress or net/mail usage, so the vulnerable email parsing API is not reachable from lpm source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "GO-2025-4013",
       "analysis": {
         "state": "not_affected",
@@ -242,6 +459,50 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33870",
+      "description": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http"
         }
       ]
     },
@@ -564,50 +825,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33870",
-      "description": "Netty HttpObjectDecoder incorrectly terminates chunk header parsing at \\r\\n inside quoted strings in chunked transfer encoding extensions, enabling HTTP request smuggling.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability. Liquibase never accepts inbound HTTP connections; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "HTTP request smuggling via chunked transfer encoding in Netty HTTP codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/1.1 requests to a Netty HTTP server. Liquibase is a database migration CLI tool that does not run an HTTP server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections. There is no listening socket for an attacker to exploit.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-44249",
       "description": "An attacker can bypass IPv6 subnet rules due to an incorrect masking operation in IpSubnetFilterRule.compareTo(). Valid public IP addresses can bypass the restrictions. The io.netty.handler.ipfilter.IpSubnetFilterRule#compareTo(java.net.InetSocketAddress) method performs a bitwise AND between the incoming IP address and the configured networkAddress, instead of the subnetMask.",
       "recommendation": "No action required. Liquibase does not import or configure Netty IpSubnetFilter access-control rules.",
@@ -916,6 +1133,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33871",
+      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-45447",
       "description": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy reports the Ubuntu Noble package under the libssl3t64 name.",
       "recommendation": "No action required. Liquibase Secure does not process PKCS#7 or S/MIME signed messages through OpenSSL PKCS#7 APIs.",
@@ -1220,50 +1481,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33871",
-      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-54512",
       "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.10.0 until 2.18.8, 2.21.4, and 3.1.4, jackson-databind's PolymorphicTypeValidator (PTV) is the primary safety mechanism guarding polymorphic deserialization. When polymorphic typing is enabled and a type identifier contains generic parameters (i.e. the type ID string contains <), DatabindContext._resolveAndValidateGeneric() validates only the raw container class name (the substring before <) against the configured PTV. If the container type is approved, the method parses the full canonical type string via TypeFactory.constructFromCanonical() and returns the fully parameterized type without ever validating the nested type arguments against the PTV. The nested type arguments are then resolved, instantiated, and populated as beans during deserialization. An attacker who controls the type ID can therefore place a denied class as a generic type parameter of an allowed container — for example java.util.ArrayList<com.evil.Gadget> when only java.util.ArrayList is allow-listed. The container passes the PTV check; com.evil.Gadget is loaded via Class.forName(name, true, loader), instantiated, and its properties are set from attacker-controlled JSON. This completely bypasses an explicitly configured PTV allow-list. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
       "recommendation": "No action required. Liquibase Secure does not configure Jackson polymorphic typing or PolymorphicTypeValidator allow-lists required to trigger this vulnerability.",
@@ -1558,6 +1775,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-55831",
       "description": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame, allowing a remote SPDY/3.1 peer to send a syntactically valid roughly 2 MiB SETTINGS frame that creates 262144 map entries and amplifies network input into heap growth and ordered-map insertion work.",
       "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
@@ -1798,50 +2059,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-41842",
       "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service (DoS) attacks when resolving static resources.",
       "recommendation": "No action required. The build is on Spring Framework 7.0.8, which is past the fixed 7.0.7.1 release line.",
@@ -2076,6 +2293,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-21945",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u471, 8u471-b50, 8u471-perf, 11.0.29, 17.0.17, 21.0.9, 25.0.1; Oracle GraalVM for JDK: 17.0.17 and 21.0.9; Oracle GraalVM Enterprise Edition: 21.3.16. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a hang or frequently repeatable crash (complete DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as a sandboxed Java client.",
@@ -2260,50 +2521,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33871",
-      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
@@ -2898,6 +3115,304 @@
       ]
     },
     {
+      "id": "CVE-2026-41695",
+      "description": "Spring Data Commons applications may be vulnerable to denial of service through resource exhaustion when attacker-controlled property path strings are passed to MappingContext property path resolution.",
+      "recommendation": "No action required. Liquibase Secure resolves spring-data-commons 4.1.0, which is newer than the fixed 4.0.6 release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The resolved spring-data-commons version is newer than the fixed release, and the repository has no direct property-path resolution call sites.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-88fw-v6x4-3f58",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41695",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41695",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Spring Data Commons property-path DoS fixed in 4.0.6 and 3.5.12. Liquibase Secure resolves spring-data-commons 4.1.0 in the distribution license manifest (`core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:958`), which is newer than the fixed 4.0.6 line. Repo search found no direct `MappingContext` or `PropertyPath` call sites in application code.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.4.0|<3.4.14|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27143",
+      "description": "Arithmetic over induction variables in loops were not correctly checked for underflow or overflow. As a result, the compiler would allow invalid indexing at runtime, potentially leading to memory corruption.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the Go compiler or build Go code at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path lives in the Go compiler, which Liquibase Secure does not execute. The image only installs and optionally runs the prebuilt lpm helper.\n"
+        }
+      ],
+      "cwes": [],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27143",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go arithmetic-overflow compiler bug in loop induction variables is only reachable while compiling Go code with the toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not run the Go compiler or build Go code at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42501",
+      "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation.",
+      "recommendation": "No action required. Liquibase Secure does not execute the Go toolchain or use module proxy checksum validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The advisory requires the Go command, module downloads, or GOTOOLCHAIN-based toolchain selection. Liquibase Secure does not run those paths.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qf3q-3h68-mmh2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42501",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go checksum-validation flaw in cmd/go only applies when the Go toolchain downloads modules or toolchains from an untrusted proxy or checksum database. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not execute `go`, use GOTOOLCHAIN, or perform module downloads at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61731",
+      "description": "Building a malicious file with cmd/go can cause a write to an attacker-controlled file with partial control of the file content.",
+      "recommendation": "No action required. Liquibase Secure does not run cmd/go or cgo builds at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is confined to Go toolchain builds and cgo processing. Liquibase Secure does not invoke the Go compiler.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "cmd/go build-time code smuggling via `#cgo pkg-config:` arguments is only reachable when compiling Go sources with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not run cmd/go, pkg-config, or cgo builds at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61732",
+      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
+      "recommendation": "No action required. Liquibase Secure does not perform cgo builds at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go compiler/cgo processing, which Liquibase Secure does not execute at runtime.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8jvr-vh7g-f8gx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/K09ubi9FQFk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go compiler/cgo comment-parsing discrepancy is only reachable when building cgo binaries with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not execute the Go compiler or perform cgo builds at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -2964,6 +3479,19 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/gnupg-utils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
         }
       ]
     },
@@ -3038,19 +3566,6 @@
       ]
     },
     {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
-        }
-      ]
-    },
-    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -3117,6 +3632,19 @@
       "affects": [
         {
           "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.azure/msal4j"
         }
       ]
     },
@@ -3225,19 +3753,6 @@
       ]
     },
     {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.azure/msal4j"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-29129",
       "analysis": {
         "state": "not_affected",
@@ -3304,6 +3819,19 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-45394",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
         }
       ]
     },
@@ -3408,19 +3936,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-45394",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
-        "justification": "code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
         }
       ]
     },
@@ -3679,6 +4194,20 @@
       ]
     },
     {
+      "id": "CVE-2025-59250",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-43513",
       "description": "Improper Handling of Case Sensitivity in LockOutRealm in Apache Tomcat. Affects Apache Tomcat 11.0.0-M1 through 11.0.21, 10.1.0-M1 through 10.1.54, 9.0.0.M1 through 9.0.117, 8.5.0 through 8.5.100, and 7.0.0 through 7.0.109. Fixed in 11.0.22, 10.1.55, and 9.0.118.",
       "recommendation": "No action required for Liquibase Secure unless the license utility is customized to enable LockOutRealm or any other Tomcat realm.",
@@ -3847,20 +4376,6 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-59250",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False positive due to classifier confusion. Trivy reads the JAR's internal pom.properties which reports version 13.2.1 (without the jre11 classifier), causing a false version comparison. The installed JAR is 13.2.1.jre11 which contains the fix. Microsoft's non-standard Maven versioning uses a classifier suffix instead of a standard version bump.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.sqlserver/mssql-jdbc"
         }
       ]
     },
@@ -4058,6 +4573,20 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-40897",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools ReDoS vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to parse HTML during package lookup; no package lookups occur since all packages are pre-installed at build time via Maven graalpy-maven-plugin.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -4271,20 +4800,6 @@
       ]
     },
     {
-      "id": "CVE-2022-40897",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools ReDoS vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to parse HTML during package lookup; no package lookups occur since all packages are pre-installed at build time via Maven graalpy-maven-plugin.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-54291",
       "description": "channelBinding=require connections can be silently downgraded from SCRAM-SHA-256-PLUS with channel binding to plain SCRAM-SHA-256 without it. An attacker able to intercept the TLS connection could exploit this by presenting certificates with unsupported signature algorithms, causing the authentication mechanism to lose its man-in-the-middle protection.",
       "recommendation": "No action required for the default configuration, since Liquibase does not set channelBinding itself. Deployments that explicitly set channelBinding=require in their own JDBC URL should use a Liquibase Secure build on pgjdbc 42.7.12 or later (current source already pins 42.7.13); already-published images built before that bump remain exposed for that specific configuration until upgraded.",
@@ -4450,6 +4965,20 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-6345",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -4628,20 +5157,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-6345",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -4883,223 +5398,6 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33814",
-      "description": "When processing HTTP/2 SETTINGS frames, transport will enter an infinite loop of writing CONTINUATION frames if it receives a SETTINGS_MAX_FRAME_SIZE with a value of 0.",
-      "recommendation": "No action required. lpm only connects to trusted GitHub release servers.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Exploitation requires a server to send SETTINGS_MAX_FRAME_SIZE=0. lpm only connects to trusted GitHub release CDN endpoints; no attacker-reachable server is in the execution path.\n"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib HTTP/2 transport infinite loop when a server sends SETTINGS_MAX_FRAME_SIZE with a value of 0. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it makes HTTP/2 connections to GitHub release servers to download Liquibase extension driver JARs. Exploitation requires a server to send the malformed SETTINGS_MAX_FRAME_SIZE=0 frame. lpm only connects to trusted GitHub release CDN endpoints (URLs and checksums fixed in docker/Dockerfile:35-55); no attacker- controlled server endpoint exists in lpm's execution path.",
-        "justification": "protected_by_mitigating_control",
-        "firstIssued": "2026-05-12T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-39820",
-      "description": "Well-crafted inputs reaching ParseAddress, ParseAddressList, and ParseDate were able to trigger excessive CPU exhaustion and memory allocations.",
-      "recommendation": "No action required. lpm has no email parsing functionality.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "lpm performs no email parsing. The net/mail code path is completely unreachable from any lpm operation.\n"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib net/mail CPU exhaustion via pathological inputs to ParseAddress, ParseAddressList, and ParseDate. lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail parsing functions are not called by lpm at any point during package installation or management operations.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-42499",
-      "description": "Pathological inputs could cause DoS through consumePhrase when parsing an email address according to RFC 5322.",
-      "recommendation": "No action required. lpm has no email parsing functionality.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "lpm performs no email parsing. The net/mail consumePhrase code path is completely unreachable from any lpm operation.\n"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib net/mail DoS via pathological email address inputs reaching the consumePhrase parser (RFC 5322 phrase parsing). lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail consumePhrase code path is not reachable from any lpm operation.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61724",
-      "description": "The Reader.ReadResponse function constructs a response string through repeated string concatenation of lines. When the number of lines in a response is large, this can cause excessive CPU consumption.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 5.3,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ReadResponse, net/textproto, or net/http usage.\n"
-        }
-      ],
-      "cwes": [
-        770
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61724",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://pkg.go.dev/vuln/GO-2025-4015",
-          "title": "Go Vulnerability Database"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib Reader.ReadResponse CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ReadResponse, net/textproto, or net/http usage, so the vulnerable API is not directly reachable from lpm source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-05-29T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61725",
-      "description": "The ParseAddress function constructs domain-literal address components through repeated string concatenation. When parsing large domain-literal components, this can cause excessive CPU consumption.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10 and lpm has no email parsing functionality.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The Docker image installs lpm v0.3.4, whose upstream go.mod declares fixed Go 1.25.10. The lpm source also has no direct ParseAddress or net/mail usage.\n"
-        }
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61725",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://pkg.go.dev/vuln/GO-2025-4006",
-          "title": "Go Vulnerability Database"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib ParseAddress CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ParseAddress or net/mail usage, so the vulnerable email parsing API is not reachable from lpm source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-05-29T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     }

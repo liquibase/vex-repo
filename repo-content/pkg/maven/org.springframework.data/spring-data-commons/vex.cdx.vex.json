@@ -1,0 +1,67 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-41695",
+      "description": "Spring Data Commons applications may be vulnerable to denial of service through resource exhaustion when attacker-controlled property path strings are passed to MappingContext property path resolution.",
+      "recommendation": "No action required. Liquibase Secure resolves spring-data-commons 4.1.0, which is newer than the fixed 4.0.6 release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The resolved spring-data-commons version is newer than the fixed release, and the repository has no direct property-path resolution call sites.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-88fw-v6x4-3f58",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41695",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41695",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Spring Data Commons property-path DoS fixed in 4.0.6 and 3.5.12. Liquibase Secure resolves spring-data-commons 4.1.0 in the distribution license manifest (`core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:958`), which is newer than the fixed 4.0.6 line. Repo search found no direct `MappingContext` or `PropertyPath` call sites in application code.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.4.0|<3.4.14|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

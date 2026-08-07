@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-26382d37622abe7d8c349a6fb112114b1d76b7c7819a999fd743382c4537a6e0",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-08-07T18:08:51.919555094Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41695"
+      },
+      "timestamp": "2026-08-07T18:08:51.919556206Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.data/spring-data-commons"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring Data Commons applications may be vulnerable to denial of service through resource exhaustion when attacker-controlled property path strings are passed to MappingContext property path resolution.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Spring Data Commons property-path DoS fixed in 4.0.6 and 3.5.12. Liquibase Secure resolves spring-data-commons 4.1.0 in the distribution license manifest (`core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:958`), which is newer than the fixed 4.0.6 line. Repo search found no direct `MappingContext` or `PropertyPath` call sites in application code."
+    }
+  ]
+}
