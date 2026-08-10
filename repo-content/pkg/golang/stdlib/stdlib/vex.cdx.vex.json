@@ -1253,6 +1253,66 @@
       ]
     },
     {
+      "id": "CVE-2025-58187",
+      "description": "Due to the design of the name constraint checking algorithm, the processing time of some inputs scale non-linearly with respect to the size of the certificate. This affects programs which validate arbitrary certificate chains.",
+      "recommendation": "No action required. Liquibase Secure does not validate arbitrary certificate chains in its lpm runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only runtime use of lpm is an outbound download helper. It does not accept attacker-controlled certificate chains or custom PEM inputs, so the x509 name-constraint path is not exercised.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-frhw-mqj2-wxw2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58187",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/4Emdl2iQ_bI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 name-constraint vulnerability. NVD fixes the 1.25 line in Go 1.25.3 and the 1.24 line in Go 1.24.9; the scanner reported go1.25.1 for this image. Liquibase Secure only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:39-55), and the entrypoint only invokes it when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Repo-wide source greps found no crypto/x509, SystemCertPool, or CertPool usage in application code, so the arbitrary certificate-chain path described by the advisory is not exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.9|>=1.25.0|<1.25.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61729",
       "analysis": {
         "state": "not_affected",
