@@ -214,6 +214,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-53066",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u461, 8u461-perf, 11.0.28, 17.0.16, 21.0.8, 25; Oracle GraalVM for JDK: 17.0.16 and 21.0.8; Oracle GraalVM Enterprise Edition: 21.3.15.",
+      "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as an Oracle Java SE client runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The assessed image is a Linux CLI container built on Temurin JRE, not an Oracle Java SE/GraalVM client runtime with JAXP client exposure.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9v5j-pxpg-qprp",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-53066",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2025.html",
+          "title": "Oracle CPU October 2025"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE JAXP vulnerability. The advisory fixes Oracle Java SE 21.0.9, while the scanner reported 21.0.8+9-LTS for this image. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and runs the CLI through docker/Dockerfile:68, not an Oracle Java SE or GraalVM client runtime. The Oracle client environment required by the advisory is absent in this deployment.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
