@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-92ed45381070bfa260548ba5f115cc5e5dd16d552632b33c8519777c31b683a9",
+  "@id": "merged-vex-a3619222a38bef4b03a85e0c101f2ced6a707e514ddfb583249dbcb4204d35c3",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-10T13:38:58.857541187Z",
+  "timestamp": "2026-08-10T14:01:21.760855953Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-58183"
       },
-      "timestamp": "2026-08-10T13:38:54.818126213Z",
+      "timestamp": "2026-08-10T14:01:16.849745552Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -23,7 +23,7 @@
       "vulnerability": {
         "name": "CVE-2025-58187"
       },
-      "timestamp": "2026-08-10T13:38:58.83988371Z",
+      "timestamp": "2026-08-10T14:01:21.740777778Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -38,7 +38,7 @@
       "vulnerability": {
         "name": "CVE-2025-58188"
       },
-      "timestamp": "2026-08-10T13:38:58.648910822Z",
+      "timestamp": "2026-08-10T14:01:21.51802039Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -53,7 +53,7 @@
       "vulnerability": {
         "name": "CVE-2025-61723"
       },
-      "timestamp": "2026-08-10T13:38:58.738164914Z",
+      "timestamp": "2026-08-10T14:01:21.622082762Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -68,7 +68,7 @@
       "vulnerability": {
         "name": "CVE-2025-61724"
       },
-      "timestamp": "2026-08-10T13:38:56.920628489Z",
+      "timestamp": "2026-08-10T14:01:19.522086224Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -83,7 +83,7 @@
       "vulnerability": {
         "name": "CVE-2025-61725"
       },
-      "timestamp": "2026-08-10T13:38:57.013411233Z",
+      "timestamp": "2026-08-10T14:01:19.625682699Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -98,7 +98,7 @@
       "vulnerability": {
         "name": "CVE-2025-61726"
       },
-      "timestamp": "2026-08-10T13:38:54.532835741Z",
+      "timestamp": "2026-08-10T14:01:16.533318152Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -112,7 +112,7 @@
       "vulnerability": {
         "name": "CVE-2025-61727"
       },
-      "timestamp": "2026-08-10T13:38:57.228378009Z",
+      "timestamp": "2026-08-10T14:01:19.879480524Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -127,7 +127,7 @@
       "vulnerability": {
         "name": "CVE-2025-61728"
       },
-      "timestamp": "2026-08-10T13:38:54.627420653Z",
+      "timestamp": "2026-08-10T14:01:16.637408791Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -141,7 +141,7 @@
       "vulnerability": {
         "name": "CVE-2025-61729"
       },
-      "timestamp": "2026-08-10T13:38:54.721914801Z",
+      "timestamp": "2026-08-10T14:01:16.742445653Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -155,7 +155,22 @@
       "vulnerability": {
         "name": "CVE-2025-61731"
       },
-      "timestamp": "2026-08-10T13:38:55.464118806Z",
+      "timestamp": "2026-08-10T14:01:16.954864126Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib cmd/go build-time smuggling vulnerability fixed in Go 1.24.12 and 1.25.6. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable cmd/go path is not reachable."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-61731"
+      },
+      "timestamp": "2026-08-10T14:01:17.907939755Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -170,7 +185,22 @@
       "vulnerability": {
         "name": "CVE-2025-61732"
       },
-      "timestamp": "2026-08-10T13:38:55.558307999Z",
+      "timestamp": "2026-08-10T14:01:17.062343189Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib cgo comment parsing vulnerability fixed in Go 1.24.13 and 1.25.7. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so no cgo compilation path is reachable."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-61732"
+      },
+      "timestamp": "2026-08-10T14:01:18.009004286Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -185,7 +215,7 @@
       "vulnerability": {
         "name": "CVE-2025-68119"
       },
-      "timestamp": "2026-08-10T13:38:58.156146105Z",
+      "timestamp": "2026-08-10T14:01:20.934732765Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -199,7 +229,7 @@
       "vulnerability": {
         "name": "CVE-2025-68121"
       },
-      "timestamp": "2026-08-10T13:38:54.441571288Z",
+      "timestamp": "2026-08-10T14:01:16.428898705Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -213,7 +243,7 @@
       "vulnerability": {
         "name": "CVE-2026-25679"
       },
-      "timestamp": "2026-08-10T13:38:54.347322004Z",
+      "timestamp": "2026-08-10T14:01:16.324582983Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -227,7 +257,7 @@
       "vulnerability": {
         "name": "CVE-2026-27140"
       },
-      "timestamp": "2026-08-10T13:38:58.282826627Z",
+      "timestamp": "2026-08-10T14:01:21.082372774Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -241,7 +271,7 @@
       "vulnerability": {
         "name": "CVE-2026-27143"
       },
-      "timestamp": "2026-08-10T13:38:55.283209223Z",
+      "timestamp": "2026-08-10T14:01:17.706536806Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -256,7 +286,7 @@
       "vulnerability": {
         "name": "CVE-2026-27144"
       },
-      "timestamp": "2026-08-10T13:38:58.370250968Z",
+      "timestamp": "2026-08-10T14:01:21.186390602Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -270,7 +300,7 @@
       "vulnerability": {
         "name": "CVE-2026-27145"
       },
-      "timestamp": "2026-08-10T13:38:57.501789345Z",
+      "timestamp": "2026-08-10T14:01:20.191360595Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -285,7 +315,7 @@
       "vulnerability": {
         "name": "CVE-2026-32280"
       },
-      "timestamp": "2026-08-10T13:38:54.910970146Z",
+      "timestamp": "2026-08-10T14:01:17.270416694Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -299,7 +329,7 @@
       "vulnerability": {
         "name": "CVE-2026-32281"
       },
-      "timestamp": "2026-08-10T13:38:55.092700223Z",
+      "timestamp": "2026-08-10T14:01:17.481906792Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -314,7 +344,7 @@
       "vulnerability": {
         "name": "CVE-2026-32282"
       },
-      "timestamp": "2026-08-10T13:38:55.000571641Z",
+      "timestamp": "2026-08-10T14:01:17.375653332Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -328,7 +358,7 @@
       "vulnerability": {
         "name": "CVE-2026-32283"
       },
-      "timestamp": "2026-08-10T13:38:55.183522588Z",
+      "timestamp": "2026-08-10T14:01:17.58484063Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -343,7 +373,7 @@
       "vulnerability": {
         "name": "CVE-2026-33811"
       },
-      "timestamp": "2026-08-10T13:38:56.550535619Z",
+      "timestamp": "2026-08-10T14:01:19.110335329Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -358,7 +388,7 @@
       "vulnerability": {
         "name": "CVE-2026-33814"
       },
-      "timestamp": "2026-08-10T13:38:56.641134996Z",
+      "timestamp": "2026-08-10T14:01:19.215704876Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -373,7 +403,7 @@
       "vulnerability": {
         "name": "CVE-2026-39820"
       },
-      "timestamp": "2026-08-10T13:38:56.732832106Z",
+      "timestamp": "2026-08-10T14:01:19.318133449Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -388,7 +418,7 @@
       "vulnerability": {
         "name": "CVE-2026-39822"
       },
-      "timestamp": "2026-08-10T13:38:57.935569269Z",
+      "timestamp": "2026-08-10T14:01:20.687265598Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -403,7 +433,7 @@
       "vulnerability": {
         "name": "CVE-2026-39823"
       },
-      "timestamp": "2026-08-10T13:38:57.31935328Z",
+      "timestamp": "2026-08-10T14:01:19.984667782Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -418,7 +448,7 @@
       "vulnerability": {
         "name": "CVE-2026-39825"
       },
-      "timestamp": "2026-08-10T13:38:57.594825857Z",
+      "timestamp": "2026-08-10T14:01:20.298931394Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -433,7 +463,7 @@
       "vulnerability": {
         "name": "CVE-2026-39826"
       },
-      "timestamp": "2026-08-10T13:38:57.685889266Z",
+      "timestamp": "2026-08-10T14:01:20.406151842Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -448,7 +478,7 @@
       "vulnerability": {
         "name": "CVE-2026-39836"
       },
-      "timestamp": "2026-08-10T13:38:56.457351887Z",
+      "timestamp": "2026-08-10T14:01:19.008170199Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -463,7 +493,7 @@
       "vulnerability": {
         "name": "CVE-2026-42499"
       },
-      "timestamp": "2026-08-10T13:38:56.826959661Z",
+      "timestamp": "2026-08-10T14:01:19.420405308Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -478,7 +508,22 @@
       "vulnerability": {
         "name": "CVE-2026-42501"
       },
-      "timestamp": "2026-08-10T13:38:55.373840937Z",
+      "timestamp": "2026-08-10T14:01:17.166409459Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib toolchain-download checksum validation flaw fixed in Go 1.25.10 and 1.26.3. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable toolchain-download path is not reachable."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42501"
+      },
+      "timestamp": "2026-08-10T14:01:17.807333356Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -493,7 +538,7 @@
       "vulnerability": {
         "name": "CVE-2026-42504"
       },
-      "timestamp": "2026-08-10T13:38:57.4095585Z",
+      "timestamp": "2026-08-10T14:01:20.090387476Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -508,7 +553,7 @@
       "vulnerability": {
         "name": "GO-2025-4007"
       },
-      "timestamp": "2026-08-10T13:38:58.467949161Z",
+      "timestamp": "2026-08-10T14:01:21.305782151Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -522,7 +567,7 @@
       "vulnerability": {
         "name": "GO-2025-4009"
       },
-      "timestamp": "2026-08-10T13:38:58.555370202Z",
+      "timestamp": "2026-08-10T14:01:21.410430332Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -536,7 +581,7 @@
       "vulnerability": {
         "name": "GO-2025-4013"
       },
-      "timestamp": "2026-08-10T13:38:57.102892877Z",
+      "timestamp": "2026-08-10T14:01:19.730106914Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
