@@ -42,6 +42,53 @@
           "ref": "pkg:maven/io.netty/netty-codec-dns"
         }
       ]
+    },
+    {
+      "id": "GHSA-mfg7-5gfp-c4w3",
+      "description": "Memory leak in Netty's DNS codec when processing malicious DNS response packets containing invalid domain names. The record decoder fails to release allocated ByteBuf resources before the IDNA-validation exception is thrown, allowing incremental memory exhaustion through sustained malicious DNS responses.",
+      "recommendation": "No action required. Requires a compromised or malicious DNS resolution path, which lies outside Liquibase's outbound-client threat model.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "Requires a compromised or malicious DNS server able to forge responses to Liquibase's own outbound resolution queries.\n"
+        }
+      ],
+      "cwes": [
+        401
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty's DNS record decoder fails to release allocated ByteBuf resources before throwing on domain names that violate IDNA rules, leaking memory per malformed record. Unlike the server-side Netty DNS codec findings above, this path is reached during Liquibase's own outbound DNS resolution, but only triggers when the DNS server answering that resolution (or an on-path attacker able to forge responses) returns malformed records. This requires a compromised or malicious DNS resolution path — an attacker already in a position to forge DNS responses to Liquibase's outbound queries could achieve more direct impact (e.g. redirecting database connections) than a gradual memory leak. No CVE has been assigned to this advisory at the time of assessment. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-dns",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.135.Final|>=4.2.0.Final|<=4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

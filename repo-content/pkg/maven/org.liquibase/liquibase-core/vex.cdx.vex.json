@@ -2976,6 +2976,163 @@
       ]
     },
     {
+      "id": "CVE-2024-47535",
+      "description": "Denial-of-service on Windows applications using Netty. Netty attempts to read OS identification files even on Windows systems where they don't natively exist. An attacker with local access can create an oversized (>1GB) file at these paths, causing Netty to load it into memory and exhaust the JVM heap, crashing the application.",
+      "recommendation": "No action required. Requires pre-existing local attacker write access to root-level filesystem paths.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": null,
+          "severity": "high",
+          "method": null
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Requires an attacker who already has local write access to root-level paths, a precondition beyond Liquibase's threat model for a database migration CLI tool.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xq3w-v528-46rv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-xq3w-v528-46rv",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty's PlatformDependent unconditionally attempts to read /etc/os-release and /usr/lib/os-release-style paths for OS identification, including on Windows where these paths don't natively exist. Exploitation requires an attacker who already has local filesystem write access sufficient to plant a >1GB file at one of these root-level paths ahead of JVM startup — a precondition that itself requires the host to already be compromised at a level exceeding what this DoS provides. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver; Liquibase does not read or configure these paths itself.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-common",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.114.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-25193",
+      "description": "Denial-of-service on Windows applications using Netty via a null-byte-filled file at an OS-identification path, causing an infinite loop during charset decoding instead of the earlier oversized-file crash.",
+      "recommendation": "No action required. Requires pre-existing local attacker write access to root-level filesystem paths.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": null,
+          "severity": "high",
+          "method": null
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Requires an attacker who already has local write access to root-level paths, a precondition beyond Liquibase's threat model for a database migration CLI tool.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-389x-839f-4rhx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-389x-839f-4rhx",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix to CVE-2024-47535 (see above): a null-byte-filled file at the same Windows os-release-style paths causes InputStreamReader / BufferedReader to loop filling the line buffer with replacement characters without hitting a line break. Same precondition as CVE-2024-47535 — requires an attacker who already has local filesystem write access to plant the malicious file before JVM startup. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver; Liquibase does not read or configure these paths itself.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-common",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.118.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GHSA-mfg7-5gfp-c4w3",
+      "description": "Memory leak in Netty's DNS codec when processing malicious DNS response packets containing invalid domain names. The record decoder fails to release allocated ByteBuf resources before the IDNA-validation exception is thrown, allowing incremental memory exhaustion through sustained malicious DNS responses.",
+      "recommendation": "No action required. Requires a compromised or malicious DNS resolution path, which lies outside Liquibase's outbound-client threat model.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "Requires a compromised or malicious DNS server able to forge responses to Liquibase's own outbound resolution queries.\n"
+        }
+      ],
+      "cwes": [
+        401
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Netty's DNS record decoder fails to release allocated ByteBuf resources before throwing on domain names that violate IDNA rules, leaking memory per malformed record. Unlike the server-side Netty DNS codec findings above, this path is reached during Liquibase's own outbound DNS resolution, but only triggers when the DNS server answering that resolution (or an on-path attacker able to forge responses) returns malformed records. This requires a compromised or malicious DNS resolution path — an attacker already in a position to forge DNS responses to Liquibase's outbound queries could achieve more direct impact (e.g. redirecting database connections) than a gradual memory leak. No CVE has been assigned to this advisory at the time of assessment. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-dns",
+          "versions": [
+            {
+              "range": "vers:maven/<=4.1.135.Final|>=4.2.0.Final|<=4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33871",
       "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
       "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
