@@ -1425,6 +1425,34 @@
       ]
     },
     {
+      "id": "CVE-2026-39821",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CVE-2026-39821 / GO-2026-5026 is the Go idna / net/http hostname validation issue, but the lpm helper only downloads from code-defined hosts. `cmd/populator/modules.go:20` and `cmd/populator/modules.go:25` hardcode the module registry URL, `cmd/populator/Populator.go:23` and `cmd/populator/Populator.go:29` show only the embedded package manifest is iterated, and the HTTP helpers consume those fixed URLs (`cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`, `internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`). There is no attacker-controlled hostname input path here, so the Punycode hostname-validation bug is unreachable in this deployment.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-46600",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CVE-2026-46600 / GO-2026-5942 requires the Go cgo DNS resolver and invalid SVCB/HTTPS DNS answers, but the lpm release build disables cgo (`Makefile:21`, `Makefile:22`, `Makefile:36`, and `Makefile:37` set `CGO_ENABLED=0`). The runtime code only creates ordinary HTTP clients and performs fixed-URL downloads (`internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`, `cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`), so the cgo resolver path used by the advisory is not reachable here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-58183",
       "analysis": {
         "state": "not_affected",
