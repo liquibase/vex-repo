@@ -1453,6 +1453,390 @@
       ]
     },
     {
+      "id": "CVE-2026-33818",
+      "description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
+      "recommendation": "No action required. The vulnerable stdlib path is not exercised by the default Liquibase Secure runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "lpm is only an optional helper and the default container path never feeds attacker-controlled nested data into Go's encoding/json Unmarshal path.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xc2p-8ggw-6cr5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33818",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-5972",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib recursion-limit issue in Unmarshal. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and the runtime entrypoint only invokes lpm when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5). The default Liquibase runtime path executes the Java CLI directly, so the Unmarshal path that would process attacker-controlled deeply nested data is not exercised. This assessment also covers the GO-2026-5972 alias.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56853",
+      "description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
+      "recommendation": "No action required. Liquibase Secure does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path requires a server-side HTTP/2 listener, which Liquibase Secure does not provide.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xphw-4f88-5f39",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56853",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6089",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/2 preface timeout issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not an HTTP server. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5), so the server-side unencrypted HTTP/2 listener required by the advisory is absent.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56858",
+      "description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
+      "recommendation": "No action required. The affected parser path is not used in this image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not render attacker-controlled HTML in the Go runtime path that would expose this slash-parsing behavior.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c974-w86c-vpfw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56858",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6091",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib unescaped-slash parsing issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure's runtime path is the Java CLI plus the optional lpm helper (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4-5). The container does not parse attacker-controlled HTML/XML content through this stdlib path, so the vulnerable behavior is not exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56859",
+      "description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
+      "recommendation": "No action required. The vulnerable XML decode path is not used by the default Liquibase Secure runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable stdlib XML decoder is not exercised by Liquibase Secure's default CLI path or its optional lpm helper.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-76p8-fhrm-vpc7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56859",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6088",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib DecodeElement depth-counter issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5), so the XML decode path that would process attacker-controlled nested elements is not reached. This assessment also covers the GO-2026-6088 alias.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56860",
+      "description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead.",
+      "recommendation": "No action required. The affected path resolution routine is not used in the default Liquibase Secure runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not expose an attacker-controlled path resolution surface in the Go stdlib runtime path.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-25mv-j2qr-v5jq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56860",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6218",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib relative-path resolution quadratic complexity issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image only executes the Java CLI by default and invokes lpm 0.3.6 only when INSTALL_MYSQL is set (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4-5). The vulnerable path resolution behavior is not exercised on attacker-controlled input in this deployment.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56862",
+      "description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
+      "recommendation": "No action required. Liquibase Secure does not run a TLS server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable TLS handshake behavior requires a server endpoint, which Liquibase Secure does not provide.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7qch-w8m5-g3h3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56862",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/94pEornpRlI",
+          "title": "Go Security Announcement"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6090",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib KeyUpdate state-advance issue in TLS handshakes. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not a TLS server; the secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5). The server-side TLS handshake path required by the advisory is absent.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-58183",
       "analysis": {
         "state": "not_affected",
