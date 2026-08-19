@@ -274,6 +274,127 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-41254",
+      "description": "Little CMS (lcms2) through 2.18 has an integer overflow in CubeSize in cmslut.c because the overflow check is performed after the multiplication.",
+      "recommendation": "No action required. The reported package does not exist in the Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The image does not contain Little CMS at all; the scanner matched an Oracle OpenJDK CPE against a Temurin JRE base image.\n"
+        }
+      ],
+      "cwes": [
+        190,
+        696
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hc77-37fq-x324",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41254",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/mm2/Little-CMS/security/advisories/GHSA-4xp6-rcgg-m9qq",
+          "title": "Little CMS Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Little CMS 2.18 integer overflow in CubeSize/cmslut.c. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1) and contains no Little CMS/lcms2 references in the repository, so the scanner's openjdk match is a false product match.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47063",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18.",
+      "recommendation": "No action required for the Liquibase Secure container. The image uses a Temurin JRE and does not run as an Oracle Java client runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The assessed image is a Linux CLI container built on Temurin JRE, not an Oracle Java SE/GraalVM client runtime with sandboxed applet or Web Start exposure.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vw39-pj36-hc59",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47063",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Libraries vulnerability. The scan reported 21.0.11+10-LTS and the dispatch payload lists fixed_version 1.8.0_502, but Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1), not an Oracle Java SE or GraalVM client runtime. The container runs the Liquibase CLI through docker-entrypoint.sh rather than a sandboxed Java Web Start or applet environment (core/docker/docker-entrypoint.sh:8), so the client runtime required by the advisory is absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

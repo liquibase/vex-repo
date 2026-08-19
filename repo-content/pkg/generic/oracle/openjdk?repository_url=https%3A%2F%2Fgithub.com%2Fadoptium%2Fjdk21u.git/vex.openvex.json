@@ -1,15 +1,20 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-8addf815b564065a060be25c1428553b92eac1907506298c3b6dc3ab0de036fb",
+  "@id": "merged-vex-282aa529c6f515868dbaeab66b444163dfba56ca7862a719894303e54a0bd114",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-14T13:05:51.455259091Z",
+  "timestamp": "2026-08-19T10:00:33.767538443Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
-        "name": "CVE-2025-53066"
+        "name": "CVE-2025-53066",
+        "aliases": [
+          "BIT-java-2025-53066",
+          "BIT-java-min-2025-53066",
+          "BIT-jre-2025-53066"
+        ]
       },
-      "timestamp": "2026-08-14T13:05:51.34826813Z",
+      "timestamp": "2026-08-19T10:00:33.329038365Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -22,9 +27,14 @@
     },
     {
       "vulnerability": {
-        "name": "CVE-2026-21932"
+        "name": "CVE-2026-21932",
+        "aliases": [
+          "BIT-java-2026-21932",
+          "BIT-java-min-2026-21932",
+          "BIT-jre-2026-21932"
+        ]
       },
-      "timestamp": "2026-08-14T13:05:50.836453087Z",
+      "timestamp": "2026-08-19T10:00:32.785422053Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -37,9 +47,14 @@
     },
     {
       "vulnerability": {
-        "name": "CVE-2026-21945"
+        "name": "CVE-2026-21945",
+        "aliases": [
+          "BIT-java-2026-21945",
+          "BIT-java-min-2026-21945",
+          "BIT-jre-2026-21945"
+        ]
       },
-      "timestamp": "2026-08-14T13:05:50.941257215Z",
+      "timestamp": "2026-08-19T10:00:32.896276879Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-22016"
       },
-      "timestamp": "2026-08-14T13:05:51.046336265Z",
+      "timestamp": "2026-08-19T10:00:33.009225725Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-34282"
       },
-      "timestamp": "2026-08-14T13:05:51.18258853Z",
+      "timestamp": "2026-08-19T10:00:33.152654639Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -79,6 +94,42 @@
       "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE: 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a hang or frequently repeatable crash (complete DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
       "impact_statement": "Oracle Java SE networking vulnerability. Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1), not an Oracle Java SE or GraalVM client distribution. The container runs the Liquibase CLI through docker-entrypoint.sh rather than a sandboxed Java Web Start or applet environment (core/docker/docker-entrypoint.sh:8), so the client-only runtime required by the advisory is absent."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41254",
+        "aliases": [
+          "BIT-java-2026-41254",
+          "BIT-java-min-2026-41254",
+          "BIT-jre-2026-41254",
+          "GHSA-4xp6-rcgg-m9qq"
+        ]
+      },
+      "timestamp": "2026-08-19T10:00:33.539826161Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Little CMS (lcms2) through 2.18 has an integer overflow in CubeSize in cmslut.c because the overflow check is performed after the multiplication.",
+      "justification": "component_not_present",
+      "impact_statement": "Little CMS 2.18 integer overflow in CubeSize/cmslut.c. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1) and contains no Little CMS/lcms2 references in the repository, so the scanner's openjdk match is a false product match."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47063"
+      },
+      "timestamp": "2026-08-19T10:00:33.652762262Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Oracle Java SE Libraries vulnerability. The scan reported 21.0.11+10-LTS and the dispatch payload lists fixed_version 1.8.0_502, but Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1), not an Oracle Java SE or GraalVM client runtime. The container runs the Liquibase CLI through docker-entrypoint.sh rather than a sandboxed Java Web Start or applet environment (core/docker/docker-entrypoint.sh:8), so the client runtime required by the advisory is absent."
     }
   ]
 }
