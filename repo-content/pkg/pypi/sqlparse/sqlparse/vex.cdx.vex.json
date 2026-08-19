@@ -16,6 +16,176 @@
           "ref": "pkg:pypi/sqlparse"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-54284",
+      "description": "sqlparse: TokenList.__init__ materializes O(subtree) value per group, causing CPU denial of service before depth and token caps trigger. This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The vulnerable Python parser is only installed for build-time tooling and is not invoked by the Liquibase runtime.\n"
+        }
+      ],
+      "cwes": [
+        407,
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwgv-4x5q-6m9f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54284",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59893",
+      "description": "sqlparse is a non-validating SQL parser module for Python. Prior to 0.6.0, SQL_REGEX in sqlparse/keywords.py and the per-position loop in sqlparse/lexer.py repeatedly scan unmatched dollar-quoted literal and multiline-comment delimiters, causing quadratic CPU consumption through sqlparse.parse(), sqlparse.format(), and sqlparse.split(). This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Python parser is only installed for build-time tooling and is not invoked by the Liquibase runtime.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-prg7-hcfm-mfcr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59893",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-71491",
+      "description": "sqlparse: Quadratic O(n²) denial of service in group_comments. This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The vulnerable Python parser is only installed for build-time tooling and is not invoked by the Liquibase runtime.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f2ff-p2ww-7p4p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-71491",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
