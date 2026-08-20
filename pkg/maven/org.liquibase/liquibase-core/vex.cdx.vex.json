@@ -3538,7 +3538,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib recursion-limit issue in Unmarshal. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and the runtime entrypoint only invokes lpm when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5). The default Liquibase runtime path executes the Java CLI directly, so the Unmarshal path that would process attacker-controlled deeply nested data is not exercised. This assessment also covers the GO-2026-5972 alias.",
+        "detail": "Go stdlib recursion-limit issue in Unmarshal. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and the runtime entrypoint only invokes lpm when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The default Liquibase runtime path executes the Java CLI directly, so the Unmarshal path that would process attacker-controlled deeply nested data is not exercised. This assessment also covers the GO-2026-5972 alias.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3602,7 +3602,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib HTTP/2 preface timeout issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not an HTTP server. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5), so the server-side unencrypted HTTP/2 listener required by the advisory is absent.",
+        "detail": "Go stdlib HTTP/2 preface timeout issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not an HTTP server. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5), so the server-side unencrypted HTTP/2 listener required by the advisory is absent.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3666,7 +3666,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib unescaped-slash parsing issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure's runtime path is the Java CLI plus the optional lpm helper (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4-5). The container does not parse attacker-controlled HTML/XML content through this stdlib path, so the vulnerable behavior is not exercised.",
+        "detail": "Go stdlib unescaped-slash parsing issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure's runtime path is the Java CLI plus the optional lpm helper (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The container does not parse attacker-controlled HTML/XML content through this stdlib path, so the vulnerable behavior is not exercised.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3730,7 +3730,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib DecodeElement depth-counter issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5), so the XML decode path that would process attacker-controlled nested elements is not reached. This assessment also covers the GO-2026-6088 alias.",
+        "detail": "Go stdlib DecodeElement depth-counter issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5), so the XML decode path that would process attacker-controlled nested elements is not reached. This assessment also covers the GO-2026-6088 alias.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3794,7 +3794,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib relative-path resolution quadratic complexity issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image only executes the Java CLI by default and invokes lpm 0.3.6 only when INSTALL_MYSQL is set (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4-5). The vulnerable path resolution behavior is not exercised on attacker-controlled input in this deployment.",
+        "detail": "Go stdlib relative-path resolution quadratic complexity issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image only executes the Java CLI by default and invokes lpm 0.3.6 only when INSTALL_MYSQL is set (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The vulnerable path resolution behavior is not exercised on attacker-controlled input in this deployment.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3858,7 +3858,7 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib KeyUpdate state-advance issue in TLS handshakes. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not a TLS server; the secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4-5). The server-side TLS handshake path required by the advisory is absent.",
+        "detail": "Go stdlib KeyUpdate state-advance issue in TLS handshakes. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not a TLS server; the secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The server-side TLS handshake path required by the advisory is absent.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-08-17T00:00:00Z"
       },
@@ -3915,6 +3915,110 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56864",
+      "description": "A malicious GOSUMDB was capable of serving arbitrary module content not contained within the transparency log. This attack allows for a coordinating GOPROXY and GOSUMDB to serve a client malicious module content that cannot be detected by evaluating the transparency log. In order to determine if you have been affected: rm -r go.sum go.work.sum vendor/ && go mod tidy",
+      "recommendation": "No action required. Liquibase Secure does not run Go module verification workflows at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable GOSUMDB / module-verification path is only relevant when Go tooling performs module resolution. Liquibase Secure only ships lpm as an optional helper and does not run go mod or sumdb verification at runtime.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56864",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib GOSUMDB transparency-log bypass issue. NVD fixes the Go 1.25 line in 1.25.13 and the 1.26 line in 1.26.6. The scan reported installed version go1.25.1 for the bundled lpm helper. Liquibase Secure installs lpm 0.3.6 from a release ZIP in core/docker/Dockerfile:23, core/docker/Dockerfile:44, core/docker/Dockerfile:49 and only invokes it when INSTALL_MYSQL is set in core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5. The default runtime path executes the Java Liquibase CLI directly, and this repository has no go.mod, go.sum, or go mod tidy workflow that would exercise the vulnerable Go module-verification path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56865",
+      "description": "A malicious GOPROXY was previously capable of forging up to two sumdb tiles that allow for a requested module to bypass the GOSUMDB check and persist attacker-controlled module content to a local Go module cache. This attack allows for a malicious GOPROXY to serve malicious module content that cannot be detected by evaluating the transparency log. All tiles are now correctly verified against their parents. In order to determine if you have been affected: rm -r go.sum go.work.sum vendor/ && go mod tidy",
+      "recommendation": "No action required. Liquibase Secure does not run Go module download or cache-verification workflows at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable GOPROXY / sumdb cache path is only relevant when Go tooling resolves modules. Liquibase Secure only ships lpm as an optional helper and does not run go mod or GOPROXY-driven cache population at runtime.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56865",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib GOPROXY sumdb-tile forgery issue. NVD fixes the Go 1.25 line in 1.25.13 and the 1.26 line in 1.26.6. The scan reported installed versions go1.25.3 and go1.25.1 for the bundled lpm helper across the supplied image tags. Liquibase Secure installs lpm 0.3.6 from a release ZIP in core/docker/Dockerfile:23, core/docker/Dockerfile:44, core/docker/Dockerfile:49 and only invokes it when INSTALL_MYSQL is set in core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5. The default runtime path executes the Java Liquibase CLI directly, so the Go module-download and cache-population path described by the advisory is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.13|>=1.26.0|<1.26.6",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
