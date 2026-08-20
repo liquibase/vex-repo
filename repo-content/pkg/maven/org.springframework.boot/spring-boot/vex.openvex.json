@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7080d3215886c714e47d7402fb5056a0214eaeeaa712b7bee06cfc4e61ff1cfb",
+  "@id": "merged-vex-3cd2713bf623f67e2b700576651b687077fdb3f30383bcc1373c8d5793a626cc",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-20T12:55:26.031335666Z",
+  "timestamp": "2026-08-20T22:26:13.191464899Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-rc42-6c7j-7h5r"
         ]
       },
-      "timestamp": "2026-08-20T12:55:24.50928228Z",
+      "timestamp": "2026-08-20T22:26:11.839164295Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot"
@@ -29,7 +29,7 @@
           "GHSA-wwpq-f5c3-7hvx"
         ]
       },
-      "timestamp": "2026-08-20T12:55:24.7589346Z",
+      "timestamp": "2026-08-20T22:26:12.075227688Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot"
@@ -47,7 +47,7 @@
           "GHSA-8v8j-3hxp-93wr"
         ]
       },
-      "timestamp": "2026-08-20T12:55:24.642247975Z",
+      "timestamp": "2026-08-20T22:26:11.966011978Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot"
@@ -56,7 +56,7 @@
       "status": "not_affected",
       "status_notes": "In certain circumstances, Spring Boot's default web security is ineffective allowing unauthorized access to all endpoints. For an application to be vulnerable, it must be a servlet-based web application, have no Spring Security configuration of its own and rely on the default web security filter chain, depend on spring-boot-actuator-autoconfigure, and not depend on spring-boot-health.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "Spring Boot default web security bypass requires the application to depend on spring-boot-actuator-autoconfigure and not depend on spring-boot-health. The repository's Spring Boot declarations are spring-boot-autoconfigure provided for Pro integration (pro/pom.xml:78) and spring-boot-starter-web in the license utility (tools/liquibase-license-utility/pom.xml:44); grep for spring-boot-actuator-autoconfigure, spring-boot-starter-actuator, and spring-boot-health across pom.xml files returned no matches."
+      "impact_statement": "Spring Boot default web security bypass requires the application to depend on spring-boot-actuator-autoconfigure and not depend on spring-boot-health. The repository's only Spring Boot declaration is spring-boot-autoconfigure, provided-scope for the Pro integration (pro/pom.xml:81); grep for spring-boot-actuator-autoconfigure, spring-boot-starter-actuator, and spring-boot-health across pom.xml files returned no matches."
     }
   ]
 }
