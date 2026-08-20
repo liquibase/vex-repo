@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-160bf2f4e38c57e3f8214632b4610cd7ab6e785fa4a88333e4fe10f6bb6c98e0",
+  "@id": "https://openvex.dev/docs/public/vex-dec8896fb9c34b6aa96d3508a60d28cfcf33915883772fe9941eb1baa422872f",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-20T12:55:44.138784214Z",
+  "timestamp": "2026-08-20T22:26:24.252320383Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-r5w3-xv2f-j59q"
         ]
       },
-      "timestamp": "2026-08-20T12:55:44.138785476Z",
+      "timestamp": "2026-08-20T22:26:24.252321936Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-expression"
@@ -21,7 +21,7 @@
       "status": "not_affected",
       "status_notes": "Applications that evaluate user-supplied Spring Expression Language (SpEL) expressions are vulnerable to an Algorithmic Denial of Service (DoS). By providing a specially crafted expression, an attacker can trigger excessive resource consumption during evaluation, leading to application degradation or unavailability.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Spring Expression is pulled in through spring-boot-starter-web in tools/liquibase-license-utility/pom.xml:59. Repo search found no org.springframework.expression imports, no SpelExpressionParser, and no StandardEvaluationContext usage. The only parseExpression() hit is the custom tokenizer in commercial-databases/liquibase-commercial-couchbase/src/main/java/ liquibase/ext/couchbase/provider/ExpressionDocumentKeyProvider.java:38, which does not evaluate SpEL. The reactor also pins <spring.version>7.0.8</spring.version> in core/pom.xml:79."
+      "impact_statement": "Spring Expression is a transitive dependency of spring-context, declared provided/optional at core/liquibase-standard/pom.xml:85. Repo search found no org.springframework.expression imports, no SpelExpressionParser, and no StandardEvaluationContext usage. The only parseExpression() hit is the custom tokenizer in commercial-databases/liquibase-commercial-couchbase/src/main/java/ liquibase/ext/couchbase/provider/ExpressionDocumentKeyProvider.java:38, which does not evaluate SpEL. The reactor also pins <spring.version>7.0.8</spring.version> in core/pom.xml:79."
     }
   ]
 }
