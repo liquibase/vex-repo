@@ -122,6 +122,108 @@
       ]
     },
     {
+      "id": "CVE-2026-40682",
+      "description": "XML External Entity (XXE) via Unsanitized Dictionary Parsing in Apache OpenNLP DictionaryEntryPersistor. Versions before 2.5.9 and before 3.0.0-M3 initialize dictionary XML parsing without secure processing or DTD restrictions, allowing attacker-supplied dictionary files to trigger local file disclosure or server-side request forgery during SAX parsing.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP dictionary parsing API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        611
+      ],
+      "advisories": [
+        {
+          "url": "https://lists.apache.org/thread/r6jpt0qr9nj67gqhppqg7jxf8vsbo0w6",
+          "title": "Apache Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40682",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "OpenNLP DictionaryEntryPersistor XXE vulnerability fixed in 2.5.9. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.8 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but the vulnerable dictionary XML parsing API is not imported or called. The only production OpenNLP usage found is document categorization and tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42027",
+      "description": "Apache OpenNLP ExtensionLoader is vulnerable to arbitrary class instantiation via attacker-controlled input passed to the extension loading mechanism, potentially allowing remote code execution.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP ExtensionLoader API is not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase does not invoke the OpenNLP ExtensionLoader. Only pre-bundled document categorization and tokenization APIs are used.\n"
+        }
+      ],
+      "cwes": [
+        470
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42027",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache OpenNLP ExtensionLoader arbitrary class instantiation vulnerability. The ExtensionLoader API is not imported or called anywhere in Liquibase Secure. The only production OpenNLP usage is document categorization and tokenization via DoccatModel, DocumentCategorizerME, and WhitespaceTokenizer in OpenNLPSentimentDetector.java; no extension loading or dynamic class instantiation occurs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/<2.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42440",
       "description": "Apache OpenNLP AbstractModelReader allocates unbounded memory when reading model files, allowing a malicious or malformed model file to cause an out-of-memory denial of service.",
       "recommendation": "No action required for Liquibase Secure. OpenNLP models are pre-bundled trusted artifacts; no attacker-controlled model loading occurs.",
@@ -478,34 +580,6 @@
       ]
     },
     {
-      "id": "GO-2025-4013",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and the upstream liquibase-package-manager v0.3.5 go.mod declares go 1.25.11 (liquibase-package-manager/go.mod:3), which is newer than the scanner-reported Go 1.25.1 and includes the fix. GitHub code search for liquibase/liquibase-package-manager found no crypto/x509 imports or references, so the vulnerable certificate-chain path is not exercised by lpm source.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-08-05T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-44431",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/urllib3"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-33871",
       "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
       "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
@@ -546,6 +620,34 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
+      "id": "GO-2025-4013",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and the upstream liquibase-package-manager v0.3.5 go.mod declares go 1.25.11 (liquibase-package-manager/go.mod:3), which is newer than the scanner-reported Go 1.25.1 and includes the fix. GitHub code search for liquibase/liquibase-package-manager found no crypto/x509 imports or references, so the vulnerable certificate-chain path is not exercised by lpm source.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-08-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-44431",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-05-12T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
         }
       ]
     },
@@ -1005,6 +1107,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-45674",
       "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's DnsResolveContext fails to validate the origin (bailiwick) of CNAME records in DNS responses. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
       "recommendation": "No action required. Liquibase does not import or configure Netty DNS resolver APIs that exercise the vulnerable CNAME bailiwick path.",
@@ -1127,50 +1273,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
@@ -1668,6 +1770,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
+        }
+      ]
+    },
+    {
       "id": "GHSA-r7wm-3cxj-wff9",
       "description": "Jackson Core's async parser can accumulate excessively long digit sequences (~20,000x amplification of the intended maxNumberLength limit) when input is fed in small chunks without a terminator, weakening DoS protection for applications that rely on maxNumberLength.",
       "recommendation": "No action required. Liquibase does not run a reactive/async network-facing service that parses untrusted JSON with this parser. Track upstream fix (2.18.8 / 2.21.4 / 2.22.1) for the next dependency refresh.",
@@ -1767,50 +1913,6 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33871",
-      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
@@ -2177,6 +2279,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-22016",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as a sandboxed Java client.",
@@ -2241,50 +2387,6 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
         }
       ]
     },
@@ -2624,34 +2726,6 @@
       ]
     },
     {
-      "id": "CVE-2026-39821",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "CVE-2026-39821 / GO-2026-5026 is the Go idna / net/http hostname validation issue, but the lpm helper only downloads from code-defined hosts. `cmd/populator/modules.go:20` and `cmd/populator/modules.go:25` hardcode the module registry URL, `cmd/populator/Populator.go:23` and `cmd/populator/Populator.go:29` show only the embedded package manifest is iterated, and the HTTP helpers consume those fixed URLs (`cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`, `internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`). There is no attacker-controlled hostname input path here, so the Punycode hostname-validation bug is unreachable in this deployment.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-14T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-46600",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "CVE-2026-46600 / GO-2026-5942 requires the Go cgo DNS resolver and invalid SVCB/HTTPS DNS answers, but the lpm release build disables cgo (`Makefile:21`, `Makefile:22`, `Makefile:36`, and `Makefile:37` set `CGO_ENABLED=0`). The runtime code only creates ordinary HTTP clients and performs fixed-URL downloads (`internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`, `cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`), so the cgo resolver path used by the advisory is not reachable here.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-14T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-33871",
       "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
       "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
@@ -2692,6 +2766,34 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39821",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CVE-2026-39821 / GO-2026-5026 is the Go idna / net/http hostname validation issue, but the lpm helper only downloads from code-defined hosts. `cmd/populator/modules.go:20` and `cmd/populator/modules.go:25` hardcode the module registry URL, `cmd/populator/Populator.go:23` and `cmd/populator/Populator.go:29` show only the embedded package manifest is iterated, and the HTTP helpers consume those fixed URLs (`cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`, `internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`). There is no attacker-controlled hostname input path here, so the Punycode hostname-validation bug is unreachable in this deployment.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-46600",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CVE-2026-46600 / GO-2026-5942 requires the Go cgo DNS resolver and invalid SVCB/HTTPS DNS answers, but the lpm release build disables cgo (`Makefile:21`, `Makefile:22`, `Makefile:36`, and `Makefile:37` set `CGO_ENABLED=0`). The runtime code only creates ordinary HTTP clients and performs fixed-URL downloads (`internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`, `cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`), so the cgo resolver path used by the advisory is not reachable here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -3166,6 +3268,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56859",
       "description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
       "recommendation": "No action required. The vulnerable XML decode path is not used by the default Liquibase Secure runtime.",
@@ -3290,50 +3436,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
         }
       ]
     },
@@ -5193,6 +5295,33 @@
     },
     {
       "id": "CVE-2026-29062",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary.",
+        "justification": "code_not_reachable"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43515",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Repo-wide searches found no source declaration for org.apache.tomcat.embed:tomcat-embed-core; the only Tomcat references in the current tree are prior VEX notes. The active build declares unrelated dependencies such as httpcore5 5.4.3 in pom.xml:121-122 and jackson-core 2.22.1 in pom.xml:57,150-151 and community-extensions/liquibase-mongodb/pom.xml:48,90-92.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-08-27T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-2m67-wjpj-xhg9",
       "description": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
       "recommendation": "No action required. Liquibase does not parse untrusted JSON input.",
       "ratings": [
@@ -5225,8 +5354,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary.",
-        "justification": "code_not_reachable",
+        "detail": "Repo-wide searches found no source declaration for tools.jackson.core:jackson-core. The build only references com.fasterxml.jackson.core:jackson-core 2.22.1 at pom.xml:57,150-151, community-extensions/liquibase-mongodb/pom.xml:48,90-92, and core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:137. The scanner-reported 3.1.0 coordinate is not present in the codebase.",
+        "justification": "code_not_present",
         "firstIssued": "2026-04-16T00:00:00Z"
       },
       "affects": [
@@ -5304,6 +5433,20 @@
       ]
     },
     {
+      "id": "CVE-2024-6345",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42583",
       "recommendation": "No action required. Liquibase does not run a Netty server.",
       "ratings": [
@@ -5374,20 +5517,6 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-dns"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-6345",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools command injection vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process URLs via download/install functions; those functions are never called at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -5724,6 +5853,20 @@
       ]
     },
     {
+      "id": "CVE-2025-47273",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-54291",
       "description": "channelBinding=require connections can be silently downgraded from SCRAM-SHA-256-PLUS with channel binding to plain SCRAM-SHA-256 without it. An attacker able to intercept the TLS connection could exploit this by presenting certificates with unsupported signature algorithms, causing the authentication mechanism to lose its man-in-the-middle protection.",
       "recommendation": "No action required for the default configuration, since Liquibase does not set channelBinding itself. Deployments that explicitly set channelBinding=require in their own JDBC URL should use a Liquibase Secure build on pgjdbc 42.7.12 or later (current source already pins 42.7.13); already-published images built before that bump remain exposed for that specific configuration until upgraded.",
@@ -5791,20 +5934,6 @@
       "affects": [
         {
           "ref": "pkg:maven/org.springframework.boot/spring-boot"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-47273",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -6078,108 +6207,6 @@
           "versions": [
             {
               "range": "vers:maven/>=1.59|<1.80.2",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-40682",
-      "description": "XML External Entity (XXE) via Unsanitized Dictionary Parsing in Apache OpenNLP DictionaryEntryPersistor. Versions before 2.5.9 and before 3.0.0-M3 initialize dictionary XML parsing without secure processing or DTD restrictions, allowing attacker-supplied dictionary files to trigger local file disclosure or server-side request forgery during SAX parsing.",
-      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP dictionary parsing API is not reachable from production code.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 9.1,
-          "severity": "critical",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
-        }
-      ],
-      "cwes": [
-        611
-      ],
-      "advisories": [
-        {
-          "url": "https://lists.apache.org/thread/r6jpt0qr9nj67gqhppqg7jxf8vsbo0w6",
-          "title": "Apache Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40682",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "OpenNLP DictionaryEntryPersistor XXE vulnerability fixed in 2.5.9. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.8 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but the vulnerable dictionary XML parsing API is not imported or called. The only production OpenNLP usage found is document categorization and tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24).",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
-          "versions": [
-            {
-              "range": "vers:maven/<2.5.9",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-42027",
-      "description": "Apache OpenNLP ExtensionLoader is vulnerable to arbitrary class instantiation via attacker-controlled input passed to the extension loading mechanism, potentially allowing remote code execution.",
-      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP ExtensionLoader API is not reachable from production code.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 9.8,
-          "severity": "critical",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Liquibase does not invoke the OpenNLP ExtensionLoader. Only pre-bundled document categorization and tokenization APIs are used.\n"
-        }
-      ],
-      "cwes": [
-        470
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42027",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Apache OpenNLP ExtensionLoader arbitrary class instantiation vulnerability. The ExtensionLoader API is not imported or called anywhere in Liquibase Secure. The only production OpenNLP usage is document categorization and tokenization via DoccatModel, DocumentCategorizerME, and WhitespaceTokenizer in OpenNLPSentimentDetector.java; no extension loading or dynamic class instantiation occurs.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
-          "versions": [
-            {
-              "range": "vers:maven/<2.5.9",
               "status": "unaffected"
             }
           ]
