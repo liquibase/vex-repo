@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-0f3da86f2c614a63c53a19397deb48355f6c10bc2b2a22985e48cbf60fdcb9ed",
+  "@id": "merged-vex-0414e59b1a856d38cd9438e1b4b5cf54d5d95da8e595124c7a61f4ee1585a688",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-04T21:21:27.258990259Z",
+  "timestamp": "2026-09-09T16:40:21.859109307Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-4g8c-wm8x-jfhw"
         ]
       },
-      "timestamp": "2026-09-04T21:21:25.584392089Z",
+      "timestamp": "2026-09-09T16:40:19.975141976Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -29,7 +29,7 @@
           "GHSA-3qp7-7mw8-wx86"
         ]
       },
-      "timestamp": "2026-09-04T21:21:26.355495919Z",
+      "timestamp": "2026-09-09T16:40:20.759427318Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -47,7 +47,7 @@
           "GHSA-x4gw-5cx5-pgmh"
         ]
       },
-      "timestamp": "2026-09-04T21:21:26.494162465Z",
+      "timestamp": "2026-09-09T16:40:20.907064681Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -65,7 +65,7 @@
           "GHSA-c653-97m9-rcg9"
         ]
       },
-      "timestamp": "2026-09-04T21:21:26.650473699Z",
+      "timestamp": "2026-09-09T16:40:21.070139333Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -75,6 +75,24 @@
       "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, SimpleTrustManagerFactory.engineGetTrustManagers() and related paths wrap any user-supplied plain X509TrustManager in X509TrustManagerWrapper, which extends X509ExtendedTrustManager but implements the 3-arg checkServerTrusted(chain, authType, SSLEngine) by discarding the SSLEngine and calling the 2-arg delegate. Because the object now IS an X509ExtendedTrustManager, neither SunJSSE's internal AbstractTrustManagerWrapper nor Netty's own OpenSslX509TrustManagerWrapper will re-wrap it to add endpoint-identification. Consequently, even though Netty 4.2 sets endpointIdentificationAlgorithm=\"HTTPS\" by default, a client built with `SslContextBuilder.forClient().trustManager(somePlainX509TrustManager)` performs no hostname verification at all. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty hostname verification can be bypassed when client code passes a plain X509TrustManager through SslContextBuilder.forClient().trustManager(...). The scanner reported io.netty:netty-handler 4.1.133.Final, which is listed in the commercial distribution license metadata (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:526), but the source build now imports the patched Netty 4.1.135.Final BOM (pom.xml:114, pom.xml:116) and the liquibase-checks module imports the patched Netty 4.2.15.Final BOM (tools/liquibase-checks/liquibase-checks/pom.xml:306, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for SslContextBuilder, SimpleTrustManagerFactory, trustManager(, and X509TrustManager returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75595",
+        "aliases": [
+          "GHSA-c4c3-7fpv-j4q5"
+        ]
+      },
+      "timestamp": "2026-09-09T16:40:21.841266004Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, io.netty.handler.ssl.SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can cause an IndexOutOfBoundsException and invoke select(ctx, null). This selects the default SslContext instead of the SNI-specific context. In deployments where per-SNI clientAuth=REQUIRE is the sole mutual TLS gate, the default SslContext uses clientAuth=NONE or clientAuth=OPTIONAL, and no application-layer certificate verification exists, an unauthenticated remote attacker can bypass the protected route's mutual TLS requirement. This issue is fixed in versions 4.1.137.Final and 4.2.17.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can throw IndexOutOfBoundsException and fall back to the default SslContext instead of the SNI-specific one. This only becomes an mTLS bypass in a deployment that (a) runs a Netty server accepting inbound TLS connections, (b) uses per-SNI SslContext selection as the sole mutual-TLS gate (clientAuth=REQUIRE on the SNI context, weaker on the default), and (c) has no application-layer certificate check. Liquibase never runs a Netty server: a grep across all Java sources for ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, and SslClientHelloHandler returns zero hits: netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (Azure SDK's azure-core-http-netty, the AWS SDK, the Couchbase client, the Cassandra JDBC driver). The scanner found netty-handler below the fixed versions in five bundled jars (Docker Scan run https://github.com/liquibase/liquibase-pro/actions/runs/34365994421): liquibase-commercial-cassandra.jar 4.1.119.Final, liquibase-azure.jar 4.1.135.Final, liquibase-aws-extension.jar 4.1.136.Final, liquibase-commercial-couchbase.jar 4.2.16.Final, and liquibase-azure-deps.jar (unlabeled in the scan, same shaded copy as liquibase-azure.jar); none of them run a Netty server, so the version gap does not matter to this assessment."
     }
   ]
 }

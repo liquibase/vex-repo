@@ -3608,6 +3608,247 @@
       ]
     },
     {
+      "id": "CVE-2026-65182",
+      "description": "Improper Access Control, Incorrect Authorization vulnerability in Apache Tomcat leads to security constraint bypass if a constraint for a longer path is specified before a more restrictive constraint for a shorter sub-path. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.24, from 10.1.0-M1 through 10.1.57, from 9.0.0.M1 through 9.0.120, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Users are recommended to upgrade to version 11.0.25, 10.1.58, 9.0.121, which fixes the issue.",
+      "recommendation": "No action required. Liquibase does not start a Tomcat server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Security-constraint evaluation only happens inside a running Tomcat servlet container processing deployed web.xml descriptors. Liquibase never starts a Tomcat server or deploys a web.xml, so the vulnerable code path is never exercised.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gcx9-497g-6cp6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65182",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Security constraint bypass when a `<security-constraint>` for a longer path is declared before a more restrictive constraint for a shorter sub-path in web.xml. Requires an active Tomcat servlet container evaluating security constraints against deployed web.xml descriptors. Liquibase is a CLI tool that uses picocli for command-line parsing and never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No servlet container is started, so no security-constraint evaluation ever occurs.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.0.M1|<9.0.121|>=10.1.0-M1|<10.1.58|>=11.0.0-M1|<11.0.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-65905",
+      "description": "Authentication Bypass by Capture-replay vulnerability in Apache Tomcat's DIGEST authenticator. If, before windowSize requests have been made, a client makes a DIGEST authenticated request with a nonceCount on the upper boundary of the replay window then that request is replayable once only while the associated nonceCount remains within the replay window. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.24, from 10.1.0-M1 through 10.1.57, from 9.0.0.M1 through 9.0.120. Users are recommended to upgrade to version 11.0.25, 10.1.58 or 9.0.121, which fix the issue.",
+      "recommendation": "No action required. Liquibase does not start a Tomcat server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "DIGEST authentication replay only applies to a running Tomcat servlet container configured with a DIGEST authenticator. Liquibase never starts a Tomcat server and never configures DIGEST authentication, so the vulnerable code path is never exercised.\n"
+        }
+      ],
+      "cwes": [
+        294
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9xv2-5v5q-p794",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65905",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Authentication bypass by capture-replay in Tomcat's DIGEST authenticator: a nonceCount on the upper boundary of the replay window can be replayed once before it ages out. Requires an active Tomcat servlet container with DIGEST authentication configured and processing inbound authenticated requests. Liquibase is a CLI tool that never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No DIGEST authenticator is ever configured or invoked.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.0.M1|<9.0.121|>=10.1.0-M1|<10.1.58|>=11.0.0-M1|<11.0.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-68525",
+      "description": "Incorrect Authorization vulnerability in Apache Tomcat's FORM authentication process allows the bypassing of a security constraint that limits user access to a resource via POST but not GET. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.24, from 10.1.0-M1 through 10.1.57, from 9.0.0.M1 through 9.0.120. Users are recommended to upgrade to version 11.0.25, 10.1.58 or 9.0.121, which fixes the issue.",
+      "recommendation": "No action required. Liquibase does not start a Tomcat server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "FORM-authentication constraint bypass only applies to a running Tomcat servlet container with FORM authentication and a method-scoped security constraint configured. Liquibase never starts a Tomcat server and never configures FORM authentication, so the vulnerable code path is never exercised.\n"
+        }
+      ],
+      "cwes": [
+        863
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h3x4-894j-xpx5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-68525",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incorrect Authorization in Tomcat's FORM authentication process allows bypassing a security constraint that limits a user to POST access on a resource (not GET). Requires an active Tomcat servlet container with FORM authentication and a POST-only security constraint configured. Liquibase is a CLI tool that never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No FORM authenticator or security constraint is ever configured.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.0.M1|<9.0.121|>=10.1.0-M1|<10.1.58|>=11.0.0-M1|<11.0.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-75595",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, io.netty.handler.ssl.SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can cause an IndexOutOfBoundsException and invoke select(ctx, null). This selects the default SslContext instead of the SNI-specific context. In deployments where per-SNI clientAuth=REQUIRE is the sole mutual TLS gate, the default SslContext uses clientAuth=NONE or clientAuth=OPTIONAL, and no application-layer certificate verification exists, an unauthenticated remote attacker can bypass the protected route's mutual TLS requirement. This issue is fixed in versions 4.1.137.Final and 4.2.17.Final.",
+      "recommendation": "No action required. Liquibase does not run a Netty server or configure per-SNI mutual-TLS routing.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": null,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "justification": "NVD had not published a CVSS vector for this CVE as of the assessment date; GHSA rates overall severity as CRITICAL.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path only triggers inside a Netty server decoding inbound TLS ClientHello records for SNI-based routing. Liquibase never runs a Netty server; all netty-handler usage in the distribution is transitive, client-side, and outbound only.\n"
+        }
+      ],
+      "cwes": [
+        754,
+        475
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c4c3-7fpv-j4q5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75595",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-c4c3-7fpv-j4q5",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can throw IndexOutOfBoundsException and fall back to the default SslContext instead of the SNI-specific one. This only becomes an mTLS bypass in a deployment that (a) runs a Netty server accepting inbound TLS connections, (b) uses per-SNI SslContext selection as the sole mutual-TLS gate (clientAuth=REQUIRE on the SNI context, weaker on the default), and (c) has no application-layer certificate check. Liquibase never runs a Netty server: a grep across all Java sources for ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, and SslClientHelloHandler returns zero hits: netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (Azure SDK's azure-core-http-netty, the AWS SDK, the Couchbase client, the Cassandra JDBC driver). The scanner found netty-handler below the fixed versions in five bundled jars (Docker Scan run https://github.com/liquibase/liquibase-pro/actions/runs/34365994421): liquibase-commercial-cassandra.jar 4.1.119.Final, liquibase-azure.jar 4.1.135.Final, liquibase-aws-extension.jar 4.1.136.Final, liquibase-commercial-couchbase.jar 4.2.16.Final, and liquibase-azure-deps.jar (unlabeled in the scan, same shaded copy as liquibase-azure.jar); none of them run a Netty server, so the version gap does not matter to this assessment.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.137.Final|>=4.2.0.Final|<4.2.17.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-33871",
       "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
       "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
