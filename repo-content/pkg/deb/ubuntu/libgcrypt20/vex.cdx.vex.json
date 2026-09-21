@@ -1,0 +1,66 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2024-2236",
+      "description": "A timing-based side-channel flaw was found in libgcrypt's RSA implementation that may allow a remote attacker to initiate a Bleichenbacher-style attack, which can lead to the decryption of RSA ciphertexts.",
+      "recommendation": "No action required. Liquibase's Java runtime does not use libgcrypt; the package is present only as a transitive dependency of unrelated OS tooling this container never invokes.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The JVM does not link or call libgcrypt; the package is pulled in only by unrelated GnuPG/apt/systemd tooling this container never invokes, and the base image already ships the fixed version.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w2gx-4fh8-wm9f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-2236",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A timing side-channel in libgcrypt's RSA implementation could enable a Bleichenbacher-style decryption attack (the \"Marvin Attack\"). The container base image currently ships libgcrypt20 1.10.3-2ubuntu0.2, the fixed release (confirmed by pulling the current base image and checking installed package versions directly, since this OS package's version is not pinned by this repository — it tracks whatever the base image resolves to at build time). Independent of the version, checking the Java runtime's own library linkage shows it does not link libgcrypt at all; the package is pulled in only as a dependency of GnuPG/apt/systemd tooling (gpg, gpgv, gpg-agent, dirmngr, libapt-pkg, libsystemd0), none of which Liquibase invokes. Java uses its own JCE crypto providers, not system libgcrypt.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgcrypt20",
+          "versions": [
+            {
+              "range": "vers:deb/<1.10.3-2ubuntu0.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

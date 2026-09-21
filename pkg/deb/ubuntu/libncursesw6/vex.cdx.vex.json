@@ -1,0 +1,62 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2025-6141",
+      "description": "GNU ncurses up to 6.5-20250322 has a stack-based buffer overflow in postprocess_termcap (tinfo/parse_entry.c) due to improper bounds checking during termcap entry processing, allowing a local attacker to trigger the overflow via a crafted termcap file, leading to denial of service.",
+      "recommendation": "No action required under normal deployment. This requires a local attacker supplying a crafted termcap entry to an interactive terminal session, which the stock container's non-interactive entrypoint does not accept.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a local attacker supplying a crafted termcap entry to an interactive terminal session; the stock container runs the CLI non-interactively via its entrypoint.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6141",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A stack-based buffer overflow in ncurses' termcap entry parsing requires a local attacker able to supply a crafted termcap file or TERM/TERMINFO value processed by an interactive terminal session. The Liquibase Secure container runs the CLI non-interactively via its entrypoint, without accepting untrusted local termcap input; TERM is set by the container orchestration layer, not by an untrusted local actor. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships libncursesw6 6.4+20240113-1ubuntu2.2, the fixed release, as additional defense-in-depth.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libncursesw6",
+          "versions": [
+            {
+              "range": "vers:deb/<6.4+20240113-1ubuntu2.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

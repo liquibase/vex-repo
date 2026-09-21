@@ -1,0 +1,66 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-11856",
+      "description": "Using libcurl to do a transfer to a specific HTTP origin with Digest authentication and then changing the origin to a different one for a second transfer while reusing the same handle causes libcurl to wrongly pass on the Authorization header field meant for the first origin to the second. This flaw does not affect the curl command-line tool.",
+      "recommendation": "No action required. Liquibase's container uses wget, not curl, and never reuses a libcurl handle across origins.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This is a libcurl API-reuse issue that does not affect the curl CLI at all per the upstream advisory, and Liquibase's container uses wget rather than curl for its own downloads.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://curl.se/docs/CVE-2026-11856.html",
+          "title": "curl Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11856",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is in libcurl's handle-reuse behavior: reusing the same handle for Digest-authenticated transfers to two different origins can leak the first origin's Authorization header to the second. Per curl's own advisory, this does not affect the curl command-line tool at all — only applications that reuse a libcurl handle across origins. The container's build steps use wget, not curl, for downloads, and the runtime entrypoint execs only the Liquibase CLI — a source review found no invocation of curl anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships curl 8.5.0-2ubuntu10.13, newer than the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-7866412c0b148525cbd6889f0d47d0d44b000f74c3fc81db8b5de9fa80bc7bea",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T18:27:58.099620078Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-2236"
+      },
+      "timestamp": "2026-09-21T18:27:58.09962125Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgcrypt20"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A timing-based side-channel flaw was found in libgcrypt's RSA implementation that may allow a remote attacker to initiate a Bleichenbacher-style attack, which can lead to the decryption of RSA ciphertexts.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A timing side-channel in libgcrypt's RSA implementation could enable a Bleichenbacher-style decryption attack (the \"Marvin Attack\"). The container base image currently ships libgcrypt20 1.10.3-2ubuntu0.2, the fixed release (confirmed by pulling the current base image and checking installed package versions directly, since this OS package's version is not pinned by this repository — it tracks whatever the base image resolves to at build time). Independent of the version, checking the Java runtime's own library linkage shows it does not link libgcrypt at all; the package is pulled in only as a dependency of GnuPG/apt/systemd tooling (gpg, gpgv, gpg-agent, dirmngr, libapt-pkg, libsystemd0), none of which Liquibase invokes. Java uses its own JCE crypto providers, not system libgcrypt."
+    }
+  ]
+}

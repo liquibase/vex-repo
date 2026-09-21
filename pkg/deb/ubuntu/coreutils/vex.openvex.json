@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-6f739b1bd713fec6f5ee4dde249bc6877ef6c86fc9b636fc2988c2b566ffbdfe",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T18:26:01.680722758Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-5278"
+      },
+      "timestamp": "2026-09-21T18:26:01.680724441Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/coreutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The sort utility's begfield() function in GNU Coreutils is vulnerable to a heap buffer under-read that may allow access to memory outside the allocated buffer when a crafted command uses the traditional key format with an out-of-range character position, due to unsafe pointer arithmetic causing integer wraparound.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GNU coreutils' sort utility has a heap buffer under-read reachable only via the traditional key-specification syntax (+POS1[.C1][OPTS]) with an out-of-range character position. The container's build steps and runtime entrypoint use only rm, ln, mkdir, chown, chmod, wget, tar, unzip, and sha256sum — a source review found no invocation of sort anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships coreutils 9.4-3ubuntu6.3, the fixed release, as additional defense-in-depth."
+    }
+  ]
+}

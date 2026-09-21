@@ -1,0 +1,172 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2025-15649",
+      "description": "IO::Uncompress::Unzip versions before 2.215 for Perl propagate an uncaught exception when parsing a zip header with a malformed DOS date. The _dosToUnixTime() function calls Time::Local::timelocal() without an eval guard; a header whose date field decodes to an out-of-range month, day, or hour causes the exception to propagate out of the caller, which expects undef plus an error variable instead.",
+      "recommendation": "No action required. Liquibase never invokes Perl or any Perl module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked.\n"
+        }
+      ],
+      "cwes": [
+        248
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15649",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Perl's IO::Uncompress::Unzip propagates an uncaught exception when a zip header's DOS date field decodes to an out-of-range value. The container's entrypoint execs only the Liquibase CLI directly (a Java process, not a shell script that shells out to Perl), and a source review found no invocation of perl or any Perl module anywhere in Liquibase's build or runtime. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-12087",
+      "description": "Socket versions before 2.041 for Perl have an out-of-bounds heap read. pack_ip_mreq_source() in Socket.xs validates argument lengths in the wrong order, so a source address shorter than 4 bytes is not rejected and the copy reads up to 3 bytes past the end of its buffer, leaking adjacent heap memory into the packed structure.",
+      "recommendation": "No action required. Liquibase never invokes Perl or any Perl module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12087",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An out-of-bounds heap read exists in Perl's Socket module (pack_ip_mreq_source() in Socket.xs) when an application calls it with a multicast source address shorter than 4 bytes. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence). This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13221",
+      "description": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
+      "recommendation": "No action required. Liquibase never invokes Perl, and no Liquibase security control is implemented via a Perl regex.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked, and no Liquibase access-control or filtering logic is implemented via a Perl regex.\n"
+        }
+      ],
+      "cwes": [
+        697
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13221",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Perl's regex compiler silently truncates its match table when an alternation has more than 65,535 branches, producing incorrect (false-positive and false-negative) pattern matches — a risk only when such a regex gates an access-control or input-filtering decision. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence), so no Liquibase security control is implemented via a Perl regex. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

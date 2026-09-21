@@ -1,0 +1,54 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-2fd4da1eccb86f362515a62662ead3dd833ae485ba6dd4f1329c40500d04ed3d",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T18:28:44.745757895Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-15649"
+      },
+      "timestamp": "2026-09-21T18:28:44.393953803Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "IO::Uncompress::Unzip versions before 2.215 for Perl propagate an uncaught exception when parsing a zip header with a malformed DOS date. The _dosToUnixTime() function calls Time::Local::timelocal() without an eval guard; a header whose date field decodes to an out-of-range month, day, or hour causes the exception to propagate out of the caller, which expects undef plus an error variable instead.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Perl's IO::Uncompress::Unzip propagates an uncaught exception when a zip header's DOS date field decodes to an out-of-range value. The container's entrypoint execs only the Liquibase CLI directly (a Java process, not a shell script that shells out to Perl), and a source review found no invocation of perl or any Perl module anywhere in Liquibase's build or runtime. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-12087"
+      },
+      "timestamp": "2026-09-21T18:28:44.579171989Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Socket versions before 2.041 for Perl have an out-of-bounds heap read. pack_ip_mreq_source() in Socket.xs validates argument lengths in the wrong order, so a source address shorter than 4 bytes is not rejected and the copy reads up to 3 bytes past the end of its buffer, leaking adjacent heap memory into the packed structure.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "An out-of-bounds heap read exists in Perl's Socket module (pack_ip_mreq_source() in Socket.xs) when an application calls it with a multicast source address shorter than 4 bytes. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence). This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-13221"
+      },
+      "timestamp": "2026-09-21T18:28:44.707910062Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Perl's regex compiler silently truncates its match table when an alternation has more than 65,535 branches, producing incorrect (false-positive and false-negative) pattern matches — a risk only when such a regex gates an access-control or input-filtering decision. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence), so no Liquibase security control is implemented via a Perl regex. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth."
+    }
+  ]
+}

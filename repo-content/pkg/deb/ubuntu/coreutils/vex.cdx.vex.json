@@ -1,0 +1,66 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2025-5278",
+      "description": "The sort utility's begfield() function in GNU Coreutils is vulnerable to a heap buffer under-read that may allow access to memory outside the allocated buffer when a crafted command uses the traditional key format with an out-of-range character position, due to unsafe pointer arithmetic causing integer wraparound.",
+      "recommendation": "No action required. Liquibase's container build and runtime never invoke sort.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Neither the container's build steps nor its runtime entrypoint ever invoke the sort utility.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ch64-4x3c-w3jq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-5278",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GNU coreutils' sort utility has a heap buffer under-read reachable only via the traditional key-specification syntax (+POS1[.C1][OPTS]) with an out-of-range character position. The container's build steps and runtime entrypoint use only rm, ln, mkdir, chown, chmod, wget, tar, unzip, and sha256sum — a source review found no invocation of sort anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships coreutils 9.4-3ubuntu6.3, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/coreutils",
+          "versions": [
+            {
+              "range": "vers:deb/<9.4-3ubuntu6.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
