@@ -1,0 +1,66 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2024-52005",
+      "description": "Git, before versions 2.48.1, 2.47.3, 2.46.5, 2.45.4, and 2.44.3, has a vulnerability where a Git client using a terminal that supports ANSI escape sequences can have those sequences, when written to the sideband channel used by the server to transmit informational or error messages during clone/fetch/push, misrepresent the state of a fetch/pull/push or otherwise mislead the user into executing untrusted scripts.",
+      "recommendation": "No action required. Liquibase does not invoke git at runtime, and the only git usage (CI checkout of this repo's own trusted remote) is not the exploit scenario this CVE describes.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase runtime code never invokes git against an untrusted remote; the only git usage in this repo is CI checkout of its own trusted remote.\n"
+        }
+      ],
+      "cwes": [
+        116,
+        150
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fq7x-238x-mm9p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-52005",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation requires cloning, fetching from, or pushing to an attacker-controlled Git remote that injects malicious ANSI escape sequences over the sideband channel. Liquibase runtime code never shells out to `git clone`, `git fetch`, or `git push` against any remote — a stronger, structural argument than merely trusting a given remote. A source review confirmed no process/exec invocation of git anywhere in Liquibase's runtime code. The only git usage in this repo at all is CI's own checkout step, which clones this repository's own trusted GitHub remote with a git binary version pinned by the runner image, not by this repo — not the exploit scenario this CVE describes.",
+        "justification": "code_not_reachable",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/git-scm/git",
+          "versions": [
+            {
+              "range": "vers:generic/<2.44.3|>=2.45.0|<2.45.4|>=2.46.0|<2.46.5|>=2.47.0|<2.47.3|>=2.48.0|<2.48.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

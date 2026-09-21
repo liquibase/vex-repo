@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-951d72487ee704102cf62bc96751265e708190f2259c8d659b75f534abd807af",
+  "@id": "merged-vex-8bb24c0e0342f4b226d9c5cc771f951a74233f7bed839dc63c56583fcd09c299",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T15:34:39.11830812Z",
+  "timestamp": "2026-09-21T16:22:37.731519669Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-prj3-ccx8-p6x4"
         ]
       },
-      "timestamp": "2026-09-21T15:34:37.716521439Z",
+      "timestamp": "2026-09-21T16:22:35.775511269Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -29,7 +29,7 @@
           "GHSA-w9fj-cfpg-grvv"
         ]
       },
-      "timestamp": "2026-09-21T15:34:36.73477693Z",
+      "timestamp": "2026-09-21T16:22:34.559610228Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -47,7 +47,7 @@
           "GHSA-f6hv-jmp6-3vwv"
         ]
       },
-      "timestamp": "2026-09-21T15:34:37.878621551Z",
+      "timestamp": "2026-09-21T16:22:35.97484038Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -64,15 +64,34 @@
           "GHSA-93wv-jw9v-4972"
         ]
       },
-      "timestamp": "2026-09-21T15:34:37.984638111Z",
+      "timestamp": "2026-09-21T16:22:37.498690356Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
         }
       ],
       "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, a remote unauthenticated peer can leak one direct ByteBuf per HTTP/2 DATA frame in applications that enable HTTP/2 content decompression via DelegatingDecompressorFrameListener: when a DATA frame is processed for a stream whose decompressor has already been closed, the retained buffer is not released on the error path, eventually exhausting direct memory and crashing the JVM. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "netty-codec-http2's DelegatingDecompressorFrameListener DATA-frame handling is exercised by both modules' outbound HTTP/2 clients: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain, and liquibase-azure's azure-core-http-netty. Exploiting the leak requires a malicious or misbehaving HTTP/2 peer; both modules only ever connect to a single trusted, TLS-authenticated first-party endpoint (AWS Secrets Manager for Cassandra, Microsoft Azure services for Azure), so the same \"requires a malicious peer, and we only talk to a trusted endpoint\" argument applies to both. Cassandra's copy also happens to already resolve at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth; Azure's copy remains on the vulnerable 4.1.135.Final and relies solely on the trusted-endpoint argument."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59900",
+        "aliases": [
+          "GHSA-c69g-56f8-xwqj"
+        ]
+      },
+      "timestamp": "2026-09-21T16:22:37.647688059Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, Netty's HTTP/2-to-HTTP/1.x translation layer (Http2StreamFrameToHttpObjectCodec / InboundHttp2ToHttpAdapter) fails to deduplicate or validate Host headers when an HTTP/2 client supplies both the :authority pseudo-header and a literal host header in a single HEADERS frame, producing an HttpRequest with two differing Host headers that can be used to bypass request-routing logic. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty HTTP/2 decompression ByteBuf reference-count leak in DelegatingDecompressorFrameListener, fixed in 4.1.136.Final / 4.2.16.Final. A remote peer can leak one direct ByteBuf per HTTP/2 DATA frame when a stream's decompressor has already been closed and the error path fails to release the retained buffer — but only in applications that run an HTTP/2 server with content decompression explicitly enabled via DelegatingDecompressorFrameListener. Liquibase is a database migration CLI tool that does not run an HTTP/2 server and never enables HTTP/2 content decompression. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections."
+      "impact_statement": "This CVE concerns the HTTP/2-to-HTTP/1.x translation layer a front-end server or proxy uses (e.g. InboundHttp2ToHttpAdapter) to receive and translate inbound HTTP/2 requests — a server/proxy-side concept neither module ever exercises, both being pure outbound HTTP/2 clients: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only ever act as a direct HTTP/1.1 or HTTP/2 client, never a protocol-translating front end. Cassandra's copy of netty-codec-http2 also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
     }
   ]
 }

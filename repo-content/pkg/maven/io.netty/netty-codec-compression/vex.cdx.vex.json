@@ -39,7 +39,29 @@
     },
     {
       "id": "CVE-2026-59901",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, Bzip2Decoder's run-length encoding (RLE) state machine can enter an infinite loop when processing a malformed bzip2 stream, permanently occupying the event-loop thread at 100% CPU and causing denial of service. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No Liquibase Netty consumer wires Bzip2Decoder/Bzip2Encoder into a pipeline, so the vulnerable RLE state machine is never reached.\n"
+        }
+      ],
       "cwes": [
         835
       ],

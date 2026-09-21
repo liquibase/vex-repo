@@ -122,70 +122,6 @@
       ]
     },
     {
-      "id": "CVE-2026-13506",
-      "description": "In Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
-      "recommendation": "No action required. Liquibase Secure does not call the standalone bcprov-jdk18on ASN.1 parsing classes required to reach this issue.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "Liquibase Secure does not import or call the standalone org.bouncycastle ASN.1 parsing classes associated with this flaw. The only Bouncy Castle references are Snowflake-shaded classes in a different package namespace used for private-key loading.\n"
-        }
-      ],
-      "cwes": [
-        674
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-qp49-qgx5-5m26",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13506",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://github.com/bcgit/bc-java/wiki/CVE-2026-13506",
-          "title": "Bouncy Castle Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle lazy ASN.1 sequence forcing resets nesting-depth guard affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, and LazyConstructionEnumeration also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which is a different package namespace than the standalone bcprov-jdk18on artifact reported by the scanner.",
-        "justification": "vulnerable_code_not_present",
-        "response": [
-          "update"
-        ],
-        "firstIssued": "2026-09-18T00:00:00Z",
-        "lastUpdated": "2026-09-21T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.bouncycastle/bcprov-jdk18on",
-          "versions": [
-            {
-              "range": "vers:maven/<1.85",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-8763",
       "description": "In Bouncy Castle for Java before 1.85, Name Constraints bypass via trailing dot in rfc822Name and URI. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
       "recommendation": "No action required. Liquibase Secure does not use the standalone bcprov-jdk18on certificate name-constraint validation APIs required to trigger this issue.",
@@ -599,50 +535,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33871",
-      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-08T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ]
-    },
-    {
       "id": "CVE-2025-61724",
       "description": "The Reader.ReadResponse function constructs a response string through repeated string concatenation of lines. When the number of lines in a response is large, this can cause excessive CPU consumption.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10.",
@@ -695,6 +587,50 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "Netty verifyContinuationFrame fails to limit the number of zero-byte CONTINUATION frames, bypassing maxHeaderListSize and causing excessive CPU consumption on the server.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability. Liquibase never accepts inbound HTTP/2 connections; Netty is only used as a client transport.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HTTP/2 CONTINUATION frame flood DoS in Netty HTTP/2 codec. This is a server-side vulnerability requiring an attacker to send malicious HTTP/2 CONTINUATION frames to a Netty HTTP/2 server. Liquibase is a database migration CLI tool that does not run an HTTP/2 server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport. There is no inbound HTTP/2 listener.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2"
         }
       ]
     },
@@ -1112,50 +1048,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-39826",
       "description": "If a trusted template author were to write a <script> tag containing an empty 'type' attribute or a 'type' attribute with an ASCII whitespace, the execution of the template would incorrectly escape any data passed into the <script> block.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.4 built with fixed Go 1.25.10, and lpm does not use html/template.",
@@ -1215,6 +1107,50 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a sibling artifact. Liquibase neither runs an HTTP server nor uses netty-transport's request path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
@@ -1768,50 +1704,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33871",
-      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-54513",
       "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.10.0 until 2.18.8, 2.21.4, and 3.1.4, BasicPolymorphicTypeValidator.Builder.allowIfSubTypeIsArray() allowlists any array type based only on clazz.isArray(), without validating the array's component (element) type against the configured allowlist. A PTV built with allowIfSubTypeIsArray() plus an explicit concrete-type allowlist therefore still permits EvilType[] even though EvilType is not allowlisted. When Jackson deserializes the elements and no per-element type IDs are present, it instantiates the component type directly with no further PTV check, bypassing the allowlist. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
       "recommendation": "No action required. Liquibase Secure does not configure Jackson polymorphic typing or PolymorphicTypeValidator allow-lists required to trigger this vulnerability.",
@@ -1871,6 +1763,50 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored here so scanners that flag netty-transport receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a sibling artifact. Liquibase neither runs an HTTP/2 server nor uses netty-transport's frame parser.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport"
         }
       ]
     },
@@ -1992,13 +1928,13 @@
       ]
     },
     {
-      "id": "CVE-2026-55831",
-      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame, allowing a remote SPDY/3.1 peer to send a syntactically valid roughly 2 MiB SETTINGS frame that creates 262144 map entries and amplifies network input into heap growth and ordered-map insertion work.",
-      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
+      "id": "CVE-2026-59901",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, Bzip2Decoder's run-length encoding (RLE) state machine can enter an infinite loop when processing a malformed bzip2 stream, permanently occupying the event-loop thread at 100% CPU and causing denial of service. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
       "ratings": [
         {
           "source": {
-            "name": "GitHub"
+            "name": "NVD"
           },
           "score": 7.5,
           "severity": "high",
@@ -2012,197 +1948,10 @@
           "score": 0,
           "severity": "none",
           "method": "CVSSv31",
-          "justification": "The vulnerable SPDY SETTINGS decoder path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No Liquibase Netty consumer wires Bzip2Decoder/Bzip2Encoder into a pipeline, so the vulnerable RLE state machine is never reached.\n"
         }
       ],
-      "cwes": [
-        400,
-        770
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-6jqx-86gh-f27w",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55831",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Netty SPDY SETTINGS decoder unbounded map amplification, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is the SPDY/3.1 protocol decoder (DefaultSpdySettingsFrame / SpdySettingsFrameDecoder), which is a legacy Google protocol that none of Liquibase's Netty consumers (Azure SDK, Cassandra driver, MongoDB driver, AWS SDK) negotiate or expose. A focused grep for SpdySettingsFrame, SpdyFrameCodec, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits, and Liquibase never runs a SPDY server or client.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-07-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-55833",
-      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty SPDY header decoding continues inflating zlib-compressed header blocks after the raw header parser has exceeded maxHeaderSize and marked the frame truncated in SpdyFrameCodec, allowing a remote peer to send a small compressed HEADERS block that expands into much larger raw header data and causes compression-amplified CPU and allocation churn.",
-      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
-      "ratings": [
-        {
-          "source": {
-            "name": "GitHub"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "The vulnerable SPDY header decompression path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-mvh2-crg5-v77c",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55833",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Netty SPDY zlib header block continues decoding expansion after maxHeaderSize truncation, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SPDY HEADERS frame zlib decompression in SpdyFrameCodec, part of the legacy SPDY/3.1 protocol decoder that none of Liquibase's Netty consumers negotiate. A focused grep for SpdyFrameCodec, SpdyHeaderBlockDecoder, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-07-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-56745",
-      "description": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame with FLAG_FIN=0 and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream or the accumulated content exceeds maxContentLength, the decoder removes the entry but does not release the pooled ByteBuf, causing native memory exhaustion.",
-      "recommendation": "No action required. Liquibase does not run a SPDY server or client and never processes SPDY frames.",
-      "ratings": [
-        {
-          "source": {
-            "name": "GitHub"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv40",
-          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "The vulnerable SpdyHttpDecoder path is never invoked; Liquibase's Netty consumers only ever speak HTTP/1.1 or HTTP/2.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-jppx-w49h-x2qq",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56745",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Netty SpdyHttpDecoder pooled ByteBuf reference leak on RST_STREAM, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SpdyHttpDecoder, the SPDY-to-HTTP translation codec, which none of Liquibase's Netty consumers negotiate (they speak HTTP/1.1 or HTTP/2 directly). A focused grep for SpdyHttpDecoder, io.netty.handler.codec.spdy, and SpdySessionHandler across Java and XML sources returned zero hits.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-07-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-59901",
-      "description": "Netty: [Bzip2Decoder] Infinite Loop in RLE State Machine Leads to Event-Loop Thread Hang. The Bzip2Decoder handler in Netty's compression codec pipeline is vulnerable to a denial-of-service attack through a malformed bzip2 stream that permanently captures the event-loop thread in an infinite loop, in the run-length encoding (RLE) state machine within Bzip2BlockDecompressor.read().",
-      "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
-      "ratings": [
-        {
-          "source": {
-            "name": "GitHub"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv40",
-          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "The vulnerable Bzip2Decoder codec is never added to a pipeline by any Liquibase Netty consumer.\n"
-        }
-      ],
-      "cwes": [
-        835
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-558v-64gr-wgg4",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59901",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Netty Bzip2Decoder infinite loop in the RLE state machine on a malformed bzip2 stream, hanging the event-loop thread. Liquibase dependency management includes Netty versions below the fixed 4.1.136.Final release (pom.xml:124, commercial-databases/liquibase-cassandra/pom.xml:49), so this assessment does not rely on a version-fixed claim. Bzip2Decoder is an opt-in compression codec that must be explicitly added to a Netty pipeline; none of Liquibase's Netty consumers (Cassandra driver via netty-codec, or the Azure/AWS/MongoDB HTTP transports) configure bzip2 compression. A focused grep for Bzip2Decoder, Bzip2Encoder, and io.netty.handler.codec.compression.Bzip2 across Java and XML sources returned zero hits.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-07-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-59901",
-      "recommendation": "No action required. Liquibase never adds Bzip2Decoder/Bzip2Encoder to a Netty pipeline.",
       "cwes": [
         835
       ],
@@ -2298,50 +2047,6 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
         }
       ]
     },
@@ -2529,6 +2234,50 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-epoll provides Linux epoll(7) native transport classes — no HTTP parser code. The cpe:2.3:a:netty:netty:* CPE causes OWASP to propagate the CVE here. Liquibase does not expose any HTTP server; the vulnerable chunked-encoding decoder is unreachable from this artifact regardless.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
         }
       ]
     },
@@ -2734,50 +2483,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33871",
-      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-epoll is the Linux epoll native transport — no HTTP/2 frame decoder. CPE-based scanners propagate the CVE here despite the artifact not containing the vulnerable parser.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
-        }
-      ]
-    },
-    {
       "id": "CVE-2025-53066",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u461, 8u461-perf, 11.0.28, 17.0.16, 21.0.8, 25; Oracle GraalVM for JDK: 17.0.16 and 21.0.8; Oracle GraalVM Enterprise Edition: 21.3.15.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as an Oracle Java SE client runtime.",
@@ -2977,6 +2682,50 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-epoll is the Linux epoll native transport — no HTTP/2 frame decoder. CPE-based scanners propagate the CVE here despite the artifact not containing the vulnerable parser.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-epoll"
         }
       ]
     },
@@ -3264,50 +3013,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-33870",
-      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
-      "recommendation": "No action required. Liquibase does not run an HTTP server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        444
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
         }
       ]
     },
@@ -3632,6 +3337,50 @@
       ]
     },
     {
+      "id": "CVE-2026-33870",
+      "description": "See CVE-2026-33870 entry on netty-codec-http. Mirrored for sibling transport artifact so scanners receive the same not_affected statement.",
+      "recommendation": "No action required. Liquibase does not run an HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwqr-wmgm-9rr8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http (see above). netty-transport-classes-kqueue provides macOS/BSD kqueue(2) native transport classes — no HTTP parser code. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56864",
       "description": "A malicious GOSUMDB was capable of serving arbitrary module content not contained within the transparency log. This attack allows for a coordinating GOPROXY and GOSUMDB to serve a client malicious module content that cannot be detected by evaluating the transparency log. In order to determine if you have been affected: rm -r go.sum go.work.sum vendor/ && go mod tidy",
       "recommendation": "No action required. Liquibase Secure does not run Go module verification workflows at runtime.",
@@ -3916,50 +3665,6 @@
       ]
     },
     {
-      "id": "CVE-2026-33871",
-      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
-        }
-      ],
-      "cwes": [
-        400
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-kqueue is the macOS/BSD kqueue native transport — no HTTP/2 frame decoder. CPE-based propagation only.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-75595",
       "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, io.netty.handler.ssl.SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can cause an IndexOutOfBoundsException and invoke select(ctx, null). This selects the default SslContext instead of the SNI-specific context. In deployments where per-SNI clientAuth=REQUIRE is the sole mutual TLS gate, the default SslContext uses clientAuth=NONE or clientAuth=OPTIONAL, and no application-layer certificate verification exists, an unauthenticated remote attacker can bypass the protected route's mutual TLS requirement. This issue is fixed in versions 4.1.137.Final and 4.2.17.Final.",
       "recommendation": "No action required. Liquibase does not run a Netty server or configure per-SNI mutual-TLS routing.",
@@ -4015,6 +3720,767 @@
             {
               "range": "vers:maven/<4.1.137.Final|>=4.2.0.Final|<4.2.17.Final",
               "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-64607",
+      "description": "Apache HttpComponents Client, when using the classic (blocking) I/O model, fails to release the underlying connection back to the connection manager if the response contains an invalid or unsupported Content-Encoding header value. Repeated requests to a malicious or misbehaving server leak connections and eventually exhaust the connection pool, producing a denial of service. The async I/O model is not affected. Fixed in version 5.6.3.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release when available. The one reachable usage path is additionally protected by only ever talking to a trusted, TLS-authenticated AWS endpoint.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The dependency is already pinned past the fixed version (httpclient5 5.6.4 >= 5.6.3) across every module that resolves it, and the one reachable classic-client usage path only ever talks to a trusted, TLS-authenticated first-party AWS endpoint, not an attacker-controlled server.\n"
+        }
+      ],
+      "cwes": [
+        772
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hjcp-jmpx-g3qm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64607",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "httpclient5 is already pinned to 5.6.4 (past the 5.6.3 fix), but that alone only holds until a future downgrade, so we also checked reachability of the classic (blocking) client this CVE affects. Two usages exist: a bundled PII-detection filter, which is unreachable - it requires a policy-loading path Liquibase's checks engine never invokes - and the AWS SDK's synchronous Secrets Manager client, which is real but only ever talks to AWS's own TLS-authenticated endpoint. Exploitation needs that server to repeatedly send malformed Content-Encoding responses, so a remote attacker can't trigger this without already controlling or intercepting trusted AWS traffic - the same precondition used for the related Netty HTTP/2 CVEs.",
+        "justification": "requires_environment",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.httpcomponents.client5/httpclient5",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.0.0-alpha1|<5.6.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-52005",
+      "description": "Git, before versions 2.48.1, 2.47.3, 2.46.5, 2.45.4, and 2.44.3, has a vulnerability where a Git client using a terminal that supports ANSI escape sequences can have those sequences, when written to the sideband channel used by the server to transmit informational or error messages during clone/fetch/push, misrepresent the state of a fetch/pull/push or otherwise mislead the user into executing untrusted scripts.",
+      "recommendation": "No action required. Liquibase does not invoke git at runtime, and the only git usage (CI checkout of this repo's own trusted remote) is not the exploit scenario this CVE describes.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:A/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase runtime code never invokes git against an untrusted remote; the only git usage in this repo is CI checkout of its own trusted remote.\n"
+        }
+      ],
+      "cwes": [
+        116,
+        150
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fq7x-238x-mm9p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-52005",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation requires cloning, fetching from, or pushing to an attacker-controlled Git remote that injects malicious ANSI escape sequences over the sideband channel. Liquibase runtime code never shells out to `git clone`, `git fetch`, or `git push` against any remote — a stronger, structural argument than merely trusting a given remote. A source review confirmed no process/exec invocation of git anywhere in Liquibase's runtime code. The only git usage in this repo at all is CI's own checkout step, which clones this repository's own trusted GitHub remote with a git binary version pinned by the runner image, not by this repo — not the exploit scenario this CVE describes.",
+        "justification": "code_not_reachable",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/git-scm/git",
+          "versions": [
+            {
+              "range": "vers:generic/<2.44.3|>=2.45.0|<2.45.4|>=2.46.0|<2.46.5|>=2.47.0|<2.47.3|>=2.48.0|<2.48.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59901",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, Bzip2Decoder's run-length encoding (RLE) state machine can enter an infinite loop when processing a malformed bzip2 stream, permanently occupying the event-loop thread at 100% CPU and causing denial of service. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module ever configures or wires bzip2 compression into a Netty pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Bzip2Decoder is never reachable in either module assessed here - Cassandra's native protocol supports only LZ4/Snappy compression and configures none, and Azure's Netty HTTP client never wires a Bzip2Decoder into any pipeline.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-558v-64gr-wgg4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59901",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "netty-codec resolves below the 4.1.136.Final fix line for both modules assessed here (4.1.130.Final for liquibase-commercial-cassandra via cassandra-jdbc-wrapper -> java-driver-core, 4.1.135.Final for liquibase-azure via azure-core-http-netty). The vulnerable class, Bzip2Decoder, is never reachable in either: the Cassandra native protocol's compression negotiation supports only LZ4/Snappy and this extension doesn't configure compression at all, while Azure's Netty HTTP client never wires a Bzip2Decoder into any pipeline (Azure HTTP responses use gzip/deflate/br, and a class-listing search of the Azure SDK jars for Bzip-related symbols returns zero hits).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56745",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream, or the accumulated content exceeds maxContentLength, the decoder removes the entry without releasing the pooled ByteBuf, leading to native memory exhaustion. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module ever wires an SPDY codec into any pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code is Netty's legacy SPDY-to-HTTP codec, which neither module's HTTP client ever negotiates or wires in, regardless of Netty version. Cassandra's copy is additionally already past the fixed version as defense-in-depth.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        772
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-jppx-w49h-x2qq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56745",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The real vulnerable code is Netty's legacy SPDY-to-HTTP codec (SpdyHttpDecoder), not generic HTTP/2 handling — confirmed against the GitHub Security Advisory. Neither liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain nor liquibase-azure's azure-core-http-netty ever negotiates or wires an SPDY codec; both only ever speak HTTP/1.1 or HTTP/2, so SpdyHttpDecoder is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final via the AWS SDK chain, past the 4.1.136.Final fix line, as secondary defense-in-depth; Azure's copy remains on the vulnerable 4.1.135.Final and relies solely on the SPDY-never-used argument.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33871",
+      "description": "See CVE-2026-33871 entry on netty-codec-http2. Mirrored for sibling transport artifact.",
+      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Server-side HTTP/2 vulnerability in a transport-only sibling artifact.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33871",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner over-match: same root assessment as netty-codec-http2 (see above). netty-transport-classes-kqueue is the macOS/BSD kqueue native transport — no HTTP/2 frame decoder. CPE-based propagation only.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-classes-kqueue"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56819",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, a remote unauthenticated peer can leak one direct ByteBuf per HTTP/2 DATA frame in applications that enable HTTP/2 content decompression via DelegatingDecompressorFrameListener: when a DATA frame is processed for a stream whose decompressor has already been closed, the retained buffer is not released on the error path, eventually exhausting direct memory and crashing the JVM. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required under normal deployment (both modules only connect to trusted, TLS-authenticated first-party endpoints — AWS Secrets Manager and Microsoft Azure services respectively).",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Both modules' HTTP/2 clients only ever connect to a single trusted, TLS-authenticated first-party endpoint (AWS Secrets Manager for Cassandra, Microsoft Azure services for Azure), so exploiting the leak requires one of those trusted endpoints to misbehave or be compromised.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        401,
+        911
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-c2gf-v879-257j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56819",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "netty-codec-http2's DelegatingDecompressorFrameListener DATA-frame handling is exercised by both modules' outbound HTTP/2 clients: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain, and liquibase-azure's azure-core-http-netty. Exploiting the leak requires a malicious or misbehaving HTTP/2 peer; both modules only ever connect to a single trusted, TLS-authenticated first-party endpoint (AWS Secrets Manager for Cassandra, Microsoft Azure services for Azure), so the same \"requires a malicious peer, and we only talk to a trusted endpoint\" argument applies to both. Cassandra's copy also happens to already resolve at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth; Azure's copy remains on the vulnerable 4.1.135.Final and relies solely on the trusted-endpoint argument.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55833",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, SpdyFrameCodec continues driving the zlib inflater on a SPDY header block even after the raw header data exceeds maxHeaderSize and the frame is marked truncated, so CPU work and heap allocations continue for the full compressed payload - a decompression-bomb pattern applied to a protocol-level control channel. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module ever wires an SPDY codec into any pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Neither module's outbound HTTP client ever negotiates or wires an SPDY codec - both only ever speak HTTP/1.1 or HTTP/2 - so SpdyFrameCodec's zlib header decompression is never reached.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        409
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-mvh2-crg5-v77c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55833",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "SPDY is a legacy protocol that neither module's outbound HTTP client ever negotiates or wires a codec for, regardless of Netty version: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever speak HTTP/1.1 or HTTP/2, never SPDY, so SpdyFrameCodec's zlib header decompression is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55831",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame's backing TreeMap without a count budget, allowing a remote SPDY/3.1 peer to send a roughly 2 MiB SETTINGS frame that creates 262,144 map entries and amplifies network input into heap growth. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module ever wires an SPDY codec into any pipeline.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Neither module's outbound HTTP client ever negotiates or wires an SPDY codec - both only ever speak HTTP/1.1 or HTTP/2 - so DefaultSpdySettingsFrame's SPDY SETTINGS decoder is never reached.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-6jqx-86gh-f27w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55831",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "SPDY is a legacy protocol that neither module's outbound HTTP client ever negotiates or wires a codec for, regardless of Netty version: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever speak HTTP/1.1 or HTTP/2, never SPDY, so DefaultSpdySettingsFrame's SPDY SETTINGS decoder is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59900",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, Netty's HTTP/2-to-HTTP/1.x translation layer (Http2StreamFrameToHttpObjectCodec / InboundHttp2ToHttpAdapter) fails to deduplicate or validate Host headers when an HTTP/2 client supplies both the :authority pseudo-header and a literal host header in a single HEADERS frame, producing an HttpRequest with two differing Host headers that can be used to bypass request-routing logic. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module performs HTTP/2-to-HTTP/1.x protocol translation.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This CVE concerns HTTP/2-to-HTTP/1.x translation performed by a front-end server or proxy; both modules are pure outbound HTTP/2 clients and never perform protocol translation.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-c69g-56f8-xwqj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59900",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE concerns the HTTP/2-to-HTTP/1.x translation layer a front-end server or proxy uses (e.g. InboundHttp2ToHttpAdapter) to receive and translate inbound HTTP/2 requests — a server/proxy-side concept neither module ever exercises, both being pure outbound HTTP/2 clients: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only ever act as a direct HTTP/1.1 or HTTP/2 client, never a protocol-translating front end. Cassandra's copy of netty-codec-http2 also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59899",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, HttpContentEncoder maintains a per-channel acceptEncodingQueue that accumulates attacker-controlled data without a size limit; the queue is filled on the I/O thread for every inbound HTTP request and drained only when the application writes a non-1xx response, allowing an attacker to exploit HTTP/1.1 pipelining to exhaust resources. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module runs an HTTP server that would use HttpContentEncoder.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "HttpContentEncoder encodes outbound responses on the server side of an HTTP exchange; neither module ever runs an HTTP server, only makes outbound client requests.\n"
+        }
+      ],
+      "cwes": [
+        770,
+        409
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-pvjx-v7vp-62vq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59899",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "HttpContentEncoder encodes outbound responses on the server side of an HTTP exchange, a role neither module ever plays: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only make outbound client requests and decode inbound responses, never run an HTTP server. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56746",
+      "description": "Netty is an asynchronous, event-driven network application framework. Versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final are affected by a logical-operator error in CorsHandler's origin evaluation that allows the shortCircuit() security control to be bypassed entirely by sending a request with an Origin: null header, forwarding unauthorized cross-origin requests to the backend application. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module runs an HTTP server that would use CorsHandler.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "CORS enforcement is inherently server-side and neither module ever runs an HTTP server, so CorsHandler is never reached by either.\n"
+        }
+      ],
+      "cwes": [
+        284,
+        807
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-6cqp-g7gg-8hr5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56746",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CORS enforcement is inherently server-side, and neither module ever runs an HTTP server: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever make outbound client requests, so CorsHandler is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59898",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, the newHandshakeResponse methods of WebSocketServerHandshaker07 and WebSocketServerHandshaker08 complete a WebSocket protocol upgrade based solely on the presence of a Sec-WebSocket-Version: 7 (or 8) header, without verifying the mandatory Connection: Upgrade and Upgrade: websocket headers, enabling HTTP request smuggling / protocol-confusion attacks through intermediaries that don't recognize the request as an Upgrade. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Neither module runs a WebSocket server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "WebSocketServerHandshaker07/08 are server-side handshake classes and neither module ever runs a WebSocket server, only makes plain HTTPS client calls.\n"
+        }
+      ],
+      "cwes": [
+        358,
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4mp9-239f-g9hg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59898",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "WebSocketServerHandshaker07/08 are server-side handshake classes, and neither module ever runs a WebSocket server: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only make plain HTTPS client calls, never WebSocket connections. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-73508",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, io.netty.handler.codec.dns.AbstractDnsRecord, io.netty.handler.codec.dns.DefaultDnsRecordDecoder.decodeRecord(), and io.netty.handler.codec.dns.DnsCodecUtil.decompressDomainName() failed to release retained or newly allocated ByteBuf objects when IDN.toASCII() or encodeDomainName() rejected a malformed domain name, allowing unauthenticated remote DNS packets to leak direct memory incrementally until denial of service. Fixed in 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "Risk-accepted pending an upstream reactor-netty/Netty release with the fix. This assessment assumes the deployment's DNS resolution path is not exposed to an attacker with network-level access (e.g. internal/corporate DNS resolvers, not an open or adversarial network) - confirm this assumption holds for how this module is actually deployed before treating this as closed. Revisit once reactor-netty ships a release with netty-resolver-dns >= 4.1.136.Final.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "Exploitation requires network-level access to the deployment's resolver path, not a plain remote attacker - the resolved hostname is always operator-configured (never changelog-derived), narrowing but not eliminating the attack surface pending an upstream fix.\n"
+        }
+      ],
+      "cwes": [
+        401,
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-73508",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "netty-resolver-dns:4.1.135.Final (below the 4.1.136.Final fix line) resolves for this module via reactor-netty-http:1.2.18 -> reactor-netty-core:1.2.18, and unlike the other Netty CVEs assessed here, is genuinely wired into every outbound connection by default via reactor-netty-core's NameResolverProvider — this is not a code-not-reachable case. The hostname resolved is always operator-supplied configuration, never derived from changelog content: Key Vault modifiers parse the vault host from a Liquibase configuration value, and Blob Storage access uses a separately configured storage-account property, so an attacker can't inject a resolution target purely via a malicious changelog. That only rules out attacker-chosen domains, though — it doesn't rule out this CVE's actual mechanism, a malformed DNS response to an otherwise-legitimate query. DNS isn't TLS-authenticated the way this module's HTTP/2 traffic is, so the \"trusted endpoint\" argument used for the HTTP/2 CVEs on this module doesn't transfer here. Exploitation requires network-level access to the deployment's DNS resolution path — an assumption about the deployment environment this codebase can't verify. No newer reactor-netty release exists yet with a fixed Netty.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-resolver-dns",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
             }
           ]
         }
@@ -6013,49 +6479,6 @@
       ]
     },
     {
-      "id": "CVE-2026-56819",
-      "recommendation": "No action required. Liquibase does not run an HTTP/2 server.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Server-side HTTP/2 decompression vulnerability. Liquibase never accepts inbound HTTP/2 connections and never enables the DelegatingDecompressorFrameListener decompression path; Netty is only used as a client transport.\n"
-        }
-      ],
-      "cwes": [
-        401
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/netty/netty/security/advisories/GHSA-c2gf-v879-257j",
-          "title": "GitHub Advisory"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Netty HTTP/2 decompression ByteBuf reference-count leak in DelegatingDecompressorFrameListener, fixed in 4.1.136.Final / 4.2.16.Final. A remote peer can leak one direct ByteBuf per HTTP/2 DATA frame when a stream's decompressor has already been closed and the error path fails to release the retained buffer — but only in applications that run an HTTP/2 server with content decompression explicitly enabled via DelegatingDecompressorFrameListener. Liquibase is a database migration CLI tool that does not run an HTTP/2 server and never enables HTTP/2 content decompression. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-07-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/io.netty/netty-codec-http2"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-42577",
       "recommendation": "No action required. Liquibase does not run a Netty server.",
       "ratings": [
@@ -6222,20 +6645,6 @@
       ]
     },
     {
-      "id": "CVE-2025-47273",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-03-31T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/setuptools"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-54291",
       "description": "channelBinding=require connections can be silently downgraded from SCRAM-SHA-256-PLUS with channel binding to plain SCRAM-SHA-256 without it. An attacker able to intercept the TLS connection could exploit this by presenting certificates with unsupported signature algorithms, causing the authentication mechanism to lose its man-in-the-middle protection.",
       "recommendation": "No action required for the default configuration, since Liquibase does not set channelBinding itself. Deployments that explicitly set channelBinding=require in their own JDBC URL should use a Liquibase Secure build on pgjdbc 42.7.12 or later (current source already pins 42.7.13); already-published images built before that bump remain exposed for that specific configuration until upgraded.",
@@ -6289,6 +6698,20 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-47273",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-03-31T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools"
         }
       ]
     },
@@ -6577,6 +7000,70 @@
           "versions": [
             {
               "range": "vers:maven/>=1.59|<1.80.2|>=1.81|<1.81.1|>=1.82|<1.84",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13506",
+      "description": "In Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
+      "recommendation": "No action required. Liquibase Secure does not call the standalone bcprov-jdk18on ASN.1 parsing classes required to reach this issue.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not import or call the standalone org.bouncycastle ASN.1 parsing classes associated with this flaw. The only Bouncy Castle references are Snowflake-shaded classes in a different package namespace used for private-key loading.\n"
+        }
+      ],
+      "cwes": [
+        674
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qp49-qgx5-5m26",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13506",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/bcgit/bc-java/wiki/CVE-2026-13506",
+          "title": "Bouncy Castle Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle lazy ASN.1 sequence forcing resets nesting-depth guard affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, and LazyConstructionEnumeration also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which is a different package namespace than the standalone bcprov-jdk18on artifact reported by the scanner.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-18T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.bouncycastle/bcprov-jdk18on",
+          "versions": [
+            {
+              "range": "vers:maven/<1.85",
               "status": "unaffected"
             }
           ]

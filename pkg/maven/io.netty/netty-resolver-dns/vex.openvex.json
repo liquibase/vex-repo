@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-f38b60e4d4f7b77de3b7f4f9331f01e0dfa08dda760feafb213e0139d56e81f8",
+  "@id": "merged-vex-cea93dc52c01ebf6e46449f8a7f8dfeb93ebab2d49b7b2134b5c94d1a1a364f3",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T15:34:55.665419548Z",
+  "timestamp": "2026-09-21T16:22:59.746708182Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-676x-f7gg-47vc"
         ]
       },
-      "timestamp": "2026-09-21T15:34:54.936249408Z",
+      "timestamp": "2026-09-21T16:22:58.597685537Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-resolver-dns"
@@ -30,7 +30,7 @@
           "GHSA-5pvg-856g-cp85"
         ]
       },
-      "timestamp": "2026-09-21T15:34:55.031029716Z",
+      "timestamp": "2026-09-21T16:22:58.713696734Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-resolver-dns"
@@ -40,6 +40,24 @@
       "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's `DnsResolveContext` insufficiently validates the bailiwick of NS records, enabling DNS Cache Poisoning. An attacker controlling an authoritative name server for a subdomain can poison the cache for parent domains (like `.co.uk`). In `io.netty.resolver.dns.DnsResolveContext.AuthoritativeNameServerList#add` method accepts any NS record from the AUTHORITY section as long as the record's name is a suffix of the questionName. Subsequently, the `handleWithAdditional` method caches the associated A records from the ADDITIONAL section directly into the `authoritativeDnsServerCache` under the parent domain's key. This bypasses standard bailiwick rules, where a server authoritative for a subdomain should not be trusted to provide authoritative records for its parent. The poisoned cache is then used for all future resolutions under the parent domain's key. Versions 4.1.135.Final and 4.2.15.Final patch the issue.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Netty DnsResolveContext NS-record bailiwick validation vulnerability fixed in 4.1.135.Final and 4.2.15.Final. Liquibase dependency management includes Netty versions below the fixed releases (commercial-databases/liquibase-cassandra/pom.xml:60, commercial-databases/liquibase-commercial-bigquery/pom.xml:73), so this assessment does not rely on a version-fixed claim. The Azure extension directly manages netty-resolver-dns at the fixed 4.1.135.Final release (cloud-integrations/liquibase-azure-extension/pom.xml:65, cloud-integrations/liquibase-azure-extension/pom.xml:102, cloud-integrations/liquibase-azure-extension/pom.xml:103), and other Netty dependency management also pins fixed releases (pom.xml:116, cloud-integrations/liquibase-azure-deps/pom.xml:51, tools/liquibase-checks/liquibase-checks/pom.xml:308). The vulnerable DNS resolver path is not reachable from Liquibase code: a focused grep for DnsResolveContext, AuthoritativeNameServerList, DnsNameResolver, DnsNameResolverBuilder, DnsServerAddressStreamProvider, authoritativeDnsServerCache, and io.netty.resolver.dns across Java and XML sources returned zero hits."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-73508",
+        "aliases": [
+          "GHSA-mfg7-5gfp-c4w3"
+        ]
+      },
+      "timestamp": "2026-09-21T16:22:59.730446666Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-resolver-dns"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, io.netty.handler.codec.dns.AbstractDnsRecord, io.netty.handler.codec.dns.DefaultDnsRecordDecoder.decodeRecord(), and io.netty.handler.codec.dns.DnsCodecUtil.decompressDomainName() failed to release retained or newly allocated ByteBuf objects when IDN.toASCII() or encodeDomainName() rejected a malformed domain name, allowing unauthenticated remote DNS packets to leak direct memory incrementally until denial of service. Fixed in 4.1.136.Final and 4.2.16.Final.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "netty-resolver-dns:4.1.135.Final (below the 4.1.136.Final fix line) resolves for this module via reactor-netty-http:1.2.18 -> reactor-netty-core:1.2.18, and unlike the other Netty CVEs assessed here, is genuinely wired into every outbound connection by default via reactor-netty-core's NameResolverProvider — this is not a code-not-reachable case. The hostname resolved is always operator-supplied configuration, never derived from changelog content: Key Vault modifiers parse the vault host from a Liquibase configuration value, and Blob Storage access uses a separately configured storage-account property, so an attacker can't inject a resolution target purely via a malicious changelog. That only rules out attacker-chosen domains, though — it doesn't rule out this CVE's actual mechanism, a malformed DNS response to an otherwise-legitimate query. DNS isn't TLS-authenticated the way this module's HTTP/2 traffic is, so the \"trusted endpoint\" argument used for the HTTP/2 CVEs on this module doesn't transfer here. Exploitation requires network-level access to the deployment's DNS resolution path — an assumption about the deployment environment this codebase can't verify. No newer reactor-netty release exists yet with a fixed Netty."
     }
   ]
 }
