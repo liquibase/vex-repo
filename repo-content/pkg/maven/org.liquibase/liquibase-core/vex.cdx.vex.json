@@ -4900,6 +4900,305 @@
       ]
     },
     {
+      "id": "CVE-2025-58057",
+      "description": "Netty is an asynchronous event-driven network application framework. In netty-codec-compression versions 4.1.124.Final and below, and netty-codec versions 4.2.4.Final and below, specially crafted input can cause BrotliDecoder and certain other decompression decoders to allocate a large number of reachable byte buffers, leading to denial of service. Fixed in 4.1.125.Final of netty-codec and 4.2.5.Final of netty-codec-compression.",
+      "recommendation": "No action required. Liquibase does not invoke BrotliDecoder or accept untrusted compressed Netty payloads.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase does not configure or call Netty's Brotli decompression handlers, so the vulnerable decoder path is not reachable even before considering that the resolved netty-codec version is already above the fixed release.\n"
+        }
+      ],
+      "cwes": [
+        409
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3p8m-j85q-pgmj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58057",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-3p8m-j85q-pgmj",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec 4.1.125.Final / netty-codec-compression 4.2.5.Final; this repository's current build already resolves netty-codec 4.1.136.Final via the Azure and Cassandra extensions' Netty dependency chains, past the fix line. Liquibase does not accept compressed HTTP payloads from untrusted clients, and a source review found no code referencing BrotliDecoder, BrotliEncoder, BrotliOptions, or io.netty.handler.codec.compression.Brotli — the vulnerable decompression path is not exercised, regardless of version.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.125.Final|>=4.2.0.Final|<4.2.5.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13757",
+      "description": "A flaw was found in p11-kit. The RPC message attribute parsing functions form a mutually-recursive call chain with no recursion depth limit when processing nested CKA_WRAP_TEMPLATE, CKA_UNWRAP_TEMPLATE, and CKA_DERIVE_TEMPLATE attributes. An unauthenticated attacker with local access to the p11-kit RPC Unix domain socket can send a specially crafted request with deeply nested template attributes, causing stack exhaustion and crashing the p11-kit server process and its dependent services.",
+      "recommendation": "No action required for the stock Liquibase Secure container. If a derived image adds and exposes a p11-kit RPC service, update the base package to a fixed build first.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running p11-kit RPC service and its Unix domain socket. The stock Liquibase Secure container only starts the Liquibase CLI and does not configure or launch p11-kit at runtime.\n"
+        }
+      ],
+      "cwes": [
+        674
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p2wm-69qx-x25w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13757",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-13757",
+          "title": "Red Hat CVE Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The reported package is inherited from the container base image. Exploitation requires a running p11-kit RPC Unix domain socket and local access to that service. Liquibase Secure does not start p11-kit or any auxiliary daemon: the container entrypoint only execs the Liquibase CLI, and a source review of the Dockerfiles and entrypoint scripts found no reference to p11-kit or pkcs11. Without a p11-kit RPC service/socket in the deployed container, the required runtime environment is absent.",
+        "justification": "requires_environment",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libp11-kit0",
+          "versions": [
+            {
+              "range": "vers:deb/<0.25.3-4ubuntu2.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-2236",
+      "description": "A timing-based side-channel flaw was found in libgcrypt's RSA implementation that may allow a remote attacker to initiate a Bleichenbacher-style attack, which can lead to the decryption of RSA ciphertexts.",
+      "recommendation": "No action required. Liquibase's Java runtime does not use libgcrypt; the package is present only as a transitive dependency of unrelated OS tooling this container never invokes.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The JVM does not link or call libgcrypt; the package is pulled in only by unrelated GnuPG/apt/systemd tooling this container never invokes, and the base image already ships the fixed version.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w2gx-4fh8-wm9f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-2236",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A timing side-channel in libgcrypt's RSA implementation could enable a Bleichenbacher-style decryption attack (the \"Marvin Attack\"). The container base image currently ships libgcrypt20 1.10.3-2ubuntu0.2, the fixed release (confirmed by pulling the current base image and checking installed package versions directly, since this OS package's version is not pinned by this repository — it tracks whatever the base image resolves to at build time). Independent of the version, checking the Java runtime's own library linkage shows it does not link libgcrypt at all; the package is pulled in only as a dependency of GnuPG/apt/systemd tooling (gpg, gpgv, gpg-agent, dirmngr, libapt-pkg, libsystemd0), none of which Liquibase invokes. Java uses its own JCE crypto providers, not system libgcrypt.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgcrypt20",
+          "versions": [
+            {
+              "range": "vers:deb/<1.10.3-2ubuntu0.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15649",
+      "description": "IO::Uncompress::Unzip versions before 2.215 for Perl propagate an uncaught exception when parsing a zip header with a malformed DOS date. The _dosToUnixTime() function calls Time::Local::timelocal() without an eval guard; a header whose date field decodes to an out-of-range month, day, or hour causes the exception to propagate out of the caller, which expects undef plus an error variable instead.",
+      "recommendation": "No action required. Liquibase never invokes Perl or any Perl module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked.\n"
+        }
+      ],
+      "cwes": [
+        248
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15649",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Perl's IO::Uncompress::Unzip propagates an uncaught exception when a zip header's DOS date field decodes to an out-of-range value. The container's entrypoint execs only the Liquibase CLI directly (a Java process, not a shell script that shells out to Perl), and a source review found no invocation of perl or any Perl module anywhere in Liquibase's build or runtime. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-5278",
+      "description": "The sort utility's begfield() function in GNU Coreutils is vulnerable to a heap buffer under-read that may allow access to memory outside the allocated buffer when a crafted command uses the traditional key format with an out-of-range character position, due to unsafe pointer arithmetic causing integer wraparound.",
+      "recommendation": "No action required. Liquibase's container build and runtime never invoke sort.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Neither the container's build steps nor its runtime entrypoint ever invoke the sort utility.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ch64-4x3c-w3jq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-5278",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GNU coreutils' sort utility has a heap buffer under-read reachable only via the traditional key-specification syntax (+POS1[.C1][OPTS]) with an out-of-range character position. The container's build steps and runtime entrypoint use only rm, ln, mkdir, chown, chmod, wget, tar, unzip, and sha256sum — a source review found no invocation of sort anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships coreutils 9.4-3ubuntu6.3, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/coreutils",
+          "versions": [
+            {
+              "range": "vers:deb/<9.4-3ubuntu6.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68121",
       "analysis": {
         "state": "not_affected",
@@ -4910,6 +5209,285 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-6141",
+      "description": "GNU ncurses up to 6.5-20250322 has a stack-based buffer overflow in postprocess_termcap (tinfo/parse_entry.c) due to improper bounds checking during termcap entry processing, allowing a local attacker to trigger the overflow via a crafted termcap file, leading to denial of service.",
+      "recommendation": "No action required under normal deployment. This requires a local attacker supplying a crafted termcap entry to an interactive terminal session, which the stock container's non-interactive entrypoint does not accept.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a local attacker supplying a crafted termcap entry to an interactive terminal session; the stock container runs the CLI non-interactively via its entrypoint.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6141",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A stack-based buffer overflow in ncurses' termcap entry parsing requires a local attacker able to supply a crafted termcap file or TERM/TERMINFO value processed by an interactive terminal session. The Liquibase Secure container runs the CLI non-interactively via its entrypoint, without accepting untrusted local termcap input; TERM is set by the container orchestration layer, not by an untrusted local actor. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships libncursesw6 6.4+20240113-1ubuntu2.2, the fixed release, as additional defense-in-depth.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libncursesw6",
+          "versions": [
+            {
+              "range": "vers:deb/<6.4+20240113-1ubuntu2.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-11856",
+      "description": "Using libcurl to do a transfer to a specific HTTP origin with Digest authentication and then changing the origin to a different one for a second transfer while reusing the same handle causes libcurl to wrongly pass on the Authorization header field meant for the first origin to the second. This flaw does not affect the curl command-line tool.",
+      "recommendation": "No action required. Liquibase's container uses wget, not curl, and never reuses a libcurl handle across origins.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This is a libcurl API-reuse issue that does not affect the curl CLI at all per the upstream advisory, and Liquibase's container uses wget rather than curl for its own downloads.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://curl.se/docs/CVE-2026-11856.html",
+          "title": "curl Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11856",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is in libcurl's handle-reuse behavior: reusing the same handle for Digest-authenticated transfers to two different origins can leak the first origin's Authorization header to the second. Per curl's own advisory, this does not affect the curl command-line tool at all — only applications that reuse a libcurl handle across origins. The container's build steps use wget, not curl, for downloads, and the runtime entrypoint execs only the Liquibase CLI — a source review found no invocation of curl anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships curl 8.5.0-2ubuntu10.13, newer than the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-12087",
+      "description": "Socket versions before 2.041 for Perl have an out-of-bounds heap read. pack_ip_mreq_source() in Socket.xs validates argument lengths in the wrong order, so a source address shorter than 4 bytes is not rejected and the copy reads up to 3 bytes past the end of its buffer, leaking adjacent heap memory into the packed structure.",
+      "recommendation": "No action required. Liquibase never invokes Perl or any Perl module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12087",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An out-of-bounds heap read exists in Perl's Socket module (pack_ip_mreq_source() in Socket.xs) when an application calls it with a multicast source address shorter than 4 bytes. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence). This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13221",
+      "description": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
+      "recommendation": "No action required. Liquibase never invokes Perl, and no Liquibase security control is implemented via a Perl regex.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs only the Liquibase Java CLI directly; no Perl interpreter or module is ever invoked, and no Liquibase access-control or filtering logic is implemented via a Perl regex.\n"
+        }
+      ],
+      "cwes": [
+        697
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13221",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Perl's regex compiler silently truncates its match table when an alternation has more than 65,535 branches, producing incorrect (false-positive and false-negative) pattern matches — a risk only when such a regex gates an access-control or input-filtering decision. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence), so no Liquibase security control is implemented via a Perl regex. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13595",
+      "description": "A flaw was found in the libblkid library of util-linux. During nested partition probing, the BSD, Minix, Solaris x86, and UnixWare partition probers cache a raw pointer to a parent partition entry in a dynamically allocated array; when subsequent partition additions reallocate the array, the pointer becomes stale, leading to a heap use-after-free read. An attacker who can present a crafted block device image can trigger this without user interaction, since libblkid is invoked automatically by udev/udisks as root on block-device hot-plug events.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which runs no block-device hot-plug management daemon.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires udev/udisks probing a crafted block device on a hot-plug event; the stock container runs no such daemon and performs no block-device management.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13595",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free in libblkid's nested partition probing (BSD, Minix, Solaris x86, UnixWare probers) is triggered automatically by udev/udisks as root on a block-device hot-plug event, such as a USB insertion or a loop-mounted disk image — containers do not perform hot-plug block-device management, and a source review of the Dockerfiles and entrypoint scripts found no invocation of udev, udisks, blkid, or any partition-probing tool; the stock container's entrypoint execs only the Liquibase CLI. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships bsdutils 1:2.39.3-9ubuntu6.6, the fixed release, as additional defense-in-depth.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39.3-9ubuntu6.6",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

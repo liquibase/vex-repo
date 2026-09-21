@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-de5e590055e32acb8344ae06ad3583b0d6ccd5b3c3a6612e32d368849d6d5ddc",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T18:26:09.517204946Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-11856",
+        "aliases": [
+          "CURL-CVE-2026-11856"
+        ]
+      },
+      "timestamp": "2026-09-21T18:26:09.517206619Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Using libcurl to do a transfer to a specific HTTP origin with Digest authentication and then changing the origin to a different one for a second transfer while reusing the same handle causes libcurl to wrongly pass on the Authorization header field meant for the first origin to the second. This flaw does not affect the curl command-line tool.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw is in libcurl's handle-reuse behavior: reusing the same handle for Digest-authenticated transfers to two different origins can leak the first origin's Authorization header to the second. Per curl's own advisory, this does not affect the curl command-line tool at all — only applications that reuse a libcurl handle across origins. The container's build steps use wget, not curl, for downloads, and the runtime entrypoint execs only the Liquibase CLI — a source review found no invocation of curl anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships curl 8.5.0-2ubuntu10.13, newer than the fixed release, as additional defense-in-depth."
+    }
+  ]
+}

@@ -101,6 +101,69 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-58057",
+      "description": "Netty is an asynchronous event-driven network application framework. In netty-codec-compression versions 4.1.124.Final and below, and netty-codec versions 4.2.4.Final and below, specially crafted input can cause BrotliDecoder and certain other decompression decoders to allocate a large number of reachable byte buffers, leading to denial of service. Fixed in 4.1.125.Final of netty-codec and 4.2.5.Final of netty-codec-compression.",
+      "recommendation": "No action required. Liquibase does not invoke BrotliDecoder or accept untrusted compressed Netty payloads.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase does not configure or call Netty's Brotli decompression handlers, so the vulnerable decoder path is not reachable even before considering that the resolved netty-codec version is already above the fixed release.\n"
+        }
+      ],
+      "cwes": [
+        409
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3p8m-j85q-pgmj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58057",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-3p8m-j85q-pgmj",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec 4.1.125.Final / netty-codec-compression 4.2.5.Final; this repository's current build already resolves netty-codec 4.1.136.Final via the Azure and Cassandra extensions' Netty dependency chains, past the fix line. Liquibase does not accept compressed HTTP payloads from untrusted clients, and a source review found no code referencing BrotliDecoder, BrotliEncoder, BrotliOptions, or io.netty.handler.codec.compression.Brotli — the vulnerable decompression path is not exercised, regardless of version.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.125.Final|>=4.2.0.Final|<4.2.5.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

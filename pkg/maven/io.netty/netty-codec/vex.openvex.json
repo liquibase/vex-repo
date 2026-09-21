@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-0b690328114bd38e370bb32023b260b7ac8a44a0db8a50c2cfc31b01b2b379b8",
+  "@id": "merged-vex-e11b53008d27b74fe2bd67e71d5bd7de607afc39958f9429d8c0c233c73b4778",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T17:46:33.334375802Z",
+  "timestamp": "2026-09-21T18:30:41.803764791Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-58057",
+        "aliases": [
+          "GHSA-3p8m-j85q-pgmj"
+        ]
+      },
+      "timestamp": "2026-09-21T18:30:41.617611472Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous event-driven network application framework. In netty-codec-compression versions 4.1.124.Final and below, and netty-codec versions 4.2.4.Final and below, specially crafted input can cause BrotliDecoder and certain other decompression decoders to allocate a large number of reachable byte buffers, leading to denial of service. Fixed in 4.1.125.Final of netty-codec and 4.2.5.Final of netty-codec-compression.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in netty-codec 4.1.125.Final / netty-codec-compression 4.2.5.Final; this repository's current build already resolves netty-codec 4.1.136.Final via the Azure and Cassandra extensions' Netty dependency chains, past the fix line. Liquibase does not accept compressed HTTP payloads from untrusted clients, and a source review found no code referencing BrotliDecoder, BrotliEncoder, BrotliOptions, or io.netty.handler.codec.compression.Brotli — the vulnerable decompression path is not exercised, regardless of version."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-42583",
@@ -12,7 +30,7 @@
           "GHSA-mj4r-2hfc-f8p6"
         ]
       },
-      "timestamp": "2026-09-21T17:46:31.947290289Z",
+      "timestamp": "2026-09-21T18:30:39.407648864Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"
@@ -29,7 +47,7 @@
           "GHSA-558v-64gr-wgg4"
         ]
       },
-      "timestamp": "2026-09-21T17:46:33.12063324Z",
+      "timestamp": "2026-09-21T18:30:41.186936448Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"
