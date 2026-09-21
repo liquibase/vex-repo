@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cea93dc52c01ebf6e46449f8a7f8dfeb93ebab2d49b7b2134b5c94d1a1a364f3",
+  "@id": "merged-vex-6ff8e66471dee5ee97c9d30c30acbd0f6e42562c22d7b5b7cfc74b4ae41b050a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T16:22:59.746708182Z",
+  "timestamp": "2026-09-21T17:47:15.999940713Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45673",
+        "aliases": [
+          "GHSA-xmv7-r254-6q78"
+        ]
+      },
+      "timestamp": "2026-09-21T17:47:15.960595576Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-resolver-dns"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's DNS resolver uses a predictable PRNG for generating DNS transaction IDs and defaults to a static UDP source port, reducing query entropy and enabling DNS cache poisoning.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Fixed in netty-resolver-dns 4.1.135.Final; this repository's current build already resolves that exact version via the Azure extension's Netty stack. Unlike most other Netty CVEs assessed for this module, netty-resolver-dns is not a \"never used\" case — it is genuinely wired into every outbound connection by default via reactor-netty's DNS resolution path (see the CVE-2026-73508 assessment on this same subcomponent for the detailed reachability analysis), so the decisive protection here is the version fix, not a reachability argument."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-45674",
@@ -12,7 +30,7 @@
           "GHSA-676x-f7gg-47vc"
         ]
       },
-      "timestamp": "2026-09-21T16:22:58.597685537Z",
+      "timestamp": "2026-09-21T17:47:14.971177629Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-resolver-dns"
@@ -30,7 +48,7 @@
           "GHSA-5pvg-856g-cp85"
         ]
       },
-      "timestamp": "2026-09-21T16:22:58.713696734Z",
+      "timestamp": "2026-09-21T17:47:15.056238887Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-resolver-dns"
@@ -48,7 +66,7 @@
           "GHSA-mfg7-5gfp-c4w3"
         ]
       },
-      "timestamp": "2026-09-21T16:22:59.730446666Z",
+      "timestamp": "2026-09-21T17:47:15.821015522Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-resolver-dns"

@@ -42,6 +42,63 @@
           "ref": "pkg:maven/io.netty/netty-transport-native-epoll"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-45536",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, netty_unix_socket_recvFd can leak file descriptors when a peer sends an SCM_RIGHTS control message carrying two descriptors. The issue is reachable via Epoll/KQueue DomainSocketChannel when the application opts into DomainSocketReadMode.FILE_DESCRIPTORS.",
+      "recommendation": "No action required. Liquibase Secure does not use Netty domain sockets or FILE_DESCRIPTORS mode, and the shipped epoll artifact is already at the fixed 4.1.135.Final release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path depends on Netty domain-socket file-descriptor passing, which Liquibase does not configure or reference in source.\n"
+        }
+      ],
+      "cwes": [
+        200,
+        772
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w573-9ffj-6ff9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45536",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-transport-native-epoll 4.1.135.Final; this repository's current build already resolves that exact version via the Azure extension's Netty HTTP client. NVD states the leak is only reachable through Epoll/KQueue DomainSocketChannel when an application opts into the non-default DomainSocketReadMode.FILE_DESCRIPTORS mode. A source review found no code referencing DomainSocket, DomainSocketChannel, DomainSocketReadMode, EpollDomainSocket, KQueueDomainSocket, recvFd, or SCM_RIGHTS — Liquibase does not use the domain-socket feature the vulnerability requires, regardless of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-transport-native-epoll",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.135.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

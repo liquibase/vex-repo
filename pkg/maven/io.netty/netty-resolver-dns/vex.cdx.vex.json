@@ -188,6 +188,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-45673",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty's DNS resolver uses a predictable PRNG for generating DNS transaction IDs and defaults to a static UDP source port, reducing query entropy and enabling DNS cache poisoning.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release when available — this fix is present in this development branch but hasn't shipped yet. This is a real, reachable dependency (not a never-used feature), so the version fix is the actual protection here, not a defense-in-depth extra.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The shipped dependency is already at the fixed 4.1.135.Final release, eliminating the vulnerable PRNG/default-port implementation from the delivered artifact.\n"
+        }
+      ],
+      "cwes": [
+        330,
+        340
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xmv7-r254-6q78",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45673",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-resolver-dns 4.1.135.Final; this repository's current build already resolves that exact version via the Azure extension's Netty stack. Unlike most other Netty CVEs assessed for this module, netty-resolver-dns is not a \"never used\" case — it is genuinely wired into every outbound connection by default via reactor-netty's DNS resolution path (see the CVE-2026-73508 assessment on this same subcomponent for the detailed reachability analysis), so the decisive protection here is the version fix, not a reachability argument.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-resolver-dns",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.135.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
