@@ -128,6 +128,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-73508",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, io.netty.handler.codec.dns.AbstractDnsRecord, io.netty.handler.codec.dns.DefaultDnsRecordDecoder.decodeRecord(), and io.netty.handler.codec.dns.DnsCodecUtil.decompressDomainName() failed to release retained or newly allocated ByteBuf objects when IDN.toASCII() or encodeDomainName() rejected a malformed domain name, allowing unauthenticated remote DNS packets to leak direct memory incrementally until denial of service. Fixed in 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "Risk-accepted pending an upstream reactor-netty/Netty release with the fix. This assessment assumes the deployment's DNS resolution path is not exposed to an attacker with network-level access (e.g. internal/corporate DNS resolvers, not an open or adversarial network) - confirm this assumption holds for how this module is actually deployed before treating this as closed. Revisit once reactor-netty ships a release with netty-resolver-dns >= 4.1.136.Final.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "Exploitation requires network-level access to the deployment's resolver path, not a plain remote attacker - the resolved hostname is always operator-configured (never changelog-derived), narrowing but not eliminating the attack surface pending an upstream fix.\n"
+        }
+      ],
+      "cwes": [
+        401,
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mfg7-5gfp-c4w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-73508",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "netty-resolver-dns:4.1.135.Final (below the 4.1.136.Final fix line) resolves for this module via reactor-netty-http:1.2.18 -> reactor-netty-core:1.2.18, and unlike the other Netty CVEs assessed here, is genuinely wired into every outbound connection by default via reactor-netty-core's NameResolverProvider — this is not a code-not-reachable case. The hostname resolved is always operator-supplied configuration, never derived from changelog content: Key Vault modifiers parse the vault host from a Liquibase configuration value, and Blob Storage access uses a separately configured storage-account property, so an attacker can't inject a resolution target purely via a malicious changelog. That only rules out attacker-chosen domains, though — it doesn't rule out this CVE's actual mechanism, a malformed DNS response to an otherwise-legitimate query. DNS isn't TLS-authenticated the way this module's HTTP/2 traffic is, so the \"trusted endpoint\" argument used for the HTTP/2 CVEs on this module doesn't transfer here. Exploitation requires network-level access to the deployment's DNS resolution path — an assumption about the deployment environment this codebase can't verify. No newer reactor-netty release exists yet with a fixed Netty.",
+        "justification": "requires_environment",
+        "response": [
+          "workaround_available"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-resolver-dns",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

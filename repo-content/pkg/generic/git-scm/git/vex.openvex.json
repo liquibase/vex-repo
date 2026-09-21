@@ -1,0 +1,28 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-94b232a3e5ce454ef83fd83c9d59eccdcb94fa66d1c02c73b855806162d5ce80",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T16:20:44.044555258Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-52005",
+        "aliases": [
+          "BIT-git-2024-52005",
+          "GHSA-7jjc-gg6m-3329"
+        ]
+      },
+      "timestamp": "2026-09-21T16:20:44.044556781Z",
+      "products": [
+        {
+          "@id": "pkg:generic/git-scm/git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Git, before versions 2.48.1, 2.47.3, 2.46.5, 2.45.4, and 2.44.3, has a vulnerability where a Git client using a terminal that supports ANSI escape sequences can have those sequences, when written to the sideband channel used by the server to transmit informational or error messages during clone/fetch/push, misrepresent the state of a fetch/pull/push or otherwise mislead the user into executing untrusted scripts.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Exploitation requires cloning, fetching from, or pushing to an attacker-controlled Git remote that injects malicious ANSI escape sequences over the sideband channel. Liquibase runtime code never shells out to `git clone`, `git fetch`, or `git push` against any remote — a stronger, structural argument than merely trusting a given remote. A source review confirmed no process/exec invocation of git anywhere in Liquibase's runtime code. The only git usage in this repo at all is CI's own checkout step, which clones this repository's own trusted GitHub remote with a git binary version pinned by the runner image, not by this repo — not the exploit scenario this CVE describes."
+    }
+  ]
+}

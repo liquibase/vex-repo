@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-7adf19cfbeb4366b965e7d3d7f5790faa38914f1ee32e57beeabf2d4b5b60cb6",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T16:23:40.313185644Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-64607",
+        "aliases": [
+          "GHSA-hjcp-jmpx-g3qm"
+        ]
+      },
+      "timestamp": "2026-09-21T16:23:40.313186777Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.httpcomponents.client5/httpclient5"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Apache HttpComponents Client, when using the classic (blocking) I/O model, fails to release the underlying connection back to the connection manager if the response contains an invalid or unsupported Content-Encoding header value. Repeated requests to a malicious or misbehaving server leak connections and eventually exhaust the connection pool, producing a denial of service. The async I/O model is not affected. Fixed in version 5.6.3.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "httpclient5 is already pinned to 5.6.4 (past the 5.6.3 fix), but that alone only holds until a future downgrade, so we also checked reachability of the classic (blocking) client this CVE affects. Two usages exist: a bundled PII-detection filter, which is unreachable - it requires a policy-loading path Liquibase's checks engine never invokes - and the AWS SDK's synchronous Secrets Manager client, which is real but only ever talks to AWS's own TLS-authenticated endpoint. Exploitation needs that server to repeatedly send malformed Content-Encoding responses, so a remote attacker can't trigger this without already controlling or intercepting trusted AWS traffic - the same precondition used for the related Netty HTTP/2 CVEs."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-1508c0a88da5271ef3f36c446a6bda60e74e4c7da1c9bc1de94d7764fe59feb6",
+  "@id": "merged-vex-cc75116115e1fcd83bea06d837ef533c78be32cbfde0a6821b9bf2874c35942e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T15:34:32.93200812Z",
+  "timestamp": "2026-09-21T16:22:28.946929498Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-pwqr-wmgm-9rr8"
         ]
       },
-      "timestamp": "2026-09-21T15:34:30.378191796Z",
+      "timestamp": "2026-09-21T16:22:25.343573314Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -30,7 +30,7 @@
           "GHSA-57rv-r2g8-2cj3"
         ]
       },
-      "timestamp": "2026-09-21T15:34:31.408553338Z",
+      "timestamp": "2026-09-21T16:22:26.647079923Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -47,7 +47,7 @@
           "GHSA-f6hv-jmp6-3vwv"
         ]
       },
-      "timestamp": "2026-09-21T15:34:31.503284946Z",
+      "timestamp": "2026-09-21T16:22:26.765152011Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -64,16 +64,16 @@
           "GHSA-6jqx-86gh-f27w"
         ]
       },
-      "timestamp": "2026-09-21T15:34:32.256324872Z",
+      "timestamp": "2026-09-21T16:22:28.549254885Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
         }
       ],
       "status": "not_affected",
-      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame, allowing a remote SPDY/3.1 peer to send a syntactically valid roughly 2 MiB SETTINGS frame that creates 262144 map entries and amplifies network input into heap growth and ordered-map insertion work.",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, Netty's SPDY SETTINGS decoder accepts a peer-declared SETTINGS entry count up to the 24-bit frame-length limit and materializes every unique setting ID in DefaultSpdySettingsFrame's backing TreeMap without a count budget, allowing a remote SPDY/3.1 peer to send a roughly 2 MiB SETTINGS frame that creates 262,144 map entries and amplifies network input into heap growth. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty SPDY SETTINGS decoder unbounded map amplification, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is the SPDY/3.1 protocol decoder (DefaultSpdySettingsFrame / SpdySettingsFrameDecoder), which is a legacy Google protocol that none of Liquibase's Netty consumers (Azure SDK, Cassandra driver, MongoDB driver, AWS SDK) negotiate or expose. A focused grep for SpdySettingsFrame, SpdyFrameCodec, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits, and Liquibase never runs a SPDY server or client."
+      "impact_statement": "SPDY is a legacy protocol that neither module's outbound HTTP client ever negotiates or wires a codec for, regardless of Netty version: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever speak HTTP/1.1 or HTTP/2, never SPDY, so DefaultSpdySettingsFrame's SPDY SETTINGS decoder is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
     },
     {
       "vulnerability": {
@@ -82,16 +82,16 @@
           "GHSA-mvh2-crg5-v77c"
         ]
       },
-      "timestamp": "2026-09-21T15:34:32.352114976Z",
+      "timestamp": "2026-09-21T16:22:28.433999798Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
         }
       ],
       "status": "not_affected",
-      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to 4.1.136.Final and 4.2.16.Final, Netty SPDY header decoding continues inflating zlib-compressed header blocks after the raw header parser has exceeded maxHeaderSize and marked the frame truncated in SpdyFrameCodec, allowing a remote peer to send a small compressed HEADERS block that expands into much larger raw header data and causes compression-amplified CPU and allocation churn.",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, SpdyFrameCodec continues driving the zlib inflater on a SPDY header block even after the raw header data exceeds maxHeaderSize and the frame is marked truncated, so CPU work and heap allocations continue for the full compressed payload - a decompression-bomb pattern applied to a protocol-level control channel. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty SPDY zlib header block continues decoding expansion after maxHeaderSize truncation, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SPDY HEADERS frame zlib decompression in SpdyFrameCodec, part of the legacy SPDY/3.1 protocol decoder that none of Liquibase's Netty consumers negotiate. A focused grep for SpdyFrameCodec, SpdyHeaderBlockDecoder, and io.netty.handler.codec.spdy across Java and XML sources returned zero hits."
+      "impact_statement": "SPDY is a legacy protocol that neither module's outbound HTTP client ever negotiates or wires a codec for, regardless of Netty version: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever speak HTTP/1.1 or HTTP/2, never SPDY, so SpdyFrameCodec's zlib header decompression is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
     },
     {
       "vulnerability": {
@@ -100,16 +100,70 @@
           "GHSA-jppx-w49h-x2qq"
         ]
       },
-      "timestamp": "2026-09-21T15:34:32.447065991Z",
+      "timestamp": "2026-09-21T16:22:28.302825578Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
         }
       ],
       "status": "not_affected",
-      "status_notes": "Netty is a network application framework for development of protocol servers and clients. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame with FLAG_FIN=0 and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream or the accumulated content exceeds maxContentLength, the decoder removes the entry but does not release the pooled ByteBuf, causing native memory exhaustion.",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, the SpdyHttpDecoder handler in Netty's SPDY-to-HTTP codec allocates a pooled ByteBuf when processing a client-initiated SYN_STREAM frame and stores the partially constructed FullHttpRequest in messageMap; when the remote peer sends RST_STREAM for that stream, or the accumulated content exceeds maxContentLength, the decoder removes the entry without releasing the pooled ByteBuf, leading to native memory exhaustion. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty SpdyHttpDecoder pooled ByteBuf reference leak on RST_STREAM, fixed in 4.1.136.Final and 4.2.16.Final. Liquibase dependency management includes Netty versions below the fixed releases (pom.xml:124, cloud-integrations/liquibase-azure-extension/pom.xml:65, tools/liquibase-checks/liquibase-checks/pom.xml:307, commercial-databases/liquibase-commercial-bigquery/pom.xml:72, commercial-databases/liquibase-cassandra/pom.xml:49, cloud-integrations/liquibase-azure-deps/pom.xml:50), so this assessment does not rely on a version-fixed claim. The vulnerable code path is SpdyHttpDecoder, the SPDY-to-HTTP translation codec, which none of Liquibase's Netty consumers negotiate (they speak HTTP/1.1 or HTTP/2 directly). A focused grep for SpdyHttpDecoder, io.netty.handler.codec.spdy, and SpdySessionHandler across Java and XML sources returned zero hits."
+      "impact_statement": "The real vulnerable code is Netty's legacy SPDY-to-HTTP codec (SpdyHttpDecoder), not generic HTTP/2 handling — confirmed against the GitHub Security Advisory. Neither liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain nor liquibase-azure's azure-core-http-netty ever negotiates or wires an SPDY codec; both only ever speak HTTP/1.1 or HTTP/2, so SpdyHttpDecoder is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final via the AWS SDK chain, past the 4.1.136.Final fix line, as secondary defense-in-depth; Azure's copy remains on the vulnerable 4.1.135.Final and relies solely on the SPDY-never-used argument."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56746",
+        "aliases": [
+          "GHSA-6cqp-g7gg-8hr5"
+        ]
+      },
+      "timestamp": "2026-09-21T16:22:28.797997882Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final are affected by a logical-operator error in CorsHandler's origin evaluation that allows the shortCircuit() security control to be bypassed entirely by sending a request with an Origin: null header, forwarding unauthorized cross-origin requests to the backend application. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "CORS enforcement is inherently server-side, and neither module ever runs an HTTP server: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty both only ever make outbound client requests, so CorsHandler is never reached by either. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59898",
+        "aliases": [
+          "GHSA-4mp9-239f-g9hg"
+        ]
+      },
+      "timestamp": "2026-09-21T16:22:28.912578904Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, the newHandshakeResponse methods of WebSocketServerHandshaker07 and WebSocketServerHandshaker08 complete a WebSocket protocol upgrade based solely on the presence of a Sec-WebSocket-Version: 7 (or 8) header, without verifying the mandatory Connection: Upgrade and Upgrade: websocket headers, enabling HTTP request smuggling / protocol-confusion attacks through intermediaries that don't recognize the request as an Upgrade. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "WebSocketServerHandshaker07/08 are server-side handshake classes, and neither module ever runs a WebSocket server: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only make plain HTTPS client calls, never WebSocket connections. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59899",
+        "aliases": [
+          "GHSA-q4f6-jm68-57ww"
+        ]
+      },
+      "timestamp": "2026-09-21T16:22:28.681808958Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, HttpContentEncoder maintains a per-channel acceptEncodingQueue that accumulates attacker-controlled data without a size limit; the queue is filled on the I/O thread for every inbound HTTP request and drained only when the application writes a non-1xx response, allowing an attacker to exploit HTTP/1.1 pipelining to exhaust resources. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "HttpContentEncoder encodes outbound responses on the server side of an HTTP exchange, a role neither module ever plays: liquibase-commercial-cassandra's AWS SDK secretsmanager -> netty-nio-client chain and liquibase-azure's azure-core-http-netty each only make outbound client requests and decode inbound responses, never run an HTTP server. Cassandra's copy of netty-codec-http also already resolves at 4.1.137.Final, past the 4.1.136.Final fix line, as secondary defense-in-depth."
     }
   ]
 }

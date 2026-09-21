@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-1d58aae586557d8d6de2b7e167bfdabfa8a7de56db075def10ee85e848f1aa60",
+  "@id": "merged-vex-023e6c67e4128b0a1eb63c6bc56b938f905c856aebfa5e878d6ad5462366b31e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T15:34:17.273227712Z",
+  "timestamp": "2026-09-21T16:22:08.136938687Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-mj4r-2hfc-f8p6"
         ]
       },
-      "timestamp": "2026-09-21T15:34:16.010863293Z",
+      "timestamp": "2026-09-21T16:22:06.386892398Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"
@@ -29,16 +29,16 @@
           "GHSA-558v-64gr-wgg4"
         ]
       },
-      "timestamp": "2026-09-21T15:34:16.821725475Z",
+      "timestamp": "2026-09-21T16:22:07.96852431Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec"
         }
       ],
       "status": "not_affected",
-      "status_notes": "Netty: [Bzip2Decoder] Infinite Loop in RLE State Machine Leads to Event-Loop Thread Hang. The Bzip2Decoder handler in Netty's compression codec pipeline is vulnerable to a denial-of-service attack through a malformed bzip2 stream that permanently captures the event-loop thread in an infinite loop, in the run-length encoding (RLE) state machine within Bzip2BlockDecompressor.read().",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. In versions 4.2.0.Final through 4.2.15.Final and 4.1.0.Final through 4.1.135.Final, Bzip2Decoder's run-length encoding (RLE) state machine can enter an infinite loop when processing a malformed bzip2 stream, permanently occupying the event-loop thread at 100% CPU and causing denial of service. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "Netty Bzip2Decoder infinite loop in the RLE state machine on a malformed bzip2 stream, hanging the event-loop thread. Liquibase dependency management includes Netty versions below the fixed 4.1.136.Final release (pom.xml:124, commercial-databases/liquibase-cassandra/pom.xml:49), so this assessment does not rely on a version-fixed claim. Bzip2Decoder is an opt-in compression codec that must be explicitly added to a Netty pipeline; none of Liquibase's Netty consumers (Cassandra driver via netty-codec, or the Azure/AWS/MongoDB HTTP transports) configure bzip2 compression. A focused grep for Bzip2Decoder, Bzip2Encoder, and io.netty.handler.codec.compression.Bzip2 across Java and XML sources returned zero hits."
+      "impact_statement": "netty-codec resolves below the 4.1.136.Final fix line for both modules assessed here (4.1.130.Final for liquibase-commercial-cassandra via cassandra-jdbc-wrapper -> java-driver-core, 4.1.135.Final for liquibase-azure via azure-core-http-netty). The vulnerable class, Bzip2Decoder, is never reachable in either: the Cassandra native protocol's compression negotiation supports only LZ4/Snappy and this extension doesn't configure compression at all, while Azure's Netty HTTP client never wires a Bzip2Decoder into any pipeline (Azure HTTP responses use gzip/deflate/br, and a class-listing search of the Azure SDK jars for Bzip-related symbols returns zero hits)."
     }
   ]
 }
