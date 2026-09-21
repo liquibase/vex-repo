@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-4c80e85da8eab0a3d14edae19a0472b53af87c8c22ec36f25ee4e9497c1a6241",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-21T17:46:28.356781914Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-53864",
+        "aliases": [
+          "GHSA-xwmg-2g98-w7v9"
+        ]
+      },
+      "timestamp": "2026-09-21T17:46:28.356783453Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.nimbusds/nimbus-jose-jwt"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Connect2id Nimbus JOSE + JWT 10.0.x before 10.0.2 and 9.37.x before 9.37.4 allows a remote attacker to cause a denial of service via a deeply nested JSON object supplied in a JWT claim set, because of uncontrolled recursion. Fixed in 9.37.4 and 10.0.2.",
+      "justification": "component_not_present",
+      "impact_statement": "A scanner flagged com.nimbusds:nimbus-jose-jwt@10.0.1 as reachable through the com.azure:azure-identity dependency chain used by the Azure extension. Resolving the actual dependency tree shows azure-identity 1.18.4 pulls com.microsoft.azure:msal4j 1.23.1, and msal4j's only reference to com.nimbusds (oauth2-oidc-sdk, which itself depends on nimbus-jose-jwt) is declared with test scope in msal4j's own POM — a test-scope dependency does not propagate to a downstream consumer's compile/runtime classpath. Resolving the dependency tree for io.netty and com.nimbusds artifacts across every module that pulls azure-identity or msal4j transitively (the Azure extension, and the Databricks and MongoDB commercial extensions, which carry defensive ProGuard keep/dontwarn rules referencing com.nimbusds left over from an earlier dependency configuration) confirms zero resolved com.nimbusds:nimbus-jose-jwt artifacts anywhere in this repository's build. The scanner's finding does not correspond to an actual dependency in this codebase."
+    }
+  ]
+}

@@ -91,6 +91,176 @@
       ]
     },
     {
+      "id": "CVE-2026-42580",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty's chunk size parser silently overflows int, enabling request smuggling attacks.",
+      "recommendation": "No action required. Liquibase Secure does not run a Netty HTTP server, and the shipped netty-codec-http version is already newer than the fixed 4.1.133.Final release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The affected parser is only relevant when Netty is decoding inbound HTTP requests on the server side; Liquibase does not expose that path.\n"
+        }
+      ],
+      "cwes": [
+        190,
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m4cv-j2px-7723",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42580",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD describes a chunk-size integer overflow in Netty's HttpObjectDecoder — a server-side request-smuggling issue. Liquibase never runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.133.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41417",
+      "description": "Netty allows request-line validation to be bypassed when a DefaultHttpRequest or DefaultFullHttpRequest is created first and its URI is later changed via setUri(). If attacker-controlled input reaches setUri(), HttpRequestEncoder and RtspEncoder can write CRLF sequences into the request line, enabling HTTP request smuggling or RTSP request injection.",
+      "recommendation": "No action required under normal deployment. Liquibase connection URIs are operator-configured, and the shipped netty-codec-http version is already newer than the fixed 4.1.133.Final release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation depends on attacker-controlled URIs reaching Netty's outbound request builder, but Liquibase endpoint configuration is administrator-supplied rather than untrusted user input.\n"
+        }
+      ],
+      "cwes": [
+        93,
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-v8h7-rr48-vmmv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41417",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. This CVE requires attacker-controlled data to reach DefaultHttpRequest.setUri() before Netty emits an outbound request line. Liquibase's connection URIs are operator-configured, not supplied by untrusted end-users, and a source review found no code calling DefaultHttpRequest, DefaultFullHttpRequest, setUri(), HttpRequestEncoder, or RtspEncoder directly.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.133.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42581",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, HttpObjectDecoder strips a conflicting Content-Length header for HTTP/1.1 chunked requests but not for HTTP/1.0, enabling request smuggling when a downstream component trusts Content-Length over Transfer-Encoding.",
+      "recommendation": "No action required. Liquibase Secure does not run a Netty HTTP server, and the shipped netty-codec-http version is already newer than the fixed 4.1.133.Final release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The affected logic is only relevant when Netty decodes inbound HTTP/1.0 requests on the server side; Liquibase does not expose that path.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xxqh-mfjm-7mv9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42581",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD ties this flaw to HttpObjectDecoder's handling of inbound HTTP/1.0 requests carrying both Transfer-Encoding and Content-Length — a server-side request-smuggling issue. Liquibase never runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.133.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42587",
       "recommendation": "No action required. Liquibase does not run an HTTP server.",
       "ratings": [
@@ -485,6 +655,62 @@
             {
               "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
               "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-50020",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, before reading the first request-line, HttpObjectDecoder skips every byte for which Character.isISOControl(b) is true (0x00–0x1F and 0x7F) as well as all whitespace. RFC 9112 §2.2 only asks servers to ignore empty CRLF lines preceding the request-line. Silently absorbing other control characters can be exploited for request-boundary confusion where a front-end component treats those bytes differently.",
+      "recommendation": "No action required. Liquibase Secure does not run a Netty HTTP server, and the shipped netty-codec-http version is already newer than the fixed 4.1.135.Final release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable logic is in Netty's server-side HTTP request parser; Liquibase ships only outbound client usage of this dependency and no Liquibase source wires Netty HTTP server handlers.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hvcg-qmg6-jm4c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50020",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec-http 4.1.135.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD ties this CVE to HttpObjectDecoder's server-side request-line parsing. Liquibase is never deployed as an HTTP backend behind a proxy or otherwise runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.135.Final",
+              "status": "unaffected"
             }
           ]
         }

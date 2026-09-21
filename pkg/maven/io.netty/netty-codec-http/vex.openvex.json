@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cc75116115e1fcd83bea06d837ef533c78be32cbfde0a6821b9bf2874c35942e",
+  "@id": "merged-vex-f434aee78c78801f9b7a743d86c576440f1bf2d60fdf826d59e63a7e84daa2da",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T16:22:28.946929498Z",
+  "timestamp": "2026-09-21T17:46:50.38072495Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-pwqr-wmgm-9rr8"
         ]
       },
-      "timestamp": "2026-09-21T16:22:25.343573314Z",
+      "timestamp": "2026-09-21T17:46:47.142412579Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -25,12 +25,66 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41417",
+        "aliases": [
+          "GHSA-v8h7-rr48-vmmv"
+        ]
+      },
+      "timestamp": "2026-09-21T17:46:50.243722622Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty allows request-line validation to be bypassed when a DefaultHttpRequest or DefaultFullHttpRequest is created first and its URI is later changed via setUri(). If attacker-controlled input reaches setUri(), HttpRequestEncoder and RtspEncoder can write CRLF sequences into the request line, enabling HTTP request smuggling or RTSP request injection.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. This CVE requires attacker-controlled data to reach DefaultHttpRequest.setUri() before Netty emits an outbound request line. Liquibase's connection URIs are operator-configured, not supplied by untrusted end-users, and a source review found no code calling DefaultHttpRequest, DefaultFullHttpRequest, setUri(), HttpRequestEncoder, or RtspEncoder directly."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42580",
+        "aliases": [
+          "GHSA-m4cv-j2px-7723"
+        ]
+      },
+      "timestamp": "2026-09-21T17:46:50.153244114Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty's chunk size parser silently overflows int, enabling request smuggling attacks.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD describes a chunk-size integer overflow in Netty's HttpObjectDecoder — a server-side request-smuggling issue. Liquibase never runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42581",
+        "aliases": [
+          "GHSA-xxqh-mfjm-7mv9"
+        ]
+      },
+      "timestamp": "2026-09-21T17:46:50.355274834Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, HttpObjectDecoder strips a conflicting Content-Length header for HTTP/1.1 chunked requests but not for HTTP/1.0, enabling request smuggling when a downstream component trusts Content-Length over Transfer-Encoding.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in netty-codec-http 4.1.133.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD ties this flaw to HttpObjectDecoder's handling of inbound HTTP/1.0 requests carrying both Transfer-Encoding and Content-Length — a server-side request-smuggling issue. Liquibase never runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-42584",
         "aliases": [
           "GHSA-57rv-r2g8-2cj3"
         ]
       },
-      "timestamp": "2026-09-21T16:22:26.647079923Z",
+      "timestamp": "2026-09-21T17:46:48.218213055Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -47,7 +101,7 @@
           "GHSA-f6hv-jmp6-3vwv"
         ]
       },
-      "timestamp": "2026-09-21T16:22:26.765152011Z",
+      "timestamp": "2026-09-21T17:46:48.312381865Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -59,12 +113,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-50020",
+        "aliases": [
+          "GHSA-hvcg-qmg6-jm4c"
+        ]
+      },
+      "timestamp": "2026-09-21T17:46:50.06454869Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, before reading the first request-line, HttpObjectDecoder skips every byte for which Character.isISOControl(b) is true (0x00–0x1F and 0x7F) as well as all whitespace. RFC 9112 §2.2 only asks servers to ignore empty CRLF lines preceding the request-line. Silently absorbing other control characters can be exploited for request-boundary confusion where a front-end component treats those bytes differently.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in netty-codec-http 4.1.135.Final; this repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. NVD ties this CVE to HttpObjectDecoder's server-side request-line parsing. Liquibase is never deployed as an HTTP backend behind a proxy or otherwise runs a Netty HTTP server, and a source review found no code wiring HttpObjectDecoder, HttpServerCodec, ServerBootstrap, CorsHandler, or HttpContentEncoder — the vulnerable parser path is not reachable regardless of version."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-55831",
         "aliases": [
           "GHSA-6jqx-86gh-f27w"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.549254885Z",
+      "timestamp": "2026-09-21T17:46:49.68861414Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -82,7 +154,7 @@
           "GHSA-mvh2-crg5-v77c"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.433999798Z",
+      "timestamp": "2026-09-21T17:46:49.601110076Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -100,7 +172,7 @@
           "GHSA-jppx-w49h-x2qq"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.302825578Z",
+      "timestamp": "2026-09-21T17:46:49.4998728Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -118,7 +190,7 @@
           "GHSA-6cqp-g7gg-8hr5"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.797997882Z",
+      "timestamp": "2026-09-21T17:46:49.875415752Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -136,7 +208,7 @@
           "GHSA-4mp9-239f-g9hg"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.912578904Z",
+      "timestamp": "2026-09-21T17:46:49.962012111Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
@@ -154,7 +226,7 @@
           "GHSA-q4f6-jm68-57ww"
         ]
       },
-      "timestamp": "2026-09-21T16:22:28.681808958Z",
+      "timestamp": "2026-09-21T17:46:49.787950318Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http"
