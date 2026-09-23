@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-771771ae9c141f8b863469984f4a0c9e5916fd2be6b6aa8a7d3c1b2b4e7bf0ba",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:08:59.298636308Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-15146"
+      },
+      "timestamp": "2026-09-23T18:08:59.298640276Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget does not validate the IP address provided by an FTP PASV response while operating in FTP passive mode. A malicious FTP server, or an HTTP server that redirects to an FTP URL, can exploit this behavior to redirect Wget's data connection to an arbitrary IP address and port. This allows an attacker to forge server-side requests from the machine running Wget, potentially accessing localhost services or internal network resources.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports wget 1.21.4-1ubuntu4.1, below Ubuntu's fixed 1.21.4-1ubuntu4.4, but this issue requires Wget to follow an attacker-controlled FTP passive-mode data connection. Liquibase Secure uses wget only during image build to fetch its release tarball and the lpm zip over HTTPS, and it does not invoke wget at container runtime."
+    }
+  ]
+}

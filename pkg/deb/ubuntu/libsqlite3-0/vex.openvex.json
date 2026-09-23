@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-d3898fbd51ae05f90301851a0bbd5cc89d2c5eb80a4f76692f6bd7c45133a9aa",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:07:15.596277503Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-39113"
+      },
+      "timestamp": "2026-09-23T18:07:15.596279106Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsqlite3-0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A buffer overflow in SQLite source snapshots/builds containing Fossil check-in 8bdc0d485e3ad0c7a1e818da66f106951d496b05cbe61d12c2c448f2f24b6d5d and later snapshots/builds can cause denial of service via the ext/misc/sqlar.c sqlarUncompressFunc()/sqlar_uncompress() code path.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This SQLite issue is limited to snapshot builds containing the sqlarUncompressFunc/sqlar_uncompress code path in ext/misc/sqlar.c. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to sqlarUncompressFunc, sqlar_uncompress, sqlite3_value_int64, or sqlite3_malloc, so the vulnerable snapshot-only code path is not reachable from the stock runtime."
+    }
+  ]
+}

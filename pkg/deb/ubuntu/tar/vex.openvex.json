@@ -1,0 +1,54 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-78e968dbd69fd2d7173d6a1449ebfe8b38ff6bb3c685261ec4dc0e18edc6f5c8",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:08:44.71522467Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-45582"
+      },
+      "timestamp": "2026-09-23T18:08:44.267352706Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/tar"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Tar through 1.35 allows file overwrite via directory traversal in crafted TAR archives, with a certain two-step process. First, the victim must extract an archive that contains a ../ symlink to a critical directory. Second, the victim must extract an archive that contains a critical file, specified via a relative pathname that begins with the symlink name and ends with that critical file's name. Here, the extraction follows the symlink and overwrites the critical file. This bypasses the protection mechanism of \"Member name contains '..'\" that would occur for a single TAR archive that attempted to specify the critical file via a ../ approach. For example, the first archive can contain \"x -> ../../../../../home/victim/.ssh\" and the second archive can contain x/authorized_keys. This can affect server applications that automatically extract any number of user-supplied TAR archives, and were relying on the blocking of traversal. This can also affect software installation processes in which \"tar xf\" is run more than once.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports tar 1.35+dfsg-3build1, below Ubuntu's fixed 1.35+dfsg-3ubuntu0.2, but this issue requires extracting attacker-supplied TAR archives more than once into the same directory. Liquibase Secure invokes GNU tar exactly once during image build to unpack its own SHA-256-verified release archive and does not invoke tar at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18477"
+      },
+      "timestamp": "2026-09-23T18:08:43.588177833Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/tar"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A TOCTOU (Time-of-Check Time-of-Use) vulnerability in GNU tar's incremental dumpdir 'X' rename handling allows a local attacker with write access to a directory being backed up to influence the restore process if the attacker has access to the system where the restore is being performed. During restoration, files or directories may be created, renamed or overwritten outside the intended extraction directory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw requires GNU tar's incremental dumpdir mode and a local attacker who can race the restore process on the target system. Liquibase Secure's Dockerfile invokes tar exactly once, at image build time, to extract its own trusted release tarball in plain (non-incremental) mode; tar is never invoked at container runtime on any input."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18508"
+      },
+      "timestamp": "2026-09-23T18:08:43.415743222Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/tar"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in GNU tar. When extracting an archive with the --one-top-level option, hardlink targets are not confined to the designated top-level directory and may resolve relative to the extraction working directory. A crafted archive can create hardlinks that escape the intended boundary and, when combined with a preexisting symbolic link under the working directory, may allow writing outside the intended directory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw is triggered by extracting a crafted archive with GNU tar's --one-top-level option. Liquibase Secure's Dockerfile invokes tar exactly once, at image build time, to extract its own trusted release tarball with no --one-top-level flag; tar is never invoked at container runtime on any input, let alone attacker-controlled archives."
+    }
+  ]
+}

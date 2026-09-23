@@ -1,0 +1,162 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-15059",
+      "description": "Local unprivileged users can terminate arbitrary local processes via a systemd-oomd IPC API due to a missing path traversal validation.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which does not run systemd-oomd.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-oomd service and its IPC API; the stock container starts only the Liquibase CLI and does not run systemd-oomd.\n"
+        }
+      ],
+      "cwes": [
+        22,
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15059",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue is in systemd-oomd's IPC API. The Liquibase Secure image inherits Ubuntu packages from the unversioned eclipse-temurin:21-jre-noble base image (`docker/Dockerfile:2`) and creates a static liquibase user with useradd rather than running systemd-managed services (`docker/Dockerfile:5`). The container entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no references to oomd or systemd-oomd, so the required systemd-oomd IPC service is absent from the stock container environment.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<255.4-1ubuntu8.17",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-16742",
+      "description": "systemd-homed contains a local privilege escalation bug via arbitrary system group addition to a local, logged in, homed-managed user.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which does not use systemd-homed to manage users.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a logged-in, homed-managed user under systemd-homed; the stock container provisions a static user and does not run systemd-homed.\n"
+        }
+      ],
+      "cwes": [
+        269,
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16742",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This privilege-escalation flaw requires systemd-homed to manage a local, logged-in user. The Liquibase Secure image creates its liquibase user statically with useradd during image build (`docker/Dockerfile:5`) and the entrypoint only execs the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no homed or systemd-homed references, so the required systemd-homed runtime environment is absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<255.4-1ubuntu8.17",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40228",
+      "description": "In systemd 259, systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 is present only as an inherited base-image library dependency.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-journald service with ForwardToWall enabled; Liquibase Secure's container has no init system and never runs systemd-journald or any other systemd service.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40228",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires systemd-journald to be running as a system service with ForwardToWall=yes, receiving a \"logger -p emerg\" invocation. A review of the running container found no systemd or systemd-journald process at all: the container has no init system, PID 1 is the Liquibase entrypoint script itself, and libsystemd0 ships only as a linked library dependency of other base-image packages, never as a running daemon. The vulnerable journald forwarding path cannot exist in a container that never runs journald.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ]
+    }
+  ]
+}

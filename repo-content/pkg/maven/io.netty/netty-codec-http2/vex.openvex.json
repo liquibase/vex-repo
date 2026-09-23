@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-961a41aefab18e86339d6b8d84a8762cf3f93e312eb56134ec885f25605e7dd5",
+  "@id": "merged-vex-4f587cc7f91976343f38c87d99efa991fea3aa0943372c899bf9b963e79422a0",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:31:19.710715198Z",
+  "timestamp": "2026-09-23T18:13:40.446740348Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-prj3-ccx8-p6x4"
         ]
       },
-      "timestamp": "2026-09-21T18:31:17.163152833Z",
+      "timestamp": "2026-09-23T18:13:34.927729795Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -29,7 +29,7 @@
           "GHSA-w9fj-cfpg-grvv"
         ]
       },
-      "timestamp": "2026-09-21T18:31:15.789096419Z",
+      "timestamp": "2026-09-23T18:13:33.098975693Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -47,7 +47,7 @@
           "GHSA-f6hv-jmp6-3vwv"
         ]
       },
-      "timestamp": "2026-09-21T18:31:17.385449766Z",
+      "timestamp": "2026-09-23T18:13:35.22192533Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -59,12 +59,66 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-47244",
+        "aliases": [
+          "GHSA-5x3r-wrvg-rp6q"
+        ]
+      },
+      "timestamp": "2026-09-23T18:13:39.622015212Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, DefaultHttp2Connection.DefaultEndpoint initialises maxActiveStreams/maxStreams to Integer.MAX_VALUE, and Http2Settings never inserts SETTINGS_MAX_CONCURRENT_STREAMS by default. Unless the application explicitly calls initialSettings().maxConcurrentStreams(n), a Netty HTTP/2 server advertises no limit and enforces none locally. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, this CVE requires a Netty HTTP/2 server; a source review found no references to DefaultHttp2Connection, Http2Settings, maxConcurrentStreams, Http2FrameCodec, Http2ConnectionHandler, ServerBootstrap, or NioServerSocketChannel anywhere in this repository, so the vulnerable HTTP/2 server path would not be reachable even independent of version."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-48043",
+        "aliases": [
+          "GHSA-c2gf-v879-257j"
+        ]
+      },
+      "timestamp": "2026-09-23T18:13:39.791402714Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. In netty-codec-http2 prior to versions 4.1.135.Final and 4.2.15.Final, the DelegatingDecompressorFrameListener class orchestrates HTTP/2 decompression by embedding a per-stream EmbeddedChannel that runs the appropriate decompression codec and forwards decompressed chunks to a wrapped listener. A remote peer could send frames that would result in the flow-controller throwing and so trigger a resource leak which at the end might take down the whole JVM due to OOME. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, a source review found no references to DelegatingDecompressorFrameListener anywhere in this repository, so this repository does not directly wire the vulnerable decompression helper either."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-50560",
+        "aliases": [
+          "GHSA-563q-j3cm-6jxm"
+        ]
+      },
+      "timestamp": "2026-09-23T18:13:39.95655867Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty HTTP/2 max header size handling produces an attack similar to HTTP/2 Rapid Reset: when a client sends the SETTINGS_MAX_HEADER_LIST_SIZE setting, Netty reads the request, proxies it to the origin, attempts to produce a response, and throws an exception while writing the response headers, similar to the HTTP/2 reset attack but with a different on-the-wire signature. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, this CVE requires a Netty HTTP/2 server; a source review found no references to DefaultHttp2Connection, Http2Settings, Http2FrameCodec, Http2ConnectionHandler, ServerBootstrap, or NioServerSocketChannel anywhere in this repository, so the vulnerable HTTP/2 server path would not be reachable even independent of version."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-56819",
         "aliases": [
           "GHSA-93wv-jw9v-4972"
         ]
       },
-      "timestamp": "2026-09-21T18:31:19.11990051Z",
+      "timestamp": "2026-09-23T18:13:37.49428565Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"
@@ -82,7 +136,7 @@
           "GHSA-c69g-56f8-xwqj"
         ]
       },
-      "timestamp": "2026-09-21T18:31:19.290028031Z",
+      "timestamp": "2026-09-23T18:13:37.709673183Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-codec-http2"

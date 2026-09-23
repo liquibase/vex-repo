@@ -1,0 +1,175 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-11850",
+      "description": "An integer underflow vulnerability was found in MIT krb5 in the berval2tl_data() function in plugins/kdb/ldap/libkdb_ldap/ ldap_principal2.c. The function performs an unsigned subtraction (bv_len - 2) without a prior bounds check. When bv_len is 0 or 1, the subtraction wraps to a large value which is then truncated to uint16_t. The subsequent malloc succeeds and memcpy reads up to 65534 bytes from a 0-1 byte buffer, resulting in a heap out-of-bounds read. The attack vector involves a malicious or compromised LDAP KDB backend returning a krbExtraData attribute with bv_len < 2, triggering the underflow when the KDC or kadmind reads principal data.",
+      "recommendation": "No action required. The stock Liquibase Secure image is not deployed as a Kerberos KDC or kadmind with an LDAP KDB backend.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a Kerberos KDC or kadmind using the LDAP KDB backend, which is not part of the Liquibase Secure deployment model.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-85rq-mqr4-hjw7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11850",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this integer-underflow flaw is in MIT krb5's LDAP KDB backend when a KDC or kadmind reads malformed krbExtraData from a malicious or compromised LDAP backend. Liquibase Secure ships the package only as part of the inherited base image and runs the Liquibase CLI, not a Kerberos KDC or kadmind with an LDAP KDB backend.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40355",
+      "description": "In MIT Kerberos 5 before 1.22.3, there is a NULL pointer dereference if an application calls gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. An unauthenticated remote attacker can trigger this, causing the process to terminate in parse_nego_message.",
+      "recommendation": "No action required. The stock Liquibase Secure image does not operate as a GSS acceptor service with NegoEx enabled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a GSS acceptor service with NegoEx configured, which is outside the Liquibase Secure runtime model.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8qgv-wm66-hrmc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40355",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this issue requires an application to act as a GSS acceptor by calling gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. Liquibase Secure is a client-side CLI image and a review of its build and stock runtime path found no use of gss_accept_sec_context or NegoEx.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40356",
+      "description": "In MIT Kerberos 5 before 1.22.3, there is an integer underflow and resultant out-of-bounds read if an application calls gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. An unauthenticated remote attacker can trigger this, possibly causing the process to terminate in parse_message.",
+      "recommendation": "No action required. The stock Liquibase Secure image does not operate as a GSS acceptor service with NegoEx enabled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a GSS acceptor service with NegoEx configured, which is outside the Liquibase Secure runtime model.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f7p3-6rhj-p7jv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40356",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this issue requires an application to act as a GSS acceptor by calling gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. Liquibase Secure is a client-side CLI image and a review of its build and stock runtime path found no use of gss_accept_sec_context or NegoEx.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

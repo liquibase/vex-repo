@@ -1,0 +1,119 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-41991",
+      "description": "GNU gzip contains a vulnerability in the gzexe utility related to insecure temporary file handling. When the mktemp utility is not available in the user's PATH, gzexe falls back to constructing a temporary file path based solely on the process ID. This predictable filename is created without exclusive access or existence checks. A local attacker can pre-create the predicted temporary file path as a symbolic link pointing to an arbitrary file writable by the victim. When gzexe runs, it follows the symlink and overwrites the target file.",
+      "recommendation": "No action required. Liquibase Secure never invokes gzexe in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is specific to the gzexe wrapper, which Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        377
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-67v8-88jf-4x6q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41991",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue is specific to the gzexe wrapper when it falls back to a predictable temporary filename. Liquibase Secure does not invoke gzexe or the gzip utility in its build or stock runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gzip",
+          "versions": [
+            {
+              "range": "vers:deb/<1.12-1ubuntu3.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41992",
+      "description": "GNU gzip contains a global buffer overflow vulnerability in the LZH decompression logic caused by improper reuse of shared global state between different decompression formats within a single execution. GNU gzip maintains a global array that is shared across the LZ77, LZW, and LZH decompression routines and is not reinitialized between files processed in the same invocation. By decompressing a specially crafted LZW file followed by a specially crafted LZH file in a single gzip -d command, an attacker can poison the shared global state and subsequently trigger an out-of-bounds read in the LZH decoder.",
+      "recommendation": "No action required. Liquibase Secure never invokes the gzip utility in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a specific gzip CLI decompression sequence that Liquibase Secure never executes in its build or runtime path.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qxh4-rprf-2mmj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41992",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue requires a single gzip -d invocation to process a crafted LZW file and then a crafted LZH file so shared decoder state carries across formats. Liquibase Secure does not invoke the gzip utility in its build or stock runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gzip",
+          "versions": [
+            {
+              "range": "vers:deb/<1.12-1ubuntu3.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -57,6 +57,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-69720",
+      "description": "The infocmp command-line tool in ncurses before 6.5-20251213 has a stack-based buffer overflow in analyze_string in progs/infocmp.c.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the infocmp utility or process untrusted terminfo data in its stock runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is in the infocmp utility, which the Liquibase Secure build and stock runtime do not invoke.\n"
+        }
+      ],
+      "cwes": [
+        121,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9952-mrqj-h4jh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69720",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libncursesw6 6.4+20240113-1ubuntu2, below Ubuntu's fixed 6.4+20240113-1ubuntu2.1, but this issue is in ncurses' infocmp utility. The stock Liquibase Secure image runs the Liquibase CLI non-interactively, and a review of its build and runtime path found no invocation of infocmp or processing of attacker-supplied termcap or terminfo input.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libncursesw6",
+          "versions": [
+            {
+              "range": "vers:deb/<6.4+20240113-1ubuntu2.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

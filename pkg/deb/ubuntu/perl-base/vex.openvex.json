@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-2fd4da1eccb86f362515a62662ead3dd833ae485ba6dd4f1329c40500d04ed3d",
+  "@id": "merged-vex-fbc968edfc65d97df75f4dfa0f0bc1efe0ad0376fd5318b490bace4aa6fcf20c",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:28:44.745757895Z",
+  "timestamp": "2026-09-23T18:08:28.940535602Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-15649"
       },
-      "timestamp": "2026-09-21T18:28:44.393953803Z",
+      "timestamp": "2026-09-23T18:08:26.434177104Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-12087"
       },
-      "timestamp": "2026-09-21T18:28:44.579171989Z",
+      "timestamp": "2026-09-23T18:08:26.673555824Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-13221"
       },
-      "timestamp": "2026-09-21T18:28:44.707910062Z",
+      "timestamp": "2026-09-23T18:08:26.835900568Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -49,6 +49,36 @@
       "status_notes": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Perl's regex compiler silently truncates its match table when an alternation has more than 65,535 branches, producing incorrect (false-positive and false-negative) pattern matches — a risk only when such a regex gates an access-control or input-filtering decision. Liquibase never invokes Perl or any Perl module (see the CVE-2025-15649 assessment on this same subcomponent for the reachability evidence), so no Liquibase security control is implemented via a Perl regex. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships perl-base 5.38.2-3.2ubuntu0.4, the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-15534"
+      },
+      "timestamp": "2026-09-23T18:08:27.050381561Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Perl versions through 5.45.1 have out-of-bounds heap reads and writes during regular expression matching via an undersized superlinear cache in S_regmatch. A caller that matches an attacker-controlled subject of the required size and pattern shape can crash the process or corrupt heap memory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This regex-engine heap read/write flaw is reachable only when an application performs Perl regular-expression matching on attacker supplied subject strings. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is therefore not reachable from the stock Liquibase Secure runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-19487"
+      },
+      "timestamp": "2026-09-23T18:08:27.264649479Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Perl versions from 5.9.4 before 5.41.9 can produce incorrect regular expression match results when a stale failure flag ends the Aho-Corasick prescan early in S_find_byclass, which can make access or filtering decisions wrong.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This incorrect-match issue affects Perl's regex prescan logic and is relevant only when an application performs Perl regular-expression matching on attacker-controlled data and then makes a security decision from the result. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is not reachable in the stock runtime."
     }
   ]
 }

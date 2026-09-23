@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-49a01e482a1031147c76eaa5ade976143892cfb6bd8c1f3f13c77ad32eeb4c22",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:05:23.330428847Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42250"
+      },
+      "timestamp": "2026-09-23T18:05:23.330429859Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libbz2-1.0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "bzip2 contains an off-by-one error in the bzip2recover utility. When processing a specially crafted file, the application performs an out-of-bounds write to a global buffer, resulting in memory corruption and a crash (denial of service).",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This off-by-one flaw is specific to the bzip2recover recovery utility, not the core bzip2 compression library. Liquibase Secure's container only ever execs the Liquibase Java CLI at runtime; a review of the container's runtime path found no invocation of bzip2recover, bzip2, bunzip2, or any bzip2 API. libbz2 ships only as an inherited base-image library dependency."
+    }
+  ]
+}

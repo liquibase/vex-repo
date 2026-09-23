@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cbe96a47fa2ca49ba42e1fe08798525f8f4d521916f3a85188fe59eced93adb0",
+  "@id": "merged-vex-6163e1323cd7fb24f2c06e97fdbb22aa44ab4ec4834f3e58b2718cc99582eb3e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:31:37.259688189Z",
+  "timestamp": "2026-09-23T18:14:11.791724353Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-4g8c-wm8x-jfhw"
         ]
       },
-      "timestamp": "2026-09-21T18:31:34.588182816Z",
+      "timestamp": "2026-09-23T18:14:06.411185692Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -29,7 +29,7 @@
           "GHSA-3qp7-7mw8-wx86"
         ]
       },
-      "timestamp": "2026-09-21T18:31:35.505117037Z",
+      "timestamp": "2026-09-23T18:14:07.610920039Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -47,7 +47,7 @@
           "GHSA-x4gw-5cx5-pgmh"
         ]
       },
-      "timestamp": "2026-09-21T18:31:35.673736403Z",
+      "timestamp": "2026-09-23T18:14:07.824466404Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -65,7 +65,7 @@
           "GHSA-c653-97m9-rcg9"
         ]
       },
-      "timestamp": "2026-09-21T18:31:35.860648962Z",
+      "timestamp": "2026-09-23T18:14:08.065611639Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -83,7 +83,7 @@
           "GHSA-c4c3-7fpv-j4q5"
         ]
       },
-      "timestamp": "2026-09-21T18:31:36.698408146Z",
+      "timestamp": "2026-09-23T18:14:09.148195088Z",
       "products": [
         {
           "@id": "pkg:maven/io.netty/netty-handler"
@@ -93,6 +93,24 @@
       "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, io.netty.handler.ssl.SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can cause an IndexOutOfBoundsException and invoke select(ctx, null). This selects the default SslContext instead of the SNI-specific context. In deployments where per-SNI clientAuth=REQUIRE is the sole mutual TLS gate, the default SslContext uses clientAuth=NONE or clientAuth=OPTIONAL, and no application-layer certificate verification exists, an unauthenticated remote attacker can bypass the protected route's mutual TLS requirement. This issue is fixed in versions 4.1.137.Final and 4.2.17.Final.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can throw IndexOutOfBoundsException and fall back to the default SslContext instead of the SNI-specific one. This only becomes an mTLS bypass in a deployment that (a) runs a Netty server accepting inbound TLS connections, (b) uses per-SNI SslContext selection as the sole mutual-TLS gate (clientAuth=REQUIRE on the SNI context, weaker on the default), and (c) has no application-layer certificate check. Liquibase never runs a Netty server: a grep across all Java sources for ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, and SslClientHelloHandler returns zero hits: netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (Azure SDK's azure-core-http-netty, the AWS SDK, the Couchbase client, the Cassandra JDBC driver). The scanner found netty-handler below the fixed versions in five bundled jars (Docker Scan run https://github.com/liquibase/liquibase-pro/actions/runs/34365994421): liquibase-commercial-cassandra.jar 4.1.119.Final, liquibase-azure.jar 4.1.135.Final, liquibase-aws-extension.jar 4.1.136.Final, liquibase-commercial-couchbase.jar 4.2.16.Final, and liquibase-azure-deps.jar (unlabeled in the scan, same shaded copy as liquibase-azure.jar); none of them run a Netty server, so the version gap does not matter to this assessment."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75596",
+        "aliases": [
+          "GHSA-fccg-mwvh-qqg4"
+        ]
+      },
+      "timestamp": "2026-09-23T18:14:10.32155445Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, the default SniHandler constructors use pre-handshake ClientHello aggregation implemented in SslClientHelloHandler, which repeatedly recopies all previously received bytes each time it processes another fragment of a ClientHello split across TLS records. An unauthenticated attacker can advertise a large ClientHello and deliver it in thousands of tiny records, causing quadratic CPU consumption on the event loop and degrading TLS handling for other clients. Fixed in versions 4.1.137.Final and 4.2.17.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE affects the same pre-handshake ClientHello aggregation code in SslClientHelloHandler as CVE-2026-75595, already assessed in this file: a server-side SNI-routing feature that repeatedly recopies buffered bytes while reassembling a fragmented ClientHello, causing quadratic CPU consumption when an attacker splits a large ClientHello across many small TLS records. This only matters to a deployment running a Netty server with per-SNI SslContext selection (SniHandler/AbstractSniHandler). A source review found no references to ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, or SslClientHelloHandler anywhere in this repository; netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (the AWS SDK's netty-nio-client, the Azure SDK's azure-core-http-netty, the Couchbase Java client, and the Cassandra driver's own AWS SDK chain), none of which run a Netty server. The AWS extension already resolves netty-handler at 4.1.137.Final, past the fix line, as defense-in-depth; the Azure extension remains on 4.1.135.Final, the Cassandra extension on 4.1.130.Final, and the Couchbase client's shaded copy on 4.2.16.Final, all relying solely on the reachability argument."
     }
   ]
 }

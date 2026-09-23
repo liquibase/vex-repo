@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-6e456efe2eeb9905d37115410934e2e2f3abfdcb9b97707e30f428f04aea868b",
+  "@id": "merged-vex-417854245f5671d6baa0d35bdb6f9e691e78ad940515d097d56d057b548fb0c7",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:25:53.911486807Z",
+  "timestamp": "2026-09-23T18:01:24.862547884Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-13595"
       },
-      "timestamp": "2026-09-21T18:25:53.911488179Z",
+      "timestamp": "2026-09-23T18:01:22.924259622Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -19,6 +19,24 @@
       "status_notes": "A flaw was found in the libblkid library of util-linux. During nested partition probing, the BSD, Minix, Solaris x86, and UnixWare partition probers cache a raw pointer to a parent partition entry in a dynamically allocated array; when subsequent partition additions reallocate the array, the pointer becomes stale, leading to a heap use-after-free read. An attacker who can present a crafted block device image can trigger this without user interaction, since libblkid is invoked automatically by udev/udisks as root on block-device hot-plug events.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
       "impact_statement": "This use-after-free in libblkid's nested partition probing (BSD, Minix, Solaris x86, UnixWare probers) is triggered automatically by udev/udisks as root on a block-device hot-plug event, such as a USB insertion or a loop-mounted disk image — containers do not perform hot-plug block-device management, and a source review of the Dockerfiles and entrypoint scripts found no invocation of udev, udisks, blkid, or any partition-probing tool; the stock container's entrypoint execs only the Liquibase CLI. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships bsdutils 1:2.39.3-9ubuntu6.6, the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-27456",
+        "aliases": [
+          "GHSA-qq4x-vfq4-9h9g"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:23.285209342Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/bsdutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "util-linux before 2.41.4 has a TOCTOU vulnerability in the SUID /usr/bin/mount binary when setting up loop devices. Exploitation requires an /etc/fstab entry with user,loop options whose path is attacker-writable and a SUID mount binary.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "This util-linux mount race requires a SUID /usr/bin/mount binary plus an /etc/fstab entry with user,loop options pointing to a user-writable path. The stock Liquibase Secure container's entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no references to /etc/fstab, /usr/bin/mount, user,loop, blkid, udisks, or udev. The required loop-mount configuration is absent from the stock container."
     }
   ]
 }

@@ -61,6 +61,603 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-19931",
+      "description": "A flaw in libcurl makes it wrongly reuse an HTTP connection setup for a given hostname using Negotiate authentication, when the initial request is done using empty credentials. This can make user B's request get sent over user A's previously authenticated connection.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to make Negotiate-authenticated libcurl requests; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        488
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19931",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is a libcurl API-level connection-reuse bug: an application linked against libcurl must issue Negotiate-authenticated requests with empty initial credentials for the vulnerable connection-pooling logic to trigger. The Liquibase Secure container entrypoint execs only the Liquibase Java CLI; a review of the JVM's own native library dependencies and the container's runtime entrypoint found no linkage against libcurl anywhere in the process tree. curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8932",
+      "description": "libcurl would reuse a previously created connection even when some mTLS config related option had been changed that should have prohibited reuse. libcurl keeps previously used connections in a connection pool for subsequent transfers to reuse if one of them matches the setup. However, some TLS settings related to client certificates were left out from the configuration match checks, making them match too easily. In particular options related to the private key.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl mutual-TLS connection-reuse path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a libcurl mutual-TLS connection-reuse path that Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        305
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m7xm-hf59-w6rj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8932",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8932.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to reuse pooled connections while changing mutual-TLS client-certificate settings. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to libcurl mutual-TLS option usage or connection-pool handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.27",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-9547",
+      "description": "When a libcurl-based application performs transfers via SCP:// or SFTP:// and utilizes the CURLOPT_SSH_KEYFUNCTION callback, it may silently accept an untrusted server. This vulnerability occurs when a server presents a host key type that does not match the specific key type already recorded for that host in the known_hosts file. Instead of rejecting the mismatch, the callback mechanism fails to properly enforce the restriction, allowing the connection to succeed without warning and risking a potential man-in-the-middle attack.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl SCP/SFTP host-key validation path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl SCP/SFTP handling with the CURLOPT_SSH_KEYFUNCTION callback, a path Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xq9p-gxg6-f7q6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9547",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-9547.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to perform SCP or SFTP transfers and register the CURLOPT_SSH_KEYFUNCTION callback so host-key validation flows through the vulnerable known_hosts handling. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to SCP, SFTP, CURLOPT_SSH_KEYFUNCTION, or known_hosts callback handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18924",
+      "description": "A flaw in libcurl's handling of HTTP/2 Server Push streams, when the parent handle is set to share connections with other handles, can lead to use-after-free in the cleanup process.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to configure libcurl HTTP/2 Server Push with shared connection handles; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18924",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to configure libcurl handles to share connections while processing HTTP/2 Server Push streams. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-82209",
+      "description": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to make libcurl cookie requests via a libpsl-enabled build; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82209",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to build libcurl with libpsl support and process attacker-controlled Set-Cookie responses. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-80230",
+      "description": "When CURLOPT_PINNEDPUBLICKEY is configured alongside options that disable standard peer verification (CURLOPT_SSL_VERIFYPEER = 0 and CURLOPT_SSL_VERIFYHOST = 0), libcurl fails to enforce public key pinning on connections established without a presented server certificate, allowing unauthenticated connections to succeed when they should be rejected.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to configure this specific libcurl option combination; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80230",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to configure libcurl with CURLOPT_PINNEDPUBLICKEY alongside disabled peer verification options. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13608",
+      "description": "A flaw in the libcurl SASL negotiation for LDAP authentication allows an incomplete handshake sequence to be misinterpreted as a successful cryptographic verification. An attacker executing a Man-in-the-Middle (MITM) attack can inject a premature or shortcut response that bypasses complete peer validation.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to perform libcurl-based LDAP SASL authentication; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        923
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13608",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to use libcurl's SASL negotiation for LDAP authentication. Liquibase Secure's runtime process tree never links against libcurl and never performs LDAP authentication via libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-10536",
+      "description": "A use-after-free vulnerability exists in libcurl when an application configures an HTTP/2 stream-dependency tree via CURLOPT_STREAM_DEPENDS or CURLOPT_STREAM_DEPENDS_E, subsequently invokes curl_easy_reset(), and finally terminates the handle with curl_easy_cleanup(). During this final cleanup phase, libcurl attempts to access and modify an internal structure that was already freed during the reset operation.",
+      "recommendation": "No action required. Liquibase Secure does not call curl or the vulnerable libcurl stream-dependency APIs in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable behavior requires specific libcurl API calls that are absent from Liquibase Secure's build and runtime path.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wjq8-x4qm-6mmh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-10536",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports curl 8.5.0-2ubuntu10.10, below Ubuntu's fixed 8.5.0-2ubuntu10.11, but this issue affects applications that configure libcurl stream dependencies and then reset and clean up the same handle. Liquibase Secure's build path uses wget for downloads, not curl, and a review of the secure-image build and stock runtime path found no use of curl or the affected libcurl APIs.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8924",
+      "description": "A flaw in curl's cookie parsing logic allows a malicious HTTP server to set \"super cookies\" that bypass the Public Suffix List check. This enables an attacker-controlled origin to inject cookies that curl subsequently scopes and transmits to unrelated third-party domains.",
+      "recommendation": "No action required. Liquibase Secure does not use curl's cookie-handling path in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke curl's cookie storage and replay path, which the stock image does not use.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://curl.se/docs/CVE-2026-8924.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8924",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.25, but this issue requires Liquibase Secure to act as a curl HTTP client that parses and stores attacker-controlled cookies and later reuses them against unrelated domains. Liquibase Secure's build downloads use wget, and its stock runtime path invokes Liquibase rather than curl, so curl's cookie parsing, Public Suffix List, and cookie jar handling are not exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8925",
+      "description": "The curl logic that works with SASL authentication could end up cleaning up the GSASL context twice without clearing the pointer in between, making it free() the same pointer twice.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl SASL authentication path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a libcurl SASL code path that Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        415
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p8x5-c6c9-8cwx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8925",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8925.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to use SASL authentication and exercise the GSASL cleanup path on a curl handle. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to GSASL, SASL-authenticated curl flows, or libcurl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8927",
+      "description": "When reusing a libcurl handle for sequential transfers driven by environment-variable proxy configuration, libcurl fails to clear the proxy authentication state between requests. Specifically, if the initial transfer authenticates against proxyA using Digest auth, a subsequent transfer routed through proxyB erroneously leaks the Proxy-Authorization header intended solely for proxyA.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any proxy-authenticated libcurl request path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires proxy-authenticated libcurl handle reuse that Liquibase Secure never performs; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        294
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jr4f-4564-w3mr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8927",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8927.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to reuse a handle across sequential transfers that pick up proxy settings from environment variables and negotiate Digest authentication to multiple proxies. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to proxy-authenticated libcurl flows or related curl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

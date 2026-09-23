@@ -167,6 +167,112 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-15534",
+      "description": "Perl versions through 5.45.1 have out-of-bounds heap reads and writes during regular expression matching via an undersized superlinear cache in S_regmatch. A caller that matches an attacker-controlled subject of the required size and pattern shape can crash the process or corrupt heap memory.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl or Perl regex processing at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs the Java CLI directly; no Perl interpreter or Perl regex engine is invoked.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        190,
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15534",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This regex-engine heap read/write flaw is reachable only when an application performs Perl regular-expression matching on attacker supplied subject strings. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is therefore not reachable from the stock Liquibase Secure runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19487",
+      "description": "Perl versions from 5.9.4 before 5.41.9 can produce incorrect regular expression match results when a stale failure flag ends the Aho-Corasick prescan early in S_find_byclass, which can make access or filtering decisions wrong.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl or make runtime decisions via Perl regex evaluation.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs the Java CLI directly; no Perl interpreter or Perl regex engine is invoked.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19487",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This incorrect-match issue affects Perl's regex prescan logic and is relevant only when an application performs Perl regular-expression matching on attacker-controlled data and then makes a security decision from the result. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is not reachable in the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
