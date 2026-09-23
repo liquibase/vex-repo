@@ -1,0 +1,369 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-259828f999d5b2280d7b9459f1a31e59775d97efbd2ed76105484c9bbd3d347d",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:05:56.61537377Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-59375"
+      },
+      "timestamp": "2026-09-23T18:05:54.164045272Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat in Expat before 2.7.2 allows attackers to trigger large dynamic memory allocations via a small document that is submitted for parsing.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw requires an application to call libexpat's parsing API on a crafted document to trigger large dynamic allocations. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-66382"
+      },
+      "timestamp": "2026-09-23T18:05:53.875286152Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In libexpat through 2.7.3, a crafted file with an approximate size of 2 MiB can lead to dozens of seconds of processing time.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This denial-of-service flaw requires an application to call libexpat's XML_Parse API on a crafted multi-megabyte XML file. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-32776"
+      },
+      "timestamp": "2026-09-23T18:05:55.487996071Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.7.5 allows a NULL pointer dereference with empty external parameter entity content.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This NULL pointer dereference requires an application to call libexpat's parser with an empty external parameter entity. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-32777"
+      },
+      "timestamp": "2026-09-23T18:05:55.322778413Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.7.5 allows an infinite loop while parsing DTD content.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This infinite loop requires an application to call libexpat's DTD parsing path on crafted DTD content. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-32778"
+      },
+      "timestamp": "2026-09-23T18:05:55.977668188Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.7.5 allows a NULL pointer dereference in the function setContext on retry after an earlier out-of-memory condition.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This NULL pointer dereference requires an application to retry libexpat's setContext function after an earlier out-of-memory condition. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41080"
+      },
+      "timestamp": "2026-09-23T18:05:55.651360659Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.0 uses insufficient entropy, and thus hash flooding can occur via a crafted XML document.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This hash-flooding weakness requires an application to call libexpat's parsing API on attacker-controlled XML to exploit insufficient hash-seed entropy. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45186"
+      },
+      "timestamp": "2026-09-23T18:05:55.813790945Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In libexpat before 2.8.1, the computational complexity of attribute name collision checks allows a denial of service via moderately sized crafted XML input.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This denial-of-service flaw requires an application to call libexpat's parsing API on moderately sized XML with many colliding attribute names. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-50219"
+      },
+      "timestamp": "2026-09-23T18:05:55.157396479Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 lacks handler call depth tracking for calls to XML_GetBuffer, XML_Parse, XML_ParseBuffer, XML_ParserFree, or XML_ParserReset from within handlers in cases of a policy violation. Thus, a use-after-free can occur.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This use-after-free requires an application to call XML_GetBuffer, XML_Parse, XML_ParseBuffer, XML_ParserFree, or XML_ParserReset from within a libexpat handler after a policy violation. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56131"
+      },
+      "timestamp": "2026-09-23T18:05:53.548220162Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 lacks handler call depth tracking for calls to XML_ResumeParser from within handlers in cases of a policy violation. Thus, a use-after-free can occur.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This use-after-free requires an application to call XML_ResumeParser from within a libexpat handler after a policy violation, a pattern specific to applications embedding libexpat directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56132"
+      },
+      "timestamp": "2026-09-23T18:05:53.056332599Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In libexpat before 2.8.2, there is a heap-based buffer overflow in doProlog in xmlparse.c because scaffold backing array reallocation is mishandled when there is data-structure sharing across parsers.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This heap-based buffer overflow requires an application to share a single libexpat data structure across multiple parser instances, a pattern used only by advanced libexpat embedders. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56403"
+      },
+      "timestamp": "2026-09-23T18:05:54.496969843Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in storeAtts.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's storeAtts attribute-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56404"
+      },
+      "timestamp": "2026-09-23T18:05:54.331384167Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in addBinding.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's addBinding namespace-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56405"
+      },
+      "timestamp": "2026-09-23T18:05:54.661976048Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in getAttributeId.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's getAttributeId attribute-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56406"
+      },
+      "timestamp": "2026-09-23T18:05:52.395621531Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in XML_ParseBuffer because it lacked a check that was present in XML_Parse.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's XML_ParseBuffer API directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56407"
+      },
+      "timestamp": "2026-09-23T18:05:52.890688957Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in doProlog that is related to storeEntityValue and entity textLen.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's doProlog entity-parsing path directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56408"
+      },
+      "timestamp": "2026-09-23T18:05:54.826946135Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 has an integer overflow in copyString.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow requires an application to call libexpat's copyString internal string-handling path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56409"
+      },
+      "timestamp": "2026-09-23T18:05:53.220108943Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "xmlwf in libexpat before 2.8.2 has an integer overflow for the output filename when -d outputDir is used.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow is confined to xmlwf's -d output-directory filename handling, a standalone command-line tool Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56410"
+      },
+      "timestamp": "2026-09-23T18:05:52.727265047Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "xmlwf in libexpat before 2.8.2 has an integer overflow in resolveSystemId.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow is confined to xmlwf, expat's standalone command-line well-formedness checker, which Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56411"
+      },
+      "timestamp": "2026-09-23T18:05:52.56289108Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This integer overflow is confined to xmlwf, expat's standalone command-line well-formedness checker, which Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-56412"
+      },
+      "timestamp": "2026-09-23T18:05:54.99158369Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.2 does not consider XML_TOK_DATA_CHARS in doCdataSection and thus lacks handler call depth tracking for various calls from within handlers in cases of a policy violation. Thus, a use-after-free can occur. This issue exists because of an incomplete fix for CVE-2026-50219.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This use-after-free requires an application to trigger a policy violation from within a libexpat CDATA-section handler; it exists because the fix for CVE-2026-50219 was incomplete. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-66046"
+      },
+      "timestamp": "2026-09-23T18:05:52.233802811Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Expat through 2.8.3 contains a denial of service vulnerability caused by quadratic algorithmic complexity in the storeAtts() function in xmlparse.c, where processing N specified attributes with non-normalized values triggers an O(N^2) linear scan of elementType->defaultAtts to determine CDATA status. A remote unauthenticated attacker can supply a single well-formed XML document of a few megabytes to an application parsing untrusted XML to cause excessive CPU consumption, resulting in denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This denial-of-service flaw requires an application to call libexpat's XML_Parse API on attacker-controlled XML with many non-normalized attributes. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-72522"
+      },
+      "timestamp": "2026-09-23T18:05:53.38248645Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.3 has an out-of-bounds read and resultant infinite loop because low surrogates are treated the same as high surrogates during Unicode processing in the *_toUtf16 functions.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This out-of-bounds read requires an application to call libexpat's internal *_toUtf16 Unicode conversion functions on attacker-controlled surrogate pairs. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-76641"
+      },
+      "timestamp": "2026-09-23T18:05:52.070644387Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Expat through 2.8.3 contains an out-of-bounds read vulnerability that allows attackers to trigger memory corruption by processing XML with external entity parsers created via XML_ExternalEntityParserCreate. A struct size mismatch between ELEMENT_TYPE members causes storeAtts to read the attIndex member past allocated memory boundaries, resulting in failure to normalize whitespace in non-CDATA attributes or a wild pointer dereference causing a segfault. This vulnerability was introduced by the fix for CVE-2026-66046.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This out-of-bounds read requires an application to call libexpat's XML_ExternalEntityParserCreate API to parse attacker-controlled XML. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-76957"
+      },
+      "timestamp": "2026-09-23T18:05:53.712630437Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat before 2.8.4 lacks handler call depth tracking with custom encoding callbacks. Thus, a use-after-free can occur.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This use-after-free requires an application to register a custom encoding callback with libexpat, a pattern specific to applications embedding libexpat directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat."
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-42250",
+      "description": "bzip2 contains an off-by-one error in the bzip2recover utility. When processing a specially crafted file, the application performs an out-of-bounds write to a global buffer, resulting in memory corruption and a crash (denial of service).",
+      "recommendation": "No action required. Liquibase Secure never invokes the bzip2recover utility or any bzip2 API at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.8,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The advisory is specific to the bzip2recover utility; Liquibase Secure's runtime never invokes that tool or any bzip2 API path that would reach it.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9r29-3vrx-4537",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42250",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This off-by-one flaw is specific to the bzip2recover recovery utility, not the core bzip2 compression library. Liquibase Secure's container only ever execs the Liquibase Java CLI at runtime; a review of the container's runtime path found no invocation of bzip2recover, bzip2, bunzip2, or any bzip2 API. libbz2 ships only as an inherited base-image library dependency.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libbz2-1.0"
+        }
+      ]
+    }
+  ]
+}

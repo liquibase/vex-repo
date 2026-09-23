@@ -165,8 +165,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle Name Constraints bypass via trailing dot in rfc822Name and URI affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for NameConstraints, rfc822Name, GeneralSubtree, and PKIXNameConstraintValidator also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which does not exercise certificate name-constraint validation or the standalone bcprov-jdk18on classes reported by the scanner.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "This affected bcprov-jdk18on before 1.85. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed version, as defense-in-depth. Independent of version, a source review found zero direct `import org.bouncycastle.` usage anywhere in this codebase, and zero references to NameConstraints, rfc822Name, GeneralSubtree, or PKIXNameConstraintValidator. The only Bouncy Castle usage in production code is Snowflake private-key loading through a shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace — a different package entirely from the standalone bcprov-jdk18on artifact this CVE affects, and one that never exercises certificate name-constraint validation.",
+        "justification": "code_not_reachable",
         "response": [
           "update"
         ],
@@ -5492,6 +5492,270 @@
       ]
     },
     {
+      "id": "CVE-2026-15059",
+      "description": "Local unprivileged users can terminate arbitrary local processes via a systemd-oomd IPC API due to a missing path traversal validation.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which does not run systemd-oomd.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-oomd service and its IPC API; the stock container starts only the Liquibase CLI and does not run systemd-oomd.\n"
+        }
+      ],
+      "cwes": [
+        22,
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15059",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue is in systemd-oomd's IPC API. The Liquibase Secure image inherits Ubuntu packages from the unversioned eclipse-temurin:21-jre-noble base image (`docker/Dockerfile:2`) and creates a static liquibase user with useradd rather than running systemd-managed services (`docker/Dockerfile:5`). The container entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no references to oomd or systemd-oomd, so the required systemd-oomd IPC service is absent from the stock container environment.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<255.4-1ubuntu8.17",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-15534",
+      "description": "Perl versions through 5.45.1 have out-of-bounds heap reads and writes during regular expression matching via an undersized superlinear cache in S_regmatch. A caller that matches an attacker-controlled subject of the required size and pattern shape can crash the process or corrupt heap memory.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl or Perl regex processing at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs the Java CLI directly; no Perl interpreter or Perl regex engine is invoked.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        190,
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15534",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This regex-engine heap read/write flaw is reachable only when an application performs Perl regular-expression matching on attacker supplied subject strings. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is therefore not reachable from the stock Liquibase Secure runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-16742",
+      "description": "systemd-homed contains a local privilege escalation bug via arbitrary system group addition to a local, logged in, homed-managed user.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which does not use systemd-homed to manage users.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a logged-in, homed-managed user under systemd-homed; the stock container provisions a static user and does not run systemd-homed.\n"
+        }
+      ],
+      "cwes": [
+        269,
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16742",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This privilege-escalation flaw requires systemd-homed to manage a local, logged-in user. The Liquibase Secure image creates its liquibase user statically with useradd during image build (`docker/Dockerfile:5`) and the entrypoint only execs the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no homed or systemd-homed references, so the required systemd-homed runtime environment is absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<255.4-1ubuntu8.17",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18938",
+      "description": "A flaw was found in p11-kit. A local attacker, or one with equivalent access to a reachable RPC channel, could exploit an integer overflow in nested attribute parsing and cause a heap out-of-bounds write that crashes the p11-kit RPC parsing process. This vulnerability is only exploitable on 32-bit systems.",
+      "recommendation": "No action required for the stock Liquibase Secure container. If a derived image adds and exposes a p11-kit RPC service, update the base package first.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a reachable p11-kit RPC service, and the stock container starts only the Liquibase CLI with no p11-kit daemon.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18938",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is in p11-kit's RPC message parser and requires a reachable p11-kit RPC channel. The stock Liquibase Secure container does not start p11-kit or any auxiliary daemon: the entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no p11-kit or pkcs11 references. Without a p11-kit RPC service/socket, the required runtime environment is absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libp11-kit0",
+          "versions": [
+            {
+              "range": "vers:deb/<0.25.3-4ubuntu2.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19487",
+      "description": "Perl versions from 5.9.4 before 5.41.9 can produce incorrect regular expression match results when a stale failure flag ends the Aho-Corasick prescan early in S_find_byclass, which can make access or filtering decisions wrong.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl or make runtime decisions via Perl regex evaluation.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase's container entrypoint execs the Java CLI directly; no Perl interpreter or Perl regex engine is invoked.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19487",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This incorrect-match issue affects Perl's regex prescan logic and is relevant only when an application performs Perl regular-expression matching on attacker-controlled data and then makes a security decision from the result. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is not reachable in the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2023-36415",
       "analysis": {
         "state": "not_affected",
@@ -5519,6 +5783,545 @@
       ]
     },
     {
+      "id": "CVE-2026-19499",
+      "description": "Calling strfmon and strfmon_l in the GNU C Library version 2.38 to 2.44 can write past the end of the caller-supplied output buffer when a conversion uses right-justified width padding. At the time of publication, no network-facing application impact is known.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's strfmon APIs in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires application calls to strfmon/strfmon_l with a vulnerable formatting pattern; no such calls exist in the stock Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19499",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This glibc flaw is reachable only through application calls to strfmon or strfmon_l with a vulnerable right-justified width-padding pattern. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to strfmon or strfmon_l, so the vulnerable API path is not reachable from the stock Liquibase Secure runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19542",
+      "description": "Calling tdelete on a sufficiently deep tree in the GNU C Library version 2.1 to 2.44 may write one pointer past the end of an alloca-allocated array on the stack, which may crash the application. No affected application in common distributions has been identified.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's tsearch or tdelete APIs in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires application use of tsearch/tdelete on a very deep tree; no such API usage exists in the stock Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19542",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This glibc flaw requires an application to use tsearch/tdelete on a very deep tree. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to tsearch or tdelete, so the vulnerable API path is not reachable from the stock Liquibase Secure runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27171",
+      "description": "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64 because x2nmodp can do right shifts within a loop that has no termination condition.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the affected zlib combine APIs in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calls into specific zlib combine APIs, and no such calls exist in the stock Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27171",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This zlib issue is tied to the crc32_combine64, crc32_combine_gen64, and x2nmodp code path. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to those zlib APIs, so the vulnerable code path is not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/zlib1g",
+          "versions": [
+            {
+              "range": "vers:deb/<1:1.3.dfsg-3.1ubuntu2.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27456",
+      "description": "util-linux before 2.41.4 has a TOCTOU vulnerability in the SUID /usr/bin/mount binary when setting up loop devices. Exploitation requires an /etc/fstab entry with user,loop options whose path is attacker-writable and a SUID mount binary.",
+      "recommendation": "No action required for the stock Liquibase Secure container, which does not provision the required loop-mount configuration for this exploit.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a specific /etc/fstab loop-mount setup that is not configured in the stock Liquibase Secure container.\n"
+        }
+      ],
+      "cwes": [
+        59,
+        269,
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27456",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This util-linux mount race requires a SUID /usr/bin/mount binary plus an /etc/fstab entry with user,loop options pointing to a user-writable path. The stock Liquibase Secure container's entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no references to /etc/fstab, /usr/bin/mount, user,loop, blkid, udisks, or udev. The required loop-mount configuration is absent from the stock container.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39.3-9ubuntu6.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39113",
+      "description": "A buffer overflow in SQLite source snapshots/builds containing Fossil check-in 8bdc0d485e3ad0c7a1e818da66f106951d496b05cbe61d12c2c448f2f24b6d5d and later snapshots/builds can cause denial of service via the ext/misc/sqlar.c sqlarUncompressFunc()/sqlar_uncompress() code path.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the affected SQLite snapshot-only sqlar decompression path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires the specific SQLite sqlar snapshot code path, and no such API usage exists in the stock Liquibase Secure runtime.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39113",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This SQLite issue is limited to snapshot builds containing the sqlarUncompressFunc/sqlar_uncompress code path in ext/misc/sqlar.c. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to sqlarUncompressFunc, sqlar_uncompress, sqlite3_value_int64, or sqlite3_malloc, so the vulnerable snapshot-only code path is not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsqlite3-0",
+          "versions": [
+            {
+              "range": "vers:deb/<3.45.1-1ubuntu2.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59921",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to versions 4.1.136.Final and 4.2.16.Final, HttpPostRequestEncoder constructs multipart HTTP request bodies by directly concatenating user-supplied filenames and field names into Content-Disposition MIME headers without validating or sanitizing CRLF characters. Since MIME headers are delimited by CRLF, an attacker who controls the filename can inject arbitrary MIME headers into the multipart body part. Fixed in versions 4.1.136.Final and 4.2.16.Final.",
+      "recommendation": "No action required. Liquibase Secure's multipart upload implementation uses the AWS SDK's REST-level multipart API, not Netty's multipart encoder classes.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path depends on Netty's multipart request encoder and attacker-controlled filenames reaching it, but this repository never references those classes and its own multipart logic uses the AWS SDK's REST-level API instead.\n"
+        }
+      ],
+      "cwes": [
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gcjf-9mgh-3p7g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59921",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in netty-codec-http 4.1.136.Final per NVD and GHSA. This repository's current build already resolves netty-codec-http 4.1.136.Final via the Azure extension's Netty HTTP client, past the fix line. This CVE is specific to Netty's HttpPostRequestEncoder multipart body construction from attacker-controlled filenames and field names, but this repository's only multipart upload implementation (S3 object uploads in the AWS extension) uses the AWS SDK's REST-level multipart API (separate part-numbered PUT requests), not Netty's multipart/form-data encoder — a fundamentally different mechanism. A source review found no references to HttpPostRequestEncoder, DiskFileUpload, MemoryFileUpload, or MixedFileUpload anywhere in this repository, so the vulnerable encoder path is not reachable regardless of version.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-21T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.1.0.Final|<4.1.136.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59903",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, io.netty.handler.codec.http.cors.CorsHandler's setVaryHeader method replaces application-defined Vary headers (such as Authorization or Cookie) with Origin. This allows a caching proxy or CDN sitting in front of a server using CorsHandler to reuse one user's authenticated response for another user, disclosing sensitive information. Fixed in versions 4.1.137.Final and 4.2.17.Final.",
+      "recommendation": "No action required. This repository never runs an HTTP server or uses CorsHandler; all netty-codec-http usage is transitive and client-side.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "CorsHandler only affects servers that add CORS response headers. This repository never runs an HTTP server; all netty-codec-http usage is transitive and client-side only.\n"
+        }
+      ],
+      "cwes": [
+        525,
+        668
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8c42-7qj2-3j46",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59903",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CorsHandler applies CORS response headers on the server side of an HTTP exchange; this repository never runs an HTTP server that uses it. A source review found no references to CorsHandler or CorsConfig anywhere in this repository's own code; every module that bundles netty-codec-http does so only as a transitive dependency of an outbound HTTP client (the AWS SDK's netty-nio-client, the Azure SDK's azure-core-http-netty, the Couchbase Java client, and the Cassandra driver's own AWS SDK chain), never as a server. The AWS extension and the Cassandra extension already resolve netty-codec-http at 4.1.137.Final, past the fix line, as defense-in-depth; the Azure extension remains on the vulnerable 4.1.135.Final and the Couchbase client's shaded copy remains on 4.2.16.Final, both relying solely on the reachability argument.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.137.Final|>=4.2.0.Final|<4.2.17.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-75596",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.1.137.Final and 4.2.17.Final, the default SniHandler constructors use pre-handshake ClientHello aggregation implemented in SslClientHelloHandler, which repeatedly recopies all previously received bytes each time it processes another fragment of a ClientHello split across TLS records. An unauthenticated attacker can advertise a large ClientHello and deliver it in thousands of tiny records, causing quadratic CPU consumption on the event loop and degrading TLS handling for other clients. Fixed in versions 4.1.137.Final and 4.2.17.Final.",
+      "recommendation": "No action required. This repository never runs a Netty server or configures per-SNI TLS routing.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path only triggers inside a Netty server aggregating inbound TLS ClientHello records for SNI-based routing. This repository never runs a Netty server; all netty-handler usage is transitive, client-side, and outbound only.\n"
+        }
+      ],
+      "cwes": [
+        407,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-fccg-mwvh-qqg4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75596",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE affects the same pre-handshake ClientHello aggregation code in SslClientHelloHandler as CVE-2026-75595, already assessed in this file: a server-side SNI-routing feature that repeatedly recopies buffered bytes while reassembling a fragmented ClientHello, causing quadratic CPU consumption when an attacker splits a large ClientHello across many small TLS records. This only matters to a deployment running a Netty server with per-SNI SslContext selection (SniHandler/AbstractSniHandler). A source review found no references to ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, or SslClientHelloHandler anywhere in this repository; netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (the AWS SDK's netty-nio-client, the Azure SDK's azure-core-http-netty, the Couchbase Java client, and the Cassandra driver's own AWS SDK chain), none of which run a Netty server. The AWS extension already resolves netty-handler at 4.1.137.Final, past the fix line, as defense-in-depth; the Azure extension remains on 4.1.135.Final, the Cassandra extension on 4.1.130.Final, and the Couchbase client's shaded copy on 4.2.16.Final, all relying solely on the reachability argument.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.137.Final|>=4.2.0.Final|<4.2.17.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19931",
+      "description": "A flaw in libcurl makes it wrongly reuse an HTTP connection setup for a given hostname using Negotiate authentication, when the initial request is done using empty credentials. This can make user B's request get sent over user A's previously authenticated connection.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to make Negotiate-authenticated libcurl requests; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        488
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19931",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is a libcurl API-level connection-reuse bug: an application linked against libcurl must issue Negotiate-authenticated requests with empty initial credentials for the vulnerable connection-pooling logic to trigger. The Liquibase Secure container entrypoint execs only the Liquibase Java CLI; a review of the JVM's own native library dependencies and the container's runtime entrypoint found no linkage against libcurl anywhere in the process tree. curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18924",
+      "description": "A flaw in libcurl's handling of HTTP/2 Server Push streams, when the parent handle is set to share connections with other handles, can lead to use-after-free in the cleanup process.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to configure libcurl HTTP/2 Server Push with shared connection handles; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18924",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to configure libcurl handles to share connections while processing HTTP/2 Server Push streams. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61728",
       "analysis": {
         "state": "not_affected",
@@ -5529,6 +6332,496 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-82209",
+      "description": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to make libcurl cookie requests via a libpsl-enabled build; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82209",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to build libcurl with libpsl support and process attacker-controlled Set-Cookie responses. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-80230",
+      "description": "When CURLOPT_PINNEDPUBLICKEY is configured alongside options that disable standard peer verification (CURLOPT_SSL_VERIFYPEER = 0 and CURLOPT_SSL_VERIFYHOST = 0), libcurl fails to enforce public key pinning on connections established without a presented server certificate, allowing unauthenticated connections to succeed when they should be rejected.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to configure this specific libcurl option combination; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80230",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to configure libcurl with CURLOPT_PINNEDPUBLICKEY alongside disabled peer verification options. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-13608",
+      "description": "A flaw in the libcurl SASL negotiation for LDAP authentication allows an incomplete handshake sequence to be misinterpreted as a successful cryptographic verification. An attacker executing a Man-in-the-Middle (MITM) attack can inject a premature or shortcut response that bypasses complete peer validation.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application to perform libcurl-based LDAP SASL authentication; Liquibase Secure's runtime process tree never links against or invokes libcurl.\n"
+        }
+      ],
+      "cwes": [
+        923
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13608",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to use libcurl's SASL negotiation for LDAP authentication. Liquibase Secure's runtime process tree never links against libcurl and never performs LDAP authentication via libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76641",
+      "description": "Expat through 2.8.3 contains an out-of-bounds read vulnerability that allows attackers to trigger memory corruption by processing XML with external entity parsers created via XML_ExternalEntityParserCreate. A struct size mismatch between ELEMENT_TYPE members causes storeAtts to read the attIndex member past allocated memory boundaries, resulting in failure to normalize whitespace in non-CDATA attributes or a wild pointer dereference causing a segfault. This vulnerability was introduced by the fix for CVE-2026-66046.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's external-entity parser API; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76641",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This out-of-bounds read requires an application to call libexpat's XML_ExternalEntityParserCreate API to parse attacker-controlled XML. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-66046",
+      "description": "Expat through 2.8.3 contains a denial of service vulnerability caused by quadratic algorithmic complexity in the storeAtts() function in xmlparse.c, where processing N specified attributes with non-normalized values triggers an O(N^2) linear scan of elementType->defaultAtts to determine CDATA status. A remote unauthenticated attacker can supply a single well-formed XML document of a few megabytes to an application parsing untrusted XML to cause excessive CPU consumption, resulting in denial of service.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:N/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's XML_Parse API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66046",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This denial-of-service flaw requires an application to call libexpat's XML_Parse API on attacker-controlled XML with many non-normalized attributes. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56406",
+      "description": "libexpat before 2.8.2 has an integer overflow in XML_ParseBuffer because it lacked a check that was present in XML_Parse.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's XML_ParseBuffer API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56406",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's XML_ParseBuffer API directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56411",
+      "description": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
+      "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This flaw is confined to expat's xmlwf command-line tool, which Liquibase Secure does not ship or invoke.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56411",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow is confined to xmlwf, expat's standalone command-line well-formedness checker, which Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56410",
+      "description": "xmlwf in libexpat before 2.8.2 has an integer overflow in resolveSystemId.",
+      "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This flaw is confined to expat's xmlwf command-line tool, which Liquibase Secure does not ship or invoke.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow is confined to xmlwf, expat's standalone command-line well-formedness checker, which Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56407",
+      "description": "libexpat before 2.8.2 has an integer overflow in doProlog that is related to storeEntityValue and entity textLen.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's entity-parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56407",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's doProlog entity-parsing path directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat; the library ships only as an inherited base-image package and is never invoked at container runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56132",
+      "description": "In libexpat before 2.8.2, there is a heap-based buffer overflow in doProlog in xmlparse.c because scaffold backing array reallocation is mishandled when there is data-structure sharing across parsers.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires sharing libexpat data structures across parser instances; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        821
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56132",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This heap-based buffer overflow requires an application to share a single libexpat data structure across multiple parser instances, a pattern used only by advanced libexpat embedders. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
         }
       ]
     },
@@ -5547,6 +6840,496 @@
       ]
     },
     {
+      "id": "CVE-2026-56409",
+      "description": "xmlwf in libexpat before 2.8.2 has an integer overflow for the output filename when -d outputDir is used.",
+      "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "This flaw is confined to expat's xmlwf command-line tool, which Liquibase Secure does not ship or invoke.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow is confined to xmlwf's -d output-directory filename handling, a standalone command-line tool Liquibase Secure does not ship or invoke. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-72522",
+      "description": "libexpat before 2.8.3 has an out-of-bounds read and resultant infinite loop because low surrogates are treated the same as high surrogates during Unicode processing in the *_toUtf16 functions.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's internal Unicode conversion functions directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-72522",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This out-of-bounds read requires an application to call libexpat's internal *_toUtf16 Unicode conversion functions on attacker-controlled surrogate pairs. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56131",
+      "description": "libexpat before 2.8.2 lacks handler call depth tracking for calls to XML_ResumeParser from within handlers in cases of a policy violation. Thus, a use-after-free can occur.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's XML_ResumeParser API directly from a custom handler; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56131",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to call XML_ResumeParser from within a libexpat handler after a policy violation, a pattern specific to applications embedding libexpat directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76957",
+      "description": "libexpat before 2.8.4 lacks handler call depth tracking with custom encoding callbacks. Thus, a use-after-free can occur.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires registering a custom libexpat encoding callback; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76957",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to register a custom encoding callback with libexpat, a pattern specific to applications embedding libexpat directly. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-66382",
+      "description": "In libexpat through 2.7.3, a crafted file with an approximate size of 2 MiB can lead to dozens of seconds of processing time.",
+      "recommendation": "No action required. Liquibase Secure never links against or invokes system libexpat at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's XML_Parse API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66382",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This denial-of-service flaw requires an application to call libexpat's XML_Parse API on a crafted multi-megabyte XML file. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18374",
+      "description": "Passing an effectively empty string to the \",ccs=\" syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled. This usage pattern is not seen in applications in common GNU/Linux distributions.",
+      "recommendation": "No action required. Liquibase Secure never constructs glibc fopen mode strings from external or attacker-controlled input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; Liquibase Secure never constructs fopen mode strings from external input.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension. Liquibase Secure's runtime never constructs fopen mode strings from external input; the JVM's own file I/O does not use this glibc idiom.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-6368",
+      "description": "Calling wordexp with WRDE_APPEND in the GNU C Library version 2.0 to version 2.43 can cause the interface to return invalid memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. Liquibase Secure never calls glibc's wordexp API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.1,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:N/UI:N/VC:L/VI:L/VA:L/SC:L/SI:L/SA:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling glibc's wordexp API with WRDE_APPEND; Liquibase Secure's runtime never calls wordexp.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6368",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to call glibc's wordexp function with the WRDE_APPEND flag. Neither the JVM nor the container's bash entrypoint calls wordexp; this is a C-language shell-word-expansion API that Liquibase Secure's Java and bash-only runtime path never invokes.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18508",
+      "description": "A flaw was found in GNU tar. When extracting an archive with the --one-top-level option, hardlink targets are not confined to the designated top-level directory and may resolve relative to the extraction working directory. A crafted archive can create hardlinks that escape the intended boundary and, when combined with a preexisting symbolic link under the working directory, may allow writing outside the intended directory.",
+      "recommendation": "No action required. Liquibase Secure only invokes tar at image build time on its own trusted release artifact, never at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure only invokes tar at image build time on its own trusted release artifact, with no --one-top-level flag, and never at container runtime on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18508",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw is triggered by extracting a crafted archive with GNU tar's --one-top-level option. Liquibase Secure's Dockerfile invokes tar exactly once, at image build time, to extract its own trusted release tarball with no --one-top-level flag; tar is never invoked at container runtime on any input, let alone attacker-controlled archives.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/tar"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18477",
+      "description": "A TOCTOU (Time-of-Check Time-of-Use) vulnerability in GNU tar's incremental dumpdir 'X' rename handling allows a local attacker with write access to a directory being backed up to influence the restore process if the attacker has access to the system where the restore is being performed. During restoration, files or directories may be created, renamed or overwritten outside the intended extraction directory.",
+      "recommendation": "No action required. Liquibase Secure only invokes tar at image build time on its own trusted release artifact in plain extraction mode, never in incremental mode, and never at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure only invokes tar at image build time in plain extraction mode on its own trusted release artifact, never in incremental dumpdir mode, and never at container runtime.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18477",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires GNU tar's incremental dumpdir mode and a local attacker who can race the restore process on the target system. Liquibase Secure's Dockerfile invokes tar exactly once, at image build time, to extract its own trusted release tarball in plain (non-incremental) mode; tar is never invoked at container runtime on any input.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/tar"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-85091",
+      "description": "zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow vulnerability in the gz_vacate() function when processing non-blocking gzwrite() operations with stale external buffer pointers. Attackers can trigger the overflow by calling gzprintf() or gzvprintf() after a write stall, causing an unchecked memmove() to write beyond the internal input buffer boundary.",
+      "recommendation": "No action required. Liquibase Secure's JVM uses its own bundled zip/deflate implementation and never links against or calls the system zlib package.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling system zlib's gzwrite/gzprintf APIs directly; the JVM's zip/gzip support uses its own bundled implementation and never links against the system zlib package.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85091",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This heap buffer overflow requires an application to call system zlib's gzwrite/gzprintf APIs in a non-blocking configuration after a write stall. The JVM's own zip/gzip native code (libzip.so) bundles its own zip/deflate implementation and does not dynamically link against the system zlib package; a review of the JVM's native library dependencies confirmed no linkage against libz.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/zlib1g"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-58183",
       "analysis": {
         "state": "not_affected",
@@ -5557,6 +7340,496 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-59375",
+      "description": "libexpat in Expat before 2.7.2 allows attackers to trigger large dynamic memory allocations via a small document that is submitted for parsing.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59375",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires an application to call libexpat's parsing API on a crafted document to trigger large dynamic allocations. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56404",
+      "description": "libexpat before 2.8.2 has an integer overflow in addBinding.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's namespace-binding API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56404",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's addBinding namespace-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56403",
+      "description": "libexpat before 2.8.2 has an integer overflow in storeAtts.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's attribute-processing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56403",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's storeAtts attribute-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56405",
+      "description": "libexpat before 2.8.2 has an integer overflow in getAttributeId.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's attribute-processing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56405",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's getAttributeId attribute-processing path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56408",
+      "description": "libexpat before 2.8.2 has an integer overflow in copyString.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's internal string-handling API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This integer overflow requires an application to call libexpat's copyString internal string-handling path. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56412",
+      "description": "libexpat before 2.8.2 does not consider XML_TOK_DATA_CHARS in doCdataSection and thus lacks handler call depth tracking for various calls from within handlers in cases of a policy violation. Thus, a use-after-free can occur. This issue exists because of an incomplete fix for CVE-2026-50219.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires triggering a policy violation from within a custom libexpat handler; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56412",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to trigger a policy violation from within a libexpat CDATA-section handler; it exists because the fix for CVE-2026-50219 was incomplete. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-50219",
+      "description": "libexpat before 2.8.2 lacks handler call depth tracking for calls to XML_GetBuffer, XML_Parse, XML_ParseBuffer, XML_ParserFree, or XML_ParserReset from within handlers in cases of a policy violation. Thus, a use-after-free can occur.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's parser-lifecycle APIs directly from a custom handler; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This use-after-free requires an application to call XML_GetBuffer, XML_Parse, XML_ParseBuffer, XML_ParserFree, or XML_ParserReset from within a libexpat handler after a policy violation. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32777",
+      "description": "libexpat before 2.7.5 allows an infinite loop while parsing DTD content.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's DTD-parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32777",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This infinite loop requires an application to call libexpat's DTD parsing path on crafted DTD content. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32776",
+      "description": "libexpat before 2.7.5 allows a NULL pointer dereference with empty external parameter entity content.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's external-entity parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32776",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This NULL pointer dereference requires an application to call libexpat's parser with an empty external parameter entity. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41080",
+      "description": "libexpat before 2.8.0 uses insufficient entropy, and thus hash flooding can occur via a crafted XML document.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        331
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41080",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This hash-flooding weakness requires an application to call libexpat's parsing API on attacker-controlled XML to exploit insufficient hash-seed entropy. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
         }
       ]
     },
@@ -5606,6 +7879,579 @@
           "versions": [
             {
               "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-45186",
+      "description": "In libexpat before 2.8.1, the computational complexity of attribute name collision checks allows a denial of service via moderately sized crafted XML input.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's parsing API directly; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45186",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This denial-of-service flaw requires an application to call libexpat's parsing API on moderately sized XML with many colliding attribute names. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32778",
+      "description": "libexpat before 2.7.5 allows a NULL pointer dereference in the function setContext on retry after an earlier out-of-memory condition.",
+      "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires calling libexpat's setContext API directly on OOM retry; Liquibase Secure's XML parsing never links against or calls system libexpat.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32778",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This NULL pointer dereference requires an application to retry libexpat's setContext function after an earlier out-of-memory condition. Liquibase Secure parses changelogs using the JVM's own bundled XML parser and never links against or calls system libexpat.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40228",
+      "description": "In systemd 259, systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 is present only as an inherited base-image library dependency.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-journald service with ForwardToWall enabled; Liquibase Secure's container has no init system and never runs systemd-journald or any other systemd service.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40228",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This flaw requires systemd-journald to be running as a system service with ForwardToWall=yes, receiving a \"logger -p emerg\" invocation. A review of the running container found no systemd or systemd-journald process at all: the container has no init system, PID 1 is the Liquibase entrypoint script itself, and libsystemd0 ships only as a linked library dependency of other base-image packages, never as a running daemon. The vulnerable journald forwarding path cannot exist in a container that never runs journald.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-58056",
+      "description": "Netty is an asynchronous event-driven network application framework. In versions 4.1.124.Final, and 4.2.0.Alpha3 through 4.2.4.Final, Netty incorrectly accepts standalone newline characters (LF) as a chunk-size line terminator, regardless of a preceding carriage return (CR), instead of requiring CRLF per HTTP/1.1 standards. When combined with reverse proxies that parse LF differently, attackers can craft requests that the proxy sees as one request but Netty processes as two, enabling request smuggling. Fixed in versions 4.1.125.Final and 4.2.5.Final.",
+      "recommendation": "No action required. Every module resolves netty-codec-http past the fixed version, and this repository never wires a Netty HTTP server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every module resolves netty-codec-http past the fixed version, and the vulnerable server-side chunk parser is additionally never wired anywhere in this repository.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fghv-69vj-qj49",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58056",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-fghv-69vj-qj49",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http past the 4.1.125.Final/4.2.5.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, this CVE affects Netty's server-side HTTP chunk-size parser; a source review found no references to HttpObjectDecoder, HttpServerCodec, ServerBootstrap, or NioServerSocketChannel anywhere in this repository, so the vulnerable server-side parser path would not be reachable even independent of version.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.125.Final|>=4.2.0.Alpha3|<4.2.5.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-67735",
+      "description": "Netty is an asynchronous, event-driven network application framework. In versions prior to 4.1.129.Final and 4.2.8.Final, the io.netty.handler.codec.http.HttpRequestEncoder has a CRLF injection via the request URI when constructing a request, leading to request smuggling when HttpRequestEncoder is used without proper sanitization of the URI. Fixed in versions 4.1.129.Final and 4.2.8.Final.",
+      "recommendation": "No action required. Every module resolves netty-codec-http past the fixed version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every module resolves netty-codec-http past the fixed version, and this repository does not directly wire HttpRequestEncoder.\n"
+        }
+      ],
+      "cwes": [
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-84h7-rjj3-6jx4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-67735",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-84h7-rjj3-6jx4",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http past the 4.1.129.Final/4.2.8.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, a source review found no references to HttpRequestEncoder anywhere in this repository, so this repository does not directly wire the vulnerable request-encoding class either.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.129.Final|>=4.2.0.Final|<4.2.8.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47244",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, DefaultHttp2Connection.DefaultEndpoint initialises maxActiveStreams/maxStreams to Integer.MAX_VALUE, and Http2Settings never inserts SETTINGS_MAX_CONCURRENT_STREAMS by default. Unless the application explicitly calls initialSettings().maxConcurrentStreams(n), a Netty HTTP/2 server advertises no limit and enforces none locally. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "recommendation": "No action required. Every module resolves netty-codec-http2 past the fixed version, and this repository never wires a Netty HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every module resolves netty-codec-http2 past the fixed version, and this repository never wires a Netty HTTP/2 server handler.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5x3r-wrvg-rp6q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47244",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-5x3r-wrvg-rp6q",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, this CVE requires a Netty HTTP/2 server; a source review found no references to DefaultHttp2Connection, Http2Settings, maxConcurrentStreams, Http2FrameCodec, Http2ConnectionHandler, ServerBootstrap, or NioServerSocketChannel anywhere in this repository, so the vulnerable HTTP/2 server path would not be reachable even independent of version.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.135.Final|>=4.2.0.Final|<4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-48043",
+      "description": "Netty is a network application framework for development of protocol servers and clients. In netty-codec-http2 prior to versions 4.1.135.Final and 4.2.15.Final, the DelegatingDecompressorFrameListener class orchestrates HTTP/2 decompression by embedding a per-stream EmbeddedChannel that runs the appropriate decompression codec and forwards decompressed chunks to a wrapped listener. A remote peer could send frames that would result in the flow-controller throwing and so trigger a resource leak which at the end might take down the whole JVM due to OOME. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "recommendation": "No action required. Every module resolves netty-codec-http2 past the fixed version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every module resolves netty-codec-http2 past the fixed version, and this repository does not directly wire DelegatingDecompressorFrameListener.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        401,
+        772
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c2gf-v879-257j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48043",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-c2gf-v879-257j",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, a source review found no references to DelegatingDecompressorFrameListener anywhere in this repository, so this repository does not directly wire the vulnerable decompression helper either.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.135.Final|>=4.2.0.Final|<4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-50560",
+      "description": "Netty is a network application framework for development of protocol servers and clients. Prior to versions 4.1.135.Final and 4.2.15.Final, Netty HTTP/2 max header size handling produces an attack similar to HTTP/2 Rapid Reset: when a client sends the SETTINGS_MAX_HEADER_LIST_SIZE setting, Netty reads the request, proxies it to the origin, attempts to produce a response, and throws an exception while writing the response headers, similar to the HTTP/2 reset attack but with a different on-the-wire signature. Fixed in versions 4.1.135.Final and 4.2.15.Final.",
+      "recommendation": "No action required. Every module resolves netty-codec-http2 past the fixed version, and this repository never wires a Netty HTTP/2 server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every module resolves netty-codec-http2 past the fixed version, and this repository never wires a Netty HTTP/2 server handler.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-563q-j3cm-6jxm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50560",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-563q-j3cm-6jxm",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http2 at or past the 4.1.135.Final/4.2.15.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships exactly the fixed 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). As secondary defense-in-depth, this CVE requires a Netty HTTP/2 server; a source review found no references to DefaultHttp2Connection, Http2Settings, Http2FrameCodec, Http2ConnectionHandler, ServerBootstrap, or NioServerSocketChannel anywhere in this repository, so the vulnerable HTTP/2 server path would not be reachable even independent of version.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http2",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.135.Final|>=4.2.0.Final|<4.2.15.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42250",
+      "description": "bzip2 contains an off-by-one error in the bzip2recover utility. When processing a specially crafted file, the application performs an out-of-bounds write to a global buffer, resulting in memory corruption and a crash (denial of service).",
+      "recommendation": "No action required. Liquibase Secure never invokes the bzip2recover utility or any bzip2 API at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.8,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The advisory is specific to the bzip2recover utility; Liquibase Secure's runtime never invokes that tool or any bzip2 API path that would reach it.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9r29-3vrx-4537",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42250",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This off-by-one flaw is specific to the bzip2recover recovery utility, not the core bzip2 compression library. Liquibase Secure's container only ever execs the Liquibase Java CLI at runtime; a review of the container's runtime path found no invocation of bzip2recover, bzip2, bunzip2, or any bzip2 API. libbz2 ships only as an inherited base-image library dependency.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libbz2-1.0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-45582",
+      "description": "GNU Tar through 1.35 allows file overwrite via directory traversal in crafted TAR archives, with a certain two-step process. First, the victim must extract an archive that contains a ../ symlink to a critical directory. Second, the victim must extract an archive that contains a critical file, specified via a relative pathname that begins with the symlink name and ends with that critical file's name. Here, the extraction follows the symlink and overwrites the critical file. This bypasses the protection mechanism of \"Member name contains '..'\" that would occur for a single TAR archive that attempted to specify the critical file via a ../ approach. For example, the first archive can contain \"x -> ../../../../../home/victim/.ssh\" and the second archive can contain x/authorized_keys. This can affect server applications that automatically extract any number of user-supplied TAR archives, and were relying on the blocking of traversal. This can also affect software installation processes in which \"tar xf\" is run more than once.",
+      "recommendation": "No action required. Liquibase Secure only uses tar once at image build time on its own verified release artifact and never on attacker-supplied runtime input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:C/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires repeated extraction of attacker-supplied TAR archives; Liquibase Secure uses tar only once during image build on a verified release archive and never at container runtime.\n"
+        }
+      ],
+      "cwes": [
+        24
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f93m-9mq4-2fjj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-45582",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports tar 1.35+dfsg-3build1, below Ubuntu's fixed 1.35+dfsg-3ubuntu0.2, but this issue requires extracting attacker-supplied TAR archives more than once into the same directory. Liquibase Secure invokes GNU tar exactly once during image build to unpack its own SHA-256-verified release archive and does not invoke tar at container runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/tar",
+          "versions": [
+            {
+              "range": "vers:deb/<1.35+dfsg-3ubuntu0.2",
               "status": "unaffected"
             }
           ]
@@ -5665,6 +8511,564 @@
       ]
     },
     {
+      "id": "CVE-2025-69720",
+      "description": "The infocmp command-line tool in ncurses before 6.5-20251213 has a stack-based buffer overflow in analyze_string in progs/infocmp.c.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the infocmp utility or process untrusted terminfo data in its stock runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is in the infocmp utility, which the Liquibase Secure build and stock runtime do not invoke.\n"
+        }
+      ],
+      "cwes": [
+        121,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9952-mrqj-h4jh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69720",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libncursesw6 6.4+20240113-1ubuntu2, below Ubuntu's fixed 6.4+20240113-1ubuntu2.1, but this issue is in ncurses' infocmp utility. The stock Liquibase Secure image runs the Liquibase CLI non-interactively, and a review of its build and runtime path found no invocation of infocmp or processing of attacker-supplied termcap or terminfo input.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libncursesw6",
+          "versions": [
+            {
+              "range": "vers:deb/<6.4+20240113-1ubuntu2.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-10536",
+      "description": "A use-after-free vulnerability exists in libcurl when an application configures an HTTP/2 stream-dependency tree via CURLOPT_STREAM_DEPENDS or CURLOPT_STREAM_DEPENDS_E, subsequently invokes curl_easy_reset(), and finally terminates the handle with curl_easy_cleanup(). During this final cleanup phase, libcurl attempts to access and modify an internal structure that was already freed during the reset operation.",
+      "recommendation": "No action required. Liquibase Secure does not call curl or the vulnerable libcurl stream-dependency APIs in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable behavior requires specific libcurl API calls that are absent from Liquibase Secure's build and runtime path.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wjq8-x4qm-6mmh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-10536",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports curl 8.5.0-2ubuntu10.10, below Ubuntu's fixed 8.5.0-2ubuntu10.11, but this issue affects applications that configure libcurl stream dependencies and then reset and clean up the same handle. Liquibase Secure's build path uses wget for downloads, not curl, and a review of the secure-image build and stock runtime path found no use of curl or the affected libcurl APIs.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-11850",
+      "description": "An integer underflow vulnerability was found in MIT krb5 in the berval2tl_data() function in plugins/kdb/ldap/libkdb_ldap/ ldap_principal2.c. The function performs an unsigned subtraction (bv_len - 2) without a prior bounds check. When bv_len is 0 or 1, the subtraction wraps to a large value which is then truncated to uint16_t. The subsequent malloc succeeds and memcpy reads up to 65534 bytes from a 0-1 byte buffer, resulting in a heap out-of-bounds read. The attack vector involves a malicious or compromised LDAP KDB backend returning a krbExtraData attribute with bv_len < 2, triggering the underflow when the KDC or kadmind reads principal data.",
+      "recommendation": "No action required. The stock Liquibase Secure image is not deployed as a Kerberos KDC or kadmind with an LDAP KDB backend.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a Kerberos KDC or kadmind using the LDAP KDB backend, which is not part of the Liquibase Secure deployment model.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-85rq-mqr4-hjw7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11850",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this integer-underflow flaw is in MIT krb5's LDAP KDB backend when a KDC or kadmind reads malformed krbExtraData from a malicious or compromised LDAP backend. Liquibase Secure ships the package only as part of the inherited base image and runs the Liquibase CLI, not a Kerberos KDC or kadmind with an LDAP KDB backend.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-15146",
+      "description": "GNU Wget does not validate the IP address provided by an FTP PASV response while operating in FTP passive mode. A malicious FTP server, or an HTTP server that redirects to an FTP URL, can exploit this behavior to redirect Wget's data connection to an arbitrary IP address and port. This allows an attacker to forge server-side requests from the machine running Wget, potentially accessing localhost services or internal network resources.",
+      "recommendation": "No action required. Liquibase Secure uses wget only for fixed HTTPS downloads during image build and not in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable behavior requires Wget FTP passive-mode transfers, while Liquibase Secure uses wget only for fixed HTTPS downloads at image build time and not at runtime.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-77jw-q7w3-q2hw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15146",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports wget 1.21.4-1ubuntu4.1, below Ubuntu's fixed 1.21.4-1ubuntu4.4, but this issue requires Wget to follow an attacker-controlled FTP passive-mode data connection. Liquibase Secure uses wget only during image build to fetch its release tarball and the lpm zip over HTTPS, and it does not invoke wget at container runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/wget",
+          "versions": [
+            {
+              "range": "vers:deb/<1.21.4-1ubuntu4.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40355",
+      "description": "In MIT Kerberos 5 before 1.22.3, there is a NULL pointer dereference if an application calls gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. An unauthenticated remote attacker can trigger this, causing the process to terminate in parse_nego_message.",
+      "recommendation": "No action required. The stock Liquibase Secure image does not operate as a GSS acceptor service with NegoEx enabled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a GSS acceptor service with NegoEx configured, which is outside the Liquibase Secure runtime model.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8qgv-wm66-hrmc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40355",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this issue requires an application to act as a GSS acceptor by calling gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. Liquibase Secure is a client-side CLI image and a review of its build and stock runtime path found no use of gss_accept_sec_context or NegoEx.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40356",
+      "description": "In MIT Kerberos 5 before 1.22.3, there is an integer underflow and resultant out-of-bounds read if an application calls gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. An unauthenticated remote attacker can trigger this, possibly causing the process to terminate in parse_message.",
+      "recommendation": "No action required. The stock Liquibase Secure image does not operate as a GSS acceptor service with NegoEx enabled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a GSS acceptor service with NegoEx configured, which is outside the Liquibase Secure runtime model.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f7p3-6rhj-p7jv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40356",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libgssapi-krb5-2 1.20.1-6ubuntu2.6, below Ubuntu's fixed 1.20.1-6ubuntu2.7, but this issue requires an application to act as a GSS acceptor by calling gss_accept_sec_context() on a system with a NegoEx mechanism registered in /etc/gss/mech. Liquibase Secure is a client-side CLI image and a review of its build and stock runtime path found no use of gss_accept_sec_context or NegoEx.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgssapi-krb5-2",
+          "versions": [
+            {
+              "range": "vers:deb/<1.20.1-6ubuntu2.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-4046",
+      "description": "The iconv() function in the GNU C Library versions 2.43 and earlier may crash due to an assertion failure when converting inputs from the IBM1390 or IBM1399 character sets, which may be used to remotely crash an application. This vulnerability can be trivially mitigated by removing the IBM1390 and IBM1399 character sets from systems that do not need them.",
+      "recommendation": "No action required. The stock Liquibase Secure runtime does not process IBM1390 or IBM1399 input through glibc iconv.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires IBM1390 or IBM1399 iconv processing, which is absent from the stock Liquibase Secure build and runtime path.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g7c4-wv7q-gcc6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4046",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libc-bin 2.39-0ubuntu8.7, below Ubuntu's fixed 2.39-0ubuntu8.8, but this issue requires an application to process IBM1390 or IBM1399 encoded input through glibc's iconv conversion path. The stock Liquibase Secure runtime is the Liquibase Java CLI, and a review of its build and runtime path found no references to iconv or those IBM1390 or IBM1399 code pages.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41991",
+      "description": "GNU gzip contains a vulnerability in the gzexe utility related to insecure temporary file handling. When the mktemp utility is not available in the user's PATH, gzexe falls back to constructing a temporary file path based solely on the process ID. This predictable filename is created without exclusive access or existence checks. A local attacker can pre-create the predicted temporary file path as a symbolic link pointing to an arbitrary file writable by the victim. When gzexe runs, it follows the symlink and overwrites the target file.",
+      "recommendation": "No action required. Liquibase Secure never invokes gzexe in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is specific to the gzexe wrapper, which Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        377
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-67v8-88jf-4x6q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41991",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue is specific to the gzexe wrapper when it falls back to a predictable temporary filename. Liquibase Secure does not invoke gzexe or the gzip utility in its build or stock runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gzip",
+          "versions": [
+            {
+              "range": "vers:deb/<1.12-1ubuntu3.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41992",
+      "description": "GNU gzip contains a global buffer overflow vulnerability in the LZH decompression logic caused by improper reuse of shared global state between different decompression formats within a single execution. GNU gzip maintains a global array that is shared across the LZ77, LZW, and LZH decompression routines and is not reinitialized between files processed in the same invocation. By decompressing a specially crafted LZW file followed by a specially crafted LZH file in a single gzip -d command, an attacker can poison the shared global state and subsequently trigger an out-of-bounds read in the LZH decoder.",
+      "recommendation": "No action required. Liquibase Secure never invokes the gzip utility in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a specific gzip CLI decompression sequence that Liquibase Secure never executes in its build or runtime path.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qxh4-rprf-2mmj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41992",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue requires a single gzip -d invocation to process a crafted LZW file and then a crafted LZH file so shared decoder state carries across formats. Liquibase Secure does not invoke the gzip utility in its build or stock runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gzip",
+          "versions": [
+            {
+              "range": "vers:deb/<1.12-1ubuntu3.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8924",
+      "description": "A flaw in curl's cookie parsing logic allows a malicious HTTP server to set \"super cookies\" that bypass the Public Suffix List check. This enables an attacker-controlled origin to inject cookies that curl subsequently scopes and transmits to unrelated third-party domains.",
+      "recommendation": "No action required. Liquibase Secure does not use curl's cookie-handling path in its stock build or runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke curl's cookie storage and replay path, which the stock image does not use.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://curl.se/docs/CVE-2026-8924.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8924",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.25, but this issue requires Liquibase Secure to act as a curl HTTP client that parses and stores attacker-controlled cookies and later reuses them against unrelated domains. Liquibase Secure's build downloads use wget, and its stock runtime path invokes Liquibase rather than curl, so curl's cookie parsing, Public Suffix List, and cookie jar handling are not exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42501",
       "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
       "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",
@@ -5710,6 +9114,427 @@
           "versions": [
             {
               "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8925",
+      "description": "The curl logic that works with SASL authentication could end up cleaning up the GSASL context twice without clearing the pointer in between, making it free() the same pointer twice.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl SASL authentication path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a libcurl SASL code path that Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        415
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p8x5-c6c9-8cwx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8925",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8925.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to use SASL authentication and exercise the GSASL cleanup path on a curl handle. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to GSASL, SASL-authenticated curl flows, or libcurl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8927",
+      "description": "When reusing a libcurl handle for sequential transfers driven by environment-variable proxy configuration, libcurl fails to clear the proxy authentication state between requests. Specifically, if the initial transfer authenticates against proxyA using Digest auth, a subsequent transfer routed through proxyB erroneously leaks the Proxy-Authorization header intended solely for proxyA.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any proxy-authenticated libcurl request path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires proxy-authenticated libcurl handle reuse that Liquibase Secure never performs; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        294
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jr4f-4564-w3mr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8927",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8927.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to reuse a handle across sequential transfers that pick up proxy settings from environment variables and negotiate Digest authentication to multiple proxies. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to proxy-authenticated libcurl flows or related curl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8932",
+      "description": "libcurl would reuse a previously created connection even when some mTLS config related option had been changed that should have prohibited reuse. libcurl keeps previously used connections in a connection pool for subsequent transfers to reuse if one of them matches the setup. However, some TLS settings related to client certificates were left out from the configuration match checks, making them match too easily. In particular options related to the private key.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl mutual-TLS connection-reuse path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a libcurl mutual-TLS connection-reuse path that Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        305
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m7xm-hf59-w6rj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8932",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-8932.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to reuse pooled connections while changing mutual-TLS client-certificate settings. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to libcurl mutual-TLS option usage or connection-pool handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.27",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-9076",
+      "description": "Issue summary: When CMS password-based decryption (RFC 3211 / PWRI key unwrap) processes attacker-supplied CMS data, an attacker-chosen stream-mode KEK cipher can trigger a heap out-of-bounds read in kek_unwrap_key(). Impact summary: A heap buffer over-read may trigger a crash which leads to Denial of Service for an application if the input buffer ends at a memory page boundary and the following page is unmapped. There is no information disclosure as the over-read bytes are not revealed to the attacker.",
+      "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMS password-based decryption at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL CMS password-based decryption on attacker-supplied input, a path Liquibase Secure never invokes.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-q98x-73c3-57gj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9076",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260609.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE affects OpenSSL CMS password-based decryption when attacker-supplied CMS data reaches CMS_decrypt() or CMS_decrypt_set1_password(). Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, CMS_decrypt_set1_password, PWRI key unwrapping, S/MIME, or PKCS#7 processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS decryption path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-9547",
+      "description": "When a libcurl-based application performs transfers via SCP:// or SFTP:// and utilizes the CURLOPT_SSH_KEYFUNCTION callback, it may silently accept an untrusted server. This vulnerability occurs when a server presents a host key type that does not match the specific key type already recorded for that host in the known_hosts file. Instead of rejecting the mismatch, the callback mechanism fails to properly enforce the restriction, allowing the connection to succeed without warning and risking a potential man-in-the-middle attack.",
+      "recommendation": "No action required. Liquibase Secure does not invoke curl or any libcurl SCP/SFTP host-key validation path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl SCP/SFTP handling with the CURLOPT_SSH_KEYFUNCTION callback, a path Liquibase Secure never invokes; curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xq9p-gxg6-f7q6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9547",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-9547.html",
+          "title": "curl Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This CVE requires a libcurl-based application to perform SCP or SFTP transfers and register the CURLOPT_SSH_KEYFUNCTION callback so host-key validation flows through the vulnerable known_hosts handling. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to SCP, SFTP, CURLOPT_SSH_KEYFUNCTION, or known_hosts callback handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42585",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty incorrectly parses malformed Transfer-Encoding, enabling request smuggling attacks. This vulnerability is fixed in 4.2.13.Final and 4.1.133.Final.",
+      "recommendation": "No action required. Liquibase Secure does not run a Netty HTTP server, and the shipped netty-codec-http version is newer than the fixed release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The affected parser is only relevant for inbound Netty HTTP server traffic, and Liquibase uses Netty only as a transitive outbound client dependency.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-38f8-5428-x5cv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42585",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-38f8-5428-x5cv",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): every bundled jar resolves netty-codec-http past the 4.1.133.Final/4.2.13.Final fix line (the AWS extension and Cassandra extension ship 4.1.136.Final, the Azure extension ships 4.1.135.Final, and the Couchbase client's shaded copy ships 4.2.16.Final). Independently, this CVE is a server-side malformed Transfer-Encoding parsing issue. Liquibase uses Netty only as a transitive outbound client dependency, and a source review found no references to HttpObjectDecoder, HttpServerCodec, ServerBootstrap, or NioServerSocketChannel anywhere in this repository. The vulnerable request-smuggling parser path is therefore not reachable even independent of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-codec-http",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.133.Final|>=4.2.0.Alpha1|<4.2.13.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42578",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty's HttpProxyHandler constructs HTTP CONNECT requests with header validation explicitly disabled. The newInitialMessage() method creates headers using DefaultHttpHeadersFactory.headersFactory().withValidation(false), then adds user-provided outboundHeaders without any CRLF validation. This allows an attacker who can influence the outbound headers to inject arbitrary HTTP headers into the CONNECT request sent to the proxy server. This vulnerability is fixed in 4.2.13.Final and 4.1.133.Final.",
+      "recommendation": "No action required. Liquibase Secure does not wire Netty's HttpProxyHandler path, and the shipped netty-handler-proxy version is newer than the fixed release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase to construct CONNECT requests through Netty's HttpProxyHandler with attacker-controlled headers, a path this repository never wires.\n"
+        }
+      ],
+      "cwes": [
+        113,
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-45q3-82m4-75jr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42578",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-45q3-82m4-75jr",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): netty-handler-proxy is bundled only by the Azure extension and the Couchbase client, both of which ship 4.1.135.Final/4.2.16.Final, past the 4.1.133.Final/4.2.13.Final fix line (the AWS extension and Cassandra extension do not bundle this artifact at all). Independently, this CVE requires code to construct outbound HTTP CONNECT requests through HttpProxyHandler with attacker-influenced outbound headers. A source review found no references to HttpProxyHandler, DefaultHttpRequest, DefaultFullHttpRequest, setUri(), or HttpRequestEncoder anywhere in this repository, so the vulnerable proxy-header path is not reachable even independent of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler-proxy",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.133.Final|>=4.2.0.Alpha1|<4.2.13.Final",
               "status": "unaffected"
             }
           ]
@@ -7963,8 +11788,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Remediated. This affected bcprov-jdk18on from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle BC-JAVA GOST 28147 CTR mode keystream reuse affects bcprov-jdk18on versions from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1298), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, and GOST28147ParameterSpec returned zero hits.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "This affected bcprov-jdk18on from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed range, as defense-in-depth. Independent of version, the vulnerable code path is not reachable from Liquibase code: a source review found zero references to G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, or GOST28147ParameterSpec anywhere in this codebase, so the GOST 28147 CTR mode cipher classes required to reach this vulnerability are never invoked.",
+        "justification": "code_not_reachable",
         "response": [
           "update"
         ],
@@ -8027,8 +11852,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle lazy ASN.1 sequence forcing resets nesting-depth guard affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, and LazyConstructionEnumeration also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which is a different package namespace than the standalone bcprov-jdk18on artifact reported by the scanner.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "This affected bcprov-jdk18on before 1.85. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed version, as defense-in-depth. Independent of version, a source review found zero direct `import org.bouncycastle.` usage anywhere in this codebase, and zero references to LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, or LazyConstructionEnumeration. The only Bouncy Castle usage in production code is Snowflake private-key loading through a shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace — a different package entirely from the standalone bcprov-jdk18on artifact this CVE affects, and one that never touches the vulnerable ASN.1 parsing classes.",
+        "justification": "code_not_reachable",
         "response": [
           "update"
         ],

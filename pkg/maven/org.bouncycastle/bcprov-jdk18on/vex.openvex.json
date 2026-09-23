@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-6e59b9a615a1cf92cb8cc9dfe84cd86e7e6f351a71175a11e6d374fb465dd73e",
+  "@id": "merged-vex-33f3ca5230a383d88729f31b54e680468e7848cecea71471cf36a0be1402ef1b",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:33:10.142580373Z",
+  "timestamp": "2026-09-23T18:17:03.096102693Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-574f-3g2m-x479"
         ]
       },
-      "timestamp": "2026-09-21T18:33:08.096180257Z",
+      "timestamp": "2026-09-23T18:16:58.59463926Z",
       "products": [
         {
           "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
@@ -20,8 +20,8 @@
       ],
       "status": "not_affected",
       "status_notes": "Use of a Broken or Risky Cryptographic Algorithm vulnerability in Legion of the Bouncy Castle Inc. BC-JAVA bcprov on all (core modules).\nThis vulnerability is associated with program files G3413CTRBlockCipher.\nThis issue affects BC-JAVA: from 1.59 before 1.80.2, from 1.81 before 1.81.1, from 1.82 before 1.84.",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Remediated. This affected bcprov-jdk18on from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle BC-JAVA GOST 28147 CTR mode keystream reuse affects bcprov-jdk18on versions from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1298), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, and GOST28147ParameterSpec returned zero hits."
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This affected bcprov-jdk18on from 1.59 before 1.80.2, from 1.81 before 1.81.1, and from 1.82 before 1.84. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed range, as defense-in-depth. Independent of version, the vulnerable code path is not reachable from Liquibase code: a source review found zero references to G3413CTRBlockCipher, GOST28147, GOST, G3413, CTRBlockCipher, GOST28147Engine, or GOST28147ParameterSpec anywhere in this codebase, so the GOST 28147 CTR mode cipher classes required to reach this vulnerability are never invoked."
     },
     {
       "vulnerability": {
@@ -30,7 +30,7 @@
           "GHSA-qp49-qgx5-5m26"
         ]
       },
-      "timestamp": "2026-09-21T18:33:08.224738146Z",
+      "timestamp": "2026-09-23T18:16:58.760638505Z",
       "products": [
         {
           "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
@@ -38,8 +38,8 @@
       ],
       "status": "not_affected",
       "status_notes": "In Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle lazy ASN.1 sequence forcing resets nesting-depth guard affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, and LazyConstructionEnumeration also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which is a different package namespace than the standalone bcprov-jdk18on artifact reported by the scanner."
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This affected bcprov-jdk18on before 1.85. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed version, as defense-in-depth. Independent of version, a source review found zero direct `import org.bouncycastle.` usage anywhere in this codebase, and zero references to LazyEncodedSequence, ASN1StreamParser, ASN1InputStream, BERSequenceParser, DLSequenceParser, or LazyConstructionEnumeration. The only Bouncy Castle usage in production code is Snowflake private-key loading through a shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace — a different package entirely from the standalone bcprov-jdk18on artifact this CVE affects, and one that never touches the vulnerable ASN.1 parsing classes."
     },
     {
       "vulnerability": {
@@ -48,7 +48,7 @@
           "GHSA-p93r-85wp-75v3"
         ]
       },
-      "timestamp": "2026-09-21T18:33:07.965859793Z",
+      "timestamp": "2026-09-23T18:16:58.429378758Z",
       "products": [
         {
           "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
@@ -66,7 +66,7 @@
           "GHSA-9pwp-9qqc-pr26"
         ]
       },
-      "timestamp": "2026-09-21T18:33:08.351888268Z",
+      "timestamp": "2026-09-23T18:16:58.926512046Z",
       "products": [
         {
           "@id": "pkg:maven/org.bouncycastle/bcprov-jdk18on"
@@ -74,8 +74,8 @@
       ],
       "status": "not_affected",
       "status_notes": "In Bouncy Castle for Java before 1.85, Name Constraints bypass via trailing dot in rfc822Name and URI. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Remediated. This affected bcprov-jdk18on before 1.85; Liquibase Secure now ships org.bouncycastle:bcprov-jdk18on:1.85 via the managed bouncycastle.version pin in the root pom.xml, so the vulnerable code is not present in the distribution. The prior code-not-reachable analysis is retained below for the versions that shipped 1.78.1. [TECHOPS-1130]\nBouncy Castle Name Constraints bypass via trailing dot in rfc822Name and URI affects bcprov-jdk18on before 1.85. Liquibase Secure distribution includes org.bouncycastle:bcprov-jdk18on:1.78.1 (core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:1141), which is in the affected range. However, grep for direct `import org.bouncycastle.` usage across Java sources returned zero hits, and focused greps for NameConstraints, rfc822Name, GeneralSubtree, and PKIXNameConstraintValidator also returned zero hits. The only Bouncy Castle usage in production code is Snowflake private-key loading through the shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace in pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:7, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:55, pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:57, and pro/src/main/java/com/datical/liquibase/ext/util/SnowflakeProJdbcConnectionUtil.java:73, which does not exercise certificate name-constraint validation or the standalone bcprov-jdk18on classes reported by the scanner."
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This affected bcprov-jdk18on before 1.85. This repository now ships org.bouncycastle:bcprov-jdk18on:1.85, past the fixed version, as defense-in-depth. Independent of version, a source review found zero direct `import org.bouncycastle.` usage anywhere in this codebase, and zero references to NameConstraints, rfc822Name, GeneralSubtree, or PKIXNameConstraintValidator. The only Bouncy Castle usage in production code is Snowflake private-key loading through a shaded `net.snowflake.client.jdbc.internal.org.bouncycastle.*` namespace — a different package entirely from the standalone bcprov-jdk18on artifact this CVE affects, and one that never exercises certificate name-constraint validation."
     }
   ]
 }

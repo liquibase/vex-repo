@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-0527026bfe5a7ee8f68c95521f0a48a96e2b4af2e4c9eacc92dfd3226c1db113",
+  "@id": "merged-vex-348a1ea871dbd767c06944d1bcd3619daaac7e8ba667a6908688f3814c9e5910",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:28:05.862510745Z",
+  "timestamp": "2026-09-23T18:06:48.063759055Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-6141"
       },
-      "timestamp": "2026-09-21T18:28:05.862512328Z",
+      "timestamp": "2026-09-23T18:06:45.997017518Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libncursesw6"
@@ -19,6 +19,21 @@
       "status_notes": "GNU ncurses up to 6.5-20250322 has a stack-based buffer overflow in postprocess_termcap (tinfo/parse_entry.c) due to improper bounds checking during termcap entry processing, allowing a local attacker to trigger the overflow via a crafted termcap file, leading to denial of service.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
       "impact_statement": "A stack-based buffer overflow in ncurses' termcap entry parsing requires a local attacker able to supply a crafted termcap file or TERM/TERMINFO value processed by an interactive terminal session. The Liquibase Secure container runs the CLI non-interactively via its entrypoint, without accepting untrusted local termcap input; TERM is set by the container orchestration layer, not by an untrusted local actor. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships libncursesw6 6.4+20240113-1ubuntu2.2, the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69720"
+      },
+      "timestamp": "2026-09-23T18:06:47.643209207Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libncursesw6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The infocmp command-line tool in ncurses before 6.5-20251213 has a stack-based buffer overflow in analyze_string in progs/infocmp.c.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libncursesw6 6.4+20240113-1ubuntu2, below Ubuntu's fixed 6.4+20240113-1ubuntu2.1, but this issue is in ncurses' infocmp utility. The stock Liquibase Secure image runs the Liquibase CLI non-interactively, and a review of its build and runtime path found no invocation of infocmp or processing of attacker-supplied termcap or terminfo input."
     }
   ]
 }

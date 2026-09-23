@@ -1,0 +1,68 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-42578",
+      "description": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty's HttpProxyHandler constructs HTTP CONNECT requests with header validation explicitly disabled. The newInitialMessage() method creates headers using DefaultHttpHeadersFactory.headersFactory().withValidation(false), then adds user-provided outboundHeaders without any CRLF validation. This allows an attacker who can influence the outbound headers to inject arbitrary HTTP headers into the CONNECT request sent to the proxy server. This vulnerability is fixed in 4.2.13.Final and 4.1.133.Final.",
+      "recommendation": "No action required. Liquibase Secure does not wire Netty's HttpProxyHandler path, and the shipped netty-handler-proxy version is newer than the fixed release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase to construct CONNECT requests through Netty's HttpProxyHandler with attacker-controlled headers, a path this repository never wires.\n"
+        }
+      ],
+      "cwes": [
+        113,
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-45q3-82m4-75jr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42578",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/netty/netty/security/advisories/GHSA-45q3-82m4-75jr",
+          "title": "Netty Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Verified against the actual published Liquibase Secure release (not just this source tree): netty-handler-proxy is bundled only by the Azure extension and the Couchbase client, both of which ship 4.1.135.Final/4.2.16.Final, past the 4.1.133.Final/4.2.13.Final fix line (the AWS extension and Cassandra extension do not bundle this artifact at all). Independently, this CVE requires code to construct outbound HTTP CONNECT requests through HttpProxyHandler with attacker-influenced outbound headers. A source review found no references to HttpProxyHandler, DefaultHttpRequest, DefaultFullHttpRequest, setUri(), or HttpRequestEncoder anywhere in this repository, so the vulnerable proxy-header path is not reachable even independent of version.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.netty/netty-handler-proxy",
+          "versions": [
+            {
+              "range": "vers:maven/<4.1.133.Final|>=4.2.0.Alpha1|<4.2.13.Final",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

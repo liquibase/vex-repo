@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-8536712cfc17afcfe45d4fcd7b42d9ef33fa97d6dcd6098f1579c07c419391f0",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:04:56.071056301Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41991"
+      },
+      "timestamp": "2026-09-23T18:04:55.691223446Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/gzip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU gzip contains a vulnerability in the gzexe utility related to insecure temporary file handling. When the mktemp utility is not available in the user's PATH, gzexe falls back to constructing a temporary file path based solely on the process ID. This predictable filename is created without exclusive access or existence checks. A local attacker can pre-create the predicted temporary file path as a symbolic link pointing to an arbitrary file writable by the victim. When gzexe runs, it follows the symlink and overwrites the target file.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue is specific to the gzexe wrapper when it falls back to a predictable temporary filename. Liquibase Secure does not invoke gzexe or the gzip utility in its build or stock runtime path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41992"
+      },
+      "timestamp": "2026-09-23T18:04:55.856560597Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/gzip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU gzip contains a global buffer overflow vulnerability in the LZH decompression logic caused by improper reuse of shared global state between different decompression formats within a single execution. GNU gzip maintains a global array that is shared across the LZ77, LZW, and LZH decompression routines and is not reinitialized between files processed in the same invocation. By decompressing a specially crafted LZW file followed by a specially crafted LZH file in a single gzip -d command, an attacker can poison the shared global state and subsequently trigger an out-of-bounds read in the LZH decoder.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports gzip 1.12-1ubuntu3.1, below Ubuntu's fixed 1.12-1ubuntu3.2, but this issue requires a single gzip -d invocation to process a crafted LZW file and then a crafted LZH file so shared decoder state carries across formats. Liquibase Secure does not invoke the gzip utility in its build or stock runtime path."
+    }
+  ]
+}

@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-9c5fbc6c860647118efb5a91d99dc1d8887ad69cfab1ce3b824a5af2175e4246",
+  "@id": "merged-vex-3894b9bd5cea745d13c5be42d873cb12a216aa0be624ec3f454e36875387c4d3",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:28:13.522351589Z",
+  "timestamp": "2026-09-23T18:07:02.687437356Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-13757"
       },
-      "timestamp": "2026-09-21T18:28:13.52235743Z",
+      "timestamp": "2026-09-23T18:07:00.496521022Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libp11-kit0"
@@ -19,6 +19,21 @@
       "status_notes": "A flaw was found in p11-kit. The RPC message attribute parsing functions form a mutually-recursive call chain with no recursion depth limit when processing nested CKA_WRAP_TEMPLATE, CKA_UNWRAP_TEMPLATE, and CKA_DERIVE_TEMPLATE attributes. An unauthenticated attacker with local access to the p11-kit RPC Unix domain socket can send a specially crafted request with deeply nested template attributes, causing stack exhaustion and crashing the p11-kit server process and its dependent services.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
       "impact_statement": "The reported package is inherited from the container base image. Exploitation requires a running p11-kit RPC Unix domain socket and local access to that service. Liquibase Secure does not start p11-kit or any auxiliary daemon: the container entrypoint only execs the Liquibase CLI, and a source review of the Dockerfiles and entrypoint scripts found no reference to p11-kit or pkcs11. Without a p11-kit RPC service/socket in the deployed container, the required runtime environment is absent."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18938"
+      },
+      "timestamp": "2026-09-23T18:07:00.940646368Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libp11-kit0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in p11-kit. A local attacker, or one with equivalent access to a reachable RPC channel, could exploit an integer overflow in nested attribute parsing and cause a heap out-of-bounds write that crashes the p11-kit RPC parsing process. This vulnerability is only exploitable on 32-bit systems.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "This flaw is in p11-kit's RPC message parser and requires a reachable p11-kit RPC channel. The stock Liquibase Secure container does not start p11-kit or any auxiliary daemon: the entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no p11-kit or pkcs11 references. Without a p11-kit RPC service/socket, the required runtime environment is absent."
     }
   ]
 }

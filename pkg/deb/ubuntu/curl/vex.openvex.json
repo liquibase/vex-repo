@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-de5e590055e32acb8344ae06ad3583b0d6ccd5b3c3a6612e32d368849d6d5ddc",
+  "@id": "merged-vex-0fbdc561662684cd00d74feb49e98c0f34b1528833caf8aa0b222d04f71b9c0b",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-21T18:26:09.517204946Z",
+  "timestamp": "2026-09-23T18:01:54.324076363Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-10536",
+        "aliases": [
+          "CURL-CVE-2026-10536"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:53.244937046Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A use-after-free vulnerability exists in libcurl when an application configures an HTTP/2 stream-dependency tree via CURLOPT_STREAM_DEPENDS or CURLOPT_STREAM_DEPENDS_E, subsequently invokes curl_easy_reset(), and finally terminates the handle with curl_easy_cleanup(). During this final cleanup phase, libcurl attempts to access and modify an internal structure that was already freed during the reset operation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 8.5.0-2ubuntu10.10, below Ubuntu's fixed 8.5.0-2ubuntu10.11, but this issue affects applications that configure libcurl stream dependencies and then reset and clean up the same handle. Liquibase Secure's build path uses wget for downloads, not curl, and a review of the secure-image build and stock runtime path found no use of curl or the affected libcurl APIs."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-11856",
@@ -12,7 +30,7 @@
           "CURL-CVE-2026-11856"
         ]
       },
-      "timestamp": "2026-09-21T18:26:09.517206619Z",
+      "timestamp": "2026-09-23T18:01:50.903794402Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -22,6 +40,186 @@
       "status_notes": "Using libcurl to do a transfer to a specific HTTP origin with Digest authentication and then changing the origin to a different one for a second transfer while reusing the same handle causes libcurl to wrongly pass on the Authorization header field meant for the first origin to the second. This flaw does not affect the curl command-line tool.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "This flaw is in libcurl's handle-reuse behavior: reusing the same handle for Digest-authenticated transfers to two different origins can leak the first origin's Authorization header to the second. Per curl's own advisory, this does not affect the curl command-line tool at all — only applications that reuse a libcurl handle across origins. The container's build steps use wget, not curl, for downloads, and the runtime entrypoint execs only the Liquibase CLI — a source review found no invocation of curl anywhere in this repository's Docker build or runtime path. This OS package's version is not pinned by this repository — it tracks whatever the unversioned eclipse-temurin:21-jre-noble base image tag resolves to at build time. Confirmed by pulling the current base image directly and checking installed package versions (not from repo-pinned config), it ships curl 8.5.0-2ubuntu10.13, newer than the fixed release, as additional defense-in-depth."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-13608",
+        "aliases": [
+          "CURL-CVE-2026-13608"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:52.134760049Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw in the libcurl SASL negotiation for LDAP authentication allows an incomplete handshake sequence to be misinterpreted as a successful cryptographic verification. An attacker executing a Man-in-the-Middle (MITM) attack can inject a premature or shortcut response that bypasses complete peer validation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw requires an application to use libcurl's SASL negotiation for LDAP authentication. Liquibase Secure's runtime process tree never links against libcurl and never performs LDAP authentication via libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18924",
+        "aliases": [
+          "CURL-CVE-2026-18924"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:51.637535837Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw in libcurl's handling of HTTP/2 Server Push streams, when the parent handle is set to share connections with other handles, can lead to use-after-free in the cleanup process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This use-after-free requires an application to configure libcurl handles to share connections while processing HTTP/2 Server Push streams. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-19931",
+        "aliases": [
+          "CURL-CVE-2026-19931"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:51.472520071Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw in libcurl makes it wrongly reuse an HTTP connection setup for a given hostname using Negotiate authentication, when the initial request is done using empty credentials. This can make user B's request get sent over user A's previously authenticated connection.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw is a libcurl API-level connection-reuse bug: an application linked against libcurl must issue Negotiate-authenticated requests with empty initial credentials for the vulnerable connection-pooling logic to trigger. The Liquibase Secure container entrypoint execs only the Liquibase Java CLI; a review of the JVM's own native library dependencies and the container's runtime entrypoint found no linkage against libcurl anywhere in the process tree. curl ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-80230",
+        "aliases": [
+          "CURL-CVE-2026-80230"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:51.967202961Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When CURLOPT_PINNEDPUBLICKEY is configured alongside options that disable standard peer verification (CURLOPT_SSL_VERIFYPEER = 0 and CURLOPT_SSL_VERIFYHOST = 0), libcurl fails to enforce public key pinning on connections established without a presented server certificate, allowing unauthenticated connections to succeed when they should be rejected.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw requires an application to configure libcurl with CURLOPT_PINNEDPUBLICKEY alongside disabled peer verification options. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-82209",
+        "aliases": [
+          "CURL-CVE-2026-82209"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:51.801220502Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This flaw requires an application to build libcurl with libpsl support and process attacker-controlled Set-Cookie responses. Liquibase Secure's runtime process tree never links against libcurl; curl ships only as an inherited base-image package and is never invoked at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8924",
+        "aliases": [
+          "CURL-CVE-2026-8924"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:53.58159718Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw in curl's cookie parsing logic allows a malicious HTTP server to set \"super cookies\" that bypass the Public Suffix List check. This enables an attacker-controlled origin to inject cookies that curl subsequently scopes and transmits to unrelated third-party domains.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.25, but this issue requires Liquibase Secure to act as a curl HTTP client that parses and stores attacker-controlled cookies and later reuses them against unrelated domains. Liquibase Secure's build downloads use wget, and its stock runtime path invokes Liquibase rather than curl, so curl's cookie parsing, Public Suffix List, and cookie jar handling are not exercised."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8925",
+        "aliases": [
+          "CURL-CVE-2026-8925"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:53.742500602Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The curl logic that works with SASL authentication could end up cleaning up the GSASL context twice without clearing the pointer in between, making it free() the same pointer twice.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to use SASL authentication and exercise the GSASL cleanup path on a curl handle. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to GSASL, SASL-authenticated curl flows, or libcurl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8927",
+        "aliases": [
+          "CURL-CVE-2026-8927"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:53.906414013Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When reusing a libcurl handle for sequential transfers driven by environment-variable proxy configuration, libcurl fails to clear the proxy authentication state between requests. Specifically, if the initial transfer authenticates against proxyA using Digest auth, a subsequent transfer routed through proxyB erroneously leaks the Proxy-Authorization header intended solely for proxyA.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to reuse a handle across sequential transfers that pick up proxy settings from environment variables and negotiate Digest authentication to multiple proxies. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to proxy-authenticated libcurl flows or related curl option usage in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8932",
+        "aliases": [
+          "CURL-CVE-2026-8932"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:54.069370838Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libcurl would reuse a previously created connection even when some mTLS config related option had been changed that should have prohibited reuse. libcurl keeps previously used connections in a connection pool for subsequent transfers to reuse if one of them matches the setup. However, some TLS settings related to client certificates were left out from the configuration match checks, making them match too easily. In particular options related to the private key.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to reuse pooled connections while changing mutual-TLS client-certificate settings. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to libcurl mutual-TLS option usage or connection-pool handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-9547",
+        "aliases": [
+          "CURL-CVE-2026-9547"
+        ]
+      },
+      "timestamp": "2026-09-23T18:01:54.255258786Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When a libcurl-based application performs transfers via SCP:// or SFTP:// and utilizes the CURLOPT_SSH_KEYFUNCTION callback, it may silently accept an untrusted server. This vulnerability occurs when a server presents a host key type that does not match the specific key type already recorded for that host in the known_hosts file. Instead of rejecting the mismatch, the callback mechanism fails to properly enforce the restriction, allowing the connection to succeed without warning and risking a potential man-in-the-middle attack.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to perform SCP or SFTP transfers and register the CURLOPT_SSH_KEYFUNCTION callback so host-key validation flows through the vulnerable known_hosts handling. Liquibase Secure's stock container does not invoke curl for its own build or runtime operations, and a source review found no references to SCP, SFTP, CURLOPT_SSH_KEYFUNCTION, or known_hosts callback handling in the product runtime path. curl is inherited from the base image only, so the vulnerable libcurl path is not reachable from Liquibase Secure."
     }
   ]
 }

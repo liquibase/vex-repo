@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-6a295edbfaa4ba0c3913fee80e54c7b8fac620ea46217830b2d6b63d5b6e8734",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-23T18:14:27.367370195Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42578",
+        "aliases": [
+          "GHSA-45q3-82m4-75jr"
+        ]
+      },
+      "timestamp": "2026-09-23T18:14:27.367371648Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.netty/netty-handler-proxy"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Netty is an asynchronous, event-driven network application framework. Prior to 4.2.13.Final and 4.1.133.Final, Netty's HttpProxyHandler constructs HTTP CONNECT requests with header validation explicitly disabled. The newInitialMessage() method creates headers using DefaultHttpHeadersFactory.headersFactory().withValidation(false), then adds user-provided outboundHeaders without any CRLF validation. This allows an attacker who can influence the outbound headers to inject arbitrary HTTP headers into the CONNECT request sent to the proxy server. This vulnerability is fixed in 4.2.13.Final and 4.1.133.Final.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Verified against the actual published Liquibase Secure release (not just this source tree): netty-handler-proxy is bundled only by the Azure extension and the Couchbase client, both of which ship 4.1.135.Final/4.2.16.Final, past the 4.1.133.Final/4.2.13.Final fix line (the AWS extension and Cassandra extension do not bundle this artifact at all). Independently, this CVE requires code to construct outbound HTTP CONNECT requests through HttpProxyHandler with attacker-influenced outbound headers. A source review found no references to HttpProxyHandler, DefaultHttpRequest, DefaultFullHttpRequest, setUri(), or HttpRequestEncoder anywhere in this repository, so the vulnerable proxy-header path is not reachable even independent of version."
+    }
+  ]
+}
