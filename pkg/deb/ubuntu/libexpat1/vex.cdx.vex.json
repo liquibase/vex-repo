@@ -837,6 +837,51 @@
       ]
     },
     {
+      "id": "CVE-2026-93990",
+      "description": "Expat through 2.8.4 fails to validate low surrogates following high surrogates in UTF-16 input, allowing malformed UTF-16 sequences to be accepted. Attackers can craft UTF-16 encoded XML with lone high surrogates that consume following code units, hiding markup characters from the parser and enabling XML injection attacks.",
+      "recommendation": "No action required. Liquibase does not use native libexpat for XML parsing.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase's XML changelog parsing is pure-Java (JAXP/Xerces); libexpat is never linked or invoked.\n"
+        }
+      ],
+      "cwes": [
+        176
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-93990",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Expat UTF-16 surrogate-pair validation issue allowing malformed XML to be accepted. Liquibase's changelog XML parsing uses the JDK-bundled JAXP/Xerces parser (pure Java) and never links the native libexpat library. The embedded GraalPy runtime used by liquibase-checks does not use xml/pyexpat in its default pipeline.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56411",
       "description": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
       "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",

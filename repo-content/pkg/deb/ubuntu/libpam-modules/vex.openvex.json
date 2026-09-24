@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-25ef1df4b8243ff8c9ffdc11da8104fa00c8f9a922b197ceb0eaba6814aea343",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T22:07:21.796975408Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-10041"
+      },
+      "timestamp": "2026-09-24T22:07:21.79697666Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpam-modules"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present."
+    }
+  ]
+}

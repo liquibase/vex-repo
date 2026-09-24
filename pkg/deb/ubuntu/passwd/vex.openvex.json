@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-8ee7d536b3a0b5be2918b433b7ebde5c342ea8eb4237ff562c5f48d9f07034cb",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T22:13:04.141412784Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2024-56433"
+      },
+      "timestamp": "2026-09-24T22:13:04.141414067Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/passwd"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "shadow-utils (aka shadow) 4.4 through 4.17.0 establishes a default /etc/subuid behavior (e.g., uid 100000 through 165535 for the first user account) that can realistically conflict with the uids of users defined on locally administered networks, potentially leading to account takeover, e.g., by leveraging newuidmap for access to an NFS home directory (or same-host resources in the case of remote logins by these local network users). NOTE: it may also be argued that system administrators should not have assigned uids, within local networks, that are within the range that can occur in /etc/subuid.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "shadow-utils establishes a default /etc/subuid range (uid 100000-165535 for the first user account) that can realistically collide with the uids of users on a network, enabling account takeover via newuidmap when a host operator has configured rootless user-namespace remapping. This is a host-level configuration concern; this image never sets up subuid ranges or invokes newuidmap itself."
+    }
+  ]
+}

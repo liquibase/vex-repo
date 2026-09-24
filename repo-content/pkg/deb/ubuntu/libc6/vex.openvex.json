@@ -1,0 +1,54 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-88965415c728b317bd858efd1fc383266418906f68b59cf05adf2ff9456373b9",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T22:04:31.457095622Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2016-20013"
+      },
+      "timestamp": "2026-09-24T22:04:30.113680309Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "sha256crypt and sha512crypt through 0.6 allow attackers to cause a denial of service (CPU consumption) because the algorithm's runtime is proportional to the square of the length of the password.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "glibc sha256crypt/sha512crypt algorithmic-complexity denial-of-service issue (CPU cost proportional to the square of password length), which Ubuntu has marked Ignored as architectural (will never be fixed without migrating hash schemes). Affects crypt(3) password hashing, which the JVM never calls."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8674"
+      },
+      "timestamp": "2026-09-24T22:04:29.587133014Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process. The resolver truncates the search list when copying it into the fixed-size _res.defdname buffer, then asserts that the copy is consistent with the full configuration. The consistency check compared against the wrong size and did not handle a first entry that does not fit, so a correctly truncated list failed the assertion. Any process that resolves names through the library is affected, including long-running processes that reload /etc/resolv.conf on the next query after it changes. Search domains are commonly written to /etc/resolv.conf from data received over DHCP or from a VPN server, so an attacker on the local network may be able to trigger this without privileges on the target system, subject to validation by the network configuration software.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "glibc DNS stub resolver assertion-abort issue when /etc/resolv.conf or LOCALDOMAIN contains a ~200+ character search-list domain. Requires attacker control of the container's DNS configuration; not remotely triggerable against this image."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-89092"
+      },
+      "timestamp": "2026-09-24T22:04:29.84800992Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all."
+    }
+  ]
+}
