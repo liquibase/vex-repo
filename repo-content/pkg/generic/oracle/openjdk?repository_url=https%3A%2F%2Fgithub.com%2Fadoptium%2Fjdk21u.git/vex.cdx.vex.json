@@ -395,6 +395,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-62574",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Install). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Easily exploitable vulnerability allows low privileged attacker with logon to the infrastructure where Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition executes to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in takeover of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition.",
+      "recommendation": "No action required for the Liquibase Secure container. The image is built from Temurin's release archive and never invokes Oracle's Java installer.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable component (Oracle's Java installer) is not present in the Liquibase Secure image; the container runs a Temurin JRE unpacked from a release archive.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-62574",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuaug2026.html",
+          "title": "Oracle CPU August 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE/GraalVM Install-component vulnerability, fixed upstream in 21.0.12 (Oracle August 2026 CPU). The flaw is in Oracle's Java installer, a packaging component that ships only with Oracle's own distribution. Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1) via docker-entrypoint.sh (core/docker/docker-entrypoint.sh:8); Temurin's JRE is unpacked from a release archive, not installed through Oracle's installer, so the vulnerable component is not present in the image at all. There is no Adoptium/Temurin tracking entry for this CVE. Unlike the other Oracle Java SE entries in this batch (sandbox/Web Start applicability mismatches, justified requires_environment), this is a component absence -- the installer isn't shipped at all -- hence code_not_present.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
