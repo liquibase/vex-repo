@@ -1,15 +1,45 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-3002d72965960472e32ca1f97cc782264bf18d39bc13f9e7152606e8fdffa1f1",
+  "@id": "merged-vex-08b1591d6d04513ac45a469c11686e520eee76fca0ec0db34b5e164df9201547",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-24T18:52:20.843194976Z",
+  "timestamp": "2026-09-24T22:14:42.234115896Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2021-31879"
+      },
+      "timestamp": "2026-09-24T22:14:39.613072072Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget through 1.21.1 does not omit the Authorization header upon a redirect to a different origin, a related issue to CVE-2018-1000007.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget path-traversal-via-redirect issue (Authorization header leaked cross-origin on redirect). wget is only invoked at Docker build time against hardcoded repo.liquibase.com/GitHub URLs that are sha256-verified after download (docker/Dockerfile:27, docker/Dockerfile:55). No runtime code in docker-entrypoint.sh or the Liquibase CLI invokes wget."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-10524"
+      },
+      "timestamp": "2026-09-24T22:14:40.027270389Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Applications that use Wget to access a remote resource using shorthand URLs and pass arbitrary user credentials in the URL are vulnerable. In these cases attackers can enter crafted credentials which will cause Wget to access an arbitrary host.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget shorthand-URL credential-confusion issue (fixed only in Ubuntu 26.04/resolute, not noble). wget is only invoked at Docker build time against hardcoded, sha256-verified URLs with no embedded credentials (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-15146"
       },
-      "timestamp": "2026-09-24T18:52:20.843196098Z",
+      "timestamp": "2026-09-24T22:14:38.994841577Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/wget"
@@ -19,6 +49,21 @@
       "status_notes": "GNU Wget does not validate the IP address provided by an FTP PASV response while operating in FTP passive mode. A malicious FTP server, or an HTTP server that redirects to an FTP URL, can exploit this behavior to redirect Wget's data connection to an arbitrary IP address and port. This allows an attacker to forge server-side requests from the machine running Wget, potentially accessing localhost services or internal network resources.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The scanned image reports wget 1.21.4-1ubuntu4.1, below Ubuntu's fixed 1.21.4-1ubuntu4.4, but this issue requires Wget to follow an attacker-controlled FTP passive-mode data connection. Liquibase Secure uses wget only during image build to fetch its release tarball and the lpm zip over HTTPS, and it does not invoke wget at container runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-16599"
+      },
+      "timestamp": "2026-09-24T22:14:39.818191281Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU wget is vulnerable to denial of service in its FTP OPIE/S-KEY authentication functionality. The server-supplied sequence number from the FTP challenge line is used as an iteration count for an MD5 key- derivation loop without any upper bound validation. A malicious FTP server or a network attacker positioned to intercept FTP traffic can send a crafted OPIE challenge with a sequence number near INT_MAX, causing wget to perform up to approximately 2.1 billion MD5 computations and suspend for some time. The --timeout option does not mitigate this because it applies only to network I/O, not CPU computation. This issue was fixed in commit e9697d98e7249b0f68a6be040a4f3dcc5bc101fa",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget FTP OPIE/S-KEY authentication denial-of-service issue, with an upstream patch not yet backported to Ubuntu noble. wget is only invoked at Docker build time against hardcoded, sha256-verified URLs (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime, and this image never performs FTP transfers."
     }
   ]
 }

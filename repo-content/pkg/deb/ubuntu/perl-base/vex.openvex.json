@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-bc8c3cfdf260845e8b614db6a78d4232551091273cdbe272f97aee33136a6f1d",
+  "@id": "merged-vex-2dc0e2fc1f703da0cf75b64f984dc35ed9fbfefa20504226255ae09930a44069",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-24T18:51:48.960657381Z",
+  "timestamp": "2026-09-24T22:13:27.904391818Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-15649"
       },
-      "timestamp": "2026-09-24T18:51:46.307233984Z",
+      "timestamp": "2026-09-24T22:13:21.939145683Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-12087"
       },
-      "timestamp": "2026-09-24T18:51:46.559229364Z",
+      "timestamp": "2026-09-24T22:13:22.242373502Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-13221"
       },
-      "timestamp": "2026-09-24T18:51:46.730470943Z",
+      "timestamp": "2026-09-24T22:13:22.446762506Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-15534"
       },
-      "timestamp": "2026-09-24T18:51:46.953775083Z",
+      "timestamp": "2026-09-24T22:13:22.714162974Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-19487"
       },
-      "timestamp": "2026-09-24T18:51:47.178843068Z",
+      "timestamp": "2026-09-24T22:13:22.983436154Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -79,6 +79,57 @@
       "status_notes": "Perl versions from 5.9.4 before 5.41.9 can produce incorrect regular expression match results when a stale failure flag ends the Aho-Corasick prescan early in S_find_byclass, which can make access or filtering decisions wrong.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "This incorrect-match issue affects Perl's regex prescan logic and is relevant only when an application performs Perl regular-expression matching on attacker-controlled data and then makes a security decision from the result. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is not reachable in the stock runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-68914",
+        "aliases": [
+          "GHSA-p5qf-qvw8-xgvg"
+        ]
+      },
+      "timestamp": "2026-09-24T22:13:25.591171993Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-14803. Reason: This candidate is a duplicate of CVE-2026-14803. Notes: All CVE users should reference CVE-2026-14803 instead of this candidate.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-14803, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-77568",
+        "aliases": [
+          "GHSA-cf46-h6jw-mj3r"
+        ]
+      },
+      "timestamp": "2026-09-24T22:13:25.797990603Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-15747. Reason: This candidate is a duplicate of CVE-2026-15747. Notes: All CVE users should reference CVE-2026-15747 instead of this candidate.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-15747, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-82560"
+      },
+      "timestamp": "2026-09-24T22:13:25.384948721Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Pod::Text versions before 6.1.1 for Perl allow CPU and memory exhaustion formatting a POD document whose =over nesting drives the margin to the output width. Each =over adds its indent to the margin, which wrap() subtracts from the output width to get the space available for text. When that space reaches zero, the line-splitting substitution matches the empty string, and the loop consumes no input while appending the margin padding on every pass. Formatting an attacker-supplied POD document never returns, and the output grows until memory is exhausted.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Pod::Text (bundled with perl-base) CPU/memory exhaustion formatting a crafted POD document. Nothing in this repository or docker-entrypoint.sh shells out to perl or invokes POD formatting (pod2text/perldoc); the entrypoint does its own pattern matching with bash case/glob syntax."
     }
   ]
 }

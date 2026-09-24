@@ -273,6 +273,103 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-82560",
+      "description": "Pod::Text versions before 6.1.1 for Perl allow CPU and memory exhaustion formatting a POD document whose =over nesting drives the margin to the output width. Each =over adds its indent to the margin, which wrap() subtracts from the output width to get the space available for text. When that space reaches zero, the line-splitting substitution matches the empty string, and the loop consumes no input while appending the margin padding on every pass. Formatting an attacker-supplied POD document never returns, and the output grows until memory is exhausted.",
+      "recommendation": "No action required. perl is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No perl invocation exists anywhere in this image's runtime code path.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82560",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Pod::Text (bundled with perl-base) CPU/memory exhaustion formatting a crafted POD document. Nothing in this repository or docker-entrypoint.sh shells out to perl or invokes POD formatting (pod2text/perldoc); the entrypoint does its own pattern matching with bash case/glob syntax.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-68914",
+      "description": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-14803. Reason: This candidate is a duplicate of CVE-2026-14803. Notes: All CVE users should reference CVE-2026-14803 instead of this candidate.",
+      "recommendation": "No action required. This id is rejected by its CVE Numbering Authority and, even if it were live, perl is not invoked at container runtime.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-68914",
+          "title": "NVD Entry (rejected)"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14803",
+          "title": "Duplicate target: CVE-2026-14803"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-14803, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77568",
+      "description": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-15747. Reason: This candidate is a duplicate of CVE-2026-15747. Notes: All CVE users should reference CVE-2026-15747 instead of this candidate.",
+      "recommendation": "No action required. This id is rejected by its CVE Numbering Authority and, even if it were live, perl is not invoked at container runtime.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77568",
+          "title": "NVD Entry (rejected)"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15747",
+          "title": "Duplicate target: CVE-2026-15747"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-15747, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,187 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    }
+  ]
+}

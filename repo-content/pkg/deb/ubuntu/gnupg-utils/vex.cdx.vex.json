@@ -16,6 +16,54 @@
           "ref": "pkg:deb/ubuntu/gnupg-utils"
         }
       ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-utils"
+        }
+      ]
     }
   ]
 }

@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-5605a560c0e1ec54b93e661751d74e0092d61f88bbb255b24107c4ba1aaac0b1",
+  "@id": "merged-vex-4bb13ac42429438822c6177d3b7f3e67c618d58fdb996735ce838df0d21084bf",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-24T18:44:16.5258078Z",
+  "timestamp": "2026-09-24T21:56:57.990505838Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2016-2781"
+      },
+      "timestamp": "2026-09-24T21:56:57.634719604Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/coreutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "chroot in GNU coreutils, when used with --userspec, allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "coreutils \"chroot --userspec\" local session-escape issue via a crafted TIOCSTI ioctl call, which Ubuntu has marked Ignored (\"no viable solution\"). chroot is never invoked anywhere in this image's runtime."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-5278"
       },
-      "timestamp": "2026-09-24T18:44:16.525809082Z",
+      "timestamp": "2026-09-24T21:56:53.218839914Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/coreutils"

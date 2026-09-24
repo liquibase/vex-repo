@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-876390b0626651bdd410bbd1a3b16ffe378853f6cfdba2bb87cc0b18487ecd3f",
+  "@id": "merged-vex-1a9bfd37709b0fc96cf4eba51160341c4b7a2c8c1c3a25544fe548a6987f0de5",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-24T18:53:23.007515816Z",
+  "timestamp": "2026-09-24T22:16:17.288921454Z",
   "version": 1,
   "statements": [
     {
@@ -14,7 +14,7 @@
           "BIT-jre-2025-53066"
         ]
       },
-      "timestamp": "2026-09-24T18:53:19.353939613Z",
+      "timestamp": "2026-09-24T22:16:10.085046641Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -34,7 +34,7 @@
           "BIT-jre-2026-21932"
         ]
       },
-      "timestamp": "2026-09-24T18:53:18.505006441Z",
+      "timestamp": "2026-09-24T22:16:09.067505782Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -54,7 +54,7 @@
           "BIT-jre-2026-21945"
         ]
       },
-      "timestamp": "2026-09-24T18:53:18.676484904Z",
+      "timestamp": "2026-09-24T22:16:09.274875708Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-22016"
       },
-      "timestamp": "2026-09-24T18:53:18.849326597Z",
+      "timestamp": "2026-09-24T22:16:09.479052205Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-34282"
       },
-      "timestamp": "2026-09-24T18:53:19.074718037Z",
+      "timestamp": "2026-09-24T22:16:09.751754944Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -105,7 +105,7 @@
           "GHSA-4xp6-rcgg-m9qq"
         ]
       },
-      "timestamp": "2026-09-24T18:53:19.685319109Z",
+      "timestamp": "2026-09-24T22:16:10.482046709Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -120,7 +120,7 @@
       "vulnerability": {
         "name": "CVE-2026-47063"
       },
-      "timestamp": "2026-09-24T18:53:19.858691399Z",
+      "timestamp": "2026-09-24T22:16:10.685191264Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -133,9 +133,39 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-60589"
+      },
+      "timestamp": "2026-09-24T22:16:15.656266404Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 3.7 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N).",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "JDK Security component (resource resolving) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse- temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse- temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-61308"
+      },
+      "timestamp": "2026-09-24T22:16:15.245619241Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via HTTP to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. While the vulnerability is in Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition, attacks may significantly impact additional products (scope change). Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. CVSS 3.1 Base Score 6.8 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N).",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "JDK Networking (HTTP Connections) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-62574"
       },
-      "timestamp": "2026-09-24T18:53:20.031276335Z",
+      "timestamp": "2026-09-24T22:16:10.886871174Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -145,6 +175,21 @@
       "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Install). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Easily exploitable vulnerability allows low privileged attacker with logon to the infrastructure where Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition executes to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in takeover of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition.",
       "justification": "component_not_present",
       "impact_statement": "Oracle Java SE/GraalVM Install-component vulnerability, fixed upstream in 21.0.12 (Oracle August 2026 CPU). The flaw is in Oracle's Java installer, a packaging component that ships only with Oracle's own distribution. Liquibase Secure is built from eclipse-temurin:21-jre-noble (core/docker/Dockerfile:1) via docker-entrypoint.sh (core/docker/docker-entrypoint.sh:8); Temurin's JRE is unpacked from a release archive, not installed through Oracle's installer, so the vulnerable component is not present in the image at all. There is no Adoptium/Temurin tracking entry for this CVE. Unlike the other Oracle Java SE entries in this batch (sandbox/Web Start applicability mismatches, justified requires_environment), this is a component absence -- the installer isn't shipped at all -- hence code_not_present."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-70907"
+      },
+      "timestamp": "2026-09-24T22:16:15.450551332Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Easily exploitable vulnerability allows unauthenticated attacker with network access via TLS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 5.3 (Availability impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L).",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "JDK TLS server (JSSE) component vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag."
     }
   ]
 }

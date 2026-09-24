@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-c992f6c7cf086859965586ac887c27e9976b74773c2dca9bac69f4dc88a7c4a0",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T22:02:58.053315976Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54369"
+      },
+      "timestamp": "2026-09-24T22:02:57.467883595Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libacl1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "acl before version 2.4.0 contains a symlink traversal vulnerability in the libacl pathname-based functions acl_get_file(), acl_set_file(), acl_extended_file(), and acl_delete_def_file() that allows local attackers to escalate privileges by replacing any pathname component with a symbolic link. Attackers who control any component of a pathname processed by a privileged caller can redirect ACL read or write operations to arbitrary files or directories, enabling unauthorized manipulation of access control lists and local privilege escalation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libacl symlink-traversal vulnerability in acl_get_file/acl_set_file/acl_extended_file/acl_delete_def_file, which Ubuntu has marked Ignored (backport deemed too intrusive; needs new acl_*_at() APIs). Requires a privileged (root) caller invoking ACL functions on attacker-influenced paths; this container runs unprivileged (docker/Dockerfile:72) and never calls ACL functions."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54370"
+      },
+      "timestamp": "2026-09-24T22:02:57.668886234Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libacl1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "acl before version 2.4.0 contains a time-of-check to time-of-use (TOCTOU) race condition vulnerability that allows local attackers to escalate privileges by replacing a pathname component with a symbolic link between an lstat() check and subsequent symlink-following operations such as stat(), chown(), chmod(), acl_get_file(), and acl_set_file(). Attackers who control a pathname component can redirect file access control list operations to arbitrary files when getfacl, setfacl, or chacl is invoked by a privileged process over an attacker- controlled path, resulting in local privilege escalation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libacl time-of-check to time-of-use (TOCTOU) race condition allowing local privilege escalation by replacing a pathname component with a symlink, which Ubuntu has marked Ignored (same reasoning as CVE-2026-54369). Requires a privileged (root) caller invoking ACL functions; this container runs unprivileged (docker/Dockerfile:72) and never calls ACL functions."
+    }
+  ]
+}

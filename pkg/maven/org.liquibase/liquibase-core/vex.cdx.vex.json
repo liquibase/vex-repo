@@ -9779,6 +9779,379 @@
       ]
     },
     {
+      "id": "CVE-2021-31879",
+      "description": "GNU Wget through 1.21.1 does not omit the Authorization header upon a redirect to a different origin, a related issue to CVE-2018-1000007.",
+      "recommendation": "No action required. wget is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "wget only runs at Docker build time against hardcoded, sha256-verified URLs; never invoked at runtime.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-31879",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "wget path-traversal-via-redirect issue (Authorization header leaked cross-origin on redirect). wget is only invoked at Docker build time against hardcoded repo.liquibase.com/GitHub URLs that are sha256-verified after download (docker/Dockerfile:27, docker/Dockerfile:55). No runtime code in docker-entrypoint.sh or the Liquibase CLI invokes wget.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/wget"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-16599",
+      "description": "GNU wget is vulnerable to denial of service in its FTP OPIE/S-KEY authentication functionality. The server-supplied sequence number from the FTP challenge line is used as an iteration count for an MD5 key- derivation loop without any upper bound validation. A malicious FTP server or a network attacker positioned to intercept FTP traffic can send a crafted OPIE challenge with a sequence number near INT_MAX, causing wget to perform up to approximately 2.1 billion MD5 computations and suspend for some time. The --timeout option does not mitigate this because it applies only to network I/O, not CPU computation. This issue was fixed in commit e9697d98e7249b0f68a6be040a4f3dcc5bc101fa",
+      "recommendation": "No action required. wget is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.1,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "justification": "wget only runs at Docker build time against hardcoded, sha256-verified HTTPS URLs; never invoked at runtime, and no FTP transfers occur in this image.\n"
+        }
+      ],
+      "cwes": [
+        606
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-16599",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "wget FTP OPIE/S-KEY authentication denial-of-service issue, with an upstream patch not yet backported to Ubuntu noble. wget is only invoked at Docker build time against hardcoded, sha256-verified URLs (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime, and this image never performs FTP transfers.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/wget"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-10524",
+      "description": "Applications that use Wget to access a remote resource using shorthand URLs and pass arbitrary user credentials in the URL are vulnerable. In these cases attackers can enter crafted credentials which will cause Wget to access an arbitrary host.",
+      "recommendation": "No action required. wget is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "wget only runs at Docker build time against hardcoded, credential- free, sha256-verified URLs; never invoked at runtime.\n"
+        }
+      ],
+      "cwes": [
+        918
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10524",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "wget shorthand-URL credential-confusion issue (fixed only in Ubuntu 26.04/resolute, not noble). wget is only invoked at Docker build time against hardcoded, sha256-verified URLs with no embedded credentials (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/wget"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-82560",
+      "description": "Pod::Text versions before 6.1.1 for Perl allow CPU and memory exhaustion formatting a POD document whose =over nesting drives the margin to the output width. Each =over adds its indent to the margin, which wrap() subtracts from the output width to get the space available for text. When that space reaches zero, the line-splitting substitution matches the empty string, and the loop consumes no input while appending the margin padding on every pass. Formatting an attacker-supplied POD document never returns, and the output grows until memory is exhausted.",
+      "recommendation": "No action required. perl is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No perl invocation exists anywhere in this image's runtime code path.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82560",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Pod::Text (bundled with perl-base) CPU/memory exhaustion formatting a crafted POD document. Nothing in this repository or docker-entrypoint.sh shells out to perl or invokes POD formatting (pod2text/perldoc); the entrypoint does its own pattern matching with bash case/glob syntax.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-68914",
+      "description": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-14803. Reason: This candidate is a duplicate of CVE-2026-14803. Notes: All CVE users should reference CVE-2026-14803 instead of this candidate.",
+      "recommendation": "No action required. This id is rejected by its CVE Numbering Authority and, even if it were live, perl is not invoked at container runtime.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-68914",
+          "title": "NVD Entry (rejected)"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14803",
+          "title": "Duplicate target: CVE-2026-14803"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-14803, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77568",
+      "description": "Rejected reason: ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2026-15747. Reason: This candidate is a duplicate of CVE-2026-15747. Notes: All CVE users should reference CVE-2026-15747 instead of this candidate.",
+      "recommendation": "No action required. This id is rejected by its CVE Numbering Authority and, even if it were live, perl is not invoked at container runtime.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77568",
+          "title": "NVD Entry (rejected)"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15747",
+          "title": "Duplicate target: CVE-2026-15747"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-15747, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-93990",
+      "description": "Expat through 2.8.4 fails to validate low surrogates following high surrogates in UTF-16 input, allowing malformed UTF-16 sequences to be accepted. Attackers can craft UTF-16 encoded XML with lone high surrogates that consume following code units, hiding markup characters from the parser and enabling XML injection attacks.",
+      "recommendation": "No action required. Liquibase does not use native libexpat for XML parsing.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase's XML changelog parsing is pure-Java (JAXP/Xerces); libexpat is never linked or invoked.\n"
+        }
+      ],
+      "cwes": [
+        176
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-93990",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Expat UTF-16 surrogate-pair validation issue allowing malformed XML to be accepted. Liquibase's changelog XML parsing uses the JDK-bundled JAXP/Xerces parser (pure Java) and never links the native libexpat library. The embedded GraalPy runtime used by liquibase-checks does not use xml/pyexpat in its default pipeline.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-10041",
+      "description": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
+      "recommendation": "No action required. No PAM-authenticated login flow exists in this container.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No PAM-authenticated login flow exists at runtime in this container.\n"
+        }
+      ],
+      "cwes": [
+        922
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10041",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-10041",
+      "description": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
+      "recommendation": "No action required. No PAM-authenticated login flow exists in this container.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No PAM-authenticated login flow exists at runtime in this container.\n"
+        }
+      ],
+      "cwes": [
+        922
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10041",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules-bin"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-32282",
       "analysis": {
         "state": "not_affected",
@@ -9789,6 +10162,462 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-10041",
+      "description": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
+      "recommendation": "No action required. No PAM-authenticated login flow exists in this container.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No PAM-authenticated login flow exists at runtime in this container.\n"
+        }
+      ],
+      "cwes": [
+        922
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10041",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-runtime"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-10041",
+      "description": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
+      "recommendation": "No action required. No PAM-authenticated login flow exists in this container.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No PAM-authenticated login flow exists at runtime in this container.\n"
+        }
+      ],
+      "cwes": [
+        922
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10041",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam0g"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86145",
+      "description": "PCRE2 before 10.48 allows a pcre2_dfa_match out-of-bounds write because reuse of a cached workspace block, in a recursive DFA matching workspace, lacks a size check (even though a newly allocated block, for the same purpose, does have a size check). This outcome requires an attacker-controlled regular expression, or a recursive pattern in conjunction with a small heap limit (this can be set through the API).",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.\n"
+        }
+      ],
+      "cwes": [
+        424
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86145",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_dfa_match out-of-bounds write via cached workspace reuse, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89156",
+      "description": "PCRE2 before 10.48 has a pcre2_match out-of-bounds read after a JIT fallback when an attacker can provide invalid UTF data.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89156",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_match out-of-bounds read after a JIT fallback on invalid UTF data, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89157",
+      "description": "PCRE2 before 10.48, on 32-bit platforms, has a pcre2_pattern_convert out-of-bounds write when an attacker can provide a large pattern.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations. Also documented upstream as 32-bit-only, further irrelevant on this image's amd64/arm64 builds.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89157",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_pattern_convert out-of-bounds write on 32-bit platforms only, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble; not applicable to this image's amd64/arm64 builds regardless. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89158",
+      "description": "PCRE2 before 10.48, on 32-bit platforms, has a pcre2_compile_32 integer overflow and resultant out-of-bounds write.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations. Also documented upstream as 32-bit-only, further irrelevant on this image's amd64/arm64 builds.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89158",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_compile_32 integer overflow and out-of-bounds write on 32-bit platforms only, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble; not applicable to this image's amd64/arm64 builds regardless. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker- entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89160",
+      "description": "PCRE2 before 10.48 has a pcre2_match out-of-bounds read during the PCRE2_MATCH_INVALID_UTF matching of an invalid UTF subject.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89160",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_match out-of-bounds read during PCRE2_MATCH_INVALID_UTF matching, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89161",
+      "description": "In PCRE2 before 10.48, pcre2_jit_match mishandles a previously copied subject being passed in as a context. An incorrect free operation can occur.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.\n"
+        }
+      ],
+      "cwes": [
+        590
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89161",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_jit_match incorrect free on a mishandled copied subject, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89162",
+      "description": "In PCRE2 before 10.48, pcre2_serialize_encode might disclose two bytes to an adversary, typically in a situation where the access available to the adversary is already unsafe.",
+      "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89162",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "PCRE2 pcre2_serialize_encode two-byte information disclosure, fixed upstream in PCRE2 10.48 but not yet backported to Ubuntu noble. Liquibase is a pure-Java application (java.util.regex) with no linkage to native libpcre2, and docker-entrypoint.sh performs no regex or grep operations.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-61308",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via HTTP to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. While the vulnerability is in Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition, attacks may significantly impact additional products (scope change). Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. CVSS 3.1 Base Score 6.8 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-61308",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK Networking (HTTP Connections) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
         }
       ]
     },
@@ -9831,6 +10660,462 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-70907",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Easily exploitable vulnerability allows unauthenticated attacker with network access via TLS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 5.3 (Availability impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70907",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK TLS server (JSSE) component vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-60589",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 3.7 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-60589",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK Security component (resource resolving) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse- temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse- temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8674",
+      "description": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process. The resolver truncates the search list when copying it into the fixed-size _res.defdname buffer, then asserts that the copy is consistent with the full configuration. The consistency check compared against the wrong size and did not handle a first entry that does not fit, so a correctly truncated list failed the assertion. Any process that resolves names through the library is affected, including long-running processes that reload /etc/resolv.conf on the next query after it changes. Search domains are commonly written to /etc/resolv.conf from data received over DHCP or from a VPN server, so an attacker on the local network may be able to trigger this without privileges on the target system, subject to validation by the network configuration software.",
+      "recommendation": "No action required. This image's DNS configuration is not attacker- controlled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Requires attacker control of the container's /etc/resolv.conf or LOCALDOMAIN; not a remote trigger.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8674",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc DNS stub resolver assertion-abort issue when /etc/resolv.conf or LOCALDOMAIN contains a ~200+ character search-list domain. Requires attacker control of the container's DNS configuration; not remotely triggerable against this image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8674",
+      "description": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process. The resolver truncates the search list when copying it into the fixed-size _res.defdname buffer, then asserts that the copy is consistent with the full configuration. The consistency check compared against the wrong size and did not handle a first entry that does not fit, so a correctly truncated list failed the assertion. Any process that resolves names through the library is affected, including long-running processes that reload /etc/resolv.conf on the next query after it changes. Search domains are commonly written to /etc/resolv.conf from data received over DHCP or from a VPN server, so an attacker on the local network may be able to trigger this without privileges on the target system, subject to validation by the network configuration software.",
+      "recommendation": "No action required. This image's DNS configuration is not attacker- controlled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Requires attacker control of the container's /etc/resolv.conf or LOCALDOMAIN; not a remote trigger.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8674",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc DNS stub resolver assertion-abort issue when /etc/resolv.conf or LOCALDOMAIN contains a ~200+ character search-list domain. Requires attacker control of the container's DNS configuration; not remotely triggerable against this image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8674",
+      "description": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process. The resolver truncates the search list when copying it into the fixed-size _res.defdname buffer, then asserts that the copy is consistent with the full configuration. The consistency check compared against the wrong size and did not handle a first entry that does not fit, so a correctly truncated list failed the assertion. Any process that resolves names through the library is affected, including long-running processes that reload /etc/resolv.conf on the next query after it changes. Search domains are commonly written to /etc/resolv.conf from data received over DHCP or from a VPN server, so an attacker on the local network may be able to trigger this without privileges on the target system, subject to validation by the network configuration software.",
+      "recommendation": "No action required. This image's DNS configuration is not attacker- controlled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Requires attacker control of the container's /etc/resolv.conf or LOCALDOMAIN; not a remote trigger.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8674",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc DNS stub resolver assertion-abort issue when /etc/resolv.conf or LOCALDOMAIN contains a ~200+ character search-list domain. Requires attacker control of the container's DNS configuration; not remotely triggerable against this image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89092",
+      "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
+      "recommendation": "No action required. This image does not run nscd.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "This minimal image runs no nscd process; the vulnerable service is absent.\n"
+        }
+      ],
+      "cwes": [
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89092",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89092",
+      "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
+      "recommendation": "No action required. This image does not run nscd.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "This minimal image runs no nscd process; the vulnerable service is absent.\n"
+        }
+      ],
+      "cwes": [
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89092",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89092",
+      "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
+      "recommendation": "No action required. This image does not run nscd.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "This minimal image runs no nscd process; the vulnerable service is absent.\n"
+        }
+      ],
+      "cwes": [
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89092",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2016-20013",
+      "description": "sha256crypt and sha512crypt through 0.6 allow attackers to cause a denial of service (CPU consumption) because the algorithm's runtime is proportional to the square of the length of the password.",
+      "recommendation": "No action required. The JVM never calls glibc's crypt() function.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The JVM never calls glibc's crypt(3); this image performs no local password hashing.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-20013",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc sha256crypt/sha512crypt algorithmic-complexity denial-of-service issue (CPU cost proportional to the square of password length), which Ubuntu has marked Ignored as architectural (will never be fixed without migrating hash schemes). Affects crypt(3) password hashing, which the JVM never calls.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2016-20013",
+      "description": "sha256crypt and sha512crypt through 0.6 allow attackers to cause a denial of service (CPU consumption) because the algorithm's runtime is proportional to the square of the length of the password.",
+      "recommendation": "No action required. The JVM never calls glibc's crypt() function.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The JVM never calls glibc's crypt(3); this image performs no local password hashing.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-20013",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc sha256crypt/sha512crypt algorithmic-complexity denial-of-service issue (CPU cost proportional to the square of password length), which Ubuntu has marked Ignored as architectural (will never be fixed without migrating hash schemes). Affects crypt(3) password hashing, which the JVM never calls.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
         }
       ]
     },
@@ -9890,6 +11175,459 @@
       ]
     },
     {
+      "id": "CVE-2016-20013",
+      "description": "sha256crypt and sha512crypt through 0.6 allow attackers to cause a denial of service (CPU consumption) because the algorithm's runtime is proportional to the square of the length of the password.",
+      "recommendation": "No action required. The JVM never calls glibc's crypt() function.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "The JVM never calls glibc's crypt(3); this image performs no local password hashing.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-20013",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc sha256crypt/sha512crypt algorithmic-complexity denial-of-service issue (CPU cost proportional to the square of password length), which Ubuntu has marked Ignored as architectural (will never be fixed without migrating hash schemes). Affects crypt(3) password hashing, which the JVM never calls.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libmount1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsmartcols1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libuuid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/mount"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-76642",
+      "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount, nsenter, or reads fstab; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        390
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-76642",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/util-linux"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-27143",
       "description": "Arithmetic over induction variables in loops were not correctly checked for underflow or overflow. As a result, the compiler would allow invalid indexing at runtime, potentially leading to memory corruption.",
       "recommendation": "No action required. Liquibase Secure does not invoke the Go compiler or build Go code at runtime.",
@@ -9944,6 +11682,456 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libmount1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsmartcols1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libuuid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/mount"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78408",
+      "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls nsenter; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        775
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78408",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/util-linux"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libmount1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsmartcols1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libuuid1"
         }
       ]
     },
@@ -10008,6 +12196,459 @@
       ]
     },
     {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/mount"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/util-linux"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/bsdutils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libblkid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libmount1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsmartcols1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libuuid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/mount"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78410",
+      "description": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime reads fstab or calls mount; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78410",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/util-linux"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54369",
+      "description": "acl before version 2.4.0 contains a symlink traversal vulnerability in the libacl pathname-based functions acl_get_file(), acl_set_file(), acl_extended_file(), and acl_delete_def_file() that allows local attackers to escalate privileges by replacing any pathname component with a symbolic link. Attackers who control any component of a pathname processed by a privileged caller can redirect ACL read or write operations to arbitrary files or directories, enabling unauthorized manipulation of access control lists and local privilege escalation.",
+      "recommendation": "No action required. This container runs unprivileged and never invokes ACL functions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Requires a privileged (root) caller invoking ACL functions; this container runs unprivileged and never calls them.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54369",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libacl symlink-traversal vulnerability in acl_get_file/acl_set_file/acl_extended_file/acl_delete_def_file, which Ubuntu has marked Ignored (backport deemed too intrusive; needs new acl_*_at() APIs). Requires a privileged (root) caller invoking ACL functions on attacker-influenced paths; this container runs unprivileged (docker/Dockerfile:72) and never calls ACL functions.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libacl1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61731",
       "description": "Building a malicious file with cmd/go can cause a write to an attacker-controlled file with partial control of the file content.",
       "recommendation": "No action required. Liquibase Secure does not run cmd/go or cgo builds at runtime.",
@@ -10068,6 +12709,480 @@
       ]
     },
     {
+      "id": "CVE-2026-54370",
+      "description": "acl before version 2.4.0 contains a time-of-check to time-of-use (TOCTOU) race condition vulnerability that allows local attackers to escalate privileges by replacing a pathname component with a symbolic link between an lstat() check and subsequent symlink-following operations such as stat(), chown(), chmod(), acl_get_file(), and acl_set_file(). Attackers who control a pathname component can redirect file access control list operations to arbitrary files when getfacl, setfacl, or chacl is invoked by a privileged process over an attacker- controlled path, resulting in local privilege escalation.",
+      "recommendation": "No action required. This container runs unprivileged and never invokes ACL functions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Requires a privileged (root) caller invoking ACL functions; this container runs unprivileged and never calls them.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54370",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libacl time-of-check to time-of-use (TOCTOU) race condition allowing local privilege escalation by replacing a pathname component with a symlink, which Ubuntu has marked Ignored (same reasoning as CVE-2026-54369). Requires a privileged (root) caller invoking ACL functions; this container runs unprivileged (docker/Dockerfile:72) and never calls ACL functions.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libacl1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2016-2781",
+      "description": "chroot in GNU coreutils, when used with --userspec, allows local users to escape to the parent session via a crafted TIOCSTI ioctl call, which pushes characters to the terminal's input buffer.",
+      "recommendation": "No action required. chroot is never invoked in this image's runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "chroot is never invoked anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2781",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "coreutils \"chroot --userspec\" local session-escape issue via a crafted TIOCSTI ioctl call, which Ubuntu has marked Ignored (\"no viable solution\"). chroot is never invoked anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/coreutils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-56433",
+      "description": "shadow-utils (aka shadow) 4.4 through 4.17.0 establishes a default /etc/subuid behavior (e.g., uid 100000 through 165535 for the first user account) that can realistically conflict with the uids of users defined on locally administered networks, potentially leading to account takeover, e.g., by leveraging newuidmap for access to an NFS home directory (or same-host resources in the case of remote logins by these local network users). NOTE: it may also be argued that system administrators should not have assigned uids, within local networks, that are within the range that can occur in /etc/subuid.",
+      "recommendation": "No action required for this image. Host operators using rootless user- namespace remapping should consult the shadow-utils advisory.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "This image never sets up subuid ranges or invokes newuidmap; the vulnerable flow is a host-level concern.\n"
+        }
+      ],
+      "cwes": [
+        1188
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-56433",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "shadow-utils establishes a default /etc/subuid range (uid 100000-165535 for the first user account) that can realistically collide with the uids of users on a network, enabling account takeover via newuidmap when a host operator has configured rootless user-namespace remapping. This is a host-level configuration concern; this image never sets up subuid ranges or invokes newuidmap itself.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/login"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-56433",
+      "description": "shadow-utils (aka shadow) 4.4 through 4.17.0 establishes a default /etc/subuid behavior (e.g., uid 100000 through 165535 for the first user account) that can realistically conflict with the uids of users defined on locally administered networks, potentially leading to account takeover, e.g., by leveraging newuidmap for access to an NFS home directory (or same-host resources in the case of remote logins by these local network users). NOTE: it may also be argued that system administrators should not have assigned uids, within local networks, that are within the range that can occur in /etc/subuid.",
+      "recommendation": "No action required for this image. Host operators using rootless user- namespace remapping should consult the shadow-utils advisory.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "This image never sets up subuid ranges or invokes newuidmap; the vulnerable flow is a host-level concern.\n"
+        }
+      ],
+      "cwes": [
+        1188
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-56433",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "shadow-utils establishes a default /etc/subuid range (uid 100000-165535 for the first user account) that can realistically collide with the uids of users on a network, enabling account takeover via newuidmap when a host operator has configured rootless user-namespace remapping. This is a host-level configuration concern; this image never sets up subuid ranges or invokes newuidmap itself.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/passwd"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-utils"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg-agent"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgconf"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61732",
       "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
       "recommendation": "No action required. Liquibase Secure does not perform cgo builds at runtime.",
@@ -10124,6 +13239,150 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgsm"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgv"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2022-3219",
+      "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
+      "recommendation": "No action required. GnuPG is not invoked at container runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG can be made to spin/consume excessive CPU on a relatively small input, such as a crafted public key with thousands of signatures compressed into a few KB (explicit upstream won't-fix). No gpg/gnupg/dirmngr invocation exists anywhere in this image's runtime.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/keyboxd"
         }
       ]
     },

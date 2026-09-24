@@ -1,0 +1,72 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-04ea372258454540df74459f48079ee857c46fceb776033cbc5fbb16dabc7678",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T22:14:17.864098899Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-76642",
+        "aliases": [
+          "GHSA-m25x-3hj9-m26f"
+        ]
+      },
+      "timestamp": "2026-09-24T22:14:16.22507452Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/util-linux"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-78408"
+      },
+      "timestamp": "2026-09-24T22:14:16.619301571Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/util-linux"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-78409"
+      },
+      "timestamp": "2026-09-24T22:14:17.010425812Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/util-linux"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-78410"
+      },
+      "timestamp": "2026-09-24T22:14:17.405745232Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/util-linux"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in util-linux. Restricted bind mounts take the source path from fstab but do not pin that source before the privileged mount. A local unprivileged user who can replace the authorized source or a writable ancestor can redirect SUID mount(8) to bind another host directory. If the fstab entry also sets X-mount.owner, X-mount.group, or X-mount.mode, root then changes ownership or mode on that redirected inode.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user."
+    }
+  ]
+}

@@ -109,6 +109,51 @@
       ]
     },
     {
+      "id": "CVE-2026-60589",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 3.7 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-60589",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK Security component (resource resolving) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse- temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse- temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-22016",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as a sandboxed Java client.",
@@ -450,6 +495,96 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-61308",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Difficult to exploit vulnerability allows unauthenticated attacker with network access via HTTP to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. While the vulnerability is in Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition, attacks may significantly impact additional products (scope change). Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. CVSS 3.1 Base Score 6.8 (Confidentiality impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-61308",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK Networking (HTTP Connections) vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-70907",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u501, 11.0.32, 17.0.20, 21.0.12, 25.0.4, 26.0.2; Oracle GraalVM for JDK: 17.0.20 and 21.0.12; Oracle GraalVM Enterprise Edition: 21.3.19. Easily exploitable vulnerability allows unauthenticated attacker with network access via TLS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service. CVSS 3.1 Base Score 5.3 (Availability impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L).",
+      "recommendation": "No immediate action required given the narrow, trusted-endpoint- compromise precondition. Track Eclipse Temurin's release of a 21-jre- noble image containing 21.0.12.1+1 and rebuild once available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Vulnerable JVM networking/TLS code is in Liquibase's execute path (outbound HTTPS/TLS JDBC client), but exploitation requires the attacker to already control or compromise a trusted peer -- not reachable by an arbitrary remote attacker with no foothold there.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70907",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "JDK TLS server (JSSE) component vulnerability, part of Oracle's August 2026 CPU. Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2) and never listens on a socket; it is only an outbound network client (HTTPS to license/hub endpoints, TLS JDBC to target databases). Triggering this requires a compromised or MITM'd peer that Liquibase already trusts and connects to -- not exploitable by an arbitrary remote attacker with no foothold on those endpoints. Fixed upstream in Temurin 21.0.12.1+1, but no eclipse-temurin Docker Hub image publishes that build yet as of 2026-09-22 (all noble/jre/jdk tags remain 21.0.12_8); revisit once Temurin ships an updated 21-jre-noble tag.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
         }
       ]
     }
