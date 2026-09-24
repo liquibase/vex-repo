@@ -1,0 +1,158 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-15308",
+      "description": "An issue was found in Python's incremental HTML parser (html.parser.HTMLParser). When application code repeatedly feeds small pieces of attacker-controlled data into the parser while an HTML construct remains unterminated, the parser can be driven to consume disproportionate CPU time, resulting in a denial of service.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-15308",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/cpython"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-4360",
+      "description": "An issue was found in Python's tarfile module. TarFile.extract() does not fully apply the filter argument when extracting hardlink members, so a crafted tar archive can cause an extracted file to be written with unexpected ownership even when a restrictive filter such as filter=\"data\" is requested.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The tarfile module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+        }
+      ],
+      "cwes": [
+        279
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4360",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://mail.python.org/archives/list/security-announce@python.org/thread/TWZW2PC2AZOV6FENIHFSRC63OM7MBGSB/",
+          "title": "Python Security Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the tarfile module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/cpython"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-6069",
+      "description": "The html.parser.HTMLParser class had worst-case quadratic complexity when processing certain crafted malformed inputs at end-of-file, potentially leading to an amplified denial of service.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6069",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.11 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/cpython"
+        }
+      ]
+    }
+  ]
+}

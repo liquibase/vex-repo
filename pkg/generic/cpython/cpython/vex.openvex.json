@@ -1,0 +1,72 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-990b111caf1d765b472ef5467f4efc807c054335e69b9d9e87acf44965b38eae",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-24T18:52:51.688846145Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-6069",
+        "aliases": [
+          "BIT-libpython-2025-6069",
+          "BIT-python-2025-6069",
+          "BIT-python-min-2025-6069",
+          "PSF-2025-10"
+        ]
+      },
+      "timestamp": "2026-09-24T18:52:46.074577644Z",
+      "products": [
+        {
+          "@id": "pkg:generic/cpython"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The html.parser.HTMLParser class had worst-case quadratic complexity when processing certain crafted malformed inputs at end-of-file, potentially leading to an amplified denial of service.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.11 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-15308",
+        "aliases": [
+          "BIT-libpython-2026-15308",
+          "BIT-python-2026-15308",
+          "BIT-python-min-2026-15308",
+          "PSF-2026-33"
+        ]
+      },
+      "timestamp": "2026-09-24T18:52:45.729173847Z",
+      "products": [
+        {
+          "@id": "pkg:generic/cpython"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An issue was found in Python's incremental HTML parser (html.parser.HTMLParser). When application code repeatedly feeds small pieces of attacker-controlled data into the parser while an HTML construct remains unterminated, the parser can be driven to consume disproportionate CPU time, resulting in a denial of service.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-4360",
+        "aliases": [
+          "BIT-libpython-2026-4360",
+          "BIT-python-2026-4360",
+          "BIT-python-min-2026-4360",
+          "PSF-2026-32"
+        ]
+      },
+      "timestamp": "2026-09-24T18:52:45.901432667Z",
+      "products": [
+        {
+          "@id": "pkg:generic/cpython"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An issue was found in Python's tarfile module. TarFile.extract() does not fully apply the filter argument when extracting hardlink members, so a crafted tar archive can cause an extracted file to be written with unexpected ownership even when a restrictive filter such as filter=\"data\" is requested.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the tarfile module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+    }
+  ]
+}
