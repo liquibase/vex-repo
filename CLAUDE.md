@@ -6,16 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Published, auto-generated VEX (Vulnerability Exploitability eXchange) content for Liquibase products, laid out per the Trivy VEX Repository Spec v0.1. Consumers (Trivy `--vex repo`, Grype, Docker Scout) fetch the `main` branch tarball declared in `vex-repository.json`.
 
-**Do not hand-edit anything under `pkg/`, `repo-content/`, `index.json`, or `vex-repository.json`.** They are regenerated from `liquibase-pro/vex/assessments.yaml` and any manual change is overwritten on the next run. To change an assessment, open a PR against `liquibase-pro/vex/assessments.yaml` (see that repo's `vex/CONTRIBUTING.md`). The only things maintained by hand here are `README.md`, `.github/workflows/`, and this file.
+**Do not hand-edit anything under `pkg/`, `repo-content/`, `index.json`, or `vex-repository.json`.** They are regenerated from `liquibase-pro/vex/assessments.yaml` (Secure) and `liquibase-insights/vex/assessments.yaml` (the liquibase-platform-* images), and any manual change is overwritten on the next run. To change an assessment, open a PR against the `assessments.yaml` in the repo that owns it (for Secure, see liquibase-pro's `vex/CONTRIBUTING.md`). The only things maintained by hand here are `README.md`, `.github/workflows/`, and this file.
 
 ## Generation and sync flow
 
 There is no build system, test suite, or source code in this repo. The generator and validator scripts live in liquibase-pro, not here.
 
-1. `assessments.yaml` merges to `master` in liquibase-pro. Its `vex-repo-dispatch.yml` fires a `repository_dispatch` (type `vex-assessments-updated`) at this repo.
-2. `.github/workflows/update-vex.yaml` sparse-checks-out `liquibase-pro/vex/`, installs SHA-pinned `vexctl` and `yq`, runs `generate-vex-repo.sh --output-dir ./repo-content`, then `validate-vex-repo.sh ./repo-content`.
+1. `assessments.yaml` merges to `main` in liquibase-pro or liquibase-insights. That repo's `vex-repo-dispatch.yml` fires a `repository_dispatch` (type `vex-assessments-updated`) at this repo.
+2. `.github/workflows/update-vex.yaml` sparse-checks-out `liquibase-pro/vex/` and `liquibase-insights/vex/`, installs SHA-pinned `vexctl` and `yq`, and runs pro's `generate-vex-repo.sh` twice: once for Secure into `./repo-content`, once for insights into `$RUNNER_TEMP/insights-content` with `--product`/`--extra-product` set to the four platform image PURLs and `--no-subcomponent-docs`. It merges the insights `pkg/` tree and `index.json` entries into `./repo-content` (failing on any shared path or PURL), then runs `validate-vex-repo.sh ./repo-content` on the merged result.
 3. It copies `repo-content/{vex-repository.json,index.json,pkg}` to the repo root, opens a PR on branch `automation/update-vex`, and **squash-merges it immediately** (`main` has no required checks). The comment in the workflow explains why: a stale VEX repo causes scanners to re-report already-assessed CVEs.
-4. `.github/workflows/trigger-trivy-scan.yml` runs on any push to `main` touching `pkg/**`, `index.json`, or `vex-repository.json` and dispatches `trivy-scan-published-images.yml` in liquibase-pro so the new statements are picked up without waiting for the cron.
+4. `.github/workflows/trigger-trivy-scan.yml` runs on any push to `main` touching `pkg/**`, `index.json`, or `vex-repository.json` and dispatches `trivy-scan-published-images.yml` in liquibase-pro and `scan-published-images.yml` in liquibase-insights so the new statements are picked up without waiting for the cron.
 
 Notes that follow from this:
 - `repo-content/` is committed as a byproduct of step 3 (create-pull-request commits the whole working tree). It is byte-identical to the root copy. Treat it as noise, not a second source of truth.
@@ -25,7 +25,7 @@ Notes that follow from this:
 ## Content layout
 
 - `vex-repository.json`: spec manifest. Points at `https://github.com/liquibase/vex-repo/archive/refs/heads/main.tar.gz//vex-repo-main`, 24h update interval. Renaming the repo or default branch breaks every consumer.
-- `index.json`: PURL -> file map. Only `vex.openvex.json` files are indexed; multiple PURLs (e.g. `pkg:docker/liquibase/liquibase`, `pkg:docker/liquibase/liquibase-secure`, `pkg:maven/org.liquibase/liquibase-core`) can point at the same document. Ecosystems present: maven, deb (ubuntu), pypi, golang, generic, docker.
+- `index.json`: PURL -> file map. Only `vex.openvex.json` files are indexed; multiple PURLs (e.g. `pkg:docker/liquibase/liquibase`, `pkg:docker/liquibase/liquibase-secure`, `pkg:maven/org.liquibase/liquibase-core`) can point at the same document. Ecosystems present: maven, deb (ubuntu), pypi, golang, generic, docker, oci. The insights statements live in one document, `pkg/oci/liquibase-platform-api/vex.openvex.json`, indexed under all four `pkg:oci/liquibase-platform-*?repository_url=...` PURLs; Trivy looks up an image by its name plus `repository_url`, so the qualifier is part of the index id.
 - `pkg/<type>/<namespace>/<name>/`: two files per package.
   - `vex.openvex.json` (OpenVEX 0.2.0): what Trivy consumes. Statements list `products` with `subcomponents`; the liquibase-core document is a merged "umbrella" doc covering every transitive dependency assessed for the Liquibase image.
   - `vex.cdx.vex.json` (CycloneDX 1.6): same assessments with full advisory data (CVSS, CWEs, `vers:` ranges, `response`, `firstIssued`/`lastUpdated`). Not indexed; for consumers that want richer data.
@@ -52,7 +52,7 @@ diff -rq repo-content/pkg pkg && diff -q repo-content/index.json index.json
 # Exercise the published repo the way a customer does
 trivy image --vex repo --show-suppressed liquibase/liquibase:latest
 
-# Kick a regeneration without waiting for liquibase-pro
+# Kick a regeneration without waiting for a source repo
 gh workflow run update-vex.yaml
 ```
 

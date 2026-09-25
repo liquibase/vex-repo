@@ -1,9 +1,9 @@
 name: Trigger Trivy Scan
 
-# Mirror of liquibase-pro/.github/workflows/vex-repo-dispatch.yml in the
-# reverse direction: when published VEX content changes here, trigger the
-# trivy-scan-published-images workflow in liquibase-pro so the next scan
-# picks up the new statements without waiting for the weekday cron.
+# Mirror of the source repos' vex-repo-dispatch.yml in the reverse
+# direction: when published VEX content changes here, trigger the published
+# image scans in liquibase-pro and liquibase-insights so the next scan picks
+# up the new statements without waiting for the weekday cron.
 
 on:
   push:
@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   trigger:
-    name: Trigger trivy-scan-published-images in liquibase-pro
+    name: Trigger published image scans in liquibase-pro and liquibase-insights
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -39,14 +39,16 @@ jobs:
             LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
-      - name: Get GitHub App token (actions:write on liquibase-pro)
+      - name: Get GitHub App token (actions:write on liquibase-pro and liquibase-insights)
         id: get-token
         uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         with:
           app-id: ${{ env.LIQUIBASE_LIQUIBASE_GITHUB_APP_ID }}
           private-key: ${{ env.LIQUIBASE_LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-          repositories: liquibase-pro
+          repositories: |
+            liquibase-pro
+            liquibase-insights
           permission-actions: write
 
       - name: Dispatch trivy-scan-published-images.yml
@@ -54,6 +56,15 @@ jobs:
         with:
           workflow: trivy-scan-published-images.yml
           repo: liquibase/liquibase-pro
+          ref: main
+          wait: 'false'
+          gh-token: ${{ steps.get-token.outputs.token }}
+
+      - name: Dispatch liquibase-insights scan-published-images.yml
+        uses: liquibase/build-logic/.github/actions/dispatch-and-wait@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
+        with:
+          workflow: scan-published-images.yml
+          repo: liquibase/liquibase-insights
           ref: main
           wait: 'false'
           gh-token: ${{ steps.get-token.outputs.token }}
