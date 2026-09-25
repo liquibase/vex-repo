@@ -341,6 +341,118 @@
       ]
     },
     {
+      "id": "CVE-2026-5928",
+      "description": "Calling the ungetwc function on a FILE stream with wide characters encoded in a character set that has overlaps between its single byte and multi-byte character encodings, in the GNU C Library version 2.43 or earlier, may result in an attempt to read bytes before an allocated buffer, potentially resulting in unintentional disclosure of neighboring data in the heap, or a program crash.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's ungetwc wide-character pushback path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires glibc's ungetwc wide-character pushback path on attacker-influenced input, which Liquibase Secure never invokes.\n"
+        }
+      ],
+      "cwes": [
+        127
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5928",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=33998",
+          "title": "glibc Bug Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.14, but this issue requires an application to call glibc's ungetwc wide-character pushback path on a FILE stream using a character set with overlapping single-byte and multibyte encodings. Liquibase Secure's stock runtime path is the Java CLI, and a review of its build and runtime flow found no references to ungetwc or related native wide-character stream handling in the product runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-6238",
+      "description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.0.1 to version 2.43 fail to validate the RDATA content against the RDATA length in a DNS response when processing A6, CERT, LOC, TKEY or TSIG records, which may allow an attacker to craft a DNS response, causing a target application to crash or read uninitialized memory.",
+      "recommendation": "No action required. Liquibase Secure does not call the affected glibc DNS record-printing helpers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires deprecated glibc DNS record-printing helpers that Liquibase Secure never invokes.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6238",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://inbox.sourceware.org/libc-announce/7a655d55-276f-41fe-b550-feb3ebb2ce91@redhat.com/T/#u",
+          "title": "glibc Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.14, but this issue affects deprecated glibc debugging helpers for printing DNS record data rather than the resolver path itself. Liquibase Secure's stock runtime is the Liquibase Java CLI, and a source review found no references to ns_printrrf, ns_printrr, fp_nquery, or TSIG-related record-printing in the product runtime path.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-18374",
       "description": "Passing an effectively empty string to the \",ccs=\" syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled. This usage pattern is not seen in applications in common GNU/Linux distributions.",
       "recommendation": "No action required. Liquibase Secure never constructs glibc fopen mode strings from external or attacker-controlled input.",

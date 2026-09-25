@@ -114,6 +114,119 @@
       ]
     },
     {
+      "id": "CVE-2026-48959",
+      "description": "IO::Uncompress::Unzip versions before 2.220 for Perl allow CPU exhaustion via per-byte read loop in fastForward. fastForward() compares length $offset (the digit count of the offset, 1 to 19) against the chunk size $c instead of $offset itself, so $c shrinks from 16 KiB to 1-19 bytes per iteration. Extracting a named entry from an attacker supplied zip via IO::Uncompress::Unzip->new($zip, Name => $target) drives a per-byte read loop scaling with the entry's compressed size, up to the non-Zip64 4 GiB cap.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl IO::Uncompress::Unzip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke Perl IO::Uncompress::Unzip on attacker-controlled zip input, and the stock container never executes Perl.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48959",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://metacpan.org/release/PMQS/IO-Compress-2.220/changes",
+          "title": "MetaCPAN Release Notes"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Uncompress::Unzip on attacker-supplied zip input so the vulnerable fastForward path is exercised. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Uncompress::Unzip. The vulnerable Perl zip extraction path is therefore not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-48962",
+      "description": "IO::Compress versions before 2.220 for Perl can execute arbitrary code in File::GlobMapper via an attacker-controlled output glob. _parseOutputGlob() wraps the caller-supplied output glob string in double quotes and stores it in the parser state; _getFiles() then runs the stored expression through eval STRING. A literal double quote in the output glob closes the dquote wrapper, and the characters that follow are evaluated as Perl. Arbitrary Perl in the output glob executes at the calling process's privilege.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl IO::Compress output-glob handling at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke Perl IO::Compress output-glob handling on attacker-controlled input, and the stock container never executes Perl.\n"
+        }
+      ],
+      "cwes": [
+        95,
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48962",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://metacpan.org/release/PMQS/IO-Compress-2.220/changes",
+          "title": "MetaCPAN Release Notes"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Compress output-glob handling so attacker-controlled glob text reaches File::GlobMapper and eval STRING. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Compress or File::GlobMapper. The vulnerable Perl compression path is therefore not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-13221",
       "description": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
       "recommendation": "No action required. Liquibase never invokes Perl, and no Liquibase security control is implemented via a Perl regex.",

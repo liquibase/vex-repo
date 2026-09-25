@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-4259d2664c03d47b2f7711df797b559595dccff043e3bdca63f0a5160e992427",
+  "@id": "merged-vex-c514f55c40a32fc727c41f3988a86e2297304b55f9b5916bb5213cdc7edaf1d5",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T17:46:45.007424672Z",
+  "timestamp": "2026-09-25T20:21:24.79827388Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-09-25T17:46:41.091920636Z",
+      "timestamp": "2026-09-25T20:21:20.072006045Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-09-25T17:46:37.721556754Z",
+      "timestamp": "2026-09-25T20:21:16.82678414Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-09-25T17:46:36.462467656Z",
+      "timestamp": "2026-09-25T20:21:15.622173698Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-09-25T17:46:36.689972858Z",
+      "timestamp": "2026-09-25T20:21:15.838428481Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-4046"
       },
-      "timestamp": "2026-09-25T17:46:39.180932443Z",
+      "timestamp": "2026-09-25T20:21:18.241644292Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-4437"
       },
-      "timestamp": "2026-09-25T17:46:44.762433431Z",
+      "timestamp": "2026-09-25T20:21:23.586118776Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -99,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-4438"
       },
-      "timestamp": "2026-09-25T17:46:44.988790128Z",
+      "timestamp": "2026-09-25T20:21:23.805254259Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -114,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-09-25T17:46:43.329671727Z",
+      "timestamp": "2026-09-25T20:21:22.212813822Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -127,9 +127,39 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-5928"
+      },
+      "timestamp": "2026-09-25T20:21:24.157498043Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling the ungetwc function on a FILE stream with wide characters encoded in a character set that has overlaps between its single byte and multi-byte character encodings, in the GNU C Library version 2.43 or earlier, may result in an attempt to read bytes before an allocated buffer, potentially resulting in unintentional disclosure of neighboring data in the heap, or a program crash.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.14, but this issue requires an application to call glibc's ungetwc wide-character pushback path on a FILE stream using a character set with overlapping single-byte and multibyte encodings. Liquibase Secure's stock runtime path is the Java CLI, and a review of its build and runtime flow found no references to ungetwc or related native wide-character stream handling in the product runtime path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6238"
+      },
+      "timestamp": "2026-09-25T20:21:24.376711751Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.0.1 to version 2.43 fail to validate the RDATA content against the RDATA length in a DNS response when processing A6, CERT, LOC, TKEY or TSIG records, which may allow an attacker to craft a DNS response, causing a target application to crash or read uninitialized memory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.14, but this issue affects deprecated glibc debugging helpers for printing DNS record data rather than the resolver path itself. Liquibase Secure's stock runtime is the Liquibase Java CLI, and a source review found no references to ns_printrrf, ns_printrr, fp_nquery, or TSIG-related record-printing in the product runtime path."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-09-25T17:46:37.946950252Z",
+      "timestamp": "2026-09-25T20:21:17.041691775Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-09-25T17:46:43.630437554Z",
+      "timestamp": "2026-09-25T20:21:22.498358619Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-09-25T17:46:44.031386387Z",
+      "timestamp": "2026-09-25T20:21:22.883244766Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -174,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-09-25T17:46:44.257724089Z",
+      "timestamp": "2026-09-25T20:21:23.102786469Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -189,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-09-25T17:46:40.495008008Z",
+      "timestamp": "2026-09-25T20:21:19.499765507Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -204,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-09-25T17:46:40.792808967Z",
+      "timestamp": "2026-09-25T20:21:19.78557565Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"

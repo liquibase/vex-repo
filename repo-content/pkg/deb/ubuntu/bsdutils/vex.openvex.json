@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-9645d806ec687a3fe0996f8d1adf50bd8ae9e4e7f882a70f7b7f138dc4eb0e5c",
+  "@id": "merged-vex-0ca9b46e21541d5940305543ad5a7b35773b3d9139cb93b8305589d68632346f",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T17:37:14.187963619Z",
+  "timestamp": "2026-09-25T20:11:17.579132664Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-13595"
       },
-      "timestamp": "2026-09-25T17:37:06.99379391Z",
+      "timestamp": "2026-09-25T20:11:09.331404525Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -27,7 +27,7 @@
           "GHSA-qq4x-vfq4-9h9g"
         ]
       },
-      "timestamp": "2026-09-25T17:37:07.504407365Z",
+      "timestamp": "2026-09-25T20:11:09.813517341Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -40,12 +40,72 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-53612"
+      },
+      "timestamp": "2026-09-25T20:11:16.91109428Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/bsdutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "No public advisory text is available yet (NVD/cve.org record not published as of 2026-09-25). Per the Ubuntu util-linux 2.39.3-9ubuntu6.6 changelog: a time-of-check-time-of-use (TOCTOU) race in libmount's hook_owner path could allow local privilege escalation during a mount operation; fixed by using fd-based fchownat/chmod instead of path-based calls.",
+      "justification": "component_not_present",
+      "impact_statement": "Scanner package misattribution. No CVE.org, NVD, or Ubuntu security tracker record exists yet for this ID as of 2026-09-25 (NVD totalResults: 0, cve.org returns CVE_RECORD_DNE, and ubuntu.com/security/CVE-2026-53612 404s), but the util-linux 2.39.3-9ubuntu6.6 changelog (changelogs.ubuntu.com/changelogs/pool/main/u/util-linux) confirms the fix: \"Local Privilege Escalation via TOCTOU in mount\" -- debian/patches/CVE-2026-53612.patch, \"libmount: use fd-based fchownat/chmod in hook_owner\", touching libmount/src/hook_owner.c. That file is compiled into the libmount1 shared library and the mount binary package, not bsdutils. Confirmed directly: `dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2 lists only logger, renice, script, scriptlive, scriptreplay, and wall -- no mount-related binary or libmount.so. The scanner's SBOM appears to attribute a util-linux-source-package-level fix to every binary package built from that source, including bsdutils, which does not contain the patched code. Even setting misattribution aside, this is a local TOCTOU privilege-escalation bug in a setuid `mount` invocation -- not something Liquibase Secure's headless CLI runtime triggers."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-53613"
+      },
+      "timestamp": "2026-09-25T20:11:17.127719455Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/bsdutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "No public advisory text is available yet (NVD/cve.org record not published as of 2026-09-25). Per the Ubuntu util-linux 2.39.3-9ubuntu6.6 changelog: a second TOCTOU race in libmount's mount-context handling could allow local privilege escalation; fixed by tracking the mount target by file descriptor rather than path.",
+      "justification": "component_not_present",
+      "impact_statement": "Same scanner package misattribution as CVE-2026-53612. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Another local Privilege Escalation via TOCTOU in mount\" -- debian/patches/CVE-2026-53613[-pre1].patch, adding ul_open_no_symlinks() and an fd_target field to libmount's mount context (lib/fileutils.c, libmount/src/context.c, libmount/src/context_mount.c, libmount/src/hook_mount.c, libmount/src/hook_mount_legacy.c) -- all libmount1/mount package files, confirmed absent from bsdutils's file list (`dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2: logger, renice, script, scriptlive, scriptreplay, wall only). Same local-TOCTOU- in-setuid-mount threat model as CVE-2026-53612, which Liquibase Secure's headless CLI runtime does not exercise."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-53614"
+      },
+      "timestamp": "2026-09-25T20:11:17.344475721Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/bsdutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "No public advisory text is available yet (NVD/cve.org record not published as of 2026-09-25). Per the Ubuntu util-linux 2.39.3-9ubuntu6.6 changelog: the LIBMOUNT_FORCE_MOUNT2 environment variable could be used to bypass privilege-dropping in the legacy mount(8) code path, allowing local privilege escalation.",
+      "justification": "component_not_present",
+      "impact_statement": "Same scanner package misattribution as CVE-2026-53612/53613. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Local Privilege Escalation via LIBMOUNT_FORCE_MOUNT2 Environment Variable\" -- debian/patches/CVE-2026-53614.patch, fixing a SUID bypass via LIBMOUNT_FORCE_MOUNT2 in the legacy mount path (libmount/src/hook_mount.c, libmount/src/hook_mount_legacy.c) -- again libmount1/mount package files, confirmed absent from bsdutils's file list. Exploitation requires setting an environment variable ahead of invoking a setuid `mount` binary; Liquibase Secure never invokes `mount` and does not ship a setuid mount binary as part of its own application surface."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-53615"
+      },
+      "timestamp": "2026-09-25T20:11:17.562411845Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/bsdutils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "No public advisory text is available yet (NVD/cve.org record not published as of 2026-09-25). Per the Ubuntu util-linux 2.39.3-9ubuntu6.6 changelog: a signed integer overflow in libblkid's DOS/MBR extended-partition (EBR) parser (dos.c) could be triggered by a crafted block device, resulting in memory corruption; fixed by validating EBR data and chain links.",
+      "justification": "component_not_present",
+      "impact_statement": "Same scanner package misattribution as the other three util-linux CVEs in this batch. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Integer Overflow or Wraparound in dos.c\" -- debian/patches/CVE-2026-53615.patch, \"libblkid: dos: validate EBR data and links within extended partition\", touching libblkid/src/partitions/dos.c. That file is compiled into the libblkid1 shared library, not bsdutils -- confirmed absent from bsdutils's file list (`dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2: logger, renice, script, scriptlive, scriptreplay, wall only; libblkid1 is a separate installed package). Exploitation requires libblkid to probe a crafted block device's MBR/extended-partition (EBR) table, e.g. via `blkid`/`lsblk`/udev device probing. Liquibase Secure's runtime never probes block devices or partition tables."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-76642",
         "aliases": [
           "GHSA-m25x-3hj9-m26f"
         ]
       },
-      "timestamp": "2026-09-25T17:37:11.006723322Z",
+      "timestamp": "2026-09-25T20:11:13.167450051Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -60,7 +120,7 @@
       "vulnerability": {
         "name": "CVE-2026-78408"
       },
-      "timestamp": "2026-09-25T17:37:11.441034762Z",
+      "timestamp": "2026-09-25T20:11:13.588140827Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -75,7 +135,7 @@
       "vulnerability": {
         "name": "CVE-2026-78409"
       },
-      "timestamp": "2026-09-25T17:37:11.871897543Z",
+      "timestamp": "2026-09-25T20:11:14.005848366Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
@@ -90,7 +150,7 @@
       "vulnerability": {
         "name": "CVE-2026-78410"
       },
-      "timestamp": "2026-09-25T17:37:12.305026469Z",
+      "timestamp": "2026-09-25T20:11:14.42414018Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/bsdutils"
