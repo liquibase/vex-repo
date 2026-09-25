@@ -9,7 +9,8 @@ This repository provides vulnerability assessments in
 > **This repository is auto-generated.** Do not edit the VEX files directly.
 > Changes will be overwritten on the next automated update.
 > To add or modify assessments, submit a PR to
-> [`liquibase-pro/vex/assessments.yaml`](https://github.com/liquibase/liquibase-pro/blob/master/vex/assessments.yaml).
+> [`liquibase-pro/vex/assessments.yaml`](https://github.com/liquibase/liquibase-pro/blob/master/vex/assessments.yaml)
+> for Liquibase Secure, or `liquibase-insights/vex/assessments.yaml` for the liquibase-platform-* images.
 > See the [contributing guide](https://github.com/liquibase/liquibase-pro/blob/master/vex/CONTRIBUTING.md).
 
 ## How it fits together
@@ -27,8 +28,9 @@ liquibase-pro                           vex-repo                    Customer
 +---------------------------+           +--------------------+
 ```
 
-Assessments are maintained in `liquibase-pro/vex/assessments.yaml`. When that
-file changes on `master`, a GitHub Actions workflow dispatches to this
+Assessments are maintained in `liquibase-pro/vex/assessments.yaml`, and for the
+liquibase-platform-* images in `liquibase-insights/vex/assessments.yaml`. When
+either file changes on `main`, a GitHub Actions workflow dispatches to this
 repository, regenerates all VEX content, and opens a pull request.
 
 ## What is VEX?
@@ -67,6 +69,9 @@ trivy fs --vex repo /path/to/liquibase/
 
 # Scan the root filesystem of a Liquibase container
 trivy rootfs --vex repo /liquibase/
+
+# Scan a Liquibase platform image
+trivy image --vex repo ghcr.io/liquibase/liquibase-platform-api:latest
 
 # Show suppressed vulnerabilities alongside active ones
 trivy image --vex repo --show-suppressed liquibase/liquibase:latest
@@ -196,6 +201,8 @@ in the liquibase-pro repository. The update flow:
 2. The [`vex-repo-dispatch.yml`](https://github.com/liquibase/liquibase-pro/blob/master/.github/workflows/vex-repo-dispatch.yml) workflow triggers
 3. It dispatches to this repository's [`update-vex.yaml`](.github/workflows/update-vex.yaml) workflow
 4. That workflow sparse-checkouts `liquibase-pro/vex/`, runs `generate-vex-repo.sh`, validates the output, and opens a PR
+
+The liquibase-platform-* images follow the same flow from `liquibase-insights`: its `vex-repo-dispatch.yml` triggers the same workflow, which also checks out `liquibase-insights/vex/`, generates those statements scoped to the four platform images, and merges them in before validating.
 
 The workflow can also be triggered manually via `workflow_dispatch`.
 
