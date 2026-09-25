@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-23f25f5c1f5606a9d80e25e29001b910a9dc93d4bcaeefa80a006d6d561cf780",
+  "@id": "merged-vex-4259d2664c03d47b2f7711df797b559595dccff043e3bdca63f0a5160e992427",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T16:24:48.609135287Z",
+  "timestamp": "2026-09-25T17:46:45.007424672Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-09-25T16:24:45.512102257Z",
+      "timestamp": "2026-09-25T17:46:41.091920636Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-09-25T16:24:42.278289739Z",
+      "timestamp": "2026-09-25T17:46:37.721556754Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-09-25T16:24:41.082409525Z",
+      "timestamp": "2026-09-25T17:46:36.462467656Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-09-25T16:24:41.298317389Z",
+      "timestamp": "2026-09-25T17:46:36.689972858Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-4046"
       },
-      "timestamp": "2026-09-25T16:24:43.68645935Z",
+      "timestamp": "2026-09-25T17:46:39.180932443Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -82,9 +82,39 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-4437"
+      },
+      "timestamp": "2026-09-25T17:46:44.762433431Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling gethostbyaddr or gethostbyaddr_r with a configured nsswitch.conf that specifies the library's DNS backend in the GNU C Library version 2.34 to version 2.43 could, with a crafted response from the configured DNS server, result in a violation of the DNS specification that causes the application to treat a non-answer section of the DNS response as a valid answer.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "glibc gethostbyaddr/gethostbyaddr_r DNS-response-parsing bug (CWE-125), exploitable when a crafted response from the configured DNS resolver causes the application to treat a non-answer section as a valid answer. Liquibase Secure only performs a reverse-DNS lookup through this path via NetUtil.getLocalHostName() (core/liquibase-standard/src/main/java/liquibase/util/NetUtil.java), which resolves the container's own local address -- never an attacker-supplied or remote address -- and caches the result in a static field after the first call. It is used purely for cosmetic/ attribution fields (DATABASECHANGELOGLOCK owner in LockDatabaseChangeLogGenerator, license/run-context tracking, drift report hostname), never for access control or trust decisions. Exploitation therefore requires a compromised or MITM'd DNS resolver already configured and trusted by the deployment (via /etc/resolv.conf and nsswitch.conf's \"dns\" hosts backend) -- not an arbitrary remote attacker. Version check: the currently published liquibase/liquibase-secure:5.2.2 image ships libc-bin 2.39-0ubuntu8.9 (already >= the 2.39-0ubuntu8.8 fix); tags 5.2.1 down to 5.0.2 ship 2.39-0ubuntu8.7 or 8.6 (unfixed by version), and 5.0.1 ships an older 2.35-0ubuntu3.11 base entirely, so the reachability argument (not the package version) is what covers the whole published tag range."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-4438"
+      },
+      "timestamp": "2026-09-25T17:46:44.988790128Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling gethostbyaddr or gethostbyaddr_r with a configured nsswitch.conf that specifies the library's DNS backend in the GNU C library version 2.34 to version 2.43 could result in an invalid DNS hostname being returned to the caller in violation of the DNS specification.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "glibc gethostbyaddr/gethostbyaddr_r invalid-hostname bug (CWE-20/ CWE-88), where a crafted DNS response can cause an invalid hostname to be returned to the caller. Liquibase Secure's only reverse-DNS call site is NetUtil.getLocalHostName() (core/liquibase-standard/src/main/java/liquibase/util/NetUtil.java), resolving the container's own local address (never a remote or attacker-supplied one), cached after the first lookup, and used only for cosmetic attribution fields (DATABASECHANGELOGLOCK owner, license/run-context tracking, drift report hostname) -- never parsed, executed, or used in an authorization decision, which also bounds the CWE-88 argument-injection concern this CVE separately flags for callers that shell out with the returned hostname. Exploitation requires a compromised or MITM'd DNS resolver already trusted by the deployment. Version check: same as CVE-2026-4437 -- only the currently published 5.2.2 tag ships a fixed libc-bin (2.39-0ubuntu8.9); 5.2.1 down to 5.0.1 remain on an unfixed build, so this reachability argument, not package version, is what covers the whole published tag range."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-09-25T16:24:47.607680508Z",
+      "timestamp": "2026-09-25T17:46:43.329671727Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -99,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-09-25T16:24:42.492492213Z",
+      "timestamp": "2026-09-25T17:46:37.946950252Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -114,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-09-25T16:24:47.886951011Z",
+      "timestamp": "2026-09-25T17:46:43.630437554Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -129,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-09-25T16:24:48.267687333Z",
+      "timestamp": "2026-09-25T17:46:44.031386387Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-09-25T16:24:48.488502454Z",
+      "timestamp": "2026-09-25T17:46:44.257724089Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-09-25T16:24:44.94048743Z",
+      "timestamp": "2026-09-25T17:46:40.495008008Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -174,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-09-25T16:24:45.226913179Z",
+      "timestamp": "2026-09-25T17:46:40.792808967Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
