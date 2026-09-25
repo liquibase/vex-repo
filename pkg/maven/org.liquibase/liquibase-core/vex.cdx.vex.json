@@ -14992,6 +14992,399 @@
       ]
     },
     {
+      "id": "CVE-2026-46917",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Easily exploitable vulnerability allows unauthenticated attacker with network access via TLS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS). Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service.",
+      "recommendation": "No action required for the Liquibase Secure container. This image is an outbound client, not a sandboxed Java runtime exposed to arbitrary TLS peers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a malicious or compromised TLS peer already in the trusted outbound path. The Liquibase Secure container is not a server or sandboxed Java client runtime.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-46917",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java JSSE partial-denial-of-service issue. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure uses a Temurin 21 JRE base and runs only as an outbound CLI client to trusted HTTPS and JDBC endpoints, not as a server or a sandboxed Java client runtime. Exploitation requires a malicious or compromised TLS peer already in the trusted network path, which is outside the expected deployment environment for this image.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-46968",
+      "description": "Vulnerability in Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Difficult to exploit vulnerability allows unauthenticated attacker with network access via TLS to compromise Oracle Java SE. Successful attacks of this vulnerability can result in unauthorized creation, deletion or modification access to critical data or all Oracle Java SE accessible data. Note: This vulnerability can only be exploited by supplying data to APIs in the specified Component without using Untrusted Java Web Start applications or Untrusted Java applets, such as through a web service.",
+      "recommendation": "No action required for the Liquibase Secure container. This image is an outbound client, not a sandboxed Java runtime exposed to arbitrary TLS peers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a malicious or compromised TLS peer already in the trusted outbound path. The Liquibase Secure container is not a server or sandboxed Java client runtime.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-46968",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java JSSE integrity issue. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure uses a Temurin 21 JRE base and runs only as an outbound CLI client to trusted HTTPS and JDBC endpoints, not as a server or a sandboxed Java client runtime. Exploitation requires a malicious or compromised TLS peer already in the trusted network path, which is outside the expected deployment environment for this image.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47010",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: ImageIO). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code.",
+      "recommendation": "No action required. Liquibase Secure does not use ImageIO in its shipped runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No ImageIO or java.awt usage exists in the shipped runtime path, so the vulnerable image-processing APIs are unreachable.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java ImageIO issue. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure is a headless CLI container and a source review found no ImageIO or java.awt usage anywhere in the shipped runtime path. The vulnerable image-decoding APIs are not exercised by this image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47021",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: 2D). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks can result in unauthorized ability to cause a partial denial of service. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code.",
+      "recommendation": "No action required. Liquibase Secure does not use java.awt or 2D APIs in its shipped runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No java.awt or 2D usage exists in the shipped runtime path, so the vulnerable rendering APIs are unreachable.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47021",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java 2D issue. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure is a headless CLI container and a source review found no java.awt or 2D usage anywhere in the shipped runtime path. The vulnerable rendering APIs are not exercised by this image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47027",
+      "description": "Vulnerability in Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE. Successful attacks can result in unauthorized ability to cause a partial denial of service. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code.",
+      "recommendation": "No action required for the Liquibase Secure container. This image is an outbound client, not a sandboxed Java runtime exposed to arbitrary untrusted data sources.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires malicious data to arrive through a trusted outbound peer path or a sandboxed client runtime. Neither condition matches the Liquibase Secure container deployment.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47027",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java Libraries partial-denial-of-service issue. The scan reported Oracle OpenJDK 21.0.11+10-LTS, but Liquibase Secure uses a Temurin 21 JRE base and runs only as an outbound CLI client to trusted HTTPS and JDBC endpoints, not as a server or a sandboxed Java client runtime. Exploitation requires malicious data to be supplied through a trusted peer path that is outside the expected deployment environment for this image.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-4437",
+      "description": "Calling gethostbyaddr or gethostbyaddr_r with a configured nsswitch.conf that specifies the library's DNS backend in the GNU C Library version 2.34 to version 2.43 could, with a crafted response from the configured DNS server, result in a violation of the DNS specification that causes the application to treat a non-answer section of the DNS response as a valid answer.",
+      "recommendation": "No action required. Liquibase Secure only reverse-resolves its own local address, for display/attribution purposes only, and only a compromised or MITM'd DNS resolver already trusted by the deployment could exploit this. As defense-in-depth, upgrade to a Secure release built on libc-bin 2.39-0ubuntu8.8 or later (5.2.2+).",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase only reverse-resolves its own local address (never an attacker-supplied one) for cosmetic attribution fields, so exploitation requires a compromised or MITM'd DNS resolver already trusted by the deployment.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4437",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=34014",
+          "title": "GNU C Library Bugzilla"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc gethostbyaddr/gethostbyaddr_r DNS-response-parsing bug (CWE-125), exploitable when a crafted response from the configured DNS resolver causes the application to treat a non-answer section as a valid answer. Liquibase Secure only performs a reverse-DNS lookup through this path via NetUtil.getLocalHostName() (core/liquibase-standard/src/main/java/liquibase/util/NetUtil.java), which resolves the container's own local address -- never an attacker-supplied or remote address -- and caches the result in a static field after the first call. It is used purely for cosmetic/ attribution fields (DATABASECHANGELOGLOCK owner in LockDatabaseChangeLogGenerator, license/run-context tracking, drift report hostname), never for access control or trust decisions. Exploitation therefore requires a compromised or MITM'd DNS resolver already configured and trusted by the deployment (via /etc/resolv.conf and nsswitch.conf's \"dns\" hosts backend) -- not an arbitrary remote attacker. Version check: the currently published liquibase/liquibase-secure:5.2.2 image ships libc-bin 2.39-0ubuntu8.9 (already >= the 2.39-0ubuntu8.8 fix); tags 5.2.1 down to 5.0.2 ship 2.39-0ubuntu8.7 or 8.6 (unfixed by version), and 5.0.1 ships an older 2.35-0ubuntu3.11 base entirely, so the reachability argument (not the package version) is what covers the whole published tag range.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-4438",
+      "description": "Calling gethostbyaddr or gethostbyaddr_r with a configured nsswitch.conf that specifies the library's DNS backend in the GNU C library version 2.34 to version 2.43 could result in an invalid DNS hostname being returned to the caller in violation of the DNS specification.",
+      "recommendation": "No action required. Liquibase Secure only reverse-resolves its own local address for display/attribution purposes and never passes the result to a shell or command line, so the CWE-88 injection concern this CVE flags does not apply here either. As defense-in-depth, upgrade to a Secure release built on libc-bin 2.39-0ubuntu8.8 or later (5.2.2+).",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase only reverse-resolves its own local address for cosmetic attribution fields and never shells out with the result, so exploitation requires a compromised or MITM'd DNS resolver already trusted by the deployment.\n"
+        }
+      ],
+      "cwes": [
+        20,
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4438",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=34015",
+          "title": "GNU C Library Bugzilla"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "glibc gethostbyaddr/gethostbyaddr_r invalid-hostname bug (CWE-20/ CWE-88), where a crafted DNS response can cause an invalid hostname to be returned to the caller. Liquibase Secure's only reverse-DNS call site is NetUtil.getLocalHostName() (core/liquibase-standard/src/main/java/liquibase/util/NetUtil.java), resolving the container's own local address (never a remote or attacker-supplied one), cached after the first lookup, and used only for cosmetic attribution fields (DATABASECHANGELOGLOCK owner, license/run-context tracking, drift report hostname) -- never parsed, executed, or used in an authorization decision, which also bounds the CWE-88 argument-injection concern this CVE separately flags for callers that shell out with the returned hostname. Exploitation requires a compromised or MITM'd DNS resolver already trusted by the deployment. Version check: same as CVE-2026-4437 -- only the currently published 5.2.2 tag ships a fixed libc-bin (2.39-0ubuntu8.9); 5.2.1 down to 5.0.1 remain on an unfixed build, so this reachability argument, not package version, is what covers the whole published tag range.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
