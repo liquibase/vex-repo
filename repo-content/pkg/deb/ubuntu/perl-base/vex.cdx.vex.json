@@ -370,6 +370,120 @@
           "ref": "pkg:deb/ubuntu/perl-base"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-42496",
+      "description": "Archive::Tar versions before 3.08 for Perl extract symlinks with attacker controlled targets outside the extraction directory. _make_special_file() passes the tar header's linkname to symlink() without validating it against absolute paths or .. segments. The secure-extract mode check that guards regular file extraction does not cover the symlink target. A subsequent open through the extracted name reads or writes the attacker chosen path.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl Archive::Tar extraction at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke Perl Archive::Tar extraction on attacker-controlled input, and the stock container never executes Perl.\n"
+        }
+      ],
+      "cwes": [
+        22,
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42496",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://osv.dev/vulnerability/CVE-2026-42496",
+          "title": "OSV Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and the Ubuntu fix level is 5.38.2-3.2ubuntu0.3. This issue requires an application to invoke Perl Archive::Tar extraction on attacker-controlled archives so a crafted symlink target is created outside the extraction directory. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles and entrypoint scripts found no Perl invocation or Perl-based tar extraction path. The vulnerable Archive::Tar symlink-extraction path is therefore not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42497",
+      "description": "Archive::Tar versions before 3.08 for Perl extract hardlinks to attacker controlled paths outside the extraction directory. _make_special_file() passes the tar header's linkname to link() without validating it against absolute paths or .. segments, creating a hardlink that shares the victim file's inode. A subsequent write through the extracted name modifies the victim file, and the post-extraction chmod, chown, and utime block in _extract_file() applies the tar header's mode, owner, and timestamps to the shared inode during extraction alone.",
+      "recommendation": "No action required. Liquibase Secure does not invoke Perl Archive::Tar extraction at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires Liquibase Secure to invoke Perl Archive::Tar extraction on attacker-controlled input, and the stock container never executes Perl.\n"
+        }
+      ],
+      "cwes": [
+        59,
+        732
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42497",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://osv.dev/vulnerability/CVE-2026-42497",
+          "title": "OSV Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and the Ubuntu fix level is 5.38.2-3.2ubuntu0.3. This issue requires an application to invoke Perl Archive::Tar extraction on attacker-controlled archives so a crafted hardlink is created outside the extraction directory. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles and entrypoint scripts found no Perl invocation or Perl-based tar extraction path. The vulnerable Archive::Tar hardlink-extraction path is therefore not reachable from the stock runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,15 +1,105 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-151ef99c7b0e25bd4f5e5036ef7c3d4ae7aa38e85bca0c05c41bebc464a42716",
+  "@id": "merged-vex-a21eec2495bb2cb493ec27fd1303c6257af2742ec93a503a74fce474cfde6940",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T15:14:31.867384064Z",
+  "timestamp": "2026-09-25T16:31:47.358225246Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-34182"
+      },
+      "timestamp": "2026-09-25T16:31:45.158277248Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Issue Summary: Cryptographic Message Services (CMS) processing fails to perform sufficient input validation on the cipher and tag length fields of AuthEnvelopedData containers, leading to various potential compromises. Attackers may achieve key-equivalent functionality for a given CMS recipient and/or bypass integrity validation for a given message.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE affects OpenSSL CMS AuthEnvelopedData decryption when attacker-supplied content reaches CMS_decrypt() and the application trusts the result without separate integrity enforcement. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, AuthEnvelopedData, or related CMS processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42766"
+      },
+      "timestamp": "2026-09-25T16:31:45.438465009Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A specially crafted password-encrypted CMS message can trigger a NULL pointer dereference during CMS decryption. An attacker who supplies such a CMS message to an application performing password-based CMS decryption can trigger an application crash, leading to a Denial of Service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE affects password-based OpenSSL CMS decryption when attacker-supplied PasswordRecipientInfo content reaches the CMS implementation. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to password-based CMS decryption or related CMS PasswordRecipientInfo processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42767"
+      },
+      "timestamp": "2026-09-25T16:31:45.653540754Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An attacker-controlled CMP server could trigger a NULL pointer dereference in a CMP client application. Applications that process untrusted CMP or CRMF messages may be affected.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires an OpenSSL CMP client to process attacker-controlled CMP or CRMF CertRepMessage content. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMP tooling, and a source review found no references to CMP, CRMF, CertRepMessage, or EncryptedValue processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMP client path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42770"
+      },
+      "timestamp": "2026-09-25T16:31:45.871352027Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When EVP_PKEY_derive_set_peer() is called with a DHX (X9.42) peer key, the peer key is not properly checked for subgroup membership. The realistic attack surface is narrow, principally CMP deployments with long-lived RA/CA DHX keys and bespoke applications using X9.42 static keys.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires an application to use OpenSSL's DHX/X9.42 key-exchange path through EVP_PKEY_derive_set_peer(), typically in specialized CMP or static DHX deployments. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL key-exchange tooling, and a source review found no references to CMP, DHX, X9.42, or EVP_PKEY_derive_set_peer in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable DHX path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45445"
+      },
+      "timestamp": "2026-09-25T16:31:46.088693708Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When an application drives an AES-OCB context through the public EVP_Cipher() one-shot interface, the application-supplied IV is silently discarded, resulting in nonce reuse and loss of confidentiality.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires an application to drive OpenSSL AES-OCB through the EVP_Cipher() one-shot interface. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD tooling, and a source review found no references to AES-OCB, EVP_Cipher(), or related OpenSSL AEAD handling in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable AES-OCB path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-45446"
+      },
+      "timestamp": "2026-09-25T16:31:46.307626832Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The implementations of AES-SIV and AES-GCM-SIV mishandle the authentication of Additional Authenticated Data with an empty ciphertext, allowing a forgery of such messages.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires an application to use OpenSSL AES-SIV or AES-GCM-SIV through the EVP interface with empty-ciphertext message handling. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD tooling, and a source review found no references to AES-SIV, AES-GCM-SIV, or related EVP decryption handling in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable AEAD path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-09-25T15:14:25.041104339Z",
+      "timestamp": "2026-09-25T16:31:37.555860144Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -22,9 +112,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-63076"
+      },
+      "timestamp": "2026-09-25T16:31:46.582094708Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When verifying the password-based MAC protection of a CMP message, OpenSSL reads the protectionAlg algorithm parameter with X509_ALGOR_get0() and treats the returned value as a PBMParameter after checking only that the pointer is not null, without validating the ASN.1 type. A remote attacker can crash an application acting as a CMP server that accepts PBM-protected messages, or a CMP client talking to a malicious or intercepted CMP server, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when an application verifies CMP password-based protection on attacker-supplied messages. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMP tooling, and a source review found no references to CMP, PBM, or OSSL_CMP request-processing paths in the product runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-7383"
+      },
+      "timestamp": "2026-09-25T16:31:46.895648786Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A signed integer overflow when sizing the destination buffer for Unicode output in ASN1_mbstring_ncopy can lead to a heap buffer overflow. The issue requires an application to call ASN1_mbstring_copy or ASN1_mbstring_ncopy directly, or to register a custom string type via ASN1_STRING_TABLE_add with attacker-controlled input large enough to overflow the size calculation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.25, but this issue requires an application to call OpenSSL's ASN1_mbstring_copy or ASN1_mbstring_ncopy APIs directly, or to register a custom string type and then feed it extremely large attacker-controlled input. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL string-processing APIs, and a source review found no references to those OpenSSL ASN.1 entry points in the product runtime path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75803"
+      },
+      "timestamp": "2026-09-25T16:31:47.108569078Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "For ChaCha20-Poly1305 and AES-OCB, EVP_Cipher could report successful decryption for an empty ciphertext without verifying the supplied AEAD tag. Applications that rely on EVP_Cipher to validate the tag in that case might accept forged messages.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue requires an application to use OpenSSL's EVP_Cipher one-shot API for ChaCha20-Poly1305 or AES-OCB decryption on an empty ciphertext while expecting that call to validate the AEAD tag. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD decryption helpers, and a source review found no references to EVP_Cipher, ChaCha20-Poly1305, or AES-OCB in the product runtime path."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-9076"
       },
-      "timestamp": "2026-09-25T15:14:29.467430913Z",
+      "timestamp": "2026-09-25T16:31:42.354035127Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"

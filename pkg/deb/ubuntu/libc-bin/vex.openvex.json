@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a90837505195a39681539b428dc99b187aea9f235e3b4f68187cb0efd7018486",
+  "@id": "merged-vex-23f25f5c1f5606a9d80e25e29001b910a9dc93d4bcaeefa80a006d6d561cf780",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T15:08:35.311962438Z",
+  "timestamp": "2026-09-25T16:24:48.609135287Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-09-25T15:08:33.836113869Z",
+      "timestamp": "2026-09-25T16:24:45.512102257Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-09-25T15:08:30.897447315Z",
+      "timestamp": "2026-09-25T16:24:42.278289739Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-09-25T15:08:29.800152837Z",
+      "timestamp": "2026-09-25T16:24:41.082409525Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-09-25T15:08:29.999671391Z",
+      "timestamp": "2026-09-25T16:24:41.298317389Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-4046"
       },
-      "timestamp": "2026-09-25T15:08:32.174177265Z",
+      "timestamp": "2026-09-25T16:24:43.68645935Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -82,9 +82,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-5435"
+      },
+      "timestamp": "2026-09-25T16:24:47.607680508Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to enforce the caller-supplied buffer length, and can result in an out-of-bounds write when printing TSIG records.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE affects deprecated glibc resolver-printing functions used for TSIG record formatting. Liquibase Secure's stock runtime is the Liquibase Java CLI, and a source review found no references to ns_printrrf, ns_printrr, fp_nquery, or TSIG processing in the product runtime path. libc-bin is inherited from the base image only, so the vulnerable glibc function path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-09-25T15:08:31.102711718Z",
+      "timestamp": "2026-09-25T16:24:42.492492213Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -97,9 +112,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-6791"
+      },
+      "timestamp": "2026-09-25T16:24:47.886951011Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When expanding paths that begin with a tilde followed by a username, glibc's parse_tilde allocates the extracted username on the stack with strndupa based on untrusted input length. If an application passes attacker-controlled input to wordexp, an excessively long username can exhaust stack space and trigger a stack clash.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.15, but this flaw requires an application to pass attacker-controlled input into glibc's wordexp path-expansion API. The stock Liquibase Secure runtime is the Liquibase Java CLI behind a bash-based entrypoint, and a source review found no references to wordexp or WRDE_APPEND in the container build or runtime path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-77117"
+      },
+      "timestamp": "2026-09-25T16:24:48.267687333Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.15, but this issue requires an application to feed attacker-controlled SHIFT_JISX0213 data through glibc's iconv conversion path with a small enough output buffer to split a two-code-point decode. Liquibase Secure's stock runtime path is the Java CLI, and a review of its build and runtime flow found no references to iconv or SHIFT_JISX0213 processing. The vulnerable glibc conversion path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-80489"
+      },
+      "timestamp": "2026-09-25T16:24:48.488502454Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Converting crafted EUC_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libc-bin 2.35-0ubuntu3.10, below Ubuntu's fixed 2.35-0ubuntu3.15, but this issue requires an application to feed attacker-controlled EUC_JISX0213 data through glibc's iconv conversion path with a small enough output buffer to split a two-code-point decode. Liquibase Secure's stock runtime path is the Java CLI, and a review of its build and runtime flow found no references to iconv or EUC_JISX0213 processing. The vulnerable glibc conversion path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-09-25T15:08:33.316980246Z",
+      "timestamp": "2026-09-25T16:24:44.94048743Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -114,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-09-25T15:08:33.578548311Z",
+      "timestamp": "2026-09-25T16:24:45.226913179Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"

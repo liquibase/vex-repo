@@ -1955,6 +1955,66 @@
       ]
     },
     {
+      "id": "CVE-2026-42505",
+      "description": "Handshakes which used Encrypted Client Hello could be de-anonymized by a passive network observer due to a disclosure of pre-shared key identities in the unencrypted client hello.",
+      "recommendation": "No action required for this CVE specifically -- lpm never configures Encrypted Client Hello in any of its outbound HTTP calls, in any released version. As defense-in-depth and to pick up the underlying Go toolchain fix, upgrade to a Secure release that bundles lpm 0.3.6+ (5.2.2 or later; docker/Dockerfile:35 tracks the latest, lpm 0.3.7, built with go1.26.8).",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires the TLS client to configure Encrypted Client Hello, which lpm has never done in any released version; the go1.26.8 fix in the latest lpm 0.3.6/0.3.7 builds is a secondary, version-independent mitigation.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42505",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-5856",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://go.dev/issue/79282",
+          "title": "Go Issue Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls Encrypted Client Hello (ECH) PSK-identity disclosure, fixed in Go 1.25.12 and 1.26.5 (GO-2026-5856). Only the latest published tag actually ships a fixed Go toolchain: extracting and inspecting the embedded Go build info of the `lpm` binary in each currently published `liquibase/liquibase-secure` tag shows 5.2.2 -> lpm 0.3.6 (go1.26.8, fixed), 5.2.1/5.2.0 -> lpm 0.3.4 (go1.26.4, unfixed), and 5.1.1/5.1.0/5.0.3/5.0.2/5.0.1 -> lpm 0.3.1/0.3.0/0.2.16/0.2.15/0.2.14 (go1.25.8/1.25.7/1.25.5/1.25.3/1.25.1, all unfixed). The current source tree's docker/Dockerfile:35 pins a newer lpm 0.3.7, itself also built with go1.26.8 (fixed) per the SHA256-pinned release artifact (lpm-0.3.7-linux.zip, sha256 329eafbe9289d1e83a62cb89844ac461bb5b9d4c5f5f184c8f26244e350e8a95). Despite most published tags running an unfixed Go toolchain by version, the vulnerable handshake path requires the TLS client to opt in by setting `crypto/tls.Config.EncryptedClientHelloConfigList` -- ECH support has been opt-in-only since its introduction in Go 1.23 (see the Go 1.23 release notes: \"This feature can be enabled by setting the Config.EncryptedClientHelloConfigList field\"). lpm's only HTTP client (internal/app/utils/Http.go) has been an unmodified bare `http.Client{}` with no custom Transport or tls.Config across every released version checked (v0.2.14 through v0.3.7), and no import of crypto/tls or reference to ECHConfigList exists anywhere in lpm's source or dependency tree. ECH is therefore never negotiated by lpm in any published Secure image, regardless of the underlying Go version, so the vulnerable code path is not reachable in any of them.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.12|>=1.26.0-0|<1.26.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61731",
       "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
       "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",

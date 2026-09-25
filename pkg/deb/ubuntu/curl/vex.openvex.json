@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-616874e31ee7b7b5b0e7b01539f4a4ce9adeec483ee00b95ac4fbf787386c1a1",
+  "@id": "merged-vex-ae9fea0d92faed531fd406f37f60e4cb52cece14d38f6b08fad37f2bfc5dea20",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T15:01:48.2360866Z",
+  "timestamp": "2026-09-25T16:16:50.619983143Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "CURL-CVE-2026-10536"
         ]
       },
-      "timestamp": "2026-09-25T15:01:44.601794979Z",
+      "timestamp": "2026-09-25T16:16:44.409560281Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -30,7 +30,7 @@
           "CURL-CVE-2026-11856"
         ]
       },
-      "timestamp": "2026-09-25T15:01:41.781942419Z",
+      "timestamp": "2026-09-25T16:16:41.21445157Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -48,7 +48,7 @@
           "CURL-CVE-2026-13608"
         ]
       },
-      "timestamp": "2026-09-25T15:01:43.259930398Z",
+      "timestamp": "2026-09-25T16:16:42.867974968Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -66,7 +66,7 @@
           "CURL-CVE-2026-18924"
         ]
       },
-      "timestamp": "2026-09-25T15:01:42.665123408Z",
+      "timestamp": "2026-09-25T16:16:42.204302979Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -84,7 +84,7 @@
           "CURL-CVE-2026-19931"
         ]
       },
-      "timestamp": "2026-09-25T15:01:42.466966213Z",
+      "timestamp": "2026-09-25T16:16:41.982015015Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -97,12 +97,102 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-3783",
+        "aliases": [
+          "CURL-CVE-2026-3783"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:48.757762591Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When an OAuth2 bearer token is used for an HTTP(S) transfer, and that transfer performs a redirect to a second URL, curl could leak that token to the second hostname under some circumstances. If the redirected host has information in the used .netrc file, curl would pass on the bearer token set for the first host also to the second one.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to perform an OAuth2 bearer token transfer that follows a redirect while consulting .netrc entries for the redirected host. Liquibase Secure's stock container does not invoke curl or link against libcurl in its own build or runtime path, so the vulnerable token-forwarding path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-3784",
+        "aliases": [
+          "CURL-CVE-2026-3784"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:48.980144148Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "curl would wrongly reuse an existing HTTP proxy connection doing CONNECT to a server, even if the new request uses different credentials for the HTTP proxy. The proper behavior is to create or use a separate connection.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to reuse an HTTP proxy CONNECT connection while changing proxy credentials between requests. Liquibase Secure's stock container does not invoke curl or link against libcurl in its own build or runtime path, so the vulnerable proxy connection-reuse path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-4873",
+        "aliases": [
+          "CURL-CVE-2026-4873"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:49.372926025Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A connection requiring TLS can incorrectly reuse an existing unencrypted connection from the same connection pool. If an initial transfer is made in clear-text via IMAP, SMTP, or POP3, a subsequent request to that same host bypasses the TLS requirement and transmits data unencrypted.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This CVE requires a libcurl-based application to reuse a connection pool across clear-text and TLS-required IMAP, SMTP, or POP3 transfers. Liquibase Secure's stock container does not invoke curl or link against libcurl in its own build or runtime path, so the vulnerable connection- pool reuse path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6429",
+        "aliases": [
+          "CURL-CVE-2026-6429"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:49.661201785Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When asked to both use a .netrc file for credentials and follow HTTP redirects, libcurl could leak the password used for the first host to the followed-to host under certain circumstances.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.24, but this issue requires a libcurl-based application to combine .netrc credential loading with HTTP redirect following. Liquibase Secure's stock container uses wget for its own downloads and executes the Liquibase Java CLI at runtime, and a focused review found no libcurl, .netrc, or redirect-handling path in the container build or runtime entrypoint."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-7168",
+        "aliases": [
+          "CURL-CVE-2026-7168"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:49.919307604Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Successfully using libcurl to do a transfer over one HTTP proxy with Digest authentication and then changing the proxy host for a second transfer while reusing the same handle can cause libcurl to pass the Proxy-Authorization header intended for the first proxy to the second.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.24, but this issue requires a libcurl-based application to reuse the same handle across multiple proxy hosts with Digest authentication enabled. Liquibase Secure's stock container uses wget for downloads and executes the Liquibase Java CLI at runtime, and a focused review found no proxy-authenticated libcurl flow, Digest-proxy handling, or curl handle reuse path in the container build or runtime entrypoint."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-80230",
         "aliases": [
           "CURL-CVE-2026-80230"
         ]
       },
-      "timestamp": "2026-09-25T15:01:43.061870015Z",
+      "timestamp": "2026-09-25T16:16:42.649100438Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -120,7 +210,7 @@
           "CURL-CVE-2026-82209"
         ]
       },
-      "timestamp": "2026-09-25T15:01:42.862790676Z",
+      "timestamp": "2026-09-25T16:16:42.429395813Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -133,12 +223,48 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-8286",
+        "aliases": [
+          "CURL-CVE-2026-8286"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:50.207365409Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A new transfer that uses STARTTLS to upgrade the connection might reuse an existing live connection even though the TLS configuration mismatches and the connection should not have been reused.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.25, but this issue requires a libcurl-based application to upgrade a connection with STARTTLS and then incorrectly reuse a live connection whose TLS settings no longer match. Liquibase Secure's stock container uses wget for its own downloads and executes the Liquibase Java CLI at runtime, and a focused review found no STARTTLS, curl connection-pool, or libcurl TLS-reuse path in the container build or runtime entrypoint."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8458",
+        "aliases": [
+          "CURL-CVE-2026-8458"
+        ]
+      },
+      "timestamp": "2026-09-25T16:16:50.429640382Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libcurl might reuse the wrong connection when asked to perform Negotiate-authenticated requests, even when those requests are set to use different services.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports curl 7.81.0-1ubuntu1.20, below Ubuntu's fixed 7.81.0-1ubuntu1.25, but this issue requires a libcurl-based application to reuse pooled connections across Negotiate-authenticated requests that change the target service. Liquibase Secure's stock container uses wget for downloads and executes the Liquibase Java CLI at runtime, and a focused review found no Negotiate-authenticated libcurl flow, service- aware connection reuse, or curl handle pool in the container build or runtime entrypoint."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-8924",
         "aliases": [
           "CURL-CVE-2026-8924"
         ]
       },
-      "timestamp": "2026-09-25T15:01:45.012354811Z",
+      "timestamp": "2026-09-25T16:16:44.873705119Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -156,7 +282,7 @@
           "CURL-CVE-2026-8925"
         ]
       },
-      "timestamp": "2026-09-25T15:01:45.211454996Z",
+      "timestamp": "2026-09-25T16:16:45.097173238Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -174,7 +300,7 @@
           "CURL-CVE-2026-8927"
         ]
       },
-      "timestamp": "2026-09-25T15:01:45.408101774Z",
+      "timestamp": "2026-09-25T16:16:45.320960274Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -192,7 +318,7 @@
           "CURL-CVE-2026-8932"
         ]
       },
-      "timestamp": "2026-09-25T15:01:45.607672384Z",
+      "timestamp": "2026-09-25T16:16:45.550010174Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -210,7 +336,7 @@
           "CURL-CVE-2026-9547"
         ]
       },
-      "timestamp": "2026-09-25T15:01:45.836546338Z",
+      "timestamp": "2026-09-25T16:16:45.805883546Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
