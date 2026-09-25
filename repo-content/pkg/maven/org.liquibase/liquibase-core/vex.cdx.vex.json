@@ -13387,6 +13387,230 @@
       ]
     },
     {
+      "id": "CVE-2026-49844",
+      "description": "Improper encoding of non-finite floating-point values during MapMessage JSON serialization in Apache Log4j API produces output that is not valid JSON. This issue affects Apache Log4j API versions 2.13.1 through 2.25.4 and version 2.26.0. The fix for CVE-2026-34481 did not cover all code paths: when a MapMessage contains a non-finite IEEE 754 value (NaN, Infinity, or -Infinity), MapMessage.asJson() emits the corresponding bare token, which a conformant JSON parser rejects. Users are advised to upgrade to Apache Log4j API 2.25.5 or 2.26.1, both of which emit RFC 8259-compliant JSON for non-finite values.",
+      "recommendation": "No action required. Liquibase Secure does not use JsonTemplateLayout or MapMessage JSON serialization, and already resolves log4j-api at a fixed version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Neither JsonTemplateLayout nor MapMessage JSON serialization is used anywhere in this codebase, and the resolved log4j-api version already carries the fix.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qv9r-c865-cp47",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-49844",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html#CVE-2026-49844",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This defect is reachable only when an application uses a layout that relies on MapMessage.asJson() or MapMessage.getFormattedMessage with a JSON format specifier, such as JsonTemplateLayout's message resolver. A source review found no references to JsonTemplateLayout or MapMessage anywhere in this repository's log4j configuration or code. Separately, log4j-api and log4j-core are resolved at 2.26.1 throughout the build, which is already one of the two versions the advisory lists as fixed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-api",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.13.1|<2.25.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59894",
+      "description": "sqlparse is a non-validating SQL parser module for Python. Prior to 0.6.0, sqlparse/filters/output.py fails to escape existing backslashes before quotes in sqlparse.format output_format='python' and output_format='php' and the corresponding sqlformat -l modes, allowing crafted SQL to terminate the generated string and inject Python or PHP code when a downstream consumer executes or imports the generated source. This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that imports sqlparse and calls format() with output_format='python' or 'php' against untrusted SQL, upgrade the script's sqlparse dependency to 0.6.0 or later, or avoid executing the generated source. The bundled sqlparse dependency has already been upgraded to 0.6.0 in this codebase and will ship in an upcoming Liquibase Secure release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.2,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:N/VI:N/VA:N/SC:H/SI:H/SA:L/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import sqlparse or exercise its Python/PHP output formatting. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3496-9g83-7v6x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59894",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. The vulnerable Python/PHP output-formatting code path (sqlparse.format with output_format='python' or 'php') is only reachable if a customer authors and configures their own custom check script that imports sqlparse and calls it in one of those modes; no shipped configuration does this out of the box.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-84305",
+      "description": "sqlparse is a non-validating SQL parser module for Python. Prior to 0.6.0, sqlparse.format(sql, reindent=True) and sqlformat --reindent route attacker-controlled parenthesized tuple lists through ReindentFilter._get_offset() in sqlparse/filters/reindent.py, where _flatten_up_to_token() repeatedly rebuilds and joins the statement prefix. Thousands of offset calculations walk an expanding token tree, producing quadratic CPU consumption for inputs that remain below MAX_GROUPING_TOKENS and causing request delays, reduced throughput, or worker starvation. This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that imports sqlparse and calls format() with reindent=True (or sqlformat --reindent) against untrusted SQL, upgrade the script's sqlparse dependency to 0.6.0 or later. The bundled sqlparse dependency has already been upgraded to 0.6.0 in this codebase and will ship in an upcoming Liquibase Secure release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.1,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import sqlparse or exercise its reindent code path. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cfqr-cjx5-5jcm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84305",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. The vulnerable reindent code path (sqlparse.format(sql, reindent=True) or sqlformat --reindent) is only reachable if a customer authors and configures their own custom check script that imports sqlparse and calls it in that mode against attacker-influenced SQL; no shipped configuration does this out of the box.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GHSA-27jp-wm6q-gp25",
+      "description": "sqlparse: formatting a list of tuples leads to denial of service. Formatting a long list of tuples with sqlparse hangs, causing excessive CPU consumption. Fixed in 0.5.4.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that imports sqlparse and formats untrusted SQL with it, upgrade the script's sqlparse dependency to 0.5.4 or later. The bundled sqlparse dependency has already been upgraded to 0.6.0 in this codebase and will ship in an upcoming Liquibase Secure release.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import sqlparse or exercise its tuple-list formatting code. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-27jp-wm6q-gp25",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. This advisory's vulnerable tuple-list formatting code path is only reachable if a customer authors and configures their own custom check script that imports sqlparse and formats attacker-influenced SQL with it; no shipped configuration does this out of the box.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.5.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -13856,7 +14080,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import html.parser. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -13870,8 +14094,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],
@@ -13905,7 +14129,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
-          "justification": "The tarfile module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import tarfile or extract archives. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -13923,8 +14147,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the tarfile module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including tarfile. None of the check scripts Liquibase ships and runs by default import tarfile — they parse changeset SQL with a different library and never extract archives. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports tarfile and extracts an untrusted archive; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],
@@ -13958,7 +14182,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import html.parser. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -13972,8 +14196,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.11 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],
