@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-3ba3b161c44ea9e4649e9e086a4bbc0e9cd211394f256c4b8b0cb8988234b286",
+  "@id": "merged-vex-10eca6429827db69fa61347190dd5832e8c25324e8e1fdec898ede0b8ff65934",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T17:58:20.482838845Z",
+  "timestamp": "2026-09-25T20:33:16.446574449Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-15649"
       },
-      "timestamp": "2026-09-25T17:58:12.388369901Z",
+      "timestamp": "2026-09-25T20:33:07.62514458Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-12087"
       },
-      "timestamp": "2026-09-25T17:58:12.719348614Z",
+      "timestamp": "2026-09-25T20:33:07.941053755Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-13221"
       },
-      "timestamp": "2026-09-25T17:58:12.939457569Z",
+      "timestamp": "2026-09-25T20:33:08.155906075Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-15534"
       },
-      "timestamp": "2026-09-25T17:58:13.22984064Z",
+      "timestamp": "2026-09-25T20:33:08.439107574Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-19487"
       },
-      "timestamp": "2026-09-25T17:58:13.515042996Z",
+      "timestamp": "2026-09-25T20:33:08.722154613Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-42496"
       },
-      "timestamp": "2026-09-25T17:58:19.966532507Z",
+      "timestamp": "2026-09-25T20:33:14.973902457Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -99,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-42497"
       },
-      "timestamp": "2026-09-25T17:58:20.188516827Z",
+      "timestamp": "2026-09-25T20:33:15.192016022Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -112,12 +112,42 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-48959"
+      },
+      "timestamp": "2026-09-25T20:33:15.673226792Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "IO::Uncompress::Unzip versions before 2.220 for Perl allow CPU exhaustion via per-byte read loop in fastForward. fastForward() compares length $offset (the digit count of the offset, 1 to 19) against the chunk size $c instead of $offset itself, so $c shrinks from 16 KiB to 1-19 bytes per iteration. Extracting a named entry from an attacker supplied zip via IO::Uncompress::Unzip->new($zip, Name => $target) drives a per-byte read loop scaling with the entry's compressed size, up to the non-Zip64 4 GiB cap.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Uncompress::Unzip on attacker-supplied zip input so the vulnerable fastForward path is exercised. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Uncompress::Unzip. The vulnerable Perl zip extraction path is therefore not reachable from the stock runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-48962"
+      },
+      "timestamp": "2026-09-25T20:33:15.890245938Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/perl-base"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "IO::Compress versions before 2.220 for Perl can execute arbitrary code in File::GlobMapper via an attacker-controlled output glob. _parseOutputGlob() wraps the caller-supplied output glob string in double quotes and stores it in the parser state; _getFiles() then runs the stored expression through eval STRING. A literal double quote in the output glob closes the dquote wrapper, and the characters that follow are evaluated as Perl. Arbitrary Perl in the output glob executes at the calling process's privilege.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Compress output-glob handling so attacker-controlled glob text reaches File::GlobMapper and eval STRING. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Compress or File::GlobMapper. The vulnerable Perl compression path is therefore not reachable from the stock runtime."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-68914",
         "aliases": [
           "GHSA-p5qf-qvw8-xgvg"
         ]
       },
-      "timestamp": "2026-09-25T17:58:16.381386276Z",
+      "timestamp": "2026-09-25T20:33:11.515491629Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -135,7 +165,7 @@
           "GHSA-cf46-h6jw-mj3r"
         ]
       },
-      "timestamp": "2026-09-25T17:58:16.604861179Z",
+      "timestamp": "2026-09-25T20:33:11.73143541Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"
@@ -150,7 +180,7 @@
       "vulnerability": {
         "name": "CVE-2026-82560"
       },
-      "timestamp": "2026-09-25T17:58:16.153459006Z",
+      "timestamp": "2026-09-25T20:33:11.29742323Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/perl-base"

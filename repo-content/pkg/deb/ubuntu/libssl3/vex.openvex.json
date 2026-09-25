@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-07477d1c9d141a256ceaf965f791dc4836320e4a934f040f3e461679be68f286",
+  "@id": "merged-vex-c2fe22d7c8e6e50a7ceb0538d40fb6b8b063f04cda0f0eff5124eec9ecdbe700",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T17:54:07.603651708Z",
+  "timestamp": "2026-09-25T20:28:55.211239148Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-34182"
       },
-      "timestamp": "2026-09-25T17:54:05.096619169Z",
+      "timestamp": "2026-09-25T20:28:51.793958488Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-42766"
       },
-      "timestamp": "2026-09-25T17:54:05.388317743Z",
+      "timestamp": "2026-09-25T20:28:52.081564496Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-42767"
       },
-      "timestamp": "2026-09-25T17:54:05.608963611Z",
+      "timestamp": "2026-09-25T20:28:52.294325047Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-42770"
       },
-      "timestamp": "2026-09-25T17:54:05.827007872Z",
+      "timestamp": "2026-09-25T20:28:52.509011774Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-45445"
       },
-      "timestamp": "2026-09-25T17:54:06.048160923Z",
+      "timestamp": "2026-09-25T20:28:52.727587722Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-45446"
       },
-      "timestamp": "2026-09-25T17:54:06.269887021Z",
+      "timestamp": "2026-09-25T20:28:52.942825857Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -99,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-09-25T17:53:57.175979152Z",
+      "timestamp": "2026-09-25T20:28:44.031633221Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -112,9 +112,39 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-63072"
+      },
+      "timestamp": "2026-09-25T20:28:54.713595643Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL CMS decryption sizes the key-unwrap output buffer based on querying the unwrapped key size, but the AES-WRAP-PAD unwrap primitive can write and cleanse more bytes than that query reports, causing an 8-byte out-of-bounds heap write.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when an application decrypts attacker-supplied CMS messages through OpenSSL's CMS_decrypt path. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, AES-WRAP-PAD CMS unwrapping, or related OpenSSL CMS handling in the product runtime path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-63074"
+      },
+      "timestamp": "2026-09-25T20:28:54.927421053Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The OpenSSL Certificate Management Protocol (CMP) caches additional certificates (extraCerts) sent in a CMP message, but never expunges them if the message is rejected. If a server reuses a single OSSL_CMP_CTX for the lifetime of a server process, a malicious client may flood it with requests and cause unbounded memory growth.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when a long- lived CMP server reuses an OSSL_CMP_CTX across attacker-supplied requests and caches extraCerts from rejected messages. Liquibase Secure's stock container runs the Liquibase Java CLI rather than an OpenSSL CMP server, and a source review found no references to OSSL_CMP_CTX, extraCerts, or CMP request processing in the product runtime path."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-63076"
       },
-      "timestamp": "2026-09-25T17:54:06.557900751Z",
+      "timestamp": "2026-09-25T20:28:53.228127893Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -129,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-7383"
       },
-      "timestamp": "2026-09-25T17:54:06.885772925Z",
+      "timestamp": "2026-09-25T20:28:53.544679862Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-75803"
       },
-      "timestamp": "2026-09-25T17:54:07.108770376Z",
+      "timestamp": "2026-09-25T20:28:53.761094259Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-9076"
       },
-      "timestamp": "2026-09-25T17:54:02.147445504Z",
+      "timestamp": "2026-09-25T20:28:48.920984554Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"

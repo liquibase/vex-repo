@@ -434,6 +434,62 @@
       ]
     },
     {
+      "id": "CVE-2026-47059",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: 2D). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS). Note: This vulnerability applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code. This vulnerability does not apply to Java deployments, typically in servers, that load and run only trusted code.",
+      "recommendation": "No action required. Liquibase Secure does not use java.awt or 2D APIs in its shipped runtime path, and Oracle's own advisory explicitly excludes server-style, trusted-code-only deployments like this one.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No java.awt or 2D usage exists in the shipped runtime path, and Oracle's advisory explicitly states this does not apply to server-style deployments that load and run only trusted code, which matches Liquibase Secure.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47059",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java 2D partial-denial-of-service issue. Both open PR #5075 and PR #5078 incorrectly treated this as already covered by merged PR #5071 (likely conflated with CVE-2026-47021, also a \"2D\" component JSSE-adjacent issue assessed there) -- it was not actually present in #5071 or on main, so this closes that gap. The scanned image reports Oracle OpenJDK 21.0.11+10-LTS; Liquibase Secure is built from eclipse-temurin:21-jre-noble (docker/Dockerfile:2). A source review found no java.awt or 2D API usage anywhere in the shipped runtime path, matching the code_not_reachable finding already recorded for CVE-2026-47021 and CVE-2026-47010 (same \"2D\"/ \"ImageIO\" component family). Oracle's own advisory note for this CVE goes further than the boilerplate applet note used elsewhere: it explicitly states the issue \"does not apply to Java deployments, typically in servers, that load and run only trusted code (e.g., code installed by an administrator)\" -- which is exactly Liquibase Secure's deployment model (a headless CLI running only its own installed code, not a sandboxed client executing untrusted 2D content).",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-22016",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as a sandboxed Java client.",

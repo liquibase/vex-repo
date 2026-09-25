@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-2195af3de141f5df8ce33520cb696cfe81b44a20d6eeec8f5301cc48a3d83782",
+  "@id": "merged-vex-c205406be5e7a7ab99780994be2109d03de580968ece876c771d14dfa5247970",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T17:53:33.064163054Z",
+  "timestamp": "2026-09-25T20:28:24.691027157Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-39113"
       },
-      "timestamp": "2026-09-25T17:53:33.064164616Z",
+      "timestamp": "2026-09-25T20:28:18.058561105Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -19,6 +19,36 @@
       "status_notes": "A buffer overflow in SQLite source snapshots/builds containing Fossil check-in 8bdc0d485e3ad0c7a1e818da66f106951d496b05cbe61d12c2c448f2f24b6d5d and later snapshots/builds can cause denial of service via the ext/misc/sqlar.c sqlarUncompressFunc()/sqlar_uncompress() code path.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "This SQLite issue is limited to snapshot builds containing the sqlarUncompressFunc/sqlar_uncompress code path in ext/misc/sqlar.c. The Liquibase Secure image inherits the OS package from eclipse-temurin:21-jre-noble (`docker/Dockerfile:2`) and the container entrypoint execs only the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles, entrypoint scripts, and application source found no references to sqlarUncompressFunc, sqlar_uncompress, sqlite3_value_int64, or sqlite3_malloc, so the vulnerable snapshot-only code path is not reachable from the stock runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-50812"
+      },
+      "timestamp": "2026-09-25T20:28:24.256444531Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsqlite3-0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A NULL pointer dereference in the SQLite Session Extension in SQLite 3.53.1 and SQLite trunk builds before check-in e807d4e3798efd53 allows an attacker who can supply a malformed changeset blob to cause a denial of service. The issue occurs when sqlite3changeset_apply_v3() applies a corrupt changeset and reaches sqlite3_value_type() with a NULL sqlite3_value pointer.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires SQLite Session Extension changeset application through sqlite3changeset_apply_v3() on a malformed changeset blob. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container executes the Liquibase Java CLI and the repository's SQLite support is wired through the JDBC driver path rather than SQLite's native Session Extension APIs. A focused source review found no references to sqlite3changeset_apply_v3, sqlite3_value_type, or other Session Extension entry points, so the vulnerable code path is not reachable from the stock runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-50813"
+      },
+      "timestamp": "2026-09-25T20:28:24.47226418Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsqlite3-0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An issue in SQLite before Fossil check-in 869a51ae84df allows a local attacker to obtain sensitive information via the Session Extension changeset concat/changegroup merge path.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires SQLite Session Extension changeset concat or changegroup merge handling. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container executes the Liquibase Java CLI and the repository's SQLite support is wired through the JDBC driver path rather than SQLite's native Session Extension merge APIs. A focused source review found no references to sqlite3changeset_concat, sqlite3changegroup, or other Session Extension merge entry points, so the vulnerable code path is not reachable from the stock runtime."
     }
   ]
 }
