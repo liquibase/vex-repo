@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-d8c76b7bbe245a532d8184d4a60bf2b1cf1b2653996ff5adc1b30b1e9b959426",
+  "@id": "merged-vex-096852e74225d39172066a9186e42e2fede6bcbac0872d0ad24a0f4bd81bd1b8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-24T22:15:29.750011449Z",
+  "timestamp": "2026-09-25T15:19:53.680178007Z",
   "version": 1,
   "statements": [
     {
@@ -15,7 +15,7 @@
           "PSF-2025-10"
         ]
       },
-      "timestamp": "2026-09-24T22:15:20.709722238Z",
+      "timestamp": "2026-09-25T15:19:44.924215131Z",
       "products": [
         {
           "@id": "pkg:generic/cpython"
@@ -23,8 +23,8 @@
       ],
       "status": "not_affected",
       "status_notes": "The html.parser.HTMLParser class had worst-case quadratic complexity when processing certain crafted malformed inputs at end-of-file, potentially leading to an amplified denial of service.",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.11 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action."
     },
     {
       "vulnerability": {
@@ -36,7 +36,7 @@
           "PSF-2026-33"
         ]
       },
-      "timestamp": "2026-09-24T22:15:20.2938746Z",
+      "timestamp": "2026-09-25T15:19:44.529676465Z",
       "products": [
         {
           "@id": "pkg:generic/cpython"
@@ -44,8 +44,8 @@
       ],
       "status": "not_affected",
       "status_notes": "An issue was found in Python's incremental HTML parser (html.parser.HTMLParser). When application code repeatedly feeds small pieces of attacker-controlled data into the parser while an HTML construct remains unterminated, the parser can be driven to consume disproportionate CPU time, resulting in a denial of service.",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action."
     },
     {
       "vulnerability": {
@@ -57,7 +57,7 @@
           "PSF-2026-32"
         ]
       },
-      "timestamp": "2026-09-24T22:15:20.502355951Z",
+      "timestamp": "2026-09-25T15:19:44.728345452Z",
       "products": [
         {
           "@id": "pkg:generic/cpython"
@@ -65,8 +65,8 @@
       ],
       "status": "not_affected",
       "status_notes": "An issue was found in Python's tarfile module. TarFile.extract() does not fully apply the filter argument when extracting hardlink members, so a crafted tar archive can cause an extracted file to be written with unexpected ownership even when a restrictive filter such as filter=\"data\" is requested.",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the tarfile module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8."
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including tarfile. None of the check scripts Liquibase ships and runs by default import tarfile — they parse changeset SQL with a different library and never extract archives. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports tarfile and extracts an untrusted archive; Liquibase creates no such exposure on its own, and no shipped check performs this action."
     }
   ]
 }

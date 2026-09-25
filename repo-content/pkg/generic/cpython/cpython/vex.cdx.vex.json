@@ -25,7 +25,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import html.parser. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -39,8 +39,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],
@@ -74,7 +74,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
-          "justification": "The tarfile module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import tarfile or extract archives. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -92,8 +92,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.14 line that fixes this issue, so the tarfile module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including tarfile. None of the check scripts Liquibase ships and runs by default import tarfile — they parse changeset SQL with a different library and never extract archives. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports tarfile and extracts an untrusted archive; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],
@@ -127,7 +127,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The html.parser module the embedded Python runtime resolves is patched with the upstream fix for this issue.\n"
+          "justification": "None of the check scripts Liquibase bundles and runs by default import html.parser. Reaching the vulnerable code requires a customer to author and configure their own custom check script that does so.\n"
         }
       ],
       "cwes": [
@@ -141,8 +141,8 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library. The bundled interpreter reports Python 3.12.8, which predates the 3.12.11 line that fixes this issue, so the html.parser module the runtime ships is replaced with a copy carrying the upstream fix for this issue, shadowing the bundled copy for every custom check script. This is a source-level backport of the fix, not a runtime version upgrade, so the interpreter continues to report Python 3.12.8.",
-        "justification": "vulnerable_code_not_present",
+        "detail": "Liquibase Secure bundles a GraalPy-based embedded Python runtime so that customers can author custom policy-check scripts with full access to the Python standard library, including html.parser. None of the check scripts Liquibase ships and runs by default import html.parser — they parse changeset SQL with a different library. Triggering this issue requires a customer to deliberately author and configure their own custom check script that imports html.parser and feeds it attacker-controlled data; Liquibase creates no such exposure on its own, and no shipped check performs this action.",
+        "justification": "requires_configuration",
         "response": [
           "update"
         ],

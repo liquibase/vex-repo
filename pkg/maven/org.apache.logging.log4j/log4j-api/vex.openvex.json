@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-234b8f094753031e6a770f4e8353a3a75dc2dafdc2d03dbfb2cb0ce5489034e4",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-25T15:30:49.115090171Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-49844",
+        "aliases": [
+          "GHSA-qv9r-c865-cp47"
+        ]
+      },
+      "timestamp": "2026-09-25T15:30:49.115091643Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.logging.log4j/log4j-api"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper encoding of non-finite floating-point values during MapMessage JSON serialization in Apache Log4j API produces output that is not valid JSON. This issue affects Apache Log4j API versions 2.13.1 through 2.25.4 and version 2.26.0. The fix for CVE-2026-34481 did not cover all code paths: when a MapMessage contains a non-finite IEEE 754 value (NaN, Infinity, or -Infinity), MapMessage.asJson() emits the corresponding bare token, which a conformant JSON parser rejects. Users are advised to upgrade to Apache Log4j API 2.25.5 or 2.26.1, both of which emit RFC 8259-compliant JSON for non-finite values.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This defect is reachable only when an application uses a layout that relies on MapMessage.asJson() or MapMessage.getFormattedMessage with a JSON format specifier, such as JsonTemplateLayout's message resolver. A source review found no references to JsonTemplateLayout or MapMessage anywhere in this repository's log4j configuration or code. Separately, log4j-api and log4j-core are resolved at 2.26.1 throughout the build, which is already one of the two versions the advisory lists as fixed."
+    }
+  ]
+}
