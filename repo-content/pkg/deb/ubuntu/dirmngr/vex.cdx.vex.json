@@ -64,6 +64,62 @@
           "ref": "pkg:deb/ubuntu/dirmngr"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-57062",
+      "description": "CMS (Cryptographic Message Syntax) parsing in gpgsm in GnuPG through 2.5.20 mishandles the CMS format for AES-GCM because aes-ICVlen is supposed to be 12 bytes but 4 bytes is accepted. NOTE: this is related to CVE-2026-34182.",
+      "recommendation": "No action required. GnuPG tooling is not invoked at Liquibase Secure runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No gpgsm, dirmngr, or related GnuPG invocation exists in the shipped Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m6x2-4hhh-669j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-57062",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 2.4.4-2ubuntu17.6. The vulnerable path is in GnuPG CMS parsing through gpgsm/dirmngr handling of AES-GCM CMS input. Liquibase Secure's shipped runtime does not invoke gpgsm, dirmngr, or related GnuPG tooling, so the affected CMS parser is not exercised by the application surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.4-2ubuntu17.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

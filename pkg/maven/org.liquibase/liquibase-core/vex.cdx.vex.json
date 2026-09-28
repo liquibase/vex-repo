@@ -16325,6 +16325,266 @@
       ]
     },
     {
+      "id": "CVE-2026-22796",
+      "description": "A type confusion vulnerability in OpenSSL signature verification of signed PKCS#7 data can dereference an invalid or NULL pointer when malformed PKCS#7 attributes are processed, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's PKCS#7 verification APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL PKCS#7 signature-verification code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22796",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires an application to verify attacker-supplied signed PKCS#7 data through OpenSSL's legacy PKCS#7 parsing APIs. Liquibase Secure's container runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL PKCS#7 integration or invocation of OpenSSL tooling at runtime. The vulnerable OpenSSL code path is therefore not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28387",
+      "description": "An uncommon OpenSSL DANE TLSA client configuration can trigger a use-after-free or double-free during server authentication when specific TLSA records are processed.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's DANE/TLSA client authentication APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL DANE/TLSA client processing that Liquibase Secure does not use.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28387",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects OpenSSL clients that perform DANE TLSA-based server authentication with a specific mix of PKIX and DANE-TA usages. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL DANE/TLSA integration or other native OpenSSL client code paths. The vulnerable OpenSSL behavior is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28388",
+      "description": "OpenSSL can dereference a NULL pointer while processing a malformed delta CRL during X.509 certificate verification when delta-CRL handling is enabled.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's delta-CRL verification path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL delta-CRL certificate verification code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28388",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires OpenSSL X.509 verification with delta-CRL processing enabled and a malformed CRL input. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL certificate-validation integration or CRL-processing path. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28389",
+      "description": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyAgreeRecipientInfo, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's CMS decryption APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL CMS decryption code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28389",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or invocation of native tooling that would process CMS EnvelopedData. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28390",
+      "description": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyTransportRecipientInfo with RSA-OAEP, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's CMS decryption APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL CMS decryption code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28390",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path with RSA-OAEP transport parameters. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or native RSA-OAEP processing through OpenSSL. The vulnerable code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2024-35255",
       "analysis": {
         "state": "not_affected",
@@ -16352,6 +16612,550 @@
       ]
     },
     {
+      "id": "CVE-2026-31789",
+      "description": "On 32-bit platforms, OpenSSL can overflow a heap buffer while converting an excessively large OCTET STRING from an X.509 certificate extension into hexadecimal text.",
+      "recommendation": "No action required. The reported Liquibase Secure image is a 64-bit runtime, while this issue requires a 32-bit environment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a 32-bit OpenSSL runtime environment, but the reported image is amd64.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-31789",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects only 32-bit platforms when OpenSSL converts excessively large X.509 OCTET STRING values to hexadecimal text. The scanner-reported package record is for amd64, and Liquibase Secure supports only 64-bit container architectures in this runtime. The required 32-bit execution environment is therefore absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-31790",
+      "description": "Applications using OpenSSL RSASVE key encapsulation can disclose uninitialized buffer contents to a malicious peer if encapsulation is attempted with an invalid RSA public key.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's RSASVE key encapsulation APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL RSASVE encapsulation code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-31790",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires an application to use OpenSSL's EVP_PKEY_encapsulate() with RSA/RSASVE on attacker-supplied public keys. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL key encapsulation integration or other OpenSSL API usage at runtime. The vulnerable code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34180",
+      "description": "OpenSSL can over-read heap memory while parsing a crafted DER ASN.1 primitive larger than 2 gigabytes through d2i_* decoding functions.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's d2i_* ASN.1 decoding APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL ASN.1 decoder APIs that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34180",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-supplied ASN.1 input into OpenSSL d2i_* decoders such as d2i_X509() or d2i_PKCS7(). Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL ASN.1 decoding integration or invocation of OpenSSL tooling at runtime. The vulnerable decoder path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54874",
+      "description": "OpenSSL DTLS endpoints can retain disproportionately large amounts of memory when future-epoch records are buffered during a handshake, enabling denial of service through memory amplification.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL DTLS endpoint handling that Liquibase Secure does not use.\n"
+        }
+      ],
+      "cwes": [
+        405
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54874",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects OpenSSL DTLS endpoints that buffer future-epoch records during a handshake. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no DTLS server or client implementation through OpenSSL, nor any invocation of OpenSSL networking tooling at runtime. The vulnerable DTLS code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.29",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54371",
+      "description": "attr before version 2.6.0 contains a symlink traversal vulnerability in the getfattr and setfattr utilities that allows local attackers to escalate privileges by replacing a pathname component with a symbolic link during directory hierarchy traversal. Attackers who control a pathname component can redirect getfattr and setfattr operations to arbitrary files by substituting a symlink, leading to local privilege escalation when getfattr or setfattr is invoked by a privileged process over an attacker-controlled path.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship the getfattr or setfattr utilities.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The getfattr and setfattr utilities that carry the vulnerable code are not installed in the Liquibase Secure image.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hh95-r7mj-c9j5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54371",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner package misattribution. The vulnerable code is the getfattr and setfattr utilities, which Ubuntu ships in the separate attr binary package. attr is not installed in the Liquibase Secure image: dpkg lists only libattr1 (the libattr.so.1 shared library used by coreutils such as cp and mv), and there is no getfattr or setfattr binary on the image. The scanner matched a fix in the attr source package to libattr1, which does not contain the vulnerable code.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libattr1",
+          "versions": [
+            {
+              "range": "vers:deb/<1:2.5.2-1ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54411",
+      "description": "Linux-PAM through 1.7.2 contains an observable timing discrepancy (CWE-208) in the pam_userdb module's plaintext-password comparison path in modules/pam_userdb/pam_userdb.c that allows a local or network-adjacent attacker able to repeatedly drive authentication through a calling service to recover the plaintext password of a target account by measuring response-timing differences.",
+      "recommendation": "No action required. Liquibase Secure does not expose a PAM-backed authentication service.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The required PAM-backed authentication environment is absent from Liquibase Secure's shipped runtime.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-56gg-22rq-q53x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54411",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Linux-PAM 1.7.2 and in Ubuntu package 1.5.3-5ubuntu5.6. The vulnerable code is the pam_userdb plaintext-password comparison path, which only becomes exploitable when a PAM-backed authentication service repeatedly drives that module. Liquibase Secure's shipped runtime is a headless CLI entrypoint, not a PAM-authenticated service, and no pam_userdb-backed authentication path is part of the application surface.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules",
+          "versions": [
+            {
+              "range": "vers:deb/<1.5.3-5ubuntu5.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54515",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.8.0 until 2.18.9, 2.21.5, and 3.1.4, in BeanDeserializerBase.createContextual(), per-property @JsonIgnoreProperties exclusions are applied by _handleByNameInclusion(), producing a contextual deserializer whose BeanPropertyMap has the ignored properties removed. The subsequent per-property case-insensitivity block (triggered by @JsonFormat(ACCEPT_CASE_INSENSITIVE_PROPERTIES)) rebuilds from this._beanProperties (the original, unfiltered map) instead of contextual._beanProperties, then overwrites the filtered map, restoring every property _handleByNameInclusion had just removed. The ignored property becomes writable again. This vulnerability is fixed in 2.18.9, 2.21.5, and 3.1.4.",
+      "recommendation": "No action required. Liquibase Secure does not use the vulnerable Jackson annotation/configuration pattern in its shipped code paths.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable per-property case-insensitive deserialization path is not used anywhere in Liquibase Secure's shipped code.\n"
+        }
+      ],
+      "cwes": [
+        915
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5jmj-h7xm-6q6v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54515",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-databind 2.18.9, 2.21.5, 2.22.1, and 3.1.4. The vulnerable behavior requires a deserialization path that combines per-property @JsonIgnoreProperties exclusions with @JsonFormat(ACCEPT_CASE_INSENSITIVE_PROPERTIES). No class in the shipped Liquibase Secure jars, including the dependencies shaded into the extension jars, carries that annotation combination; the only users of case-insensitive properties configure it on the whole ObjectMapper, not per property. The vulnerable mass-assignment path is therefore not exercised in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.8.0|<2.18.9|>=2.19.0|<2.21.5|>=2.22.0|<2.22.1|>=3.1.0|<3.1.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54874",
+      "description": "Issue summary: Receiving a DTLS record for a future epoch while a handshake is in progress causes OpenSSL to buffer far more memory than the record itself requires. Impact summary: A peer can use a small amount of network traffic to make an OpenSSL DTLS endpoint retain a disproportionately large amount of memory, which may lead to a Denial of Service. Description: While a DTLS handshake is in progress, a peer may legitimately have already moved on to the next epoch before the local endpoint has processed the same transition. OpenSSL buffers such early records so that they can be processed once the local endpoint catches up. Buffering a record currently retains the entire read buffer it arrived in rather than just the bytes that make up the record itself, allowing a remote memory amplification DoS against DTLS servers.",
+      "recommendation": "No action required. Liquibase Secure does not expose an OpenSSL DTLS server or client endpoint in its shipped runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not expose the vulnerable DTLS endpoint behavior required for this OpenSSL memory-amplification issue.\n"
+        }
+      ],
+      "cwes": [
+        405
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-97g4-hhwh-c697",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54874",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 3.0.13-0ubuntu3.15. The vulnerable behavior is specific to OpenSSL DTLS endpoints buffering future-epoch records while a DTLS handshake is in progress. Liquibase Secure's shipped runtime is a headless CLI that launches Liquibase or lpm and does not expose a DTLS endpoint, so the affected OpenSSL path is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.15",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-5704",
+      "description": "A flaw was found in tar. A remote attacker could exploit this vulnerability by crafting a malicious archive, leading to hidden file injection with fully attacker-controlled content. This bypasses pre-extraction inspection mechanisms, potentially allowing an attacker to introduce malicious files onto a system without detection.",
+      "recommendation": "No action required. Liquibase Secure's shipped runtime does not extract untrusted tar archives.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable tar extraction path is not exposed at runtime, and the build-time use is limited to a digest-verified release archive.\n"
+        }
+      ],
+      "cwes": [
+        434
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jqqw-37x4-9rwj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5704",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 1.35+dfsg-3ubuntu0.4. This issue requires tar to extract an attacker-crafted archive so the hidden-file injection path is reached. In Liquibase Secure, tar is only used during image build to unpack the pinned Liquibase release tarball after digest verification, and the shipped runtime does not invoke tar on user-controlled input.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/tar",
+          "versions": [
+            {
+              "range": "vers:deb/<1.35+dfsg-3ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-57062",
+      "description": "CMS (Cryptographic Message Syntax) parsing in gpgsm in GnuPG through 2.5.20 mishandles the CMS format for AES-GCM because aes-ICVlen is supposed to be 12 bytes but 4 bytes is accepted. NOTE: this is related to CVE-2026-34182.",
+      "recommendation": "No action required. GnuPG tooling is not invoked at Liquibase Secure runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No gpgsm, dirmngr, or related GnuPG invocation exists in the shipped Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m6x2-4hhh-669j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-57062",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 2.4.4-2ubuntu17.6. The vulnerable path is in GnuPG CMS parsing through gpgsm/dirmngr handling of AES-GCM CMS input. Liquibase Secure's shipped runtime does not invoke gpgsm, dirmngr, or related GnuPG tooling, so the affected CMS parser is not exercised by the application surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.4-2ubuntu17.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -16366,6 +17170,513 @@
       ]
     },
     {
+      "id": "CVE-2026-5450",
+      "description": "Calling the scanf family of functions with a %mc (malloc'd character match) conversion in the GNU C Library version 2.7 to 2.43 with an explicit field width greater than 1024 can result in a one byte heap buffer overflow.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's scanf family with the %mc conversion in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a scanf %mc call with a width above 1024 on attacker-controlled input; no such call exists in the Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5450",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-5450",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This glibc flaw is reachable only through a scanf-family call that uses the %mc conversion with an explicit field width above 1024 on attacker-controlled input. The Liquibase Secure image runs the Liquibase Java CLI on a Temurin JRE plus the lpm helper, which is a statically linked Go binary that does not use glibc at all. An inspection of the shipped image found no %mc scanf directive in the JVM, the JRE native libraries, the shell entrypoint or any OS binary, so the vulnerable glibc pattern is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.14|>=2.39|<2.39-0ubuntu8.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55856",
+      "description": "When an application connects with sslMode=verify-full or verify-ca and a password but does not pin a server certificate, Connector/J accepts an untrusted certificate at the TLS layer and proves the server's identity afterwards by binding the certificate fingerprint into the authentication exchange. That check is not applied on the initial-handshake path, so an active man-in-the-middle that names the mysql_clear_password plugin receives the password in cleartext before any identity check runs.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, pin the server certificate with serverSslCert or a trust store in the MariaDB connection URL instead of relying on sslMode=verify-full without one.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g9jj-cgmh-9f38",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55856",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55857",
+      "description": "When PAM (dialog) authentication is used, the connector can be coerced into sending the account password in cleartext over an insecure connection. A hostile or man-in-the-middle server can trigger this with the default configuration by issuing an Authentication Switch Request for the dialog plugin over plain TCP.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, set restrictedAuth in the MariaDB connection URL to a list that excludes dialog, or connect with sslMode=verify-full and a pinned server certificate.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        319,
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qxvw-fvwx-5cp7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55857",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55858",
+      "description": "The connector encodes and decodes all character data assuming the connection character set is UTF-8. A server can change character_set_client mid-session to a non-UTF-8 charset, after which the driver and server interpret the same bytes under different encodings. This causes silent data corruption and is a primitive that can defeat byte-wise quoting and escaping.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, connect only to trusted MariaDB servers over a verified TLS connection.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        838
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvr9-35cr-46v9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55858",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86805",
+      "description": "A time-of-check to time-of-use (TOCTOU) race condition in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to escalate privileges. When expanding $ORIGIN in DT_RPATH for setuid/setgid (AT_SECURE) programs, glibc validates the lexically normalized search path against the trusted directories but then opens the raw, un-normalized path. On systems where fs.protected_hardlinks is disabled, an attacker who hard-links such a program and swaps a path component for a symbolic link can make the loader load an attacker-controlled shared object.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0022",
+          "title": "glibc advisory GLIBC-SA-2026-0022"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86805",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86805",
+      "description": "A time-of-check to time-of-use (TOCTOU) race condition in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to escalate privileges. When expanding $ORIGIN in DT_RPATH for setuid/setgid (AT_SECURE) programs, glibc validates the lexically normalized search path against the trusted directories but then opens the raw, un-normalized path. On systems where fs.protected_hardlinks is disabled, an attacker who hard-links such a program and swaps a path component for a symbolic link can make the loader load an attacker-controlled shared object.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0022",
+          "title": "glibc advisory GLIBC-SA-2026-0022"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86805",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86805",
+      "description": "A time-of-check to time-of-use (TOCTOU) race condition in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to escalate privileges. When expanding $ORIGIN in DT_RPATH for setuid/setgid (AT_SECURE) programs, glibc validates the lexically normalized search path against the trusted directories but then opens the raw, un-normalized path. On systems where fs.protected_hardlinks is disabled, an attacker who hard-links such a program and swaps a path component for a symbolic link can make the loader load an attacker-controlled shared object.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0022",
+          "title": "glibc advisory GLIBC-SA-2026-0022"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86805",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95818",
+      "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0023",
+          "title": "glibc advisory GLIBC-SA-2026-0023"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95818",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95818",
+      "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0023",
+          "title": "glibc advisory GLIBC-SA-2026-0023"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95818",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95818",
+      "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0023",
+          "title": "glibc advisory GLIBC-SA-2026-0023"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95818",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-68973",
       "analysis": {
         "state": "not_affected",
@@ -16376,6 +17687,59 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/gpg-wks-client"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91187",
+      "description": "Improper Verification of Cryptographic Signature vulnerability in dashbit nimble_zta allows an unauthenticated remote attacker to authenticate as an arbitrary Cloudflare service token. Applications using the Cloudflare Zero Trust authentication strategy are affected. This issue affects nimble_zta from 0.1.2 before 0.1.3.",
+      "recommendation": "No action required. The affected software is not part of Liquibase Secure.",
+      "ratings": [
+        {
+          "source": {
+            "name": "EEF"
+          },
+          "score": 9.3,
+          "severity": "critical",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "justification": "The affected nimble_zta library is not present in Liquibase Secure.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/dashbitco/nimble_zta/security/advisories/GHSA-rj24-g8cc-g7g2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://cna.erlef.org/cves/CVE-2026-91187.html",
+          "title": "EEF CNA Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-91187",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False match. The CVE is for nimble_zta, an Elixir authentication library published by dashbit, not for the dash shell. The Ubuntu tracker attributes it to the dash package by name. The Liquibase Secure image ships no Elixir or Erlang runtime and no nimble_zta code.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
         }
       ]
     },
