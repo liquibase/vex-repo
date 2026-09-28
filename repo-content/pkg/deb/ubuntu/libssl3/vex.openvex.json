@@ -1,15 +1,135 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c2fe22d7c8e6e50a7ceb0538d40fb6b8b063f04cda0f0eff5124eec9ecdbe700",
+  "@id": "merged-vex-25d558c8f43e154acb9a58d0db2279fc27abc5cf7010c4ff29dcbc23f825264c",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:28:55.211239148Z",
+  "timestamp": "2026-09-28T21:43:06.208556448Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-22796"
+      },
+      "timestamp": "2026-09-28T21:43:04.121847711Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A type confusion vulnerability in OpenSSL signature verification of signed PKCS#7 data can dereference an invalid or NULL pointer when malformed PKCS#7 attributes are processed, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires an application to verify attacker-supplied signed PKCS#7 data through OpenSSL's legacy PKCS#7 parsing APIs. Liquibase Secure's container runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL PKCS#7 integration or invocation of OpenSSL tooling at runtime. The vulnerable OpenSSL code path is therefore not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-28387"
+      },
+      "timestamp": "2026-09-28T21:43:04.316971873Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An uncommon OpenSSL DANE TLSA client configuration can trigger a use-after-free or double-free during server authentication when specific TLSA records are processed.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue affects OpenSSL clients that perform DANE TLSA-based server authentication with a specific mix of PKIX and DANE-TA usages. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL DANE/TLSA integration or other native OpenSSL client code paths. The vulnerable OpenSSL behavior is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-28388"
+      },
+      "timestamp": "2026-09-28T21:43:04.509232746Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL can dereference a NULL pointer while processing a malformed delta CRL during X.509 certificate verification when delta-CRL handling is enabled.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires OpenSSL X.509 verification with delta-CRL processing enabled and a malformed CRL input. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL certificate-validation integration or CRL-processing path. The vulnerable OpenSSL code path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-28389"
+      },
+      "timestamp": "2026-09-28T21:43:04.705694772Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyAgreeRecipientInfo, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or invocation of native tooling that would process CMS EnvelopedData. The vulnerable OpenSSL code path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-28390"
+      },
+      "timestamp": "2026-09-28T21:43:04.900250327Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyTransportRecipientInfo with RSA-OAEP, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path with RSA-OAEP transport parameters. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or native RSA-OAEP processing through OpenSSL. The vulnerable code path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-31789"
+      },
+      "timestamp": "2026-09-28T21:43:05.094942825Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "On 32-bit platforms, OpenSSL can overflow a heap buffer while converting an excessively large OCTET STRING from an X.509 certificate extension into hexadecimal text.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "This issue affects only 32-bit platforms when OpenSSL converts excessively large X.509 OCTET STRING values to hexadecimal text. The scanner-reported package record is for amd64, and Liquibase Secure supports only 64-bit container architectures in this runtime. The required 32-bit execution environment is therefore absent."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-31790"
+      },
+      "timestamp": "2026-09-28T21:43:05.291721441Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Applications using OpenSSL RSASVE key encapsulation can disclose uninitialized buffer contents to a malicious peer if encapsulation is attempted with an invalid RSA public key.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires an application to use OpenSSL's EVP_PKEY_encapsulate() with RSA/RSASVE on attacker-supplied public keys. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL key encapsulation integration or other OpenSSL API usage at runtime. The vulnerable code path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-34180"
+      },
+      "timestamp": "2026-09-28T21:43:05.489905703Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL can over-read heap memory while parsing a crafted DER ASN.1 primitive larger than 2 gigabytes through d2i_* decoding functions.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue affects applications that pass attacker-supplied ASN.1 input into OpenSSL d2i_* decoders such as d2i_X509() or d2i_PKCS7(). Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL ASN.1 decoding integration or invocation of OpenSSL tooling at runtime. The vulnerable decoder path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-34182"
       },
-      "timestamp": "2026-09-25T20:28:51.793958488Z",
+      "timestamp": "2026-09-28T21:43:00.844501443Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -24,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-42766"
       },
-      "timestamp": "2026-09-25T20:28:52.081564496Z",
+      "timestamp": "2026-09-28T21:43:01.102187475Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -39,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-42767"
       },
-      "timestamp": "2026-09-25T20:28:52.294325047Z",
+      "timestamp": "2026-09-28T21:43:01.297747903Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -54,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-42770"
       },
-      "timestamp": "2026-09-25T20:28:52.509011774Z",
+      "timestamp": "2026-09-28T21:43:01.494528029Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -69,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-45445"
       },
-      "timestamp": "2026-09-25T20:28:52.727587722Z",
+      "timestamp": "2026-09-28T21:43:01.68838759Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -84,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-45446"
       },
-      "timestamp": "2026-09-25T20:28:52.942825857Z",
+      "timestamp": "2026-09-28T21:43:01.883545317Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -99,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-09-25T20:28:44.031633221Z",
+      "timestamp": "2026-09-28T21:42:53.874217812Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -112,9 +232,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-54874"
+      },
+      "timestamp": "2026-09-28T21:43:05.681673513Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL DTLS endpoints can retain disproportionately large amounts of memory when future-epoch records are buffered during a handshake, enabling denial of service through memory amplification.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue affects OpenSSL DTLS endpoints that buffer future-epoch records during a handshake. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no DTLS server or client implementation through OpenSSL, nor any invocation of OpenSSL networking tooling at runtime. The vulnerable DTLS code path is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-63072"
       },
-      "timestamp": "2026-09-25T20:28:54.713595643Z",
+      "timestamp": "2026-09-28T21:43:03.490275161Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -129,7 +264,7 @@
       "vulnerability": {
         "name": "CVE-2026-63074"
       },
-      "timestamp": "2026-09-25T20:28:54.927421053Z",
+      "timestamp": "2026-09-28T21:43:03.684343452Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -144,7 +279,7 @@
       "vulnerability": {
         "name": "CVE-2026-63076"
       },
-      "timestamp": "2026-09-25T20:28:53.228127893Z",
+      "timestamp": "2026-09-28T21:43:02.140941453Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -159,7 +294,7 @@
       "vulnerability": {
         "name": "CVE-2026-7383"
       },
-      "timestamp": "2026-09-25T20:28:53.544679862Z",
+      "timestamp": "2026-09-28T21:43:02.427431084Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -174,7 +309,7 @@
       "vulnerability": {
         "name": "CVE-2026-75803"
       },
-      "timestamp": "2026-09-25T20:28:53.761094259Z",
+      "timestamp": "2026-09-28T21:43:02.630992408Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -189,7 +324,7 @@
       "vulnerability": {
         "name": "CVE-2026-9076"
       },
-      "timestamp": "2026-09-25T20:28:48.920984554Z",
+      "timestamp": "2026-09-28T21:42:58.261062514Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"

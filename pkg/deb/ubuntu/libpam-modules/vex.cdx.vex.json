@@ -50,6 +50,62 @@
           "ref": "pkg:deb/ubuntu/libpam-modules"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-54411",
+      "description": "Linux-PAM through 1.7.2 contains an observable timing discrepancy (CWE-208) in the pam_userdb module's plaintext-password comparison path in modules/pam_userdb/pam_userdb.c that allows a local or network-adjacent attacker able to repeatedly drive authentication through a calling service to recover the plaintext password of a target account by measuring response-timing differences.",
+      "recommendation": "No action required. Liquibase Secure does not expose a PAM-backed authentication service.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The required PAM-backed authentication environment is absent from Liquibase Secure's shipped runtime.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-56gg-22rq-q53x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54411",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Linux-PAM 1.7.2 and in Ubuntu package 1.5.3-5ubuntu5.6. The vulnerable code is the pam_userdb plaintext-password comparison path, which only becomes exploitable when a PAM-backed authentication service repeatedly drives that module. Liquibase Secure's shipped runtime is a headless CLI entrypoint, not a PAM-authenticated service, and no pam_userdb-backed authentication path is part of the application surface.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules",
+          "versions": [
+            {
+              "range": "vers:deb/<1.5.3-5ubuntu5.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

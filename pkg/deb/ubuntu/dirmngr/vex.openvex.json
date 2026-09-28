@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-f91d25221baf27c72edf3540bdd88911360a0c9548ba2b051f133529bd032622",
+  "@id": "merged-vex-38ed7b89cf155631f5f12c90678e1f5c5ea7df8fc651c7fbc71f4136c22e44e1",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:13:27.770292489Z",
+  "timestamp": "2026-09-28T21:28:08.221025982Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2022-3219"
       },
-      "timestamp": "2026-09-25T20:13:25.733695206Z",
+      "timestamp": "2026-09-28T21:28:05.48343738Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/dirmngr"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2025-68973"
       },
-      "timestamp": "2026-09-25T20:13:15.520354445Z",
+      "timestamp": "2026-09-28T21:27:56.476876948Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/dirmngr"
@@ -33,6 +33,21 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-57062"
+      },
+      "timestamp": "2026-09-28T21:28:07.879574931Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/dirmngr"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "CMS (Cryptographic Message Syntax) parsing in gpgsm in GnuPG through 2.5.20 mishandles the CMS format for AES-GCM because aes-ICVlen is supposed to be 12 bytes but 4 bytes is accepted. NOTE: this is related to CVE-2026-34182.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in Ubuntu package 2.4.4-2ubuntu17.6. The vulnerable path is in GnuPG CMS parsing through gpgsm/dirmngr handling of AES-GCM CMS input. Liquibase Secure's shipped runtime does not invoke gpgsm, dirmngr, or related GnuPG tooling, so the affected CMS parser is not exercised by the application surface."
     }
   ]
 }

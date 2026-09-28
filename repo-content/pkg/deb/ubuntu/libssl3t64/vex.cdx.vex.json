@@ -59,6 +59,62 @@
           "ref": "pkg:deb/ubuntu/libssl3t64"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-54874",
+      "description": "Issue summary: Receiving a DTLS record for a future epoch while a handshake is in progress causes OpenSSL to buffer far more memory than the record itself requires. Impact summary: A peer can use a small amount of network traffic to make an OpenSSL DTLS endpoint retain a disproportionately large amount of memory, which may lead to a Denial of Service. Description: While a DTLS handshake is in progress, a peer may legitimately have already moved on to the next epoch before the local endpoint has processed the same transition. OpenSSL buffers such early records so that they can be processed once the local endpoint catches up. Buffering a record currently retains the entire read buffer it arrived in rather than just the bytes that make up the record itself, allowing a remote memory amplification DoS against DTLS servers.",
+      "recommendation": "No action required. Liquibase Secure does not expose an OpenSSL DTLS server or client endpoint in its shipped runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not expose the vulnerable DTLS endpoint behavior required for this OpenSSL memory-amplification issue.\n"
+        }
+      ],
+      "cwes": [
+        405
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-97g4-hhwh-c697",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54874",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 3.0.13-0ubuntu3.15. The vulnerable behavior is specific to OpenSSL DTLS endpoints buffering future-epoch records while a DTLS handshake is in progress. Liquibase Secure's shipped runtime is a headless CLI that launches Liquibase or lpm and does not expose a DTLS endpoint, so the affected OpenSSL path is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.15",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

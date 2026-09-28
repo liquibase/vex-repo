@@ -1,0 +1,60 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-91187",
+      "description": "Improper Verification of Cryptographic Signature vulnerability in dashbit nimble_zta allows an unauthenticated remote attacker to authenticate as an arbitrary Cloudflare service token. Applications using the Cloudflare Zero Trust authentication strategy are affected. This issue affects nimble_zta from 0.1.2 before 0.1.3.",
+      "recommendation": "No action required. The affected software is not part of Liquibase Secure.",
+      "ratings": [
+        {
+          "source": {
+            "name": "EEF"
+          },
+          "score": 9.3,
+          "severity": "critical",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:H/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "justification": "The affected nimble_zta library is not present in Liquibase Secure.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/dashbitco/nimble_zta/security/advisories/GHSA-rj24-g8cc-g7g2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://cna.erlef.org/cves/CVE-2026-91187.html",
+          "title": "EEF CNA Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-91187",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False match. The CVE is for nimble_zta, an Elixir authentication library published by dashbit, not for the dash shell. The Ubuntu tracker attributes it to the dash package by name. The Liquibase Secure image ships no Elixir or Erlang runtime and no nimble_zta code.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
+        }
+      ]
+    }
+  ]
+}

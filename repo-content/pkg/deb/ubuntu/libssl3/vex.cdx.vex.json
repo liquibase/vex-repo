@@ -295,6 +295,370 @@
       ]
     },
     {
+      "id": "CVE-2026-22796",
+      "description": "A type confusion vulnerability in OpenSSL signature verification of signed PKCS#7 data can dereference an invalid or NULL pointer when malformed PKCS#7 attributes are processed, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's PKCS#7 verification APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL PKCS#7 signature-verification code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22796",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires an application to verify attacker-supplied signed PKCS#7 data through OpenSSL's legacy PKCS#7 parsing APIs. Liquibase Secure's container runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL PKCS#7 integration or invocation of OpenSSL tooling at runtime. The vulnerable OpenSSL code path is therefore not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28387",
+      "description": "An uncommon OpenSSL DANE TLSA client configuration can trigger a use-after-free or double-free during server authentication when specific TLSA records are processed.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's DANE/TLSA client authentication APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL DANE/TLSA client processing that Liquibase Secure does not use.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28387",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects OpenSSL clients that perform DANE TLSA-based server authentication with a specific mix of PKIX and DANE-TA usages. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL DANE/TLSA integration or other native OpenSSL client code paths. The vulnerable OpenSSL behavior is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28388",
+      "description": "OpenSSL can dereference a NULL pointer while processing a malformed delta CRL during X.509 certificate verification when delta-CRL handling is enabled.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's delta-CRL verification path at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL delta-CRL certificate verification code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28388",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires OpenSSL X.509 verification with delta-CRL processing enabled and a malformed CRL input. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL certificate-validation integration or CRL-processing path. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28389",
+      "description": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyAgreeRecipientInfo, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's CMS decryption APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL CMS decryption code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28389",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or invocation of native tooling that would process CMS EnvelopedData. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-28390",
+      "description": "OpenSSL can dereference a NULL pointer while processing crafted CMS EnvelopedData that uses KeyTransportRecipientInfo with RSA-OAEP, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's CMS decryption APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL CMS decryption code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-28390",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path with RSA-OAEP transport parameters. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or native RSA-OAEP processing through OpenSSL. The vulnerable code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-31789",
+      "description": "On 32-bit platforms, OpenSSL can overflow a heap buffer while converting an excessively large OCTET STRING from an X.509 certificate extension into hexadecimal text.",
+      "recommendation": "No action required. The reported Liquibase Secure image is a 64-bit runtime, while this issue requires a 32-bit environment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a 32-bit OpenSSL runtime environment, but the reported image is amd64.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-31789",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects only 32-bit platforms when OpenSSL converts excessively large X.509 OCTET STRING values to hexadecimal text. The scanner-reported package record is for amd64, and Liquibase Secure supports only 64-bit container architectures in this runtime. The required 32-bit execution environment is therefore absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-31790",
+      "description": "Applications using OpenSSL RSASVE key encapsulation can disclose uninitialized buffer contents to a malicious peer if encapsulation is attempted with an invalid RSA public key.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's RSASVE key encapsulation APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL RSASVE encapsulation code that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-31790",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires an application to use OpenSSL's EVP_PKEY_encapsulate() with RSA/RSASVE on attacker-supplied public keys. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL key encapsulation integration or other OpenSSL API usage at runtime. The vulnerable code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-34182",
       "description": "Issue Summary: Cryptographic Message Services (CMS) processing fails to perform sufficient input validation on the cipher and tag length fields of AuthEnvelopedData containers, leading to various potential compromises. Attackers may achieve key-equivalent functionality for a given CMS recipient and/or bypass integrity validation for a given message.",
       "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMS AuthEnvelopedData decryption at runtime.",
@@ -348,6 +712,110 @@
           "versions": [
             {
               "range": "vers:deb/<3.0.2-0ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34180",
+      "description": "OpenSSL can over-read heap memory while parsing a crafted DER ASN.1 primitive larger than 2 gigabytes through d2i_* decoding functions.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL's d2i_* ASN.1 decoding APIs at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL ASN.1 decoder APIs that Liquibase Secure does not invoke.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34180",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects applications that pass attacker-supplied ASN.1 input into OpenSSL d2i_* decoders such as d2i_X509() or d2i_PKCS7(). Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL ASN.1 decoding integration or invocation of OpenSSL tooling at runtime. The vulnerable decoder path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54874",
+      "description": "OpenSSL DTLS endpoints can retain disproportionately large amounts of memory when future-epoch records are buffered during a handshake, enabling denial of service through memory amplification.",
+      "recommendation": "No action required. Liquibase Secure does not use OpenSSL DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires OpenSSL DTLS endpoint handling that Liquibase Secure does not use.\n"
+        }
+      ],
+      "cwes": [
+        405
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54874",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue affects OpenSSL DTLS endpoints that buffer future-epoch records during a handshake. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no DTLS server or client implementation through OpenSSL, nor any invocation of OpenSSL networking tooling at runtime. The vulnerable DTLS code path is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.29",
               "status": "unaffected"
             }
           ]

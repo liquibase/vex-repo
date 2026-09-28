@@ -1,0 +1,158 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-55856",
+      "description": "When an application connects with sslMode=verify-full or verify-ca and a password but does not pin a server certificate, Connector/J accepts an untrusted certificate at the TLS layer and proves the server's identity afterwards by binding the certificate fingerprint into the authentication exchange. That check is not applied on the initial-handshake path, so an active man-in-the-middle that names the mysql_clear_password plugin receives the password in cleartext before any identity check runs.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, pin the server certificate with serverSslCert or a trust store in the MariaDB connection URL instead of relying on sslMode=verify-full without one.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g9jj-cgmh-9f38",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55856",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55857",
+      "description": "When PAM (dialog) authentication is used, the connector can be coerced into sending the account password in cleartext over an insecure connection. A hostile or man-in-the-middle server can trigger this with the default configuration by issuing an Authentication Switch Request for the dialog plugin over plain TCP.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, set restrictedAuth in the MariaDB connection URL to a list that excludes dialog, or connect with sslMode=verify-full and a pinned server certificate.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        319,
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qxvw-fvwx-5cp7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55857",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55858",
+      "description": "The connector encodes and decodes all character data assuming the connection character set is UTF-8. A server can change character_set_client mid-session to a non-UTF-8 charset, after which the driver and server interpret the same bytes under different encodings. This causes silent data corruption and is a primitive that can defeat byte-wise quoting and escaping.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, connect only to trusted MariaDB servers over a verified TLS connection.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        838
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvr9-35cr-46v9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55858",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
