@@ -81,19 +81,41 @@ jobs:
             --output-dir ./repo-content \
             --assessments liquibase-pro/vex/assessments.yaml
 
-      # Scoped to the four platform images so these statements never apply to other images that ship the same packages.
+      # Scoped to the four platform images, in GHCR and in the customer registry, so these statements never apply to
+      # other images that ship the same packages. A failure here must not block Secure's VEX, so it falls back below.
       - name: Generate liquibase-insights VEX content
+        id: insights
+        continue-on-error: true
         run: |
-          image() { echo "pkg:oci/liquibase-platform-$1?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-$1"; }
+          ghcr() { echo "pkg:oci/liquibase-platform-$1?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-$1"; }
+          customer() { echo "pkg:oci/liquibase-platform-$1?repository_url=registry.liquibase.com%2Fliquibase-platform-$1"; }
           bash liquibase-pro/vex/generate-vex-repo.sh \
             --output-dir "$RUNNER_TEMP/insights-content" \
             --assessments liquibase-insights/vex/assessments.yaml \
             --alias-cache liquibase-insights/vex/alias-cache.json \
-            --product "$(image api)" \
-            --extra-product "$(image web)" \
-            --extra-product "$(image migrate)" \
-            --extra-product "$(image llt)" \
+            --product "$(ghcr api)" \
+            --extra-product "$(ghcr web)" \
+            --extra-product "$(ghcr migrate)" \
+            --extra-product "$(ghcr llt)" \
+            --extra-product "$(customer api)" \
+            --extra-product "$(customer web)" \
+            --extra-product "$(customer migrate)" \
+            --extra-product "$(customer llt)" \
             --no-subcomponent-docs
+
+      # Republishing the last good insights documents keeps their suppressions live until the insights input is fixed.
+      - name: Keep published liquibase-insights content
+        if: steps.insights.outcome == 'failure'
+        run: |
+          echo "::warning::liquibase-insights VEX generation failed; republishing its last published content so liquibase-pro still updates"
+          INSIGHTS="$RUNNER_TEMP/insights-content"
+          rm -rf "$INSIGHTS"
+          mkdir -p "$INSIGHTS/pkg"
+          jq '.packages |= map(select(.id | startswith("pkg:oci/liquibase-platform-")))' index.json > "$INSIGHTS/index.json"
+          jq -r '.packages[].location' "$INSIGHTS/index.json" | sort -u | while read -r loc; do
+            mkdir -p "$INSIGHTS/$(dirname "$loc")"
+            cp -R "$(dirname "$loc")/." "$INSIGHTS/$(dirname "$loc")/"
+          done
 
       # Trivy reads one index per repo, so a path or PURL present in both sources would silently shadow the other.
       - name: Merge liquibase-insights content

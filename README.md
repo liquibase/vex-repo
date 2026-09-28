@@ -71,7 +71,7 @@ trivy fs --vex repo /path/to/liquibase/
 trivy rootfs --vex repo /liquibase/
 
 # Scan a Liquibase platform image
-trivy image --vex repo ghcr.io/liquibase/liquibase-platform-api:latest
+trivy image --vex repo registry.liquibase.com/liquibase-platform-api:latest
 
 # Show suppressed vulnerabilities alongside active ones
 trivy image --vex repo --show-suppressed liquibase/liquibase:latest
@@ -202,7 +202,7 @@ in the liquibase-pro repository. The update flow:
 3. It dispatches to this repository's [`update-vex.yaml`](.github/workflows/update-vex.yaml) workflow
 4. That workflow sparse-checkouts `liquibase-pro/vex/`, runs `generate-vex-repo.sh`, validates the output, and opens a PR
 
-The liquibase-platform-* images follow the same flow from `liquibase-insights`: its `vex-repo-dispatch.yml` triggers the same workflow, which also checks out `liquibase-insights/vex/`, generates those statements scoped to the four platform images, and merges them in before validating.
+The liquibase-platform-* images follow the same flow from `liquibase-insights`: its `vex-repo-dispatch.yml` triggers the same workflow, which also checks out `liquibase-insights/vex/`, generates those statements scoped to the four platform images (as published to both `ghcr.io/liquibase` and `registry.liquibase.com`), and merges them in before validating. If the insights run fails, the workflow warns and republishes the last published insights documents, so a broken insights input never holds back the Secure update.
 
 The workflow can also be triggered manually via `workflow_dispatch`.
 
