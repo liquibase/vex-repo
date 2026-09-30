@@ -22,20 +22,20 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          role-to-assume: ${{ secrets.VAULT_GROUPED_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK_ROLE_ARN }}
+          role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
           aws-region: us-east-1
 
-      - name: Get the Slack webhook from vault
-        # Grouped secret holds only TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK; nothing else comes along.
+      - name: Get secrets from vault
+        # TECHOPS-1299 moves this to /vault/grouped/team-liquibase-secure-slack-webhook.
         uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
         with:
           secret-ids: |
-            ,/vault/grouped/team-liquibase-secure-slack-webhook
+            LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
       - name: Post to Slack
         env:
-          WEBHOOK: ${{ env.TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK }}
+          WEBHOOK: ${{ env.LIQUIBASE_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK }}
           REPO: ${{ github.repository }}
           WORKFLOW: ${{ github.event.workflow_run.name }}
           EVENT: ${{ github.event.workflow_run.event }}
@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "$WEBHOOK" ]]; then
-            echo "::error::TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK is unset; nothing sent."
+            echo "::error::LIQUIBASE_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK is unset; nothing sent."
             exit 1
           fi
           TITLE="❌ ${REPO}: ${WORKFLOW} failed"
