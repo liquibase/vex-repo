@@ -453,6 +453,218 @@
       ]
     },
     {
+      "id": "CVE-2026-5450",
+      "description": "Calling the scanf family of functions with a %mc (malloc'd character match) conversion in the GNU C Library version 2.7 to 2.43 with an explicit field width greater than 1024 can result in a one byte heap buffer overflow.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's scanf family with the %mc conversion in its runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a scanf %mc call with a width above 1024 on attacker-controlled input; no such call exists in the Liquibase Secure runtime path.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5450",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-5450",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This glibc flaw is reachable only through a scanf-family call that uses the %mc conversion with an explicit field width above 1024 on attacker-controlled input. The Liquibase Secure image runs the Liquibase Java CLI on a Temurin JRE plus the lpm helper, which is a statically linked Go binary that does not use glibc at all. An inspection of the shipped image found no %mc scanf directive in the JVM, the JRE native libraries, the shell entrypoint or any OS binary, so the vulnerable glibc pattern is not reachable from Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.14|>=2.39|<2.39-0ubuntu8.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86805",
+      "description": "A time-of-check to time-of-use (TOCTOU) race condition in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to escalate privileges. When expanding $ORIGIN in DT_RPATH for setuid/setgid (AT_SECURE) programs, glibc validates the lexically normalized search path against the trusted directories but then opens the raw, un-normalized path. On systems where fs.protected_hardlinks is disabled, an attacker who hard-links such a program and swaps a path component for a symbolic link can make the loader load an attacker-controlled shared object.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0022",
+          "title": "glibc advisory GLIBC-SA-2026-0022"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86805",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95818",
+      "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
+      "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No setuid or setgid binary in the image carries a $ORIGIN search path, so the vulnerable loader path is never taken.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0023",
+          "title": "glibc advisory GLIBC-SA-2026-0023"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95818",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-8058",
+      "description": "The GNU C Library regcomp function from versions 2.4 through 2.41 can double-free memory if an earlier allocation fails, which may permit buffer manipulation depending on the constructed regular expression.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's regcomp() at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:P/VC:L/VI:L/VA:H/SC:L/SI:L/SA:H/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "No process in the Liquibase Secure runtime path compiles regular expressions through glibc, so the vulnerable regcomp() path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        415
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-8058",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=33185",
+          "title": "glibc Bug Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The vulnerable regcomp() double free needs a process that compiles a regular expression through glibc after an earlier allocation failure. An inspection of the shipped image found that neither the JVM nor any JRE native library imports regcomp; Java regular expressions are implemented in java.util.regex, not in glibc. The only importers are OS utilities such as bash, grep, tar and wget, which are either not part of the runtime path or, in the case of the bash entrypoint, do not use regular-expression matching. lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.11; only Liquibase Secure 5.0.0 (jammy, 2.35-0ubuntu3.10) shipped an affected build.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-18374",
       "description": "Passing an effectively empty string to the \",ccs=\" syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled. This usage pattern is not seen in applications in common GNU/Linux distributions.",
       "recommendation": "No action required. Liquibase Secure never constructs glibc fopen mode strings from external or attacker-controlled input.",
@@ -498,6 +710,118 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0861",
+      "description": "Passing an excessively large alignment to memalign, posix_memalign, or aligned_alloc in the GNU C Library can overflow internal arithmetic and lead to heap corruption when the caller controls both the size and the alignment values.",
+      "recommendation": "No action required. Liquibase Secure never passes attacker-controlled alignment values to glibc's memalign family.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only memalign-family callers in the runtime path pass fixed, runtime-chosen alignments, so the overflow cannot be triggered by attacker input.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0861",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0001",
+          "title": "glibc advisory GLIBC-SA-2026-0001"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The vulnerable arithmetic in memalign, posix_memalign and aligned_alloc is triggered only when a caller passes an attacker-controlled, exceptionally large alignment. An inspection of the shipped image found that libjvm.so imports posix_memalign and libmlib_image.so imports memalign, but both pass fixed alignments chosen by the runtime (page and cache-line sizes), never a value derived from user input; no other process in the runtime path uses the memalign family, and lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy) and 2.39-0ubuntu8.7 (noble); Liquibase Secure 5.0.0 through 5.0.3 shipped affected builds, and Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0915",
+      "description": "Calling getnetbyaddr or getnetbyaddr_r in the GNU C Library with a configured DNS backend for networks and a zero-valued network query can leak stack contents to the configured DNS resolver.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's getnetbyaddr family at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path calls the getnetbyaddr family, and the image's nsswitch.conf has no DNS backend for networks.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0915",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=33802",
+          "title": "glibc Bug Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The stack leak needs a process that calls getnetbyaddr() or getnetbyaddr_r() while nsswitch.conf routes the networks database to DNS. Neither condition holds in the Liquibase Secure image: an inspection found that no JRE native library imports the getnetbyaddr family (the only importers are the getent utility and the perl interpreter, neither of which runs at runtime), and /etc/nsswitch.conf configures networks: files with no dns backend. lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy) and 2.39-0ubuntu8.7 (noble); Liquibase Secure 5.0.0 through 5.0.3 shipped affected builds, and Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

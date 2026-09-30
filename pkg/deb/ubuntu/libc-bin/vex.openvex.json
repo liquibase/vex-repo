@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c514f55c40a32fc727c41f3988a86e2297304b55f9b5916bb5213cdc7edaf1d5",
+  "@id": "merged-vex-d8b1a673ed0bbce3a44255a7ccdbbfdd8c813ff8e48b6f49106e841bee2cf471",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:21:24.79827388Z",
+  "timestamp": "2026-09-30T15:31:14.112537791Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-09-25T20:21:20.072006045Z",
+      "timestamp": "2026-09-30T15:31:05.585608639Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -22,9 +22,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-8058"
+      },
+      "timestamp": "2026-09-30T15:31:12.624885902Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The GNU C Library regcomp function from versions 2.4 through 2.41 can double-free memory if an earlier allocation fails, which may permit buffer manipulation depending on the constructed regular expression.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The vulnerable regcomp() double free needs a process that compiles a regular expression through glibc after an earlier allocation failure. An inspection of the shipped image found that neither the JVM nor any JRE native library imports regcomp; Java regular expressions are implemented in java.util.regex, not in glibc. The only importers are OS utilities such as bash, grep, tar and wget, which are either not part of the runtime path or, in the case of the bash entrypoint, do not use regular-expression matching. lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.11; only Liquibase Secure 5.0.0 (jammy, 2.35-0ubuntu3.10) shipped an affected build."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0861"
+      },
+      "timestamp": "2026-09-30T15:31:12.922099001Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Passing an excessively large alignment to memalign, posix_memalign, or aligned_alloc in the GNU C Library can overflow internal arithmetic and lead to heap corruption when the caller controls both the size and the alignment values.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The vulnerable arithmetic in memalign, posix_memalign and aligned_alloc is triggered only when a caller passes an attacker-controlled, exceptionally large alignment. An inspection of the shipped image found that libjvm.so imports posix_memalign and libmlib_image.so imports memalign, but both pass fixed alignments chosen by the runtime (page and cache-line sizes), never a value derived from user input; no other process in the runtime path uses the memalign family, and lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy) and 2.39-0ubuntu8.7 (noble); Liquibase Secure 5.0.0 through 5.0.3 shipped affected builds, and Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0915"
+      },
+      "timestamp": "2026-09-30T15:31:13.218214777Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling getnetbyaddr or getnetbyaddr_r in the GNU C Library with a configured DNS backend for networks and a zero-valued network query can leak stack contents to the configured DNS resolver.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The stack leak needs a process that calls getnetbyaddr() or getnetbyaddr_r() while nsswitch.conf routes the networks database to DNS. Neither condition holds in the Liquibase Secure image: an inspection found that no JRE native library imports the getnetbyaddr family (the only importers are the getent utility and the perl interpreter, neither of which runs at runtime), and /etc/nsswitch.conf configures networks: files with no dns backend. lpm is a statically linked Go binary. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy) and 2.39-0ubuntu8.7 (noble); Liquibase Secure 5.0.0 through 5.0.3 shipped affected builds, and Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-09-25T20:21:16.82678414Z",
+      "timestamp": "2026-09-30T15:31:02.714439693Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -39,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-09-25T20:21:15.622173698Z",
+      "timestamp": "2026-09-30T15:31:01.652448014Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -54,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-09-25T20:21:15.838428481Z",
+      "timestamp": "2026-09-30T15:31:01.842903218Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -69,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-4046"
       },
-      "timestamp": "2026-09-25T20:21:18.241644292Z",
+      "timestamp": "2026-09-30T15:31:03.969634255Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -84,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-4437"
       },
-      "timestamp": "2026-09-25T20:21:23.586118776Z",
+      "timestamp": "2026-09-30T15:31:08.740401059Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -99,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-4438"
       },
-      "timestamp": "2026-09-25T20:21:23.805254259Z",
+      "timestamp": "2026-09-30T15:31:08.964465898Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -114,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-09-25T20:21:22.212813822Z",
+      "timestamp": "2026-09-30T15:31:07.492883156Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -127,9 +172,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-5450"
+      },
+      "timestamp": "2026-09-30T15:31:10.655385799Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling the scanf family of functions with a %mc (malloc'd character match) conversion in the GNU C Library version 2.7 to 2.43 with an explicit field width greater than 1024 can result in a one byte heap buffer overflow.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This glibc flaw is reachable only through a scanf-family call that uses the %mc conversion with an explicit field width above 1024 on attacker-controlled input. The Liquibase Secure image runs the Liquibase Java CLI on a Temurin JRE plus the lpm helper, which is a statically linked Go binary that does not use glibc at all. An inspection of the shipped image found no %mc scanf directive in the JVM, the JRE native libraries, the shell entrypoint or any OS binary, so the vulnerable glibc pattern is not reachable from Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-5928"
       },
-      "timestamp": "2026-09-25T20:21:24.157498043Z",
+      "timestamp": "2026-09-30T15:31:09.320075598Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -144,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-6238"
       },
-      "timestamp": "2026-09-25T20:21:24.376711751Z",
+      "timestamp": "2026-09-30T15:31:09.538895967Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -159,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-09-25T20:21:17.041691775Z",
+      "timestamp": "2026-09-30T15:31:02.903132816Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -174,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-09-25T20:21:22.498358619Z",
+      "timestamp": "2026-09-30T15:31:07.754675722Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -189,7 +249,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-09-25T20:21:22.883244766Z",
+      "timestamp": "2026-09-30T15:31:08.098880796Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -204,7 +264,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-09-25T20:21:23.102786469Z",
+      "timestamp": "2026-09-30T15:31:08.29489203Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -219,7 +279,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-09-25T20:21:19.499765507Z",
+      "timestamp": "2026-09-30T15:31:05.084233134Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -232,9 +292,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-86805"
+      },
+      "timestamp": "2026-09-30T15:31:10.97976503Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A time-of-check to time-of-use (TOCTOU) race condition in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to escalate privileges. When expanding $ORIGIN in DT_RPATH for setuid/setgid (AT_SECURE) programs, glibc validates the lexically normalized search path against the trusted directories but then opens the raw, un-normalized path. On systems where fs.protected_hardlinks is disabled, an attacker who hard-links such a program and swaps a path component for a symbolic link can make the loader load an attacker-controlled shared object.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-09-25T20:21:19.78557565Z",
+      "timestamp": "2026-09-30T15:31:05.333639067Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -244,6 +319,21 @@
       "status_notes": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-95818"
+      },
+      "timestamp": "2026-09-30T15:31:11.254188768Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user."
     }
   ]
 }

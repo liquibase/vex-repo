@@ -1,0 +1,63 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-65facf97cbc6126ec4d4d4ddd5c4f2f2bdbf369484741e074134fd733f4f598c",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-30T16:06:47.790236076Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-55856",
+        "aliases": [
+          "GHSA-g9jj-cgmh-9f38"
+        ]
+      },
+      "timestamp": "2026-09-30T16:06:45.283036099Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When an application connects with sslMode=verify-full or verify-ca and a password but does not pin a server certificate, Connector/J accepts an untrusted certificate at the TLS layer and proves the server's identity afterwards by binding the certificate fingerprint into the authentication exchange. That check is not applied on the initial-handshake path, so an active man-in-the-middle that names the mysql_clear_password plugin receives the password in cleartext before any identity check runs.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-55857",
+        "aliases": [
+          "GHSA-qxvw-fvwx-5cp7"
+        ]
+      },
+      "timestamp": "2026-09-30T16:06:45.477790452Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When PAM (dialog) authentication is used, the connector can be coerced into sending the account password in cleartext over an insecure connection. A hostile or man-in-the-middle server can trigger this with the default configuration by issuing an Authentication Switch Request for the dialog plugin over plain TCP.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-55858",
+        "aliases": [
+          "GHSA-xvr9-35cr-46v9"
+        ]
+      },
+      "timestamp": "2026-09-30T16:06:45.67080782Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The connector encodes and decodes all character data assuming the connection character set is UTF-8. A server can change character_set_client mid-session to a non-UTF-8 charset, after which the driver and server interpret the same bytes under different encodings. This causes silent data corruption and is a primitive that can defeat byte-wise quoting and escaping.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected."
+    }
+  ]
+}

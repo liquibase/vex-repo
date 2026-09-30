@@ -59,6 +59,669 @@
           "ref": "pkg:deb/ubuntu/libssl3t64"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-54874",
+      "description": "Issue summary: Receiving a DTLS record for a future epoch while a handshake is in progress causes OpenSSL to buffer far more memory than the record itself requires. Impact summary: A peer can use a small amount of network traffic to make an OpenSSL DTLS endpoint retain a disproportionately large amount of memory, which may lead to a Denial of Service. Description: While a DTLS handshake is in progress, a peer may legitimately have already moved on to the next epoch before the local endpoint has processed the same transition. OpenSSL buffers such early records so that they can be processed once the local endpoint catches up. Buffering a record currently retains the entire read buffer it arrived in rather than just the bytes that make up the record itself, allowing a remote memory amplification DoS against DTLS servers.",
+      "recommendation": "No action required. Liquibase Secure does not expose an OpenSSL DTLS server or client endpoint in its shipped runtime path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure does not expose the vulnerable DTLS endpoint behavior required for this OpenSSL memory-amplification issue.\n"
+        }
+      ],
+      "cwes": [
+        405
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-97g4-hhwh-c697",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54874",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in Ubuntu package 3.0.13-0ubuntu3.15. The vulnerable behavior is specific to OpenSSL DTLS endpoints buffering future-epoch records while a DTLS handshake is in progress. Liquibase Secure's shipped runtime is a headless CLI that launches Liquibase or lpm and does not expose a DTLS endpoint, so the affected OpenSSL path is not exercised here.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.15",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-75805",
+      "description": "A CMP client that identifies the certificate to revoke with a PKCS#10 CSR dereferences a NULL pointer and crashes when a malicious or compromised CMP server returns a crafted name in the revocation response. The response passes message-protection checks before the affected code runs, so the attacker must control the server or hold the protection secret.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75805",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure contains no CMP client, so OpenSSL's revocation response handling is never reached.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-75806",
+      "description": "An established DTLS 1.2 association using an AEAD cipher suite can be torn down by a single unauthenticated datagram whose encrypted fragment is shorter than the explicit IV and authentication tag overhead: the record layer passed the impossible length to the cipher before checking it and treated the rejection as a fatal internal error instead of discarding the record.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75806",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS record layer is never used by Liquibase Secure, so no DTLS association exists to be torn down.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77696",
+      "description": "SM2 signature generation in OpenSSL uses variable-time BIGNUM operations on the secret nonce and the private key, so signing time depends on secret values. An attacker able to measure SM2 signing times can learn information about the per-signature nonce and, over many signatures, recover the private key.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77696",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs SM2 signing through OpenSSL.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-69418",
+      "description": "When an application uses OpenSSL's low-level OCB encrypt or decrypt APIs directly with hardware-accelerated code paths and input whose length is not a multiple of 16 bytes, the final partial block can be left unencrypted and unauthenticated because the tail-handling logic reprocesses the wrong buffer region.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable API is never called on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        325
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69418",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The vulnerable low-level OCB encrypt and decrypt routines are therefore never called by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-69419",
+      "description": "Calling PKCS12_get_friendlyname() on a malicious PKCS#12 file can cause a one-byte out-of-bounds write before the allocated buffer while converting a BMPString friendly name from UTF-16BE to UTF-8.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable API is never called on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69419",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_get_friendlyname() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-69420",
+      "description": "A type confusion flaw in OpenSSL's TimeStamp Response verification can dereference an invalid or NULL pointer when TS_RESP_verify_response() processes a malformed response, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable API is never called on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69420",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. TS_RESP_verify_response() is therefore never called on attacker-supplied timestamp responses by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-69421",
+      "description": "Processing a malformed PKCS#12 file can trigger a NULL pointer dereference in OpenSSL's PKCS12_item_decrypt_d2i_ex() function, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable API is never called on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-69421",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_item_decrypt_d2i_ex() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22795",
+      "description": "A type confusion flaw in OpenSSL PKCS#12 parsing can dereference an invalid or NULL pointer when a malformed PKCS#12 file is processed, causing a denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable API is never called on attacker-controlled input.\n"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22795",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's PKCS#12 parser is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-84782",
+      "description": "OpenSSL's DTLS retransmission logic mishandles a handshake message write that was suspended part-way through: the retransmitted message is read from a stale buffer offset and overwrites the state the suspended write needs to resume. A peer can receive heap memory as plaintext handshake data, or the read can reach unmapped memory and crash the process.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84782",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS implementation is therefore never used by Liquibase Secure, and no DTLS handshake can be in flight for the retransmission logic to act on.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-35189",
+      "description": "A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions: a certificate chain under the accepted peer size limit can allocate several hundred MiB of resident memory during a normal TLS handshake, enough to crash a client or a server that solicits client certificates. OpenSSL rates the issue Low; no CVSS vector has been published.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-35189",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL never receives a peer certificate from Liquibase Secure, so its X.509 extension cache and CRL distribution point processing are never exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54872",
+      "description": "OpenSSL's generic elliptic-curve scalar multiplication, used for ECDSA and SM2 signing with curves that have no dedicated constant-time implementation (Brainpool and other generic prime curves), pads the secret scalar with non-constant-time BIGNUM operations. An attacker able to measure signing times can learn information about the per-signature nonce and, over many signatures, recover the private key. The NIST curves P-256, P-384 and P-521 are not affected.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path links OpenSSL, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54872",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 through 5.2.2 shipped 3.0.13-0ubuntu3.6 through 3.0.13-0ubuntu3.15, all below the fixed 3.0.13-0ubuntu3.16. The same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs ECDSA or SM2 signing through OpenSSL; the JRE's Java providers handle any signing the product does.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

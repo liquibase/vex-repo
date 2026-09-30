@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-14158d700abd12cb5daed7b8b6e0185f3a358bdba8c374f6867db87566a721e5",
+  "@id": "merged-vex-5d0497c4095d81cf3be19c802c9850a91255b2a50bede972594e4d728fcde2d3",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:12:21.587663327Z",
+  "timestamp": "2026-09-30T15:20:12.362788816Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "CURL-CVE-2026-10536"
         ]
       },
-      "timestamp": "2026-09-25T20:12:13.941543186Z",
+      "timestamp": "2026-09-30T15:20:02.617778664Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -30,7 +30,7 @@
           "CURL-CVE-2026-11856"
         ]
       },
-      "timestamp": "2026-09-25T20:12:10.824842925Z",
+      "timestamp": "2026-09-30T15:19:59.818809175Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -48,7 +48,7 @@
           "CURL-CVE-2026-13608"
         ]
       },
-      "timestamp": "2026-09-25T20:12:12.440659261Z",
+      "timestamp": "2026-09-30T15:20:01.272105407Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -66,7 +66,7 @@
           "CURL-CVE-2026-18924"
         ]
       },
-      "timestamp": "2026-09-25T20:12:11.788587225Z",
+      "timestamp": "2026-09-30T15:20:00.696896009Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -79,12 +79,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-1965",
+        "aliases": [
+          "CURL-CVE-2026-1965"
+        ]
+      },
+      "timestamp": "2026-09-30T15:20:11.629969119Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/curl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libcurl can incorrectly reuse an existing Negotiate-authenticated connection for a later request to the same server with different credentials, causing the request to run under the wrong authenticated identity.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The wrong-connection reuse needs a libcurl-based application that performs Negotiate (SPNEGO) authenticated transfers with different credentials over one connection pool. curl is present in the image but nothing in the runtime path invokes it, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.23 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 8.5.0-2ubuntu10.8 (noble); Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6, and Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-19931",
         "aliases": [
           "CURL-CVE-2026-19931"
         ]
       },
-      "timestamp": "2026-09-25T20:12:11.572035461Z",
+      "timestamp": "2026-09-30T15:20:00.503641064Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -102,7 +120,7 @@
           "CURL-CVE-2026-3783"
         ]
       },
-      "timestamp": "2026-09-25T20:12:18.190480307Z",
+      "timestamp": "2026-09-30T15:20:06.429263622Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -120,7 +138,7 @@
           "CURL-CVE-2026-3784"
         ]
       },
-      "timestamp": "2026-09-25T20:12:18.408202576Z",
+      "timestamp": "2026-09-30T15:20:06.623457655Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -138,7 +156,7 @@
           "CURL-CVE-2026-4873"
         ]
       },
-      "timestamp": "2026-09-25T20:12:18.796549723Z",
+      "timestamp": "2026-09-30T15:20:06.961941217Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -156,7 +174,7 @@
           "CURL-CVE-2026-5545"
         ]
       },
-      "timestamp": "2026-09-25T20:12:20.517468383Z",
+      "timestamp": "2026-09-30T15:20:08.535150166Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -174,7 +192,7 @@
           "CURL-CVE-2026-5773"
         ]
       },
-      "timestamp": "2026-09-25T20:12:20.731119395Z",
+      "timestamp": "2026-09-30T15:20:08.727085485Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -192,7 +210,7 @@
           "CURL-CVE-2026-6253"
         ]
       },
-      "timestamp": "2026-09-25T20:12:21.017791476Z",
+      "timestamp": "2026-09-30T15:20:08.982159914Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -210,7 +228,7 @@
           "CURL-CVE-2026-6276"
         ]
       },
-      "timestamp": "2026-09-25T20:12:21.237497171Z",
+      "timestamp": "2026-09-30T15:20:09.202115587Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -228,7 +246,7 @@
           "CURL-CVE-2026-6429"
         ]
       },
-      "timestamp": "2026-09-25T20:12:19.081381588Z",
+      "timestamp": "2026-09-30T15:20:07.213967673Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -246,7 +264,7 @@
           "CURL-CVE-2026-7168"
         ]
       },
-      "timestamp": "2026-09-25T20:12:19.330793167Z",
+      "timestamp": "2026-09-30T15:20:07.438181623Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -264,7 +282,7 @@
           "CURL-CVE-2026-80230"
         ]
       },
-      "timestamp": "2026-09-25T20:12:12.22333101Z",
+      "timestamp": "2026-09-30T15:20:01.081640072Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -282,7 +300,7 @@
           "CURL-CVE-2026-82209"
         ]
       },
-      "timestamp": "2026-09-25T20:12:12.006484972Z",
+      "timestamp": "2026-09-30T15:20:00.88761751Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -300,7 +318,7 @@
           "CURL-CVE-2026-8286"
         ]
       },
-      "timestamp": "2026-09-25T20:12:19.617332159Z",
+      "timestamp": "2026-09-30T15:20:07.688424369Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -318,7 +336,7 @@
           "CURL-CVE-2026-8458"
         ]
       },
-      "timestamp": "2026-09-25T20:12:19.832812889Z",
+      "timestamp": "2026-09-30T15:20:07.883142631Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -336,7 +354,7 @@
           "CURL-CVE-2026-8924"
         ]
       },
-      "timestamp": "2026-09-25T20:12:14.393354086Z",
+      "timestamp": "2026-09-30T15:20:03.021712544Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -354,7 +372,7 @@
           "CURL-CVE-2026-8925"
         ]
       },
-      "timestamp": "2026-09-25T20:12:14.610206451Z",
+      "timestamp": "2026-09-30T15:20:03.217432646Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -372,7 +390,7 @@
           "CURL-CVE-2026-8927"
         ]
       },
-      "timestamp": "2026-09-25T20:12:14.826188547Z",
+      "timestamp": "2026-09-30T15:20:03.4115959Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -390,7 +408,7 @@
           "CURL-CVE-2026-8932"
         ]
       },
-      "timestamp": "2026-09-25T20:12:15.040115207Z",
+      "timestamp": "2026-09-30T15:20:03.606168983Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"
@@ -408,7 +426,7 @@
           "CURL-CVE-2026-9547"
         ]
       },
-      "timestamp": "2026-09-25T20:12:15.292756519Z",
+      "timestamp": "2026-09-30T15:20:03.827091339Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/curl"

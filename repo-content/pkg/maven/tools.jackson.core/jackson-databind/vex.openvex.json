@@ -1,45 +1,63 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-848e8375275efa0405d97446067da96fe87c8f49dbd275b0f5e15b72e98728e0",
+  "@id": "merged-vex-f9c96b30b03472c2d15232200678faaf523bd1dd740629192960de92c71525ad",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-08-20T12:56:04.198129754Z",
+  "timestamp": "2026-09-30T16:09:52.438475213Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
-        "name": "CVE-2026-54512",
+        "name": "CVE-2026-19032",
         "aliases": [
-          "GHSA-j3rv-43j4-c7qm"
+          "GHSA-wjgm-6hv5-3cvf"
         ]
       },
-      "timestamp": "2026-08-20T12:56:03.386883693Z",
+      "timestamp": "2026-09-30T16:09:51.869665374Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-databind"
         }
       ],
       "status": "not_affected",
-      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.10.0 until 2.18.8, 2.21.4, and 3.1.4, jackson-databind's PolymorphicTypeValidator (PTV) is the primary safety mechanism guarding polymorphic deserialization. When polymorphic typing is enabled and a type identifier contains generic parameters (i.e. the type ID string contains <), DatabindContext._resolveAndValidateGeneric() validates only the raw container class name (the substring before <) against the configured PTV. If the container type is approved, the method parses the full canonical type string via TypeFactory.constructFromCanonical() and returns the fully parameterized type without ever validating the nested type arguments against the PTV. The nested type arguments are then resolved, instantiated, and populated as beans during deserialization. An attacker who controls the type ID can therefore place a denied class as a generic type parameter of an allowed container — for example java.util.ArrayList<com.evil.Gadget> when only java.util.ArrayList is allow-listed. The container passes the PTV check; com.evil.Gadget is loaded via Class.forName(name, true, loader), instantiated, and its properties are set from attacker-controlled JSON. This completely bypasses an explicitly configured PTV allow-list. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
+      "status_notes": "jackson-databind's deserializer for java.nio.file.Path resolves an attacker-supplied URI without restricting the URI scheme. In JDKFromStringDeserializer.NioPathHelper.deserialize, a string bound from untrusted JSON is passed to new URI(value) and then to Path.of(uri). When that throws FileSystemNotFoundException, the code enumerates ServiceLoader<FileSystemProvider> and calls provider.getPath(uri) on the first provider whose scheme matches the attacker-chosen scheme. Untrusted JSON can therefore select and drive an arbitrary registered FileSystemProvider during readValue under a default JsonMapper, and forces provider class loading at the same time. With only the JDK built-in providers (file, jar/zipfs) present, the resolved path is inert and no mount or network I/O occurs; further impact requires a side-effecting third-party FileSystemProvider on the classpath. This affects com.fasterxml.jackson.core:jackson-databind from 2.8.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2. Binding java.nio.file.Path from untrusted JSON should be avoided regardless of version.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "jackson-databind's PolymorphicTypeValidator generic type validation bypass is fixed in 3.1.4. The scanner reported tools.jackson.core:jackson-databind 3.1.1, and the commercial distribution pins that artifact to 3.1.1 (dist/pom.xml:67, dist/pom.xml:68), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for PolymorphicTypeValidator, BasicPolymorphicTypeValidator, activateDefaultTyping, enableDefaultTyping, JsonTypeInfo, constructFromCanonical, allowIfSubType, allowIfSubTypeIsArray, DefaultTyping, and _resolveAndValidateGeneric returned zero hits."
+      "impact_statement": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Jackson 3 appears in two places in the Liquibase Secure distribution: relocated inside liquibase-commercial-cassandra on the current main build (3.2.2, already fixed) and inside the liquibase-license-tracking application (3.2.1). The reachability argument is the same as for Jackson 2 and holds independently of version: the vulnerable NioPathHelper path runs only when Jackson binds a JSON string into a java.nio.file.Path target, either directly or through a bean that declares a Path-typed property. An inspection of every jar in the shipped distribution, including the Jackson copies relocated inside the couchbase, databricks and snowflake drivers and the license-tracking application, found no Jackson-bound class with a Path-typed property. The classes that reference both Path and Jackson (the Snowflake and Databricks token caches and config parsers, Couchbase's ImportFile, Liquibase's ProJsonChangeLogParser, the Jackson 3 stream factories) use Path as a file handle for the document being read and bind its content into Map, JsonNode or their own DTOs without Path fields. Liquibase Secure's own Jackson call sites bind into Object or Map."
     },
     {
       "vulnerability": {
-        "name": "CVE-2026-54513",
+        "name": "CVE-2026-68497",
         "aliases": [
-          "GHSA-rmj7-2vxq-3g9f"
+          "GHSA-q4xh-88c3-wmh7"
         ]
       },
-      "timestamp": "2026-08-20T12:56:03.501421855Z",
+      "timestamp": "2026-09-30T16:09:50.209845878Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-databind"
         }
       ],
       "status": "not_affected",
-      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.10.0 until 2.18.8, 2.21.4, and 3.1.4, BasicPolymorphicTypeValidator.Builder.allowIfSubTypeIsArray() allowlists any array type based only on clazz.isArray(), without validating the array's component (element) type against the configured allowlist. A PTV built with allowIfSubTypeIsArray() plus an explicit concrete-type allowlist therefore still permits EvilType[] even though EvilType is not allowlisted. When Jackson deserializes the elements and no per-element type IDs are present, it instantiates the component type directly with no further PTV check, bypassing the allowlist. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
+      "status_notes": "jackson-databind binds a JSON string to a javax.xml.datatype.Duration or javax.xml.datatype.XMLGregorianCalendar field by passing the raw string verbatim to DatatypeFactory.newDuration(value) or newXMLGregorianCalendar(value). These deserializers are registered by default with no opt-in. The XML Schema lexical grammar permits numeric components of arbitrary length, which the JDK materializes through the native BigInteger(String) and BigDecimal(String) constructors, both quadratic in digit count, and because the digits sit inside a JSON string token rather than a JSON number token the maxNumberLength guard never applies. This affects tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 3.1.6 or 3.2.2.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "jackson-databind's BasicPolymorphicTypeValidator allowIfSubTypeIsArray array subtype allow-list bypass is fixed in 3.1.4. The scanner reported tools.jackson.core:jackson-databind 3.1.1, and the commercial distribution pins that artifact to 3.1.1 (dist/pom.xml:67, dist/pom.xml:68), which is in the affected range. However, the vulnerable code path is not reachable from Liquibase code: focused greps across Java sources for PolymorphicTypeValidator, BasicPolymorphicTypeValidator, activateDefaultTyping, enableDefaultTyping, JsonTypeInfo, constructFromCanonical, allowIfSubType, allowIfSubTypeIsArray, DefaultTyping, and _resolveAndValidateGeneric returned zero hits."
+      "impact_statement": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Liquibase Secure ships one Jackson 3 copy, in liquibase-commercial-cassandra, and it is on the fixed 3.2.2. That was read out of the built distribution rather than from the dependency graph: internal/extensions/liquibase-commercial-cassandra.jar carries META-INF/maven/tools.jackson.core/jackson-databind/pom.properties with version=3.2.2, and the constant in tools/jackson/databind/cfg/PackageVersion agrees. jackson-core in the same jar is also 3.2.2. The reachability argument is the same as for Jackson 2 and holds independently of the version: no production code in this repository references javax.xml.datatype.Duration or XMLGregorianCalendar, so the XML datatype deserializers that carry the unbounded parse are never given a target to bind. One thing to watch rather than a present exposure: no POM here pins tools.jackson.core. The version arrives transitively from com.ing.data:cassandra-jdbc-wrapper, pinned at 5.0.3 via cassandra-jdbc.version, and only that release carries a fixed Jackson. Wrapper 5.0.2 and 5.0.1 declare 3.2.0 and wrapper 5.0.0 declares 3.1.3, both inside the affected ranges, so a wrapper change could reintroduce an affected copy with no POM edit here to signal it."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-83557",
+        "aliases": [
+          "GHSA-gx83-3vf8-gh7j"
+        ]
+      },
+      "timestamp": "2026-09-30T16:09:51.643330009Z",
+      "products": [
+        {
+          "@id": "pkg:maven/tools.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "DefaultBaseTypeLimitingValidator is the PolymorphicTypeValidator applied automatically whenever @JsonTypeInfo is used without an explicitly configured custom validator. It denies polymorphic resolution only for a fixed set of \"unsafe base types\", and its isSafeSubType method returns true unconditionally for every base type outside that set. java.lang.Comparable was absent from the list despite being implemented by a very large fraction of JDK and application classes, comparable in breadth to java.io.Serializable, which is on the list for that reason. An application declaring an @JsonTypeInfo-annotated property or class with Comparable as its base type, and no custom PolymorphicTypeValidator, will accept a type identifier for essentially any class implementing Comparable. This yields an attacker-controlled object instantiation primitive; a demonstrated case constructs a java.io.File for an arbitrary attacker-chosen path, which becomes path-traversal-adjacent if the application subsequently calls path-sensitive methods on the value. No class implementing Comparable has been identified that yields code execution through deserialization alone. Global Default Typing via activateDefaultTyping is not affected, because that method structurally requires an explicit PolymorphicTypeValidator argument. This affects com.fasterxml.jackson.core:jackson-databind from 2.11.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Jackson 3 appears in two places in the Liquibase Secure distribution: relocated inside liquibase-commercial-cassandra on the current main build (3.2.2, already fixed) and inside the liquibase-license-tracking application (3.2.1). The reachability argument is the same as for Jackson 2 and holds independently of version: the vulnerable DefaultBaseTypeLimitingValidator path is exercised only when an application declares @JsonTypeInfo on a property or class whose base type is java.lang.Comparable and lets Jackson fall back to the default validator. An inspection of every jar in the shipped distribution, including the Jackson copies relocated inside the couchbase, databricks and snowflake drivers and the license-tracking application, found @JsonTypeInfo declared on exactly three base types, Apache Arrow's ArrowType (bundled by bigquery, databricks and snowflake) and Couchbase's AnalyticsLink and BucketConfig, plus a reflective lookup of the annotation in Azure Core's FlatteningDeserializer. None of these base types is Comparable, and all of them bind JSON that comes from the respective database or cloud service, not from Liquibase users. Liquibase Secure's own code never uses @JsonTypeInfo."
     }
   ]
 }

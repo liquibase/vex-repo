@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-0a370e1e29e2c0fa27f032511349ab29f5949e227bdfb07bc9f19aa4297f3272",
+  "@id": "merged-vex-6630a50ac0cb187ff487ab41aa6f4dcb9d9dd5408d21a805d0052b82bceeb7e0",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:25:30.210182388Z",
+  "timestamp": "2026-09-30T15:37:29.013836961Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2024-10041"
       },
-      "timestamp": "2026-09-25T20:25:30.210184167Z",
+      "timestamp": "2026-09-30T15:37:22.391454504Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpam-modules"
@@ -19,6 +19,21 @@
       "status_notes": "A vulnerability was found in PAM. The secret information is stored in memory, where the attacker can trigger the victim program to execute by sending characters to its standard input (stdin). As this occurs, the attacker can train the branch predictor to execute an ROP chain speculatively. This flaw could result in leaked passwords, such as those found in /etc/shadow while performing authentications.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "libpam Yescrypt/pam_unix in-memory secret disclosure issue, which Ubuntu has marked Ignored (fix deemed too intrusive/regression-prone). Exploitation requires an active PAM-authenticated login prompt reading stdin; this container runs the Liquibase CLI as a fixed non-root user (docker/Dockerfile:72) with no login, su, sudo, or sshd present."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54411"
+      },
+      "timestamp": "2026-09-30T15:37:26.548964981Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpam-modules"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Linux-PAM through 1.7.2 contains an observable timing discrepancy (CWE-208) in the pam_userdb module's plaintext-password comparison path in modules/pam_userdb/pam_userdb.c that allows a local or network-adjacent attacker able to repeatedly drive authentication through a calling service to recover the plaintext password of a target account by measuring response-timing differences.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Fixed in Linux-PAM 1.7.2 and in Ubuntu package 1.5.3-5ubuntu5.6. The vulnerable code is the pam_userdb plaintext-password comparison path, which only becomes exploitable when a PAM-backed authentication service repeatedly drives that module. Liquibase Secure's shipped runtime is a headless CLI entrypoint, not a PAM-authenticated service, and no pam_userdb-backed authentication path is part of the application surface."
     }
   ]
 }

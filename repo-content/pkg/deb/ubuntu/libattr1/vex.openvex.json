@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-5911afa207d02c7547c2ba60ace249782e3ef587d3db42facc68157842f9e9e8",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-30T15:29:35.439093139Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54371"
+      },
+      "timestamp": "2026-09-30T15:29:35.439094332Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libattr1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "attr before version 2.6.0 contains a symlink traversal vulnerability in the getfattr and setfattr utilities that allows local attackers to escalate privileges by replacing a pathname component with a symbolic link during directory hierarchy traversal. Attackers who control a pathname component can redirect getfattr and setfattr operations to arbitrary files by substituting a symlink, leading to local privilege escalation when getfattr or setfattr is invoked by a privileged process over an attacker-controlled path.",
+      "justification": "component_not_present",
+      "impact_statement": "Scanner package misattribution. The vulnerable code is the getfattr and setfattr utilities, which Ubuntu ships in the separate attr binary package. attr is not installed in the Liquibase Secure image: dpkg lists only libattr1 (the libattr.so.1 shared library used by coreutils such as cp and mv), and there is no getfattr or setfattr binary on the image. The scanner matched a fix in the attr source package to libattr1, which does not contain the vulnerable code."
+    }
+  ]
+}

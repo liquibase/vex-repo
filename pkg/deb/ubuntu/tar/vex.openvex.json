@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-f1512ee50b840e0925f9746513be9c431d54f086040d3e94f057704eda622b5f",
+  "@id": "merged-vex-47b4c0f8670c9806f255571c106cea9505b4d68ed39e2383f5fd4188317e78b3",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-25T20:33:49.884727878Z",
+  "timestamp": "2026-09-30T15:47:36.246667389Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-45582"
       },
-      "timestamp": "2026-09-25T20:33:45.102482627Z",
+      "timestamp": "2026-09-30T15:47:29.215561906Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/tar"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-18477"
       },
-      "timestamp": "2026-09-25T20:33:44.207647739Z",
+      "timestamp": "2026-09-30T15:47:28.434900993Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/tar"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-18508"
       },
-      "timestamp": "2026-09-25T20:33:43.992211484Z",
+      "timestamp": "2026-09-30T15:47:28.230142744Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/tar"
@@ -49,6 +49,21 @@
       "status_notes": "A flaw was found in GNU tar. When extracting an archive with the --one-top-level option, hardlink targets are not confined to the designated top-level directory and may resolve relative to the extraction working directory. A crafted archive can create hardlinks that escape the intended boundary and, when combined with a preexisting symbolic link under the working directory, may allow writing outside the intended directory.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "This flaw is triggered by extracting a crafted archive with GNU tar's --one-top-level option. Liquibase Secure's Dockerfile invokes tar exactly once, at image build time, to extract its own trusted release tarball with no --one-top-level flag; tar is never invoked at container runtime on any input, let alone attacker-controlled archives."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5704"
+      },
+      "timestamp": "2026-09-30T15:47:33.989667789Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/tar"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in tar. A remote attacker could exploit this vulnerability by crafting a malicious archive, leading to hidden file injection with fully attacker-controlled content. This bypasses pre-extraction inspection mechanisms, potentially allowing an attacker to introduce malicious files onto a system without detection.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in Ubuntu package 1.35+dfsg-3ubuntu0.4. This issue requires tar to extract an attacker-crafted archive so the hidden-file injection path is reached. In Liquibase Secure, tar is only used during image build to unpack the pinned Liquibase release tarball after digest verification, and the shipped runtime does not invoke tar on user-controlled input."
     }
   ]
 }
