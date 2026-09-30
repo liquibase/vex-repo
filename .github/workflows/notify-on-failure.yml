@@ -10,6 +10,7 @@ on:
 
 permissions:
   id-token: write
+  actions: read
 
 jobs:
   notify:
@@ -33,9 +34,26 @@ jobs:
             LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
+      - name: Find the failed step
+        id: failed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          # "job / step" for every failed step in the run. $job is jq, not shell.
+          # shellcheck disable=SC2016
+          STEPS=$(gh api "repos/${REPO}/actions/runs/${RUN_ID}/jobs" --paginate \
+            --jq '.jobs[] | select(.conclusion == "failure") | .name as $job
+                  | .steps[] | select(.conclusion == "failure") | "\($job) / \(.name)"' \
+            | paste -sd ';' - | sed 's/;/; /g')
+          echo "steps=${STEPS:-unknown}" >> "$GITHUB_OUTPUT"
+
       - name: Post to Slack
         env:
           WEBHOOK: ${{ env.LIQUIBASE_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK }}
+          FAILED_STEPS: ${{ steps.failed.outputs.steps }}
           REPO: ${{ github.repository }}
           WORKFLOW: ${{ github.event.workflow_run.name }}
           EVENT: ${{ github.event.workflow_run.event }}
@@ -49,7 +67,10 @@ jobs:
             exit 1
           fi
           TITLE="❌ ${REPO}: ${WORKFLOW} failed"
-          TEXT="Trigger: ${EVENT} on ${BRANCH} by ${ACTOR}. <${RUN_URL}|View run>"
+          TEXT=$(printf '%s\n' \
+            "Failed step: ${FAILED_STEPS}" \
+            "Trigger: ${EVENT} on ${BRANCH} by ${ACTOR}" \
+            "<${RUN_URL}|View run>")
           curl -fsS -X POST "$WEBHOOK" \
             -H 'Content-Type: application/json' \
             -d "$(jq -n \
