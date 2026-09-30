@@ -1,0 +1,59 @@
+name: Notify Slack on workflow failure
+
+# Catch-all: fires when any workflow in this repo completes, alerts only on
+# failure. Cancelled and skipped runs are ignored. TECHOPS-1368.
+
+on:
+  workflow_run:
+    workflows: ["**"]
+    types: [completed]
+
+permissions:
+  id-token: write
+
+jobs:
+  notify:
+    name: Notify Slack
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.name != github.workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.VAULT_GROUPED_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Get the Slack webhook from vault
+        # Grouped secret holds only TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK; nothing else comes along.
+        uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
+        with:
+          secret-ids: |
+            ,/vault/grouped/team-liquibase-secure-slack-webhook
+          parse-json-secrets: true
+
+      - name: Post to Slack
+        env:
+          WEBHOOK: ${{ env.TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK }}
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.event.workflow_run.name }}
+          EVENT: ${{ github.event.workflow_run.event }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          ACTOR: ${{ github.event.workflow_run.actor.login }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$WEBHOOK" ]]; then
+            echo "::error::TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK is unset; nothing sent."
+            exit 1
+          fi
+          TITLE="❌ ${REPO}: ${WORKFLOW} failed"
+          TEXT="Trigger: ${EVENT} on ${BRANCH} by ${ACTOR}. <${RUN_URL}|View run>"
+          curl -fsS -X POST "$WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg title "$TITLE" \
+              --arg text "$TEXT" \
+              --arg footer "$REPO" \
+              '{attachments: [{color: "danger", title: $title, text: $text, fallback: $text, footer: $footer}]}')"
