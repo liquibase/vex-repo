@@ -7,6 +7,13 @@ on:
   workflow_run:
     workflows: ["**"]
     types: [completed]
+  # Test path: post a real-shape message for a past run without waiting for a failure.
+  workflow_dispatch:
+    inputs:
+      test_run_id:
+        description: "Run ID of any workflow run in this repo to report on"
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -15,9 +22,13 @@ permissions:
 jobs:
   notify:
     name: Notify Slack
+    # Skip PR runs: they already show on the PR, and a fork PR can add any workflow it likes.
     if: >-
-      github.event.workflow_run.conclusion == 'failure' &&
-      github.event.workflow_run.name != github.workflow
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'failure' &&
+       github.event.workflow_run.event != 'pull_request' &&
+       github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.name != github.workflow)
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -34,39 +45,44 @@ jobs:
             LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
-      - name: Find the failed step
-        id: failed
+      - name: Describe the failed run
+        id: run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.test_run_id || github.event.workflow_run.id }}
         run: |
           set -euo pipefail
-          # "job / step" for every failed step in the run. $job is jq, not shell.
+          # Fetched by id so the dispatch test path and the real path share one shape.
+          gh api "repos/${REPO}/actions/runs/${RUN_ID}" \
+            --jq '"name=\(.name)", "event=\(.event)", "branch=\(.head_branch)", "actor=\(.actor.login)", "url=\(.html_url)"' \
+            >> "$GITHUB_OUTPUT"
+          # "job / step" for every failed step. Falls back to unknown so an API error never drops the alert.
           # shellcheck disable=SC2016
           STEPS=$(gh api "repos/${REPO}/actions/runs/${RUN_ID}/jobs" --paginate \
             --jq '.jobs[] | select(.conclusion == "failure") | .name as $job
                   | .steps[] | select(.conclusion == "failure") | "\($job) / \(.name)"' \
-            | paste -sd ';' - | sed 's/;/; /g')
+            | paste -sd ';' - | sed 's/;/; /g') || STEPS=""
           echo "steps=${STEPS:-unknown}" >> "$GITHUB_OUTPUT"
 
       - name: Post to Slack
         env:
           WEBHOOK: ${{ env.LIQUIBASE_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK }}
-          FAILED_STEPS: ${{ steps.failed.outputs.steps }}
+          TEST_PREFIX: ${{ github.event_name == 'workflow_dispatch' && '[test] ' || '' }}
           REPO: ${{ github.repository }}
-          WORKFLOW: ${{ github.event.workflow_run.name }}
-          EVENT: ${{ github.event.workflow_run.event }}
-          BRANCH: ${{ github.event.workflow_run.head_branch }}
-          ACTOR: ${{ github.event.workflow_run.actor.login }}
-          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          WORKFLOW: ${{ steps.run.outputs.name }}
+          EVENT: ${{ steps.run.outputs.event }}
+          BRANCH: ${{ steps.run.outputs.branch }}
+          ACTOR: ${{ steps.run.outputs.actor }}
+          RUN_URL: ${{ steps.run.outputs.url }}
+          FAILED_STEPS: ${{ steps.run.outputs.steps }}
         run: |
           set -euo pipefail
           if [[ -z "$WEBHOOK" ]]; then
             echo "::error::LIQUIBASE_TEAM_LIQUIBASE_SECURE_SLACK_WEBHOOK is unset; nothing sent."
             exit 1
           fi
-          TITLE="❌ ${REPO}: ${WORKFLOW} failed"
+          TITLE="${TEST_PREFIX}❌ ${REPO}: ${WORKFLOW} failed"
           TEXT=$(printf '%s\n' \
             "Failed step: ${FAILED_STEPS}" \
             "Trigger: ${EVENT} on ${BRANCH} by ${ACTOR}" \
