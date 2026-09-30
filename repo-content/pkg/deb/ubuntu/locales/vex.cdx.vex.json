@@ -240,6 +240,174 @@
           "ref": "pkg:deb/ubuntu/locales"
         }
       ]
+    },
+    {
+      "id": "CVE-2025-8058",
+      "description": "The GNU C Library regcomp function from versions 2.4 through 2.41 can double-free memory if an earlier allocation fails, which may permit buffer manipulation depending on the constructed regular expression.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's regcomp() at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:P/VC:L/VI:L/VA:H/SC:L/SI:L/SA:H/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "No process in the Liquibase Secure runtime path compiles regular expressions through glibc, so the vulnerable regcomp() path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        415
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-8058",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=33185",
+          "title": "glibc Bug Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable regcomp() double free needs a process that compiles a regular expression through glibc after an earlier allocation failure. An inspection of the shipped image found that neither the JVM nor any JRE native library imports regcomp; Java regular expressions are implemented in java.util.regex, not in glibc. The only importers are OS utilities such as bash, grep, tar and wget, which are either not part of the runtime path or, in the case of the bash entrypoint, do not use regular-expression matching. lpm is a statically linked Go binary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0861",
+      "description": "Passing an excessively large alignment to memalign, posix_memalign, or aligned_alloc in the GNU C Library can overflow internal arithmetic and lead to heap corruption when the caller controls both the size and the alignment values.",
+      "recommendation": "No action required. Liquibase Secure never passes attacker-controlled alignment values to glibc's memalign family.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only memalign-family callers in the runtime path pass fixed, runtime-chosen alignments, so the overflow cannot be triggered by attacker input.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0861",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0001",
+          "title": "glibc advisory GLIBC-SA-2026-0001"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable arithmetic in memalign, posix_memalign and aligned_alloc is triggered only when a caller passes an attacker-controlled, exceptionally large alignment. An inspection of the shipped image found that libjvm.so imports posix_memalign and libmlib_image.so imports memalign, but both pass fixed alignments chosen by the runtime (page and cache-line sizes), never a value derived from user input; no other process in the runtime path uses the memalign family, and lpm is a statically linked Go binary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0915",
+      "description": "Calling getnetbyaddr or getnetbyaddr_r in the GNU C Library with a configured DNS backend for networks and a zero-valued network query can leak stack contents to the configured DNS resolver.",
+      "recommendation": "No action required. Liquibase Secure does not call glibc's getnetbyaddr family at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path calls the getnetbyaddr family, and the image's nsswitch.conf has no DNS backend for networks.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0915",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=33802",
+          "title": "glibc Bug Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the stack leak needs a process that calls getnetbyaddr() or getnetbyaddr_r() while nsswitch.conf routes the networks database to DNS. Neither condition holds in the Liquibase Secure image: an inspection found that no JRE native library imports the getnetbyaddr family (the only importers are the getent utility and the perl interpreter, neither of which runs at runtime), and /etc/nsswitch.conf configures networks: files with no dns backend. lpm is a statically linked Go binary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

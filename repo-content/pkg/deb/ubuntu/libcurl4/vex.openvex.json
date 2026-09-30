@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-49e29de18385ac6dde90f6601e9697520c2e4e381559514274f028708e621f6b",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-30T15:32:31.006585971Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-1965",
+        "aliases": [
+          "CURL-CVE-2026-1965"
+        ]
+      },
+      "timestamp": "2026-09-30T15:32:31.00658969Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libcurl4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libcurl can incorrectly reuse an existing Negotiate-authenticated connection for a later request to the same server with different credentials, causing the request to run under the wrong authenticated identity.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the wrong-connection reuse needs a libcurl-based application that performs Negotiate (SPNEGO) authenticated transfers with different credentials over one connection pool. curl is present in the image but nothing in the runtime path invokes it, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure."
+    }
+  ]
+}

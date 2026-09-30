@@ -1,15 +1,105 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-8a7bc6b81b6eca6392b2b72571be87f4b8cec669624d14a2085ecfc78023a123",
+  "@id": "merged-vex-212739e9a429dc7554cd930bad72bc8fb858bb1756fa1cc8d3827258560a6d0a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-29T13:58:42.963439901Z",
+  "timestamp": "2026-09-30T15:41:48.539645469Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-69418"
+      },
+      "timestamp": "2026-09-30T15:41:45.095997706Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When an application uses OpenSSL's low-level OCB encrypt or decrypt APIs directly with hardware-accelerated code paths and input whose length is not a multiple of 16 bytes, the final partial block can be left unencrypted and unauthenticated because the tail-handling logic reprocesses the wrong buffer region.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The vulnerable low-level OCB encrypt and decrypt routines are therefore never called by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69419"
+      },
+      "timestamp": "2026-09-30T15:41:45.374484537Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling PKCS12_get_friendlyname() on a malicious PKCS#12 file can cause a one-byte out-of-bounds write before the allocated buffer while converting a BMPString friendly name from UTF-16BE to UTF-8.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_get_friendlyname() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69420"
+      },
+      "timestamp": "2026-09-30T15:41:45.658340537Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A type confusion flaw in OpenSSL's TimeStamp Response verification can dereference an invalid or NULL pointer when TS_RESP_verify_response() processes a malformed response, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. TS_RESP_verify_response() is therefore never called on attacker-supplied timestamp responses by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69421"
+      },
+      "timestamp": "2026-09-30T15:41:45.942661836Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Processing a malformed PKCS#12 file can trigger a NULL pointer dereference in OpenSSL's PKCS12_item_decrypt_d2i_ex() function, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_item_decrypt_d2i_ex() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-9230"
+      },
+      "timestamp": "2026-09-30T15:41:46.491148891Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An application that tries to decrypt CMS messages encrypted with password-based recipient information can trigger an out-of-bounds read and write in OpenSSL, leading to denial of service or memory corruption.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's CMS password-recipient decryption is therefore never performed by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.20 (jammy); only Liquibase Secure 5.0.0 (3.0.2-0ubuntu1.19) shipped an affected build, and the noble images from 5.0.2 on already carry the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22795"
+      },
+      "timestamp": "2026-09-30T15:41:46.222861434Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A type confusion flaw in OpenSSL PKCS#12 parsing can dereference an invalid or NULL pointer when a malformed PKCS#12 file is processed, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's PKCS#12 parser is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-22796"
       },
-      "timestamp": "2026-09-29T13:58:40.271659598Z",
+      "timestamp": "2026-09-30T15:41:42.29392311Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -24,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-28387"
       },
-      "timestamp": "2026-09-29T13:58:40.513779746Z",
+      "timestamp": "2026-09-30T15:41:42.513125765Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -39,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-28388"
       },
-      "timestamp": "2026-09-29T13:58:40.759158963Z",
+      "timestamp": "2026-09-30T15:41:42.728654248Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -54,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-28389"
       },
-      "timestamp": "2026-09-29T13:58:41.004997322Z",
+      "timestamp": "2026-09-30T15:41:42.935690926Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -69,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-28390"
       },
-      "timestamp": "2026-09-29T13:58:41.24758501Z",
+      "timestamp": "2026-09-30T15:41:43.146577047Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -84,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-31789"
       },
-      "timestamp": "2026-09-29T13:58:41.490583069Z",
+      "timestamp": "2026-09-30T15:41:43.363198174Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -99,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-31790"
       },
-      "timestamp": "2026-09-29T13:58:41.735678512Z",
+      "timestamp": "2026-09-30T15:41:43.575674003Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -114,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-34180"
       },
-      "timestamp": "2026-09-29T13:58:41.981028251Z",
+      "timestamp": "2026-09-30T15:41:43.79069943Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -129,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-34182"
       },
-      "timestamp": "2026-09-29T13:58:36.165566482Z",
+      "timestamp": "2026-09-30T15:41:38.797210287Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -142,9 +232,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-35189"
+      },
+      "timestamp": "2026-09-30T15:41:47.447421921Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions: a certificate chain under the accepted peer size limit can allocate several hundred MiB of resident memory during a normal TLS handshake, enough to crash a client or a server that solicits client certificates. OpenSSL rates the issue Low; no CVSS vector has been published.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL never receives a peer certificate from Liquibase Secure, so its X.509 extension cache and CRL distribution point processing are never exercised. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-42766"
       },
-      "timestamp": "2026-09-29T13:58:36.49030684Z",
+      "timestamp": "2026-09-30T15:41:39.048003059Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -159,7 +264,7 @@
       "vulnerability": {
         "name": "CVE-2026-42767"
       },
-      "timestamp": "2026-09-29T13:58:36.738612245Z",
+      "timestamp": "2026-09-30T15:41:39.236321575Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -174,7 +279,7 @@
       "vulnerability": {
         "name": "CVE-2026-42770"
       },
-      "timestamp": "2026-09-29T13:58:36.986148478Z",
+      "timestamp": "2026-09-30T15:41:39.427045842Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -189,7 +294,7 @@
       "vulnerability": {
         "name": "CVE-2026-45445"
       },
-      "timestamp": "2026-09-29T13:58:37.232307554Z",
+      "timestamp": "2026-09-30T15:41:39.6159271Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -204,7 +309,7 @@
       "vulnerability": {
         "name": "CVE-2026-45446"
       },
-      "timestamp": "2026-09-29T13:58:37.479593619Z",
+      "timestamp": "2026-09-30T15:41:39.805746661Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -219,7 +324,7 @@
       "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-09-29T13:58:27.354663917Z",
+      "timestamp": "2026-09-30T15:41:31.897781298Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -232,9 +337,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-54872"
+      },
+      "timestamp": "2026-09-30T15:41:47.713560978Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL's generic elliptic-curve scalar multiplication, used for ECDSA and SM2 signing with curves that have no dedicated constant-time implementation (Brainpool and other generic prime curves), pads the secret scalar with non-constant-time BIGNUM operations. An attacker able to measure signing times can learn information about the per-signature nonce and, over many signatures, recover the private key. The NIST curves P-256, P-384 and P-521 are not affected.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs ECDSA or SM2 signing through OpenSSL; the JRE's Java providers handle any signing the product does. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-54874"
       },
-      "timestamp": "2026-09-29T13:58:42.222779706Z",
+      "timestamp": "2026-09-30T15:41:44.005412772Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -249,7 +369,7 @@
       "vulnerability": {
         "name": "CVE-2026-63072"
       },
-      "timestamp": "2026-09-29T13:58:39.48272174Z",
+      "timestamp": "2026-09-30T15:41:41.597837142Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -264,7 +384,7 @@
       "vulnerability": {
         "name": "CVE-2026-63074"
       },
-      "timestamp": "2026-09-29T13:58:39.726221269Z",
+      "timestamp": "2026-09-30T15:41:41.814891845Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -279,7 +399,7 @@
       "vulnerability": {
         "name": "CVE-2026-63076"
       },
-      "timestamp": "2026-09-29T13:58:37.796306496Z",
+      "timestamp": "2026-09-30T15:41:40.093111282Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -294,7 +414,7 @@
       "vulnerability": {
         "name": "CVE-2026-7383"
       },
-      "timestamp": "2026-09-29T13:58:38.154625219Z",
+      "timestamp": "2026-09-30T15:41:40.410317701Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -309,7 +429,7 @@
       "vulnerability": {
         "name": "CVE-2026-75803"
       },
-      "timestamp": "2026-09-29T13:58:38.402421795Z",
+      "timestamp": "2026-09-30T15:41:40.630067899Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"
@@ -322,9 +442,69 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-75805"
+      },
+      "timestamp": "2026-09-30T15:41:47.964920965Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A CMP client that identifies the certificate to revoke with a PKCS#10 CSR dereferences a NULL pointer and crashes when a malicious or compromised CMP server returns a crafted name in the revocation response. The response passes message-protection checks before the affected code runs, so the attacker must control the server or hold the protection secret.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure contains no CMP client, so OpenSSL's revocation response handling is never reached. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75806"
+      },
+      "timestamp": "2026-09-30T15:41:48.21581091Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An established DTLS 1.2 association using an AEAD cipher suite can be torn down by a single unauthenticated datagram whose encrypted fragment is shorter than the explicit IV and authentication tag overhead: the record layer passed the impossible length to the cipher before checking it and treated the rejection as a fatal internal error instead of discarding the record.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS record layer is never used by Liquibase Secure, so no DTLS association exists to be torn down. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-77696"
+      },
+      "timestamp": "2026-09-30T15:41:48.461006866Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "SM2 signature generation in OpenSSL uses variable-time BIGNUM operations on the secret nonce and the private key, so signing time depends on secret values. An attacker able to measure SM2 signing times can learn information about the per-signature nonce and, over many signatures, recover the private key.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs SM2 signing through OpenSSL. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-84782"
+      },
+      "timestamp": "2026-09-30T15:41:47.193211494Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL's DTLS retransmission logic mishandles a handshake message write that was suspended part-way through: the retransmitted message is read from a stale buffer offset and overwrites the state the suspended write needs to resume. A peer can receive heap memory as plaintext handshake data, or the read can reach unmapped memory and crash the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS implementation is therefore never used by Liquibase Secure, and no DTLS handshake can be in flight for the retransmission logic to act on. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-9076"
       },
-      "timestamp": "2026-09-29T13:58:32.901494082Z",
+      "timestamp": "2026-09-30T15:41:36.274554781Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3"

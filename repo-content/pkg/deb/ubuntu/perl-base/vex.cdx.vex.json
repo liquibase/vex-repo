@@ -227,6 +227,119 @@
       ]
     },
     {
+      "id": "CVE-2026-57432",
+      "description": "Perl versions before 5.40.5-RC1, from 5.41.0 before 5.42.3-RC1, from 5.43.0 before 5.43.11 have an integer overflow in S_measure_struct leading to an out-of-bounds heap read in pack and unpack. S_measure_struct adds each item's size times its repeat count to a running total with no overflow check, so a large repeat count in a pack or unpack template wraps the signed SSize_t total negative. The @, X, and x position codes then guard their moves with a signed length comparison that passes when the length is negative, advancing the buffer pointer out of bounds. A template derived from untrusted input can read heap memory past the buffer and return it to the caller.",
+      "recommendation": "No action required. Liquibase Secure does not execute Perl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path executes Perl, so the vulnerable pack and unpack parser is never reached.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-57432",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-57432",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "perl-base is an Essential Ubuntu package, so /usr/bin/perl is present in every Liquibase Secure image, but nothing in the runtime path executes it: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The vulnerable pack and unpack template parser only runs inside a Perl process handed an attacker-controlled template, so it is not reachable from Liquibase Secure. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 5.38.2-3.2ubuntu0.4 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 5.38.2-3.2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.34.0-3ubuntu1.8|>=5.38|<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-57433",
+      "description": "Storable versions before 3.41 for Perl have a signed integer overflow when deserializing a crafted SX_HOOK record. retrieve_hook_common reads a signed 32-bit item count from an SX_HOOK record and calls av_extend with that count plus one. A count of I32_MAX wraps the addition to a negative value. A crafted blob passed to thaw or retrieve triggers the overflow; av_extend receives the negative count and dies with a panic, terminating the deserialization.",
+      "recommendation": "No action required. Liquibase Secure does not execute Perl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path executes Perl, so the vulnerable Storable deserializer is never reached.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-57433",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-57433",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "perl-base is an Essential Ubuntu package, so /usr/bin/perl is present in every Liquibase Secure image, but nothing in the runtime path executes it: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The vulnerable Storable deserializer only runs inside a Perl process that thaws attacker-controlled data, so it is not reachable from Liquibase Secure. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 5.38.2-3.2ubuntu0.4 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 5.38.2-3.2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.34.0-3ubuntu1.8|>=5.38|<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-13221",
       "description": "Perl through version 5.43.9 has a regex overflow flaw. When an alternation compiled into a trie by Perl_study_chunk contains more than 65,535 branches, a 16-bit delta field overflows and the trie's match decision table is silently truncated with no warning, causing the regex to return both false positives and false negatives.",
       "recommendation": "No action required. Liquibase never invokes Perl, and no Liquibase security control is implemented via a Perl regex.",

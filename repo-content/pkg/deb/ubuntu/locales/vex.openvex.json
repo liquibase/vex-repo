@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-d93af9efa3e4dfc28cae8206719c4885bda768b7dc0f0b9f173663f086bbae4b",
+  "@id": "merged-vex-8b9d1d8aa2df9413d24abc361e6e59608be49985804603bdbe51dfaf082c9fa8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-29T14:01:15.308901175Z",
+  "timestamp": "2026-09-30T15:44:15.432773695Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-09-29T14:01:10.091093131Z",
+      "timestamp": "2026-09-30T15:44:09.270260901Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -22,9 +22,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-8058"
+      },
+      "timestamp": "2026-09-30T15:44:14.203429278Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/locales"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The GNU C Library regcomp function from versions 2.4 through 2.41 can double-free memory if an earlier allocation fails, which may permit buffer manipulation depending on the constructed regular expression.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable regcomp() double free needs a process that compiles a regular expression through glibc after an earlier allocation failure. An inspection of the shipped image found that neither the JVM nor any JRE native library imports regcomp; Java regular expressions are implemented in java.util.regex, not in glibc. The only importers are OS utilities such as bash, grep, tar and wget, which are either not part of the runtime path or, in the case of the bash entrypoint, do not use regular-expression matching. lpm is a statically linked Go binary."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0861"
+      },
+      "timestamp": "2026-09-30T15:44:14.447629187Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/locales"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Passing an excessively large alignment to memalign, posix_memalign, or aligned_alloc in the GNU C Library can overflow internal arithmetic and lead to heap corruption when the caller controls both the size and the alignment values.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable arithmetic in memalign, posix_memalign and aligned_alloc is triggered only when a caller passes an attacker-controlled, exceptionally large alignment. An inspection of the shipped image found that libjvm.so imports posix_memalign and libmlib_image.so imports memalign, but both pass fixed alignments chosen by the runtime (page and cache-line sizes), never a value derived from user input; no other process in the runtime path uses the memalign family, and lpm is a statically linked Go binary."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0915"
+      },
+      "timestamp": "2026-09-30T15:44:14.697995467Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/locales"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling getnetbyaddr or getnetbyaddr_r in the GNU C Library with a configured DNS backend for networks and a zero-valued network query can leak stack contents to the configured DNS resolver.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the stack leak needs a process that calls getnetbyaddr() or getnetbyaddr_r() while nsswitch.conf routes the networks database to DNS. Neither condition holds in the Liquibase Secure image: an inspection found that no JRE native library imports the getnetbyaddr family (the only importers are the getent utility and the perl interpreter, neither of which runs at runtime), and /etc/nsswitch.conf configures networks: files with no dns backend. lpm is a statically linked Go binary."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-09-29T14:01:09.431516672Z",
+      "timestamp": "2026-09-30T15:44:08.766461804Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -39,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-09-29T14:01:14.840061496Z",
+      "timestamp": "2026-09-30T15:44:12.847977514Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -54,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-09-29T14:01:09.75913262Z",
+      "timestamp": "2026-09-30T15:44:09.017174886Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -69,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-09-29T14:01:15.172101215Z",
+      "timestamp": "2026-09-30T15:44:13.090308511Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"

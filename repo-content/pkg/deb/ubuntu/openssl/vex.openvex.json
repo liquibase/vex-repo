@@ -1,15 +1,120 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-e427ad69d456360447bb7c22bc8a5e73a711dc88f554f7cb19f398824d123199",
+  "@id": "merged-vex-d6392cdc9bea5a8a8d95ce1fb6430a5f54b20f05058786bb0848316ff2b42f79",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-29T14:02:50.034832032Z",
+  "timestamp": "2026-09-30T15:45:53.173789995Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-69418"
+      },
+      "timestamp": "2026-09-30T15:45:49.979225305Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When an application uses OpenSSL's low-level OCB encrypt or decrypt APIs directly with hardware-accelerated code paths and input whose length is not a multiple of 16 bytes, the final partial block can be left unencrypted and unauthenticated because the tail-handling logic reprocesses the wrong buffer region.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The vulnerable low-level OCB encrypt and decrypt routines are therefore never called by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69419"
+      },
+      "timestamp": "2026-09-30T15:45:50.238116315Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling PKCS12_get_friendlyname() on a malicious PKCS#12 file can cause a one-byte out-of-bounds write before the allocated buffer while converting a BMPString friendly name from UTF-16BE to UTF-8.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_get_friendlyname() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69420"
+      },
+      "timestamp": "2026-09-30T15:45:50.486859815Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A type confusion flaw in OpenSSL's TimeStamp Response verification can dereference an invalid or NULL pointer when TS_RESP_verify_response() processes a malformed response, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. TS_RESP_verify_response() is therefore never called on attacker-supplied timestamp responses by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-69421"
+      },
+      "timestamp": "2026-09-30T15:45:50.740958262Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Processing a malformed PKCS#12 file can trigger a NULL pointer dereference in OpenSSL's PKCS12_item_decrypt_d2i_ex() function, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_item_decrypt_d2i_ex() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-9230"
+      },
+      "timestamp": "2026-09-30T15:45:51.209040655Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An application that tries to decrypt CMS messages encrypted with password-based recipient information can trigger an out-of-bounds read and write in OpenSSL, leading to denial of service or memory corruption.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's CMS password-recipient decryption is therefore never performed by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22795"
+      },
+      "timestamp": "2026-09-30T15:45:50.990289501Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A type confusion flaw in OpenSSL PKCS#12 parsing can dereference an invalid or NULL pointer when a malformed PKCS#12 file is processed, causing a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's PKCS#12 parser is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-35189"
+      },
+      "timestamp": "2026-09-30T15:45:52.169227079Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions: a certificate chain under the accepted peer size limit can allocate several hundred MiB of resident memory during a normal TLS handshake, enough to crash a client or a server that solicits client certificates. OpenSSL rates the issue Low; no CVSS vector has been published.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL never receives a peer certificate from Liquibase Secure, so its X.509 extension cache and CRL distribution point processing are never exercised."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-09-29T14:02:50.034833305Z",
+      "timestamp": "2026-09-30T15:45:40.260489605Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -19,6 +124,81 @@
       "status_notes": "See CVE-2026-45447 entry on libssl3. Mirrored here because Trivy also flags the openssl CLI tools package.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The openssl package provides the OpenSSL command-line tools (the openssl(1) binary). The vulnerable code path is in the PKCS#7/S/MIME signature verification API (PKCS7_verify), which is only reachable if an application calls that API or a user invokes `openssl smime` / `openssl pkcs7` sub-commands. Liquibase Secure never executes the openssl CLI at runtime — the Docker entrypoint dispatches to user- supplied commands or /liquibase/liquibase (docker/docker-entrypoint.sh:8, docker/docker-entrypoint.sh:109, docker/docker-entrypoint.sh:119, docker/docker-entrypoint.sh:121). A focused grep for openssl, smime, pkcs7, and PKCS7 across repository sources (excluding test resources) returned zero hits on call sites that invoke the openssl CLI."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54872"
+      },
+      "timestamp": "2026-09-30T15:45:52.411703499Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL's generic elliptic-curve scalar multiplication, used for ECDSA and SM2 signing with curves that have no dedicated constant-time implementation (Brainpool and other generic prime curves), pads the secret scalar with non-constant-time BIGNUM operations. An attacker able to measure signing times can learn information about the per-signature nonce and, over many signatures, recover the private key. The NIST curves P-256, P-384 and P-521 are not affected.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs ECDSA or SM2 signing through OpenSSL; the JRE's Java providers handle any signing the product does."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75805"
+      },
+      "timestamp": "2026-09-30T15:45:52.660967571Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A CMP client that identifies the certificate to revoke with a PKCS#10 CSR dereferences a NULL pointer and crashes when a malicious or compromised CMP server returns a crafted name in the revocation response. The response passes message-protection checks before the affected code runs, so the attacker must control the server or hold the protection secret.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure contains no CMP client, so OpenSSL's revocation response handling is never reached."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-75806"
+      },
+      "timestamp": "2026-09-30T15:45:52.912295363Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An established DTLS 1.2 association using an AEAD cipher suite can be torn down by a single unauthenticated datagram whose encrypted fragment is shorter than the explicit IV and authentication tag overhead: the record layer passed the impossible length to the cipher before checking it and treated the rejection as a fatal internal error instead of discarding the record.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS record layer is never used by Liquibase Secure, so no DTLS association exists to be torn down."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-77696"
+      },
+      "timestamp": "2026-09-30T15:45:53.160690157Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "SM2 signature generation in OpenSSL uses variable-time BIGNUM operations on the secret nonce and the private key, so signing time depends on secret values. An attacker able to measure SM2 signing times can learn information about the per-signature nonce and, over many signatures, recover the private key.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs SM2 signing through OpenSSL."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-84782"
+      },
+      "timestamp": "2026-09-30T15:45:51.923526771Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "OpenSSL's DTLS retransmission logic mishandles a handshake message write that was suspended part-way through: the retransmitted message is read from a stale buffer offset and overwrites the state the suspended write needs to resume. A peer can receive heap memory as plaintext handshake data, or the read can reach unmapped memory and crash the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS implementation is therefore never used by Liquibase Secure, and no DTLS handshake can be in flight for the retransmission logic to act on."
     }
   ]
 }

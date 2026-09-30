@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-de47ed013931a721a8d39cca9dd0bb6a1c8efca41ef50e60278ace8c6784b15d",
+  "@id": "merged-vex-9d1fce9b18ea2398b048ae8a7d29dec107e89a26ed0ebd0b9ecc7addec76cd19",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-09-29T14:05:59.533815806Z",
+  "timestamp": "2026-09-30T15:48:40.255669405Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2021-31879"
       },
-      "timestamp": "2026-09-29T14:05:53.415207905Z",
+      "timestamp": "2026-09-30T15:48:32.537881846Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/wget"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2024-10524"
       },
-      "timestamp": "2026-09-29T14:05:53.898515971Z",
+      "timestamp": "2026-09-30T15:48:32.975116752Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/wget"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-15146"
       },
-      "timestamp": "2026-09-29T14:05:52.682557557Z",
+      "timestamp": "2026-09-30T15:48:31.87674921Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/wget"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-16599"
       },
-      "timestamp": "2026-09-29T14:05:53.655863125Z",
+      "timestamp": "2026-09-30T15:48:32.760945135Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/wget"
@@ -64,6 +64,66 @@
       "status_notes": "GNU wget is vulnerable to denial of service in its FTP OPIE/S-KEY authentication functionality. The server-supplied sequence number from the FTP challenge line is used as an iteration count for an MD5 key- derivation loop without any upper bound validation. A malicious FTP server or a network attacker positioned to intercept FTP traffic can send a crafted OPIE challenge with a sequence number near INT_MAX, causing wget to perform up to approximately 2.1 billion MD5 computations and suspend for some time. The --timeout option does not mitigate this because it applies only to network I/O, not CPU computation. This issue was fixed in commit e9697d98e7249b0f68a6be040a4f3dcc5bc101fa",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "wget FTP OPIE/S-KEY authentication denial-of-service issue, with an upstream patch not yet backported to Ubuntu noble. wget is only invoked at Docker build time against hardcoded, sha256-verified URLs (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime, and this image never performs FTP transfers."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-58469"
+      },
+      "timestamp": "2026-09-30T15:48:38.081196334Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget through 1.25.0, fixed in commit 37a40fc, contains a heap buffer underread vulnerability in the clean_metalink_string() function within src/metalink.c that allows a malicious server to trigger memory corruption by serving a Metalink document containing a whitespace-only URL. Attackers can cause the function to decrement a pointer past the start of the buffer when processing an all-whitespace Metalink URL, potentially leading to abnormal program behavior.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable Metalink parser only runs inside a wget process fetching attacker-controlled Metalink content, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-58470"
+      },
+      "timestamp": "2026-09-30T15:48:38.275031887Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget through 1.25.0, fixed in commit 43d3ba9, contains an integer overflow vulnerability in the parse_content_range() function within src/http.c that allows server-controlled values to cause signed integer arithmetic to overflow. Attackers can supply malicious Content-Range header values to trigger undefined behavior and download desynchronization in the affected client.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable Content-Range header parser only runs inside a wget process talking to an attacker-controlled server, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-58471"
+      },
+      "timestamp": "2026-09-30T15:48:38.466430818Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget through 1.25.0, fixed in commit c2640fe, contains a heap buffer overflow vulnerability in the convert_fname() function within src/url.c that allows remote attackers to trigger memory corruption through a server-supplied filename requiring character set conversion. When the output buffer is too small during iconv E2BIG reallocation, the reallocation logic miscalculates the remaining space, leading to a heap buffer overflow that can be exploited via a maliciously crafted server response.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable filename conversion only runs inside a wget process saving a server-supplied filename, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-58472"
+      },
+      "timestamp": "2026-09-30T15:48:38.654349119Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/wget"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Wget through 1.25.0, fixed in commit dd692d9, contains a heap buffer overflow vulnerability in the html_quote_string() function in src/convert.c that allows a remote attacker to trigger memory corruption by supplying a crafted HTML attribute with a large number of characters requiring entity encoding. A server-supplied HTML attribute causes a signed integer counter to overflow during output size accumulation, resulting in an undersized heap allocation and subsequent heap buffer overflow during the copy phase.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable HTML attribute encoder only runs inside a wget process converting attacker-controlled HTML, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5."
     }
   ]
 }
