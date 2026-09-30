@@ -1,0 +1,1225 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-6019af85d99b5a5f5f689a6e8cf27e843f5efc3a196d812fee2aff30f0fa72cf",
+  "author": "Liquibase New Technologies Team",
+  "timestamp": "2026-09-30T19:54:51.441444957Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-60876"
+      },
+      "timestamp": "2026-09-30T19:54:51.423620243Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/busybox"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "BusyBox wget through 1.37 accepted raw CR, LF and other C0 control bytes in the HTTP request-target, allowing the request line to be split and attacker-controlled headers to be injected.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is request-target injection in BusyBox wget, a client-side HTTP utility. The platform never runs busybox wget: the web image entrypoint (which starts the Node.js server) and the migrate image entrypoint (which starts Liquibase) contain no wget, curl or busybox call, and neither image defines a HEALTHCHECK. The vulnerable code is therefore never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18374"
+      },
+      "timestamp": "2026-09-30T19:54:51.129749437Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Passing an effectively empty string to the ,ccs= syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The overflow requires an attacker-controlled fopen mode string that uses the glibc-specific \",ccs=\" extension. Node.js performs file I/O through libuv with open(2), not fopen. The binaries in the api and llt images that do call fopen use fixed mode strings, and none of them contains a \"ccs=\" mode, so no request input can reach the vulnerable parser."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-19499"
+      },
+      "timestamp": "2026-09-30T19:54:50.77486506Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling strfmon and strfmon_l in the GNU C Library version 2.38 to 2.44 can write past the end of the caller-supplied output buffer when a conversion uses right-justified width padding.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "strfmon and strfmon_l are C monetary-formatting functions with no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of strfmon or strfmon_l, so no platform code path can call them."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-19542"
+      },
+      "timestamp": "2026-09-30T19:54:51.079249507Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling tdelete on a sufficiently deep tree in the GNU C Library version 2.1 to 2.44 may write one pointer past the end of an alloca-allocated array on the stack, which may crash the application.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The tdelete/tsearch binary-tree functions have no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of tdelete, tsearch, tfind or twalk."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-27171"
+      },
+      "timestamp": "2026-09-30T19:54:50.726460985Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64 because x2nmodp can do right shifts within a loop that has no termination condition.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The system zlib1g library is installed in the base image but nothing in the api or llt image loads it: Node.js bundles its own zlib, and no glibc-linked binary in the images links against or dynamically loads libz.so.1. The vulnerable crc32_combine64 / crc32_combine_gen64 code in the system package is therefore never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5435"
+      },
+      "timestamp": "2026-09-30T19:54:50.823258415Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to enforce the caller-supplied buffer length, and can result in an out-of-bounds write when printing TSIG records.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "ns_printrrf, ns_printrr and fp_nquery are deprecated resolver print functions with no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of any of them. Name resolution goes through getaddrinfo and c-ares, which do not use these functions."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6238"
+      },
+      "timestamp": "2026-09-30T19:54:50.872154446Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.0.1 to version 2.43 fail to validate the RDATA content against the RDATA length in a DNS response when processing A6, CERT, LOC, TKEY or TSIG records.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Same deprecated resolver print functions as CVE-2026-5435 (ns_printrrf, ns_printrr, fp_nquery), which have no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of any of them."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6368"
+      },
+      "timestamp": "2026-09-30T19:54:51.325249541Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling wordexp with WRDE_APPEND in the GNU C Library version 2.0 to 2.43 can cause the interface to return invalid memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in glibc wordexp when it is called with WRDE_APPEND. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of wordexp or wordfree, so the vulnerable code is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6791"
+      },
+      "timestamp": "2026-09-30T19:54:51.025441515Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When expanding paths that begin with a tilde followed by a username, the internal parse_tilde function of glibc wordexp allocates memory for the username on the stack with strndupa, and an overly long username can cause a stack-based buffer clash.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "wordexp performs shell-style word expansion and has no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of wordexp or wordfree, so the vulnerable tilde-expansion code is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-77117"
+      },
+      "timestamp": "2026-09-30T19:54:50.921720269Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The SHIFT_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a SHIFT_JISX0213 conversion, so the vulnerable decoder is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-80489"
+      },
+      "timestamp": "2026-09-30T19:54:50.972452575Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Converting crafted EUC_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The EUC_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a EUC_JISX0213 conversion, so the vulnerable decoder is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-85091"
+      },
+      "timestamp": "2026-09-30T19:54:50.670144435Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/zlib1g"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow in the gz_vacate() function when processing non-blocking gzwrite() operations with stale external buffer pointers. Attackers can trigger the overflow by calling gzprintf() or gzvprintf() after a write stall.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The system zlib1g library is installed in the base image but nothing in the api or llt image loads it. Node.js statically bundles its own zlib (process.versions.zlib), and a review of every glibc-linked binary in the images (the Node.js runtime and all native modules) found none that links against or dynamically loads libz.so.1. The vulnerable gz_vacate path is also reached only through the gzFile streaming-write API (gzprintf/gzvprintf after a write stall), which the platform does not use."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8674"
+      },
+      "timestamp": "2026-09-30T19:54:51.27587097Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The resolver is in the execution path: Node.js resolves host names through getaddrinfo. The process aborts only when /etc/resolv.conf (or LOCALDOMAIN) contains a search list with a domain of roughly 200 or more characters. That file is written by the deployer's host or orchestrator, never by the platform, and no request input can change it. Impact is denial of service only, with no code execution or data exposure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-86805"
+      },
+      "timestamp": "2026-09-30T19:54:51.226970601Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A time-of-check to time-of-use race condition in the dynamic loader (ld.so) of the GNU C Library versions 2.14 through 2.44 allows a local attacker to escalate privileges when $ORIGIN is expanded in DT_RPATH for setuid/setgid (AT_SECURE) programs.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The attack requires a setuid or setgid (AT_SECURE) program whose run path uses $ORIGIN, so that the dynamic loader can be raced into loading attacker-controlled code. The api and llt images contain no setuid or setgid binaries, so the elevated-privilege load path cannot be entered."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-89092"
+      },
+      "timestamp": "2026-09-30T19:54:51.178470637Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The vulnerability is in the nscd name service caching daemon. nscd is not installed in the api or llt images (they are distroless, Node.js runs as the only process and there is no init system), so the vulnerable daemon code is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-95818"
+      },
+      "timestamp": "2026-09-30T19:54:51.374702047Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:deb/debian/libc6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs whose DT_RPATH or DT_RUNPATH begins with $ORIGIN.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The overflow is in the dynamic loader when it starts a setuid or setgid (AT_SECURE) program whose run path begins with $ORIGIN. The api and llt images contain no setuid or setgid binaries, so a local attacker has no AT_SECURE program to start and the vulnerable loader path is never entered."
+    }
+  ]
+}
