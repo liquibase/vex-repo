@@ -1,0 +1,931 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-85091",
+      "description": "zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow in the gz_vacate() function when processing non-blocking gzwrite() operations with stale external buffer pointers. Attackers can trigger the overflow by calling gzprintf() or gzvprintf() after a write stall.",
+      "recommendation": "No action required. The system zlib is not loaded by the platform runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The system zlib library is never loaded by the platform, and the gzFile streaming-write API that reaches the flaw is not used.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85091",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-85091",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://www.vulncheck.com/advisories/zlib-1.3.1.2-through-1.3.2-heap-buffer-overflow-via-gz-vacate",
+          "title": "VulnCheck Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The system zlib1g library is installed in the base image but nothing in the api or llt image loads it. Node.js statically bundles its own zlib (process.versions.zlib), and a review of every glibc-linked binary in the images (the Node.js runtime and all native modules) found none that links against or dynamically loads libz.so.1. The vulnerable gz_vacate path is also reached only through the gzFile streaming-write API (gzprintf/gzvprintf after a write stall), which the platform does not use.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/zlib1g"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27171",
+      "description": "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64 because x2nmodp can do right shifts within a loop that has no termination condition.",
+      "recommendation": "No action required. The system zlib is not loaded by the platform runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The system zlib library is never loaded by the platform.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27171",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-27171",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://github.com/madler/zlib/issues/904",
+          "title": "zlib issue #904"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The system zlib1g library is installed in the base image but nothing in the api or llt image loads it: Node.js bundles its own zlib, and no glibc-linked binary in the images links against or dynamically loads libz.so.1. The vulnerable crc32_combine64 / crc32_combine_gen64 code in the system package is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/zlib1g"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89092",
+      "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system.",
+      "recommendation": "No action required. nscd is not part of the platform images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code lives in the nscd daemon, which is not installed in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89092",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-89092",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0016",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0016"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The vulnerability is in the nscd name service caching daemon. nscd is not installed in the api or llt images (they are distroless, Node.js runs as the only process and there is no init system), so the vulnerable daemon code is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86805",
+      "description": "A time-of-check to time-of-use race condition in the dynamic loader (ld.so) of the GNU C Library versions 2.14 through 2.44 allows a local attacker to escalate privileges when $ORIGIN is expanded in DT_RPATH for setuid/setgid (AT_SECURE) programs.",
+      "recommendation": "No action required. The platform images ship no setuid or setgid programs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs a setuid or setgid program, and the platform images contain none.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86805",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-86805",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0022",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0022"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The attack requires a setuid or setgid (AT_SECURE) program whose run path uses $ORIGIN, so that the dynamic loader can be raced into loading attacker-controlled code. The api and llt images contain no setuid or setgid binaries, so the elevated-privilege load path cannot be entered.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8674",
+      "description": "Initializing the DNS stub resolver from an /etc/resolv.conf file, or a LOCALDOMAIN environment variable, whose search list contains a domain of roughly 200 characters or more in the GNU C Library version 2.26 to 2.44 results in an assertion failure which aborts the process.",
+      "recommendation": "Keep the container DNS search list within normal length. It is set by the host or orchestrator DNS configuration.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs an unusually long DNS search list in the deployment environment, which attackers cannot set through the platform.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8674",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-8674",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0021",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0021"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The resolver is in the execution path: Node.js resolves host names through getaddrinfo. The process aborts only when /etc/resolv.conf (or LOCALDOMAIN) contains a search list with a domain of roughly 200 or more characters. That file is written by the deployer's host or orchestrator, never by the platform, and no request input can change it. Impact is denial of service only, with no code execution or data exposure.",
+        "justification": "requires_environment",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-6368",
+      "description": "Calling wordexp with WRDE_APPEND in the GNU C Library version 2.0 to 2.43 can cause the interface to return invalid memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. No platform component calls glibc wordexp.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.1,
+          "severity": "low",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:N/UI:N/VC:L/VI:L/VA:L/SC:L/SI:L/SA:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "wordexp is not called by the Node.js runtime or by any native module in the platform images, so the vulnerable code path is not reachable.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6368",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-6368",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0014",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0014"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in glibc wordexp when it is called with WRDE_APPEND. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of wordexp or wordfree, so the vulnerable code is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95818",
+      "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs whose DT_RPATH or DT_RUNPATH begins with $ORIGIN.",
+      "recommendation": "No action required. The platform images ship no setuid or setgid programs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs a setuid or setgid program, and the platform images contain none.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95818",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-95818",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0023",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0023"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow is in the dynamic loader when it starts a setuid or setgid (AT_SECURE) program whose run path begins with $ORIGIN. The api and llt images contain no setuid or setgid binaries, so a local attacker has no AT_SECURE program to start and the vulnerable loader path is never entered.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-60876",
+      "description": "BusyBox wget through 1.37 accepted raw CR, LF and other C0 control bytes in the HTTP request-target, allowing the request line to be split and attacker-controlled headers to be injected.",
+      "recommendation": "No action required. busybox wget is not invoked by the platform runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform never invokes busybox wget, so attacker input cannot reach the vulnerable request builder.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-60876",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://cert-portal.siemens.com/productcert/html/ssa-253495.html",
+          "title": "Siemens Security Advisory SSA-253495"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is request-target injection in BusyBox wget, a client-side HTTP utility. The platform never runs busybox wget: the web image entrypoint (which starts the Node.js server) and the migrate image entrypoint (which starts Liquibase) contain no wget, curl or busybox call, and neither image defines a HEALTHCHECK. The vulnerable code is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/busybox"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19499",
+      "description": "Calling strfmon and strfmon_l in the GNU C Library version 2.38 to 2.44 can write past the end of the caller-supplied output buffer when a conversion uses right-justified width padding.",
+      "recommendation": "No action required. No platform component calls glibc strfmon.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "strfmon is not called by the Node.js runtime or by any native module in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19499",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-19499",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0017",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0017"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "strfmon and strfmon_l are C monetary-formatting functions with no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of strfmon or strfmon_l, so no platform code path can call them.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-5435",
+      "description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to enforce the caller-supplied buffer length, and can result in an out-of-bounds write when printing TSIG records.",
+      "recommendation": "No action required. No platform component calls the glibc resolver print functions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The resolver print functions are not called by the Node.js runtime or by any native module in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5435",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-5435",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=34033",
+          "title": "glibc bug 34033"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "ns_printrrf, ns_printrr and fp_nquery are deprecated resolver print functions with no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of any of them. Name resolution goes through getaddrinfo and c-ares, which do not use these functions.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-6238",
+      "description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.0.1 to version 2.43 fail to validate the RDATA content against the RDATA length in a DNS response when processing A6, CERT, LOC, TKEY or TSIG records.",
+      "recommendation": "No action required. No platform component calls the glibc resolver print functions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The resolver print functions are not called by the Node.js runtime or by any native module in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6238",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-6238",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=34069",
+          "title": "glibc bug 34069"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Same deprecated resolver print functions as CVE-2026-5435 (ns_printrrf, ns_printrr, fp_nquery), which have no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of any of them.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77117",
+      "description": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "recommendation": "No action required. The platform never runs glibc iconv conversions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only glibc iconv caller in the images is a library the platform never loads, and no SHIFT_JISX0213 conversion is ever requested.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77117",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-77117",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0019",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0019"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The SHIFT_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a SHIFT_JISX0213 conversion, so the vulnerable decoder is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-80489",
+      "description": "Converting crafted EUC_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "recommendation": "No action required. The platform never runs glibc iconv conversions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only glibc iconv caller in the images is a library the platform never loads, and no EUC_JISX0213 conversion is ever requested.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-80489",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-80489",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0020",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0020"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The EUC_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a EUC_JISX0213 conversion, so the vulnerable decoder is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-6791",
+      "description": "When expanding paths that begin with a tilde followed by a username, the internal parse_tilde function of glibc wordexp allocates memory for the username on the stack with strndupa, and an overly long username can cause a stack-based buffer clash.",
+      "recommendation": "No action required. No platform component calls glibc wordexp.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.6,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:L/VA:H/SC:N/SI:L/SA:H/E:U"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "wordexp is not called by the Node.js runtime or by any native module in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6791",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-6791",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/bugzilla/show_bug.cgi?id=34091",
+          "title": "glibc bug 34091"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "wordexp performs shell-style word expansion and has no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of wordexp or wordfree, so the vulnerable tilde-expansion code is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-19542",
+      "description": "Calling tdelete on a sufficiently deep tree in the GNU C Library version 2.1 to 2.44 may write one pointer past the end of an alloca-allocated array on the stack, which may crash the application.",
+      "recommendation": "No action required. No platform component calls glibc tdelete.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "tdelete is not called by the Node.js runtime or by any native module in the platform images.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19542",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-19542",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0018",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0018"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The tdelete/tsearch binary-tree functions have no Node.js binding. A review of the dynamic symbols of every glibc-linked binary in the api and llt images (the Node.js runtime and all native modules) found no import of tdelete, tsearch, tfind or twalk.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18374",
+      "description": "Passing an effectively empty string to the ,ccs= syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled.",
+      "recommendation": "No action required. The platform never passes a ccs= mode to fopen.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs an attacker-controlled fopen mode string with the ccs= extension, and the platform never builds one.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-18374",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0015",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0015"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow requires an attacker-controlled fopen mode string that uses the glibc-specific \",ccs=\" extension. Node.js performs file I/O through libuv with open(2), not fopen. The binaries in the api and llt images that do call fopen use fixed mode strings, and none of them contains a \"ccs=\" mode, so no request input can reach the vulnerable parser.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    }
+  ]
+}
