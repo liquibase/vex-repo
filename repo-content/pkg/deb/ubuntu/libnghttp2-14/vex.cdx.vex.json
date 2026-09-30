@@ -1,0 +1,63 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-58055",
+      "description": "nghttp2's nghttpx proxy through 1.69.0 forwards an HTTP/1.1 Upgrade request that also carries a Content-Length header and body onto reusable keep-alive backend connections, re-adding the Upgrade and Connection headers while passing Content-Length verbatim. A backend that resolves the resulting ambiguous message in the attacker's favor enables HTTP request/response smuggling and cross-client response-queue poisoning.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship the nghttpx proxy.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:N/A:N",
+          "justification": "The vulnerable nghttpx proxy is not present in the image; libnghttp2-14 only carries the framing library.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58055",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-58055",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner package misattribution. The vulnerable code is the nghttpx reverse proxy, which Ubuntu ships in the separate nghttp2-proxy binary package. nghttp2-proxy is not installed in the Liquibase Secure image: dpkg lists libnghttp2-14 as containing only the libnghttp2.so.14 HTTP/2 framing library, and there is no nghttpx binary on the image. The only consumer of libnghttp2.so.14 in the image is libcurl, and curl is not invoked at runtime. The scanner matched a fix in the nghttp2 source package to libnghttp2-14, which does not contain the vulnerable proxy code. Ubuntu published the fix as libnghttp2-14 1.43.0-1ubuntu0.4 (jammy) and 1.59.0-1ubuntu0.4 (noble); Liquibase Secure 5.2.2 ships 1.59.0-1ubuntu0.4.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libnghttp2-14",
+          "versions": [
+            {
+              "range": "vers:deb/<1.43.0-1ubuntu0.4|>=1.59|<1.59.0-1ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

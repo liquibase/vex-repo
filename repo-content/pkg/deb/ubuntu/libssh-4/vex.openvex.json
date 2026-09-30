@@ -1,0 +1,54 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-9fb001a992bccc7ec4b46c5d7c215ff11ab32d4c259026bf4f1a7e25d26c20c5",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-09-30T15:41:11.279670467Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59843"
+      },
+      "timestamp": "2026-09-30T15:41:09.345443386Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. A remote authenticated peer can advertise a zero maximum packet size in SSH_MSG_CHANNEL_OPEN, causing later channel writes to loop indefinitely and consume CPU, leading to denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The vulnerable channel-write loop needs an open libssh session with an authenticated peer, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59845"
+      },
+      "timestamp": "2026-09-30T15:41:09.537608647Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. When ProxyCommand is used, an unchecked fork() failure can be stored as process ID -1; during cleanup, signals may then be sent across the caller's accessible process tree, leading to local denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The vulnerable cleanup path needs a libssh client session configured with ProxyCommand, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59846"
+      },
+      "timestamp": "2026-09-30T15:41:09.731802001Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. A malicious username expanded through %r in ProxyCommand handling can inject shell metacharacters, exposing environment variables and causing unintended shell behavior.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The vulnerable %r expansion needs a libssh client session configured with ProxyCommand, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 0.10.6-2ubuntu0.5."
+    }
+  ]
+}

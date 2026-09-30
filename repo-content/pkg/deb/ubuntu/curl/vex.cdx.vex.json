@@ -913,6 +913,62 @@
       ]
     },
     {
+      "id": "CVE-2026-1965",
+      "description": "libcurl can incorrectly reuse an existing Negotiate-authenticated connection for a later request to the same server with different credentials, causing the request to run under the wrong authenticated identity.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the Negotiate connection-reuse path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        305
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1965",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-1965.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The wrong-connection reuse needs a libcurl-based application that performs Negotiate (SPNEGO) authenticated transfers with different credentials over one connection pool. curl is present in the image but nothing in the runtime path invokes it, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.23 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 8.5.0-2ubuntu10.8 (noble); Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6, and Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.23|>=8.5|<8.5.0-2ubuntu10.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-82209",
       "description": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
       "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
