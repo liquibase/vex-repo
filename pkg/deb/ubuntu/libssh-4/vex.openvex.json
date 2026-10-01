@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-116e915da41f5dab2d578f1d08a058da3b3eb49d0a2a8de3e1c0659e22aeb671",
+  "@id": "merged-vex-5343adda451c591c79d16b7453031c0d5a7170ff9073973a84634d0fe57a667c",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T14:01:08.153175983Z",
+  "timestamp": "2026-10-01T18:46:38.08934279Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-59843"
       },
-      "timestamp": "2026-10-01T14:01:05.960986739Z",
+      "timestamp": "2026-10-01T18:46:32.834572886Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-59845"
       },
-      "timestamp": "2026-10-01T14:01:06.176764372Z",
+      "timestamp": "2026-10-01T18:46:33.128540748Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-59846"
       },
-      "timestamp": "2026-10-01T14:01:06.400738155Z",
+      "timestamp": "2026-10-01T18:46:33.420417682Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -49,6 +49,51 @@
       "status_notes": "A flaw was found in libssh. A malicious username expanded through %r in ProxyCommand handling can inject shell metacharacters, exposing environment variables and causing unintended shell behavior.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The vulnerable %r expansion needs a libssh client session configured with ProxyCommand, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59847"
+      },
+      "timestamp": "2026-10-01T18:46:36.334436774Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. Incorrect AES-GCM finalization checks in builds using the OpenSSL backend can effectively remove integrity protection, allowing an in-path attacker to modify plaintext on the wire without detection.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The broken AES-GCM integrity check only matters inside an active libssh session with an in-path attacker, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59848"
+      },
+      "timestamp": "2026-10-01T18:46:36.625552039Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. A malicious SFTP server can send responses for unknown request IDs that libssh clients keep queued indefinitely, causing unbounded memory growth and client-side denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh SFTP session is ever opened by Liquibase Secure. The unbounded request queue needs a libssh SFTP client talking to a malicious server, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59850"
+      },
+      "timestamp": "2026-10-01T18:46:36.915514452Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. If data packets are processed after a channel is closed, channel data callbacks can be invoked after the associated data has already been freed, leading to crashes or possible use-after-free conditions.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh channel is ever opened by Liquibase Secure. The use-after-free needs data packets arriving on a closed libssh channel, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5."
     }
   ]
 }

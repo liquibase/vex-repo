@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-1632d72e99bb956db4a4d58d77938860c65a64159ed433df79c8f762332f74cc",
+  "@id": "merged-vex-bb6d4024dc062b13b0d369ae4b8d2a3710a215020530a6ee5e9e2da9770c1d48",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T13:50:08.882816273Z",
+  "timestamp": "2026-10-01T18:30:44.895675653Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-10-01T13:50:00.07339157Z",
+      "timestamp": "2026-10-01T18:30:31.119451398Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -22,9 +22,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-15281"
+      },
+      "timestamp": "2026-10-01T18:30:44.463231207Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc-bin"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 2.35-0ubuntu3.10 and 2.35-0ubuntu3.11) and 2.39-0ubuntu8.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 2.39-0ubuntu8.6); Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-8058"
       },
-      "timestamp": "2026-10-01T13:50:07.399613819Z",
+      "timestamp": "2026-10-01T18:30:41.059514339Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0861"
       },
-      "timestamp": "2026-10-01T13:50:07.682463387Z",
+      "timestamp": "2026-10-01T18:30:41.442651402Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0915"
       },
-      "timestamp": "2026-10-01T13:50:07.957971579Z",
+      "timestamp": "2026-10-01T18:30:41.827895968Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-10-01T13:49:56.83695553Z",
+      "timestamp": "2026-10-01T18:30:26.708831655Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-10-01T13:49:55.627419905Z",
+      "timestamp": "2026-10-01T18:30:25.057750236Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-10-01T13:49:55.838658668Z",
+      "timestamp": "2026-10-01T18:30:25.349174294Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-4046"
       },
-      "timestamp": "2026-10-01T13:49:58.243054233Z",
+      "timestamp": "2026-10-01T18:30:28.634072472Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-4437"
       },
-      "timestamp": "2026-10-01T13:50:03.602800289Z",
+      "timestamp": "2026-10-01T18:30:35.881435974Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-4438"
       },
-      "timestamp": "2026-10-01T13:50:03.813532957Z",
+      "timestamp": "2026-10-01T18:30:36.171744644Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-10-01T13:50:02.233265482Z",
+      "timestamp": "2026-10-01T18:30:34.021168993Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -174,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-5450"
       },
-      "timestamp": "2026-10-01T13:50:05.509690694Z",
+      "timestamp": "2026-10-01T18:30:38.478928414Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -189,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-5928"
       },
-      "timestamp": "2026-10-01T13:50:04.162971896Z",
+      "timestamp": "2026-10-01T18:30:36.646042819Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -204,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-6238"
       },
-      "timestamp": "2026-10-01T13:50:04.381854284Z",
+      "timestamp": "2026-10-01T18:30:36.943214352Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -219,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-10-01T13:49:57.053456749Z",
+      "timestamp": "2026-10-01T18:30:26.998260738Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -234,7 +249,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-10-01T13:50:02.517296467Z",
+      "timestamp": "2026-10-01T18:30:34.405238446Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -249,7 +264,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-10-01T13:50:02.898678739Z",
+      "timestamp": "2026-10-01T18:30:34.929577531Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -264,7 +279,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-10-01T13:50:03.115792353Z",
+      "timestamp": "2026-10-01T18:30:35.222694302Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -279,7 +294,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-10-01T13:49:59.510148015Z",
+      "timestamp": "2026-10-01T18:30:30.34636456Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -294,7 +309,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-10-01T13:50:05.82506323Z",
+      "timestamp": "2026-10-01T18:30:38.90857181Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -309,7 +324,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-10-01T13:49:59.792465453Z",
+      "timestamp": "2026-10-01T18:30:30.73294989Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"
@@ -324,7 +339,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-10-01T13:50:06.110522756Z",
+      "timestamp": "2026-10-01T18:30:39.292724046Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc-bin"

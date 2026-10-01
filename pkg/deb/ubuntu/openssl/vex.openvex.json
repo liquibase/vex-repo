@@ -1,15 +1,45 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ea2acd4b323ee121e395dd2984c94c11abbeba3d11a7f47b8cc19790e762ffb0",
+  "@id": "merged-vex-816ae19c47a4e3eccbe2bcc118e12f6ff40e1a4fadbd746d024e8322191222e6",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T14:06:28.709254746Z",
+  "timestamp": "2026-10-01T18:54:17.35051755Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-15467"
+      },
+      "timestamp": "2026-10-01T18:54:16.892140584Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-68160"
+      },
+      "timestamp": "2026-10-01T18:54:17.284093279Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/openssl"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-69418"
       },
-      "timestamp": "2026-10-01T14:06:24.901928405Z",
+      "timestamp": "2026-10-01T18:54:10.344942851Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -24,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2025-69419"
       },
-      "timestamp": "2026-10-01T14:06:25.197451279Z",
+      "timestamp": "2026-10-01T18:54:10.726419565Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -39,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2025-69420"
       },
-      "timestamp": "2026-10-01T14:06:25.512581584Z",
+      "timestamp": "2026-10-01T18:54:11.110643502Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -54,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2025-69421"
       },
-      "timestamp": "2026-10-01T14:06:25.811137235Z",
+      "timestamp": "2026-10-01T18:54:11.496829574Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -69,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2025-9230"
       },
-      "timestamp": "2026-10-01T14:06:26.363980042Z",
+      "timestamp": "2026-10-01T18:54:12.223390223Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -84,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-22795"
       },
-      "timestamp": "2026-10-01T14:06:26.106461101Z",
+      "timestamp": "2026-10-01T18:54:11.884028125Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -99,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-35189"
       },
-      "timestamp": "2026-10-01T14:06:27.526075842Z",
+      "timestamp": "2026-10-01T18:54:13.722776963Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -114,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-10-01T14:06:14.089035132Z",
+      "timestamp": "2026-10-01T18:53:55.982131713Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -129,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-54872"
       },
-      "timestamp": "2026-10-01T14:06:27.812554448Z",
+      "timestamp": "2026-10-01T18:54:14.106938568Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-75805"
       },
-      "timestamp": "2026-10-01T14:06:28.10357891Z",
+      "timestamp": "2026-10-01T18:54:14.494086109Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-75806"
       },
-      "timestamp": "2026-10-01T14:06:28.400623249Z",
+      "timestamp": "2026-10-01T18:54:14.879667915Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -174,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-77696"
       },
-      "timestamp": "2026-10-01T14:06:28.69347398Z",
+      "timestamp": "2026-10-01T18:54:15.266804791Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"
@@ -189,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-84782"
       },
-      "timestamp": "2026-10-01T14:06:27.227099444Z",
+      "timestamp": "2026-10-01T18:54:13.33882942Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/openssl"

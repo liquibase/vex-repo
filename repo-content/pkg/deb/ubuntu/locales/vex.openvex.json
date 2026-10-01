@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c428531d10bfed03c0240a3457bb72a4332171770880d29636d7ee7779ba5e8b",
+  "@id": "merged-vex-4c6491edbbe7dcdedb2555f30034f3826e9d18b408896f49fef45fe26b1f7dc0",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T14:04:37.492032488Z",
+  "timestamp": "2026-10-01T18:51:39.208608204Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-10-01T14:04:30.16286699Z",
+      "timestamp": "2026-10-01T18:51:27.748041452Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -22,9 +22,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-15281"
+      },
+      "timestamp": "2026-10-01T18:51:38.867722521Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/locales"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-8058"
       },
-      "timestamp": "2026-10-01T14:04:36.030100749Z",
+      "timestamp": "2026-10-01T18:51:35.466585662Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0861"
       },
-      "timestamp": "2026-10-01T14:04:36.318878335Z",
+      "timestamp": "2026-10-01T18:51:35.851657923Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0915"
       },
-      "timestamp": "2026-10-01T14:04:36.607856066Z",
+      "timestamp": "2026-10-01T18:51:36.23682181Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-10-01T14:04:29.572915327Z",
+      "timestamp": "2026-10-01T18:51:26.97879495Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-10-01T14:04:34.413836003Z",
+      "timestamp": "2026-10-01T18:51:33.329516185Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-10-01T14:04:29.87258214Z",
+      "timestamp": "2026-10-01T18:51:27.360057561Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-10-01T14:04:34.696817618Z",
+      "timestamp": "2026-10-01T18:51:33.711571699Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"

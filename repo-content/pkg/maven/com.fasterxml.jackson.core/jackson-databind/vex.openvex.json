@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-118ee325f2a06bed52bc4aec5c2214723bffb128c9992a26d24281a4bd9b5ee3",
+  "@id": "merged-vex-bf54b56ed83a55212b11ef12ed8b8274f2da528b03da7ef2bf62e457e0eb60f1",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T14:15:11.090349296Z",
+  "timestamp": "2026-10-01T19:06:41.934861395Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-wjgm-6hv5-3cvf"
         ]
       },
-      "timestamp": "2026-10-01T14:15:10.410503356Z",
+      "timestamp": "2026-10-01T19:06:38.460355762Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -30,7 +30,7 @@
           "GHSA-j3rv-43j4-c7qm"
         ]
       },
-      "timestamp": "2026-10-01T14:14:57.849602719Z",
+      "timestamp": "2026-10-01T19:06:21.665262679Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -48,7 +48,7 @@
           "GHSA-rmj7-2vxq-3g9f"
         ]
       },
-      "timestamp": "2026-10-01T14:14:58.065628625Z",
+      "timestamp": "2026-10-01T19:06:21.963740094Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -66,7 +66,7 @@
           "GHSA-5jmj-h7xm-6q6v"
         ]
       },
-      "timestamp": "2026-10-01T14:15:07.797546481Z",
+      "timestamp": "2026-10-01T19:06:34.987128326Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -79,12 +79,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-59889",
+        "aliases": [
+          "GHSA-5gvw-p9qm-jgwh"
+        ]
+      },
+      "timestamp": "2026-10-01T19:06:39.643186897Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.18.0 until 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1, UnwrappedPropertyHandler.processUnwrapped() replays buffered JSON for a @JsonUnwrapped property and calls prop.deserializeAndSet() without a prop.visibleInView(ctxt.getActiveView()) guard, allowing a property annotated with both @JsonView and @JsonUnwrapped to be written from attacker JSON under a less-privileged active view. This issue is fixed in versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.18.9, 2.21.5 and 2.22.1. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries at least one copy inside the advisory range, so this assessment does not rest on version. The copies were read from the PackageVersion class in each shipped jar, including copies relocated inside vendor drivers. In 5.0.x the only affected copy is the one relocated inside snowflake-jdbc (2.18.1). In 5.1.x and 5.2.0 the snowflake-jdbc, databricks-jdbc and Azure SDK copies are on 2.18.x, and 5.2.0 adds the first-party 2.21.2. In 5.2.1 the first-party copies are on 2.22.0 and the Couchbase SDK copy is on 2.21.4. In 5.2.2 and 6.0.0 the first-party copies are fixed and the one affected copy left is 2.18.8, relocated inside databricks-jdbc. The vulnerable path needs a property annotated with both @JsonView and @JsonUnwrapped, deserialized from attacker JSON under an active view. A scan of every class in every shipped jar, first-party and vendor, found no @JsonView annotation and no view-scoped reader anywhere. The only @JsonUnwrapped use is in a log4j JSON layout, which serializes and never deserializes. Without the annotation pair, the unchecked view gate is never reached."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-68497",
         "aliases": [
           "GHSA-q4xh-88c3-wmh7"
         ]
       },
-      "timestamp": "2026-10-01T14:15:08.50245351Z",
+      "timestamp": "2026-10-01T19:06:35.955713732Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -97,12 +115,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-77310",
+        "aliases": [
+          "GHSA-vvgp-rfg2-7rr6"
+        ]
+      },
+      "timestamp": "2026-10-01T19:06:39.936786611Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. Prior to versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1 on their respective release lines, the java.net.InetAddress branch of FromStringDeserializer.Std._deserialize() calls InetAddress.getByName() on attacker-controlled input, causing eager DNS resolution during deserialization and enabling DNS-based server-side request forgery and internal-host enumeration. This issue is fixed in versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.18.9, 2.21.5 and 2.22.1. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries at least one copy inside the advisory range, so this assessment does not rest on version. The copies were read from the PackageVersion class in each shipped jar, including copies relocated inside vendor drivers. From 5.0.0 through 5.2.1 every copy is affected, first-party and vendor alike. In 5.2.2 and 6.0.0 the first-party copies are fixed and the one affected copy left is 2.18.8, relocated inside databricks-jdbc. The vulnerable path is reached only when Jackson binds a JSON string to a java.net.InetAddress target, at which point the standard deserializer calls InetAddress.getByName() on it. No Liquibase code binds JSON to an InetAddress. Its only InetAddress uses are local host-name lookups and a loopback check on a configured JDBC host, none of them through Jackson, and no Liquibase type that Jackson binds has an InetAddress field. The relocated vendor copies are private to their drivers. Liquibase never hands them JSON, and the drivers use them for their own protocol messages with the database service."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-83557",
         "aliases": [
           "GHSA-gx83-3vf8-gh7j"
         ]
       },
-      "timestamp": "2026-10-01T14:15:10.146796124Z",
+      "timestamp": "2026-10-01T19:06:38.112757126Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -112,6 +148,42 @@
       "status_notes": "DefaultBaseTypeLimitingValidator is the PolymorphicTypeValidator applied automatically whenever @JsonTypeInfo is used without an explicitly configured custom validator. It denies polymorphic resolution only for a fixed set of \"unsafe base types\", and its isSafeSubType method returns true unconditionally for every base type outside that set. java.lang.Comparable was absent from the list despite being implemented by a very large fraction of JDK and application classes, comparable in breadth to java.io.Serializable, which is on the list for that reason. An application declaring an @JsonTypeInfo-annotated property or class with Comparable as its base type, and no custom PolymorphicTypeValidator, will accept a type identifier for essentially any class implementing Comparable. This yields an attacker-controlled object instantiation primitive; a demonstrated case constructs a java.io.File for an arbitrary attacker-chosen path, which becomes path-traversal-adjacent if the application subsequently calls path-sensitive methods on the value. No class implementing Comparable has been identified that yields code execution through deserialization alone. Global Default Typing via activateDefaultTyping is not affected, because that method structurally requires an explicit PolymorphicTypeValidator argument. This affects com.fasterxml.jackson.core:jackson-databind from 2.11.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The vulnerable DefaultBaseTypeLimitingValidator path is exercised only when an application declares @JsonTypeInfo on a property or class whose base type is java.lang.Comparable and lets Jackson fall back to the default validator. An inspection of every jar in the shipped distribution, including the Jackson copies relocated inside the couchbase, databricks and snowflake drivers and the license-tracking application, found @JsonTypeInfo declared on exactly three base types, Apache Arrow's ArrowType (bundled by bigquery, databricks and snowflake) and Couchbase's AnalyticsLink and BucketConfig, plus a reflective lookup of the annotation in Azure Core's FlatteningDeserializer. None of these base types is Comparable, and all of them bind JSON that comes from the respective database or cloud service, not from Liquibase users. Liquibase Secure's own code never uses @JsonTypeInfo. Fixed in jackson-databind 2.18.10, 2.21.6 and 2.22.2. Every Liquibase Secure release from 5.0.0 through 5.2.2 ships in-range copies, read from the PackageVersion class of each copy in the built distribution rather than from the dependency graph: 5.2.2 carries 2.22.1 in the aws, azure, bigquery, cassandra and mongodb extensions and in liquibase-azure-deps, 2.21.5 relocated inside the couchbase driver, 2.18.9 relocated inside snowflake-jdbc and 2.18.8 relocated inside databricks-jdbc. The next release moves the pinned copies to 2.22.2; the relocated driver copies follow their vendors' releases."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-91776",
+        "aliases": [
+          "GHSA-wv8q-qhhj-9h54"
+        ]
+      },
+      "timestamp": "2026-10-01T19:06:40.320794212Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "TypeDeserializerBase._findDeserializer() in jackson-databind caches the resolved deserializer under the raw, attacker-supplied type ID. When name-based polymorphism is configured with a fallback, for example @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), every distinct unrecognized type ID resolves to the same fallback deserializer but is retained as its own key in an unbounded, process-lifetime map, so an attacker who can repeatedly supply fresh unknown type IDs causes monotonic memory retention. This affects com.fasterxml.jackson.core:jackson-databind from 2.0.0 through 2.18.10, from 2.19.0 through 2.21.6, and from 2.22.0 through 2.22.2. Users should upgrade to 2.18.11, 2.21.7 or 2.22.3.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The same advisory covers the Jackson 2 coordinate, which is a separate artifact with its own version line. Fixed in jackson-databind 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries only copies inside the advisory range. In 6.0.0 those are the first-party 2.22.2 and the copies relocated inside the Couchbase SDK (2.21.6), databricks-jdbc (2.18.8) and snowflake-jdbc (2.18.10), read from the PackageVersion class in each jar. So this assessment does not rest on version. The vulnerable cache is filled only through name-based polymorphic typing with a fallback, such as @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), applied to attacker-chosen type IDs. A scan of every class in every shipped jar found no @JsonTypeInfo and no default typing in any Liquibase code. Three vendor libraries declare it. Apache Arrow's ArrowType, bundled with the BigQuery, Databricks and Snowflake drivers, uses name-based typing with no fallback, so an unknown type ID fails instead of being cached. The Couchbase SDK's bucket configuration type also has no fallback. The Couchbase SDK's analytics link model does declare a fallback. It is read only by the SDK's analytics link management API, which Liquibase never calls, and its input would be a Couchbase server response rather than user input."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-91777",
+        "aliases": [
+          "GHSA-cxp5-3px4-pw24"
+        ]
+      },
+      "timestamp": "2026-10-01T19:06:40.617884012Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Forward-reference completion for @JsonIdentityInfo object IDs in jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID, in CollectionDeserializer.CollectionReferringAccumulator.resolveForwardReference() and the equivalent map implementation. A shallow document that creates N unresolved references and then defines them in reverse order causes quadratic CPU work. This affects com.fasterxml.jackson.core:jackson-databind from 2.5.0 through 2.18.10, from 2.19.0 through 2.21.6, and from 2.22.0 through 2.22.2. Users should upgrade to 2.18.11, 2.21.7 or 2.22.3.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The same advisory covers the Jackson 2 coordinate, which is a separate artifact with its own version line. Fixed in jackson-databind 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries only copies inside the advisory range. In 6.0.0 those are the first-party 2.22.2 and the copies relocated inside the Couchbase SDK (2.21.6), databricks-jdbc (2.18.8) and snowflake-jdbc (2.18.10), read from the PackageVersion class in each jar. So this assessment does not rest on version. The quadratic lookup runs only when JSON is deserialized into a collection or map of @JsonIdentityInfo-enabled values. A scan of every class in every shipped jar, first-party and vendor, found no @JsonIdentityInfo and no Jackson object-ID generator outside Jackson itself. With no object identity configured anywhere, the forward-reference accumulator is never created."
     }
   ]
 }

@@ -1,15 +1,45 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-9408754cb0eddefe670c85b0bd75b82e957fbb6dee4a29f964e6d386f6db8e7e",
+  "@id": "merged-vex-f4cb663b4a889fc57c258e7d85b9ab48c14038083d54f688f146cdf121ef1fb4",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T14:02:42.829033227Z",
+  "timestamp": "2026-10-01T18:48:56.282674836Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-15467"
+      },
+      "timestamp": "2026-10-01T18:48:55.788532193Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7, and Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-68160"
+      },
+      "timestamp": "2026-10-01T18:48:56.172732182Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssl3t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7, and Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-69418"
       },
-      "timestamp": "2026-10-01T14:02:39.29541377Z",
+      "timestamp": "2026-10-01T18:48:49.445673865Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -24,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2025-69419"
       },
-      "timestamp": "2026-10-01T14:02:39.578262877Z",
+      "timestamp": "2026-10-01T18:48:49.834001717Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -39,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2025-69420"
       },
-      "timestamp": "2026-10-01T14:02:39.864050639Z",
+      "timestamp": "2026-10-01T18:48:50.21577079Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -54,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2025-69421"
       },
-      "timestamp": "2026-10-01T14:02:40.147359451Z",
+      "timestamp": "2026-10-01T18:48:50.600482137Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -69,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-22795"
       },
-      "timestamp": "2026-10-01T14:02:40.437109605Z",
+      "timestamp": "2026-10-01T18:48:50.986579331Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -84,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-35189"
       },
-      "timestamp": "2026-10-01T14:02:41.628320612Z",
+      "timestamp": "2026-10-01T18:48:52.604084673Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -99,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-45447"
       },
-      "timestamp": "2026-10-01T14:02:28.447978808Z",
+      "timestamp": "2026-10-01T18:48:34.791067792Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -114,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-54872"
       },
-      "timestamp": "2026-10-01T14:02:41.91593047Z",
+      "timestamp": "2026-10-01T18:48:52.986896963Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -129,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-54874"
       },
-      "timestamp": "2026-10-01T14:02:38.179026822Z",
+      "timestamp": "2026-10-01T18:48:47.950537037Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-75805"
       },
-      "timestamp": "2026-10-01T14:02:42.202211976Z",
+      "timestamp": "2026-10-01T18:48:53.376876901Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-75806"
       },
-      "timestamp": "2026-10-01T14:02:42.491054965Z",
+      "timestamp": "2026-10-01T18:48:53.768422257Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -174,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-77696"
       },
-      "timestamp": "2026-10-01T14:02:42.778129993Z",
+      "timestamp": "2026-10-01T18:48:54.152979498Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"
@@ -189,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-84782"
       },
-      "timestamp": "2026-10-01T14:02:41.336781664Z",
+      "timestamp": "2026-10-01T18:48:52.214728852Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssl3t64"

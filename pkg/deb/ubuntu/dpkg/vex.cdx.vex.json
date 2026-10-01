@@ -1,0 +1,68 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2025-6297",
+      "description": "dpkg-deb does not properly sanitize directory permissions when extracting a control member into a temporary directory, which can leave temporary files behind on cleanup and, under repeated execution on adversarial .deb packages, lead to disk quota exhaustion or disk full conditions.",
+      "recommendation": "No action required. Liquibase Secure does not extract .deb packages at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path invokes dpkg-deb, so the vulnerable extraction path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        732
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w56q-6jw5-h5xf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6297",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-6297",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The leftover temporary files need dpkg-deb to extract the control member of an attacker-supplied .deb archive. dpkg is used only by the package manager while the image is built; the container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary, so dpkg-deb's extraction path is never reached by Liquibase Secure. Fixed in Ubuntu dpkg 1.21.1ubuntu2.6 (jammy) and 1.22.6ubuntu6.5 (noble); only Liquibase Secure 5.0.0 shipped an affected build (1.21.1ubuntu2.3), Liquibase Secure 5.0.1 ships 1.21.1ubuntu2.6, and Liquibase Secure 5.0.2 and later ship 1.22.6ubuntu6.5 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dpkg",
+          "versions": [
+            {
+              "range": "vers:deb/<1.21.1ubuntu2.6|>=1.22|<1.22.6ubuntu6.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
