@@ -75,8 +75,10 @@ jobs:
           sudo chmod +x /usr/local/bin/yq
           yq --version
 
+      # repo-content/ is committed by every update PR, so it starts out holding the last run's insights documents.
       - name: Generate VEX repo content
         run: |
+          rm -rf ./repo-content
           bash liquibase-pro/vex/generate-vex-repo.sh \
             --output-dir ./repo-content \
             --assessments liquibase-pro/vex/assessments.yaml
