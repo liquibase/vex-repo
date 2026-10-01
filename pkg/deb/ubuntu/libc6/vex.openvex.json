@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-57c9a9126bd581ae742b80cef7fa8079d4325fb16346e53071ba902baec78432",
+  "@id": "merged-vex-fe03ac4460bba517c9895d9b253d026c7904b674458a7c73c85a107ce2752b27",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-01T13:50:54.791206023Z",
+  "timestamp": "2026-10-01T18:31:50.95744432Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-10-01T13:50:47.538960762Z",
+      "timestamp": "2026-10-01T18:31:39.478855695Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -22,9 +22,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-15281"
+      },
+      "timestamp": "2026-10-01T18:31:50.568986049Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libc6 (the glibc shared library itself) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-8058"
       },
-      "timestamp": "2026-10-01T13:50:53.30232661Z",
+      "timestamp": "2026-10-01T18:31:47.172556706Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0861"
       },
-      "timestamp": "2026-10-01T13:50:53.591372867Z",
+      "timestamp": "2026-10-01T18:31:47.551824556Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0915"
       },
-      "timestamp": "2026-10-01T13:50:53.875462326Z",
+      "timestamp": "2026-10-01T18:31:47.931670459Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-10-01T13:50:46.966261936Z",
+      "timestamp": "2026-10-01T18:31:38.716385646Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-10-01T13:50:51.697499583Z",
+      "timestamp": "2026-10-01T18:31:45.033393776Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-10-01T13:50:47.247268792Z",
+      "timestamp": "2026-10-01T18:31:39.096651944Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-10-01T13:50:51.987918856Z",
+      "timestamp": "2026-10-01T18:31:45.41453526Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"

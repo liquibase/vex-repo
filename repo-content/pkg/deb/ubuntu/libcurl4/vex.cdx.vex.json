@@ -58,6 +58,263 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-14017",
+      "description": "When doing multi-threaded LDAPS transfers (LDAP over TLS) with libcurl, changing TLS options in one thread would inadvertently change them globally and therefore possibly also affect other concurrently setup transfers. Disabling certificate verification for a specific transfer could unintentionally disable the feature for other threads as well.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the LDAPS option-sharing path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        567
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jh4h-2cg6-889h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14017",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14017",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14017.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the global TLS-option leak needs a libcurl-based application that performs multi-threaded LDAPS transfers while changing TLS options per transfer. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14524",
+      "description": "When an OAuth2 bearer token is used for an HTTP(S) transfer, and that transfer performs a cross-protocol redirect to a second URL that uses an IMAP, LDAP, POP3 or SMTP scheme, curl might wrongly pass on the bearer token to the new target host.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the cross-protocol redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        522,
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g897-jvjx-78vg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14524",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14524",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14524.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the bearer-token leak needs a libcurl-based HTTP(S) transfer that uses an OAuth2 bearer token and then follows a cross-protocol redirect to IMAP, LDAP, POP3 or SMTP. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15079",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and setting the known_hosts file, libcurl could still mistakenly accept connecting to hosts not present in the specified file if they were added as recognized in the libssh global known_hosts file.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the known_hosts path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7q9p-cx8r-rh2q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15079",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15079",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15079.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the host-key bypass needs a libcurl SCP or SFTP transfer that sets its own known_hosts file. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15224",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and asked to do public key authentication, curl would wrongly still ask and authenticate using a locally running SSH agent.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the SSH-agent path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hccr-q52r-4w88",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15224",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15224",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15224.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the SSH-agent fallback needs a libcurl SCP or SFTP transfer that requests public-key authentication. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

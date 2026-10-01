@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-b0111ec1bf92954acf88e74b8ee010795bc4fc93292ee39e093af1cd11103f88",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-01T18:15:48.586447901Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-6297"
+      },
+      "timestamp": "2026-10-01T18:15:48.586449524Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/dpkg"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "dpkg-deb does not properly sanitize directory permissions when extracting a control member into a temporary directory, which can leave temporary files behind on cleanup and, under repeated execution on adversarial .deb packages, lead to disk quota exhaustion or disk full conditions.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The leftover temporary files need dpkg-deb to extract the control member of an attacker-supplied .deb archive. dpkg is used only by the package manager while the image is built; the container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary, so dpkg-deb's extraction path is never reached by Liquibase Secure. Fixed in Ubuntu dpkg 1.21.1ubuntu2.6 (jammy) and 1.22.6ubuntu6.5 (noble); only Liquibase Secure 5.0.0 shipped an affected build (1.21.1ubuntu2.3), Liquibase Secure 5.0.1 ships 1.21.1ubuntu2.6, and Liquibase Secure 5.0.2 and later ship 1.22.6ubuntu6.5 or newer."
+    }
+  ]
+}

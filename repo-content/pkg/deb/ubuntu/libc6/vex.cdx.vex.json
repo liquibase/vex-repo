@@ -408,6 +408,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-15281",
+      "description": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. No process in Liquibase Secure calls glibc's wordexp() interface.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary or library in the Liquibase Secure image imports wordexp(), so the vulnerable path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qg56-4cfq-w9w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15281",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15281",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libc6 (the glibc shared library itself) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

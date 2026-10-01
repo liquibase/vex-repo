@@ -1547,6 +1547,135 @@
       ]
     },
     {
+      "id": "CVE-2025-15467",
+      "description": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path parses CMS input with OpenSSL, so the vulnerable parser is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wvhq-3h88-rf6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15467",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15467",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-68160",
+      "description": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure image uses the BIO_f_linebuffer filter, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g78j-46j5-97cr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-68160",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-68160",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42767",
       "description": "An attacker-controlled CMP server could trigger a NULL pointer dereference in a CMP client application. Applications that process untrusted CMP or CRMF messages may be affected.",
       "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMP or CRMF client processing at runtime.",

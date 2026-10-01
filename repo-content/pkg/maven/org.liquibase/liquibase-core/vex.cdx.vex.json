@@ -21346,6 +21346,376 @@
       ]
     },
     {
+      "id": "CVE-2026-59889",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.18.0 until 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1, UnwrappedPropertyHandler.processUnwrapped() replays buffered JSON for a @JsonUnwrapped property and calls prop.deserializeAndSet() without a prop.visibleInView(ctxt.getActiveView()) guard, allowing a property annotated with both @JsonView and @JsonUnwrapped to be written from attacker JSON under a less-privileged active view. This issue is fixed in versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1.",
+      "recommendation": "No action required. Liquibase Secure does not use @JsonView, so the view-bypass path cannot be reached in any shipped Jackson copy.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped code, first-party or vendor, declares @JsonView, so no property combines @JsonView with @JsonUnwrapped and the missing view check is never exercised.\n"
+        }
+      ],
+      "cwes": [
+        863
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5gvw-p9qm-jgwh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59889",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-5gvw-p9qm-jgwh",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-databind 2.18.9, 2.21.5 and 2.22.1. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries at least one copy inside the advisory range, so this assessment does not rest on version. The copies were read from the PackageVersion class in each shipped jar, including copies relocated inside vendor drivers. In 5.0.x the only affected copy is the one relocated inside snowflake-jdbc (2.18.1). In 5.1.x and 5.2.0 the snowflake-jdbc, databricks-jdbc and Azure SDK copies are on 2.18.x, and 5.2.0 adds the first-party 2.21.2. In 5.2.1 the first-party copies are on 2.22.0 and the Couchbase SDK copy is on 2.21.4. In 5.2.2 and 6.0.0 the first-party copies are fixed and the one affected copy left is 2.18.8, relocated inside databricks-jdbc. The vulnerable path needs a property annotated with both @JsonView and @JsonUnwrapped, deserialized from attacker JSON under an active view. A scan of every class in every shipped jar, first-party and vendor, found no @JsonView annotation and no view-scoped reader anywhere. The only @JsonUnwrapped use is in a log4j JSON layout, which serializes and never deserializes. Without the annotation pair, the unchecked view gate is never reached.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.18.0|<2.18.9|>=2.21.0|<2.21.5|>=2.22.0|<2.22.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77310",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. Prior to versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1 on their respective release lines, the java.net.InetAddress branch of FromStringDeserializer.Std._deserialize() calls InetAddress.getByName() on attacker-controlled input, causing eager DNS resolution during deserialization and enabling DNS-based server-side request forgery and internal-host enumeration. This issue is fixed in versions 2.18.9, 2.21.5, 2.22.1, 3.1.5, and 3.2.1.",
+      "recommendation": "No action required. Liquibase Secure does not deserialize JSON into java.net.InetAddress values.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure never binds JSON into java.net.InetAddress values, and the vendor-relocated copies are never given JSON by Liquibase, so the eager DNS lookup in the InetAddress deserializer is not reached.\n"
+        }
+      ],
+      "cwes": [
+        918
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vvgp-rfg2-7rr6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77310",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-vvgp-rfg2-7rr6",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-databind 2.18.9, 2.21.5 and 2.22.1. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries at least one copy inside the advisory range, so this assessment does not rest on version. The copies were read from the PackageVersion class in each shipped jar, including copies relocated inside vendor drivers. From 5.0.0 through 5.2.1 every copy is affected, first-party and vendor alike. In 5.2.2 and 6.0.0 the first-party copies are fixed and the one affected copy left is 2.18.8, relocated inside databricks-jdbc. The vulnerable path is reached only when Jackson binds a JSON string to a java.net.InetAddress target, at which point the standard deserializer calls InetAddress.getByName() on it. No Liquibase code binds JSON to an InetAddress. Its only InetAddress uses are local host-name lookups and a loopback check on a configured JDBC host, none of them through Jackson, and no Liquibase type that Jackson binds has an InetAddress field. The relocated vendor copies are private to their drivers. Liquibase never hands them JSON, and the drivers use them for their own protocol messages with the database service.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.0.0|<2.18.9|>=2.19.0|<2.21.5|>=2.22.0|<2.22.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91776",
+      "description": "TypeDeserializerBase._findDeserializer() in FasterXML jackson-databind caches the resolved deserializer under the raw, attacker-supplied type ID. When name-based polymorphism is configured with a fallback, for example @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), every distinct unrecognized type ID resolves to the same fallback deserializer but is retained as its own key in the _deserializers map. That map has no configurable bound and lives for the lifetime of the type deserializer, so an attacker who can repeatedly supply fresh unknown type IDs causes monotonic memory retention across requests. Exploitation requires an application that enables name-based polymorphism with a defaultImpl or equivalent fallback, accepts attacker-influenced type IDs, and reuses a long-lived ObjectMapper across requests. This affects tools.jackson.core:jackson-databind from 3.0.0 through 3.1.6 and from 3.2.0 through 3.2.2. Users should upgrade to 3.1.7 or 3.2.3.",
+      "recommendation": "No action required. Liquibase Secure does not configure polymorphic type handling for Jackson 3, so the cache-retention path cannot be reached. A future release moves the bundled copy to 3.2.3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped code declares @JsonTypeInfo or enables default typing on Jackson 3, so the unbounded type-ID cache is never populated.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wv8q-qhhj-9h54",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91776",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-wv8q-qhhj-9h54",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. The 6.0.0 image is the only published Liquibase Secure image that ships Jackson 3: one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The 5.x images ship no Jackson 3 at all. 3.2.2 is inside the advisory range, so this assessment does not rest on version. The vulnerable cache is filled only through name-based polymorphic typing with a fallback, such as @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), applied to attacker-chosen type IDs. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonTypeInfo, @JsonSubTypes or default typing. Liquibase's own code does not use Jackson 3. With no polymorphic type handling configured for Jackson 3, no type-ID cache is ever created.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.7|>=3.2.0|<3.2.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91777",
+      "description": "Forward-reference completion for @JsonIdentityInfo object IDs in FasterXML jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID. The affected paths are CollectionDeserializer.CollectionReferringAccumulator. resolveForwardReference() and the equivalent implementation in MapDeserializer. When a document first creates N unresolved object-ID references in an identity-enabled collection or map and then defines those same IDs in reverse order, completion performs on the order of N * (N + 1) / 2 identity comparisons, so a shallow document whose size grows linearly causes quadratic CPU work during deserialization. Exploitation requires an application that deserializes attacker-influenced JSON into an identity-enabled collection or map. This affects tools.jackson.core:jackson-databind from 3.0.0 through 3.1.6 and from 3.2.0 through 3.2.2. Users should upgrade to 3.1.7 or 3.2.3.",
+      "recommendation": "No action required. Liquibase Secure does not use @JsonIdentityInfo, so the vulnerable forward-reference path is never enabled. A future release moves the bundled copy to 3.2.3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped code enables Jackson object identity on Jackson 3, so the vulnerable forward-reference accumulator is never used.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxp5-3px4-pw24",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91777",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-cxp5-3px4-pw24",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. The 6.0.0 image is the only published Liquibase Secure image that ships Jackson 3: one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The 5.x images ship no Jackson 3 at all. 3.2.2 is inside the advisory range, so this assessment does not rest on version. The quadratic lookup runs only when JSON is deserialized into a collection or map of @JsonIdentityInfo-enabled values. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonIdentityInfo or Jackson object-ID generator. Liquibase's own code does not use Jackson 3. With no object identity configured, the forward-reference accumulator is never created.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.7|>=3.2.0|<3.2.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91776",
+      "description": "TypeDeserializerBase._findDeserializer() in jackson-databind caches the resolved deserializer under the raw, attacker-supplied type ID. When name-based polymorphism is configured with a fallback, for example @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), every distinct unrecognized type ID resolves to the same fallback deserializer but is retained as its own key in an unbounded, process-lifetime map, so an attacker who can repeatedly supply fresh unknown type IDs causes monotonic memory retention. This affects com.fasterxml.jackson.core:jackson-databind from 2.0.0 through 2.18.10, from 2.19.0 through 2.21.6, and from 2.22.0 through 2.22.2. Users should upgrade to 2.18.11, 2.21.7 or 2.22.3.",
+      "recommendation": "No action required. The only shipped type with a polymorphic fallback belongs to a Couchbase SDK API that Liquibase does not call.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase configures no polymorphic typing, and the one vendor type with a fallback is reached only through a Couchbase SDK API that Liquibase never invokes, so the unbounded type-ID cache is never populated from user input.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wv8q-qhhj-9h54",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91776",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-wv8q-qhhj-9h54",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 2 coordinate, which is a separate artifact with its own version line. Fixed in jackson-databind 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries only copies inside the advisory range. In 6.0.0 those are the first-party 2.22.2 and the copies relocated inside the Couchbase SDK (2.21.6), databricks-jdbc (2.18.8) and snowflake-jdbc (2.18.10), read from the PackageVersion class in each jar. So this assessment does not rest on version. The vulnerable cache is filled only through name-based polymorphic typing with a fallback, such as @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), applied to attacker-chosen type IDs. A scan of every class in every shipped jar found no @JsonTypeInfo and no default typing in any Liquibase code. Three vendor libraries declare it. Apache Arrow's ArrowType, bundled with the BigQuery, Databricks and Snowflake drivers, uses name-based typing with no fallback, so an unknown type ID fails instead of being cached. The Couchbase SDK's bucket configuration type also has no fallback. The Couchbase SDK's analytics link model does declare a fallback. It is read only by the SDK's analytics link management API, which Liquibase never calls, and its input would be a Couchbase server response rather than user input.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.0.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91777",
+      "description": "Forward-reference completion for @JsonIdentityInfo object IDs in jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID, in CollectionDeserializer.CollectionReferringAccumulator.resolveForwardReference() and the equivalent map implementation. A shallow document that creates N unresolved references and then defines them in reverse order causes quadratic CPU work. This affects com.fasterxml.jackson.core:jackson-databind from 2.5.0 through 2.18.10, from 2.19.0 through 2.21.6, and from 2.22.0 through 2.22.2. Users should upgrade to 2.18.11, 2.21.7 or 2.22.3.",
+      "recommendation": "No action required. Liquibase Secure does not use @JsonIdentityInfo, so the vulnerable forward-reference path is never enabled.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped code enables Jackson object identity, so the vulnerable forward-reference accumulator is never used.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxp5-3px4-pw24",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91777",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-cxp5-3px4-pw24",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 2 coordinate, which is a separate artifact with its own version line. Fixed in jackson-databind 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries only copies inside the advisory range. In 6.0.0 those are the first-party 2.22.2 and the copies relocated inside the Couchbase SDK (2.21.6), databricks-jdbc (2.18.8) and snowflake-jdbc (2.18.10), read from the PackageVersion class in each jar. So this assessment does not rest on version. The quadratic lookup runs only when JSON is deserialized into a collection or map of @JsonIdentityInfo-enabled values. A scan of every class in every shipped jar, first-party and vendor, found no @JsonIdentityInfo and no Jackson object-ID generator outside Jackson itself. With no object identity configured anywhere, the forward-reference accumulator is never created.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.5.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-66471",
       "analysis": {
         "state": "not_affected",
@@ -21356,6 +21726,624 @@
       "affects": [
         {
           "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59847",
+      "description": "A flaw was found in libssh. Incorrect AES-GCM finalization checks in builds using the OpenSSL backend can effectively remove integrity protection, allowing an in-path attacker to modify plaintext on the wire without detection.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session, so the vulnerable integrity-check path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        1310,
+        253
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mq2j-7vq4-77m8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59847",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-59847",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The broken AES-GCM integrity check only matters inside an active libssh session with an in-path attacker, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.8|>=0.10|<0.10.6-2ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59848",
+      "description": "A flaw was found in libssh. A malicious SFTP server can send responses for unknown request IDs that libssh clients keep queued indefinitely, causing unbounded memory growth and client-side denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh SFTP sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh SFTP session, so the vulnerable request-queue path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4h4r-q9xg-gfmm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59848",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-59848",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh SFTP session is ever opened by Liquibase Secure. The unbounded request queue needs a libssh SFTP client talking to a malicious server, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.8|>=0.10|<0.10.6-2ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59850",
+      "description": "A flaw was found in libssh. If data packets are processed after a channel is closed, channel data callbacks can be invoked after the associated data has already been freed, leading to crashes or possible use-after-free conditions.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh channels at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens libssh channels, so the vulnerable callback path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cr6p-6527-344m",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59850",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-59850",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh channel is ever opened by Liquibase Secure. The use-after-free needs data packets arriving on a closed libssh channel, so it is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 0.10.6-2ubuntu0.5 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 and later ship 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.8|>=0.10|<0.10.6-2ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-7017",
+      "description": "HTTP::Tiny versions before 0.095 for Perl forward credential headers to cross-origin redirect targets. When the server returns a 3xx redirect, the caller's Authorization, Cookie and Proxy-Authorization headers are re-sent to whatever host the redirect names, across scheme, host or port boundaries, including https to http downgrades that expose them in plaintext on the wire.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship the HTTP::Tiny module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable HTTP::Tiny module is not present in the image; perl-base does not contain it.\n"
+        }
+      ],
+      "cwes": [
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pgc4-5jjm-7rr7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-7017",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-7017",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner package misattribution. The vulnerable code is the HTTP::Tiny module, which Ubuntu ships in perl-modules (and libhttp-tiny-perl), not in perl-base. Neither package is installed in any Liquibase Secure image: perl-base carries only the interpreter and a minimal core module set, there is no HTTP/Tiny.pm anywhere on the image, and loading HTTP::Tiny fails with \"Can't locate HTTP/Tiny.pm\". The scanner matched a fix in the perl source package to perl-base, which does not contain the vulnerable module. Even setting that aside, nothing in the runtime path executes perl. Ubuntu fixes this in perl 5.38.2-3.2ubuntu0.4 (noble); jammy has no fix yet.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8376",
+      "description": "Perl versions before 5.40.5-RC1, from 5.41.0 before 5.42.3-RC1, from 5.43.0 before 5.43.11 have a heap buffer overflow when compiling regular expressions with a repeated fixed string on 32-bit builds. A caller that compiles an attacker-controlled regular expression on a 32-bit perl build triggers a heap buffer overflow at compile time.",
+      "recommendation": "No action required. Liquibase Secure ships only 64-bit images and does not execute Perl at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure ships only 64-bit Perl and does not execute Perl at runtime, so the 32-bit-only overflow cannot occur.\n"
+        }
+      ],
+      "cwes": [
+        680
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mpxq-89h3-qc47",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8376",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-8376",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The heap overflow only exists on 32-bit Perl builds compiling an attacker-controlled regular expression. Liquibase Secure images are published only for linux/amd64 and linux/arm64, and the shipped perl is a 64-bit build (pointer size 8). In addition, nothing in the runtime path executes perl: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.7 (jammy, Liquibase Secure 5.0.0 and 5.0.1 shipped 5.34.0-3ubuntu1.5) and 5.38.2-3.2ubuntu0.3 (noble, Liquibase Secure 5.0.2 through 5.2.1 shipped 5.38.2-3.2ubuntu0.2); Liquibase Secure 5.2.2 and later ship 5.38.2-3.2ubuntu0.6.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.34.0-3ubuntu1.7|>=5.38|<5.38.2-3.2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-9538",
+      "description": "Archive::Tar versions before 3.10 for Perl allow memory exhaustion via an attacker-controlled entry size field in a tar header. A crafted header declaring a multi-gigabyte size causes Perl to allocate a scalar of that size.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship the Archive::Tar module.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Archive::Tar module is not present in the image; perl-base does not contain it.\n"
+        }
+      ],
+      "cwes": [
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rrh7-4pj2-xxq8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-9538",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-9538",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Scanner package misattribution. The vulnerable code is the Archive::Tar module, which Ubuntu ships in perl-modules, not in perl-base. perl-modules is not installed in any Liquibase Secure image: perl-base carries only the interpreter and a minimal core module set, there is no Archive/Tar.pm anywhere on the image, and loading Archive::Tar fails with \"Can't locate Archive/Tar.pm\". The scanner matched a fix in the perl source package to perl-base, which does not contain the vulnerable module. Even setting that aside, nothing in the runtime path executes perl. Ubuntu fixes this in perl 5.38.2-3.2ubuntu0.4 (noble); jammy has no fix yet.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/perl-base",
+          "versions": [
+            {
+              "range": "vers:deb/<5.38.2-3.2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14017",
+      "description": "When doing multi-threaded LDAPS transfers (LDAP over TLS) with libcurl, changing TLS options in one thread would inadvertently change them globally and therefore possibly also affect other concurrently setup transfers. Disabling certificate verification for a specific transfer could unintentionally disable the feature for other threads as well.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the LDAPS option-sharing path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        567
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jh4h-2cg6-889h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14017",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14017",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14017.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The global TLS-option leak needs a libcurl-based application that performs multi-threaded LDAPS transfers while changing TLS options per transfer. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.22 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.7 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22|>=8.5|<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14017",
+      "description": "When doing multi-threaded LDAPS transfers (LDAP over TLS) with libcurl, changing TLS options in one thread would inadvertently change them globally and therefore possibly also affect other concurrently setup transfers. Disabling certificate verification for a specific transfer could unintentionally disable the feature for other threads as well.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the LDAPS option-sharing path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        567
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jh4h-2cg6-889h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14017",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14017",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14017.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the global TLS-option leak needs a libcurl-based application that performs multi-threaded LDAPS transfers while changing TLS options per transfer. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14017",
+      "description": "When doing multi-threaded LDAPS transfers (LDAP over TLS) with libcurl, changing TLS options in one thread would inadvertently change them globally and therefore possibly also affect other concurrently setup transfers. Disabling certificate verification for a specific transfer could unintentionally disable the feature for other threads as well.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the LDAPS option-sharing path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        567
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jh4h-2cg6-889h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14017",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14017",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14017.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the global TLS-option leak needs a libcurl-based application that performs multi-threaded LDAPS transfers while changing TLS options per transfer. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14524",
+      "description": "When an OAuth2 bearer token is used for an HTTP(S) transfer, and that transfer performs a cross-protocol redirect to a second URL that uses an IMAP, LDAP, POP3 or SMTP scheme, curl might wrongly pass on the bearer token to the new target host.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the cross-protocol redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        522,
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g897-jvjx-78vg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14524",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14524",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14524.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The bearer-token leak needs a libcurl-based HTTP(S) transfer that uses an OAuth2 bearer token and then follows a cross-protocol redirect to IMAP, LDAP, POP3 or SMTP. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.22 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.7 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22|>=8.5|<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -21387,6 +22375,640 @@
       ]
     },
     {
+      "id": "CVE-2025-14524",
+      "description": "When an OAuth2 bearer token is used for an HTTP(S) transfer, and that transfer performs a cross-protocol redirect to a second URL that uses an IMAP, LDAP, POP3 or SMTP scheme, curl might wrongly pass on the bearer token to the new target host.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the cross-protocol redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        522,
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g897-jvjx-78vg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14524",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14524",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14524.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the bearer-token leak needs a libcurl-based HTTP(S) transfer that uses an OAuth2 bearer token and then follows a cross-protocol redirect to IMAP, LDAP, POP3 or SMTP. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14524",
+      "description": "When an OAuth2 bearer token is used for an HTTP(S) transfer, and that transfer performs a cross-protocol redirect to a second URL that uses an IMAP, LDAP, POP3 or SMTP scheme, curl might wrongly pass on the bearer token to the new target host.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the cross-protocol redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        522,
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g897-jvjx-78vg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14524",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14524",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14524.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the bearer-token leak needs a libcurl-based HTTP(S) transfer that uses an OAuth2 bearer token and then follows a cross-protocol redirect to IMAP, LDAP, POP3 or SMTP. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15079",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and setting the known_hosts file, libcurl could still mistakenly accept connecting to hosts not present in the specified file if they were added as recognized in the libssh global known_hosts file.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the known_hosts path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7q9p-cx8r-rh2q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15079",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15079",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15079.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The host-key bypass needs a libcurl SCP or SFTP transfer that sets its own known_hosts file. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.22 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.7 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22|>=8.5|<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15079",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and setting the known_hosts file, libcurl could still mistakenly accept connecting to hosts not present in the specified file if they were added as recognized in the libssh global known_hosts file.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the known_hosts path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7q9p-cx8r-rh2q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15079",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15079",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15079.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the host-key bypass needs a libcurl SCP or SFTP transfer that sets its own known_hosts file. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15079",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and setting the known_hosts file, libcurl could still mistakenly accept connecting to hosts not present in the specified file if they were added as recognized in the libssh global known_hosts file.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the known_hosts path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        297
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7q9p-cx8r-rh2q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15079",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15079",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15079.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the host-key bypass needs a libcurl SCP or SFTP transfer that sets its own known_hosts file. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15224",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and asked to do public key authentication, curl would wrongly still ask and authenticate using a locally running SSH agent.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the SSH-agent path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hccr-q52r-4w88",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15224",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15224",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15224.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The SSH-agent fallback needs a libcurl SCP or SFTP transfer that requests public-key authentication. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.22 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.7 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22|>=8.5|<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15224",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and asked to do public key authentication, curl would wrongly still ask and authenticate using a locally running SSH agent.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the SSH-agent path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hccr-q52r-4w88",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15224",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15224",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15224.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the SSH-agent fallback needs a libcurl SCP or SFTP transfer that requests public-key authentication. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15224",
+      "description": "When doing SSH-based transfers using either SCP or SFTP, and asked to do public key authentication, curl would wrongly still ask and authenticate using a locally running SSH agent.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl SCP or SFTP transfers, so the SSH-agent path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hccr-q52r-4w88",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15224",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15224",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-15224.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the SSH-agent fallback needs a libcurl SCP or SFTP transfer that requests public-key authentication. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15281",
+      "description": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. No process in Liquibase Secure calls glibc's wordexp() interface.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary or library in the Liquibase Secure image imports wordexp(), so the vulnerable path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qg56-4cfq-w9w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15281",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15281",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure. Fixed in Ubuntu glibc 2.35-0ubuntu3.13 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 2.35-0ubuntu3.10 and 2.35-0ubuntu3.11) and 2.39-0ubuntu8.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 2.39-0ubuntu8.6); Liquibase Secure 5.1.0 and later ship 2.39-0ubuntu8.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15281",
+      "description": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. No process in Liquibase Secure calls glibc's wordexp() interface.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary or library in the Liquibase Secure image imports wordexp(), so the vulnerable path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qg56-4cfq-w9w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15281",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15281",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libc6 (the glibc shared library itself) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2023-43804",
       "analysis": {
         "state": "not_affected",
@@ -21397,6 +23019,514 @@
       "affects": [
         {
           "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15281",
+      "description": "Calling wordexp with WRDE_REUSE in conjunction with WRDE_APPEND in the GNU C Library version 2.0 to version 2.42 may cause the interface to return uninitialized memory in the we_wordv member, which on subsequent calls to wordfree may abort the process.",
+      "recommendation": "No action required. No process in Liquibase Secure calls glibc's wordexp() interface.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary or library in the Liquibase Secure image imports wordexp(), so the vulnerable path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        908
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qg56-4cfq-w9w3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15281",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15281",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales",
+          "versions": [
+            {
+              "range": "vers:deb/<2.35-0ubuntu3.13|>=2.39|<2.39-0ubuntu8.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15467",
+      "description": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path parses CMS input with OpenSSL, so the vulnerable parser is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wvhq-3h88-rf6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15467",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15467",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15467",
+      "description": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path parses CMS input with OpenSSL, so the vulnerable parser is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wvhq-3h88-rf6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15467",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15467",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7, and Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-15467",
+      "description": "Parsing a CMS AuthEnvelopedData or EnvelopedData message with maliciously crafted AEAD parameters can trigger a stack buffer overflow. A stack buffer overflow may lead to a crash, causing Denial of Service, or potentially remote code execution.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path parses CMS input with OpenSSL, so the vulnerable parser is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787,
+        120
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wvhq-3h88-rf6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15467",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-15467",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/openssl",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21|>=3.0.13|<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-68160",
+      "description": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure image uses the BIO_f_linebuffer filter, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g78j-46j5-97cr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-68160",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-68160",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-68160",
+      "description": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure image uses the BIO_f_linebuffer filter, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g78j-46j5-97cr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-68160",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-68160",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssl3t64 is Ubuntu noble's time64 ABI rename of libssl3; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6, below the fixed 3.0.13-0ubuntu3.7, and Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer. The same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-68160",
+      "description": "Writing large, newline-free data into a BIO chain using the line-buffering filter where the next BIO performs short writes can trigger a heap-based out-of-bounds write. This out-of-bounds write can cause memory corruption which typically results in a crash, leading to Denial of Service for an application.",
+      "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure image uses the BIO_f_linebuffer filter, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g78j-46j5-97cr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-68160",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-68160",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260127.txt",
+          "title": "OpenSSL Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The openssl package provides the openssl(1) command-line tool, which links the same libssl and libcrypto as the library package. It is present in the image but never invoked at runtime, and the same rationale as the libssl3 assessment for this CVE applies: no process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/openssl",
+          "versions": [
+            {
+              "range": "vers:deb/<3.0.2-0ubuntu1.21|>=3.0.13|<3.0.13-0ubuntu3.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-6297",
+      "description": "dpkg-deb does not properly sanitize directory permissions when extracting a control member into a temporary directory, which can leave temporary files behind on cleanup and, under repeated execution on adversarial .deb packages, lead to disk quota exhaustion or disk full conditions.",
+      "recommendation": "No action required. Liquibase Secure does not extract .deb packages at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path invokes dpkg-deb, so the vulnerable extraction path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        732
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w56q-6jw5-h5xf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6297",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-6297",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The leftover temporary files need dpkg-deb to extract the control member of an attacker-supplied .deb archive. dpkg is used only by the package manager while the image is built; the container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary, so dpkg-deb's extraction path is never reached by Liquibase Secure. Fixed in Ubuntu dpkg 1.21.1ubuntu2.6 (jammy) and 1.22.6ubuntu6.5 (noble); only Liquibase Secure 5.0.0 shipped an affected build (1.21.1ubuntu2.3), Liquibase Secure 5.0.1 ships 1.21.1ubuntu2.6, and Liquibase Secure 5.0.2 and later ship 1.22.6ubuntu6.5 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dpkg",
+          "versions": [
+            {
+              "range": "vers:deb/<1.21.1ubuntu2.6|>=1.22|<1.22.6ubuntu6.5",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
