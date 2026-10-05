@@ -464,6 +464,152 @@
       ]
     },
     {
+      "id": "CVE-2026-102599",
+      "recommendation": "No action required. The platform uses websocket-only transport and does not expose the vulnerable upgrade path.",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships engine.io through socket.io, but the websocket service is configured to allow only the websocket transport. The published issue requires a transport upgrade on an existing Engine.IO session so that a second transport can negotiate a mismatched protocol revision. Because the platform does not enable polling or transport upgrades, that precondition is not met.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/engine.io"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-2gc4-cqfq-p2gv",
+      "recommendation": "No action required. The platform uses websocket-only transport and does not expose the vulnerable upgrade path.",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships engine.io through socket.io, but the websocket service is configured to allow only the websocket transport. The published issue requires a transport upgrade on an existing Engine.IO session so that a second transport can negotiate a mismatched protocol revision. Because the platform does not enable polling or transport upgrades, that precondition is not met.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/engine.io"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-3pq3-5fj3-cg6v",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.13.0 until 1.20.0, Axios HTTP/2 request setup does not consistently apply proxy settings and caller-supplied DNS lookup policy. An HTTPS request that uses httpVersion: 2 can bypass the configured proxy route or the caller-supplied DNS resolution policy before http2.connect().",
+      "recommendation": "No action required. The platform runtime does not make axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:H/SI:H/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The platform runtime does not make axios requests, so the vulnerable HTTP/2 request path is not reached.\n"
+        }
+      ],
+      "cwes": [
+        918
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101898",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-3pq3-5fj3-cg6v",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships axios in the api and llt runtime dependency graph, but the shipped runtime does not use axios to make outbound requests. The only non-test source reference imports AxiosError for an exception filter; it does not create an axios client, perform a request, follow redirects, or enable HTTP/2. The vulnerable HTTP/2 adapter path is therefore not executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-542g-h47m-68v8",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.13.0 until 1.20.0, Http2Sessions does not install adequate error handling for a ClientHttp2Session during Axios HTTP/2 session initialization or reuse. An unhandled session error can terminate the Node.js process and cause denial of service.",
+      "recommendation": "No action required. The platform runtime does not make axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The platform runtime does not make axios requests, so the vulnerable HTTP/2 session path is not reached.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101901",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-542g-h47m-68v8",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships axios in the api and llt runtime dependency graph, but the shipped runtime does not use axios to make outbound requests. The only non-test source reference imports AxiosError for an exception filter; it does not create an axios client, perform a request, follow redirects, or enable HTTP/2. The vulnerable HTTP/2 session initialization path is therefore not executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-19499",
       "description": "Calling strfmon and strfmon_l in the GNU C Library version 2.38 to 2.44 can write past the end of the caller-supplied output buffer when a conversion uses right-justified width padding.",
       "recommendation": "No action required. No platform component calls glibc strfmon.",
@@ -518,6 +664,286 @@
       "affects": [
         {
           "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-c29m-xwm3-cm6r",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.16.1 until 1.20.0, the RFC 2397 regular expression in fromDataURI allows slash characters on both sides of the media-type separator. Malformed attacker-controlled data URLs can trigger excessive backtracking, block the Node.js event loop, and cause denial of service.",
+      "recommendation": "No action required. The platform runtime does not make axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The platform runtime does not make axios requests, so the vulnerable data URL parser is not reached.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101903",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-c29m-xwm3-cm6r",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships axios in the api and llt runtime dependency graph, but the shipped runtime does not use axios to make outbound requests. The only non-test source reference imports AxiosError for an exception filter; it does not create an axios client, perform a request, or pass untrusted URLs into axios. The vulnerable data: URL parsing path is therefore not executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-m8m8-qj5v-23w3",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.15.2 until 1.20.0, the Node HTTP adapter supplies request options without an own createConnection value. In a process that is already affected by a separate prototype-pollution flaw, Node can invoke an inherited createConnection socket factory and route requests to an attacker-controlled endpoint.",
+      "recommendation": "No action required. The platform runtime does not make axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The platform runtime does not make axios requests, so the vulnerable Node HTTP adapter path is not reached.\n"
+        }
+      ],
+      "cwes": [
+        441,
+        1321
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101905",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-m8m8-qj5v-23w3",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships axios in the api and llt runtime dependency graph, but the shipped runtime does not use axios to make outbound requests. The only non-test source reference imports AxiosError for an exception filter; it does not create an axios client or hand request options to the Node HTTP adapter. The vulnerable createConnection gadget path is therefore not executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-mghh-pgcx-3jjj",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.15.0 until 1.20.0, shouldBypassProxy applies a quadratic trailing-dot regular expression to redirect hostnames. Crafted redirect Location values can block the Node.js event loop and cause denial of service when proxy environment variables and NO_PROXY handling are in use.",
+      "recommendation": "No action required. The platform runtime does not make axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The platform runtime does not make axios requests, so the vulnerable redirect and proxy-bypass path is not reached.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101906",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-mghh-pgcx-3jjj",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The platform ships axios in the api and llt runtime dependency graph, but the shipped runtime does not use axios to make outbound requests. The only non-test source reference imports AxiosError for an exception filter; it does not create an axios client, follow redirects, or evaluate NO_PROXY handling for axios requests. The vulnerable redirect and proxy-bypass path is therefore not executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-75804",
+      "description": "OpenSSL QUIC did not enforce connection-level flow control for streams. A malicious remote peer could send data that stayed within per-stream limits while exceeding the intended connection-level cap, causing the stack to allocate far more memory than expected and enabling denial of service.",
+      "recommendation": "No action required. The platform does not expose OpenSSL QUIC features.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not use OpenSSL's QUIC stack, so the vulnerable flow-control code is not reached.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-75804",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-75804",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory 2026-09-29"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The system libssl3t64 package is present in the distroless Debian base of the api and llt images, but the platform does not use OpenSSL's QUIC stack. Runtime transport code uses Node's standard HTTPS and TLS modules for outbound HTTP, Redis TLS and PostgreSQL TLS, and the only direct native add-on dependency is better-sqlite3, which is a local SQLite binding rather than a QUIC implementation. The vulnerable QUIC flow control path is therefore not reachable from the shipped workload.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-84782",
+      "description": "OpenSSL DTLS retransmission logic could reuse write-state from a suspended handshake message. A retransmitted message could then read past the intended buffer, disclose heap memory, or crash the process and cause denial of service.",
+      "recommendation": "No action required. The platform does not expose OpenSSL DTLS features.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not use OpenSSL's DTLS stack, so the vulnerable retransmission code is not reached.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84782",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-84782",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory 2026-09-29"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The system libssl3t64 package is present in the distroless Debian base of the api and llt images, but the platform does not use OpenSSL's DTLS stack. Runtime transport code uses Node's standard HTTPS and TLS modules for outbound HTTP, Redis TLS and PostgreSQL TLS, and the only direct native add-on dependency is better-sqlite3, which is a local SQLite binding rather than a DTLS implementation. The vulnerable DTLS retransmission path is therefore not reachable from the shipped workload.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64"
         }
       ]
     },
