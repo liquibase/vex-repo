@@ -23531,6 +23531,132 @@
       ]
     },
     {
+      "id": "CVE-2026-60147",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data as well as unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "recommendation": "No action required for Liquibase Secure 5.2.2 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use; upgrading to 5.2.2 or later removes the dependency on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a network service or a sandboxed client runtime that feeds untrusted data to the java.security APIs. Liquibase Secure is an outbound command-line client, and 5.2.2 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4pv6-97j8-3pwq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-60147",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+          "title": "Oracle CPU July 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-07-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-07-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Security (java.security) issue, fixed in OpenJDK 21.0.12. The JRE was read from the release file of each published Liquibase Secure image: 5.0.0 and 5.0.1 ship Temurin 21.0.8, 5.0.2 and 5.0.3 ship 21.0.9, 5.1.0 and 5.1.1 ship 21.0.10, 5.2.0 and 5.2.1 ship 21.0.11, 5.2.2 ships 21.0.12+8 and 6.0.0 ships 21.0.12.1+1, so 5.2.2 and later already carry the fix. For the earlier images, exploitation needs an attacker to deliver crafted data to the java.security APIs, either through a network service that passes untrusted input to them or through a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure is neither. It runs as a command-line client that starts no listener, runs no untrusted code, and only connects outbound to the database and service endpoints its operator configures.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41695",
+      "description": "Spring Data Commons applications may be vulnerable to denial of service through resource exhaustion when attacker-controlled property path strings are passed to MappingContext property path resolution. Specifically, an application is vulnerable when attacker-controlled input is used as a property path string for path resolution, the consuming module or application exposes this resolution to untrusted callers (for example, when using Spring Data REST), and the targeted domain types contain recursive or sufficiently deeply nested property graphs, or attackers can submit a large number of unique invalid paths. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14.",
+      "recommendation": "No action required. No shipped code passes externally supplied strings to Spring Data property-path resolution.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data is absent from the Docker image and tar.gz, and the ZIP-only license-tracking application never routes request input into MappingContext property-path resolution.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-88fw-v6x4-3f58",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41695",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41695",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-data-commons because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The vulnerable cache is filled only when a caller passes externally supplied strings to MappingContext.getPersistentPropertyPath(String, ...), as Spring Data REST and store-specific query mappers do. A bytecode scan of the application found no caller of that method outside spring-data-commons itself, and Spring Data REST is not bundled. Its HTTP endpoints accept only fixed JSON request bodies and no sort, filter or property-path parameters.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.4.0|<3.4.15|>=3.5.0|<3.5.11.1|>=4.0.0|<4.0.5.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2024-4340",
       "analysis": {
         "state": "not_affected",
@@ -23541,6 +23667,612 @@
       "affects": [
         {
           "ref": "pkg:pypi/sqlparse"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41716",
+      "description": "Spring Data's internal property-lookup cache accepts and permanently retains attacker-supplied strings as cache keys, allowing heap exhaustion through repeated requests. Affected applications are those using Spring Data features that forward HTTP-supplied strings to PropertyPath.from without prior filtering, in particular Querydsl web bindings (via QuerydslPredicateArgumentResolver) with the default permit-all visibility, and @ProjectedPayload form-parameter binding (via MapDataBinder). Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.3.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped code forwards HTTP-supplied strings to Spring Data property lookup.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data is absent from the Docker image and tar.gz, and the ZIP-only license-tracking application uses neither Querydsl web bindings nor @ProjectedPayload binding.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9fw2-h3hf-293r",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41716",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41716",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-data-commons because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory names two routes from HTTP input into the PropertyPath.from cache: Querydsl web bindings and @ProjectedPayload form binding through MapDataBinder. Querydsl is not bundled, so the Querydsl argument resolver is never registered. The application declares no @ProjectedPayload type, and its endpoints bind only concrete JSON request-body classes, with no Sort, Pageable or projection parameters.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.3.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.11.1|>=4.0.0|<4.0.5.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41842",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service (DoS) attacks when resolving static resources. An application can be vulnerable when it uses Spring MVC or Spring WebFlux, serves static resources from the file system, and has configured versioned resources support. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. Neither file-system static resources nor versioned resource support is configured in any shipped component.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC is absent from the Docker image and tar.gz, and the ZIP-only license-tracking application does not configure the versioned file-system resource handling the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x23c-287f-qqv5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41842",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41842",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-webmvc because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that serves static resources from the file system and has versioned resource support configured. The application configures neither: it packages no static resources, sets no spring.web.resources static-location or resource-chain properties, and none of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry. Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.18.1|>=7.0.0|<7.0.7.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41845",
+      "description": "Due to incorrect escaping, the use of JavaScriptUtils.javaScriptEscape() may lead to JavaScript code injection in the browser, potentially resulting in a cross-site scripting (XSS) vulnerability. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped code calls JavaScriptUtils.javaScriptEscape().",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC is absent from the Docker image and tar.gz, and in the ZIP-only license-tracking application the only callers of the faulty escape are JSP tags that are never loaded.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3chg-m5w7-qfv5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41845",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41845",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-webmvc because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. A bytecode scan of the application found JavaScriptUtils called only from the Spring JSP tag classes (EscapeBodyTag, EvalTag, MessageTag and UrlTag). The application bundles no JSP engine and renders no JSP views, and none of its own classes calls JavaScriptUtils.javaScriptEscape(), so the faulty escaping never runs.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.18.1|>=7.0.0|<7.0.7.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89407",
+      "description": "NumberInput.looksLikeValidNumber() in FasterXML jackson-core pre-validates stringified numbers with two regular expressions: PATTERN_FLOAT, present since 2.17.0, and PATTERN_FLOAT_TRAILING_DOT, added in 2.17.2. PATTERN_FLOAT places adjacent quantifiers over the same character class so input that ultimately fails to match forces Java's backtracking engine to retry every possible split point of the digit run. Matching cost therefore grows with the square of the input length. An attacker who can supply JSON that an application deserializes into a numeric target type reaches this method through jackson-databind's default String-to-number coercion for BigDecimal, BigInteger, Double and Float, and a small number of concurrent requests can exhaust a server's request-handling thread pool. The fix replaces both regular expressions with a hand-rolled single-pass scan.",
+      "recommendation": "No action required. Liquibase Secure never binds JSON strings to the numeric targets that reach the vulnerable check.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped Liquibase code binds JSON strings to Float, Double, Number or BigDecimal targets, so the backtracking check is never run on user-supplied text.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p6pp-m3f8-5c89",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89407",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-core 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries in-range copies, so this assessment does not rest on version. The copies were read from the version class of each copy in the shipped jars, including the obfuscated copy inside the core Liquibase Secure jar and copies relocated inside vendor drivers. In 6.0.0 the first-party copies are 2.22.2, the Couchbase SDK copy is 2.21.6, the snowflake-jdbc copy is 2.18.10 and the databricks-jdbc copy is 2.18.8; earlier releases carry older in-range copies. The vulnerable regular expression runs only when jackson-databind coerces a JSON string into a Float, Double, Number or BigDecimal target. A bytecode scan of every shipped jar found looksLikeValidNumber() called only by those jackson-databind number deserializers. Every Jackson binding call in Liquibase Secure's own code, including the changelog, snapshot, import-file, checks and license parsers, targets JsonNode trees, Object, Map or List of Map, where JSON strings stay strings and are never coerced. The license-tracking application in the 5.x ZIP binds request bodies whose fields are strings, string maps, whole numbers, booleans and dates only. The relocated vendor copies are private to their drivers and parse responses from the database service.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.17.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89425",
+      "description": "UTF8DataInputJsonParser._reportInvalidToken() in FasterXML jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound. Unlike sibling parser implementations, it never consults ErrorReportConfiguration.getMaxErrorTokenLength(). A malformed token supplied to a parser created through JsonFactory.createParser(DataInput) is therefore accumulated in full, which can drive the StringBuilder to many times the raw payload size and trigger OutOfMemoryError for the JVM. Releases before 2.8.0 do not contain the affected class.",
+      "recommendation": "No action required. No shipped code parses JSON through Jackson's DataInput-backed parser.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing in the shipped jars hands a DataInput to Jackson, so the parser with the unbounded error buffer is never created.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7hhh-6rmp-j9qf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89425",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-core 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries in-range copies, so this assessment does not rest on version. The copies were read from the version class of each copy in the shipped jars, including the obfuscated copy inside the core Liquibase Secure jar and copies relocated inside vendor drivers. In 6.0.0 the first-party copies are 2.22.2, the Couchbase SDK copy is 2.21.6, the snowflake-jdbc copy is 2.18.10 and the databricks-jdbc copy is 2.18.8; earlier releases carry older in-range copies. The unbounded error-token buffer is in UTF8DataInputJsonParser, which Jackson creates only for input supplied as a java.io.DataInput through createParser(DataInput), readValue(DataInput) or readTree(DataInput). A bytecode scan of every class in every shipped jar, first-party and vendor, including the license-tracking application in the 5.x ZIP, found no code outside Jackson itself that passes a DataInput to Jackson. Liquibase Secure parses JSON from streams, readers, strings and files, which use the other parser implementations that do enforce the error-token limit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.8.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89425",
+      "description": "UTF8DataInputJsonParser._reportInvalidToken() in jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound and never consults the configured maximum error-token length. A malformed token supplied to a parser created from a DataInput is therefore accumulated in full, which can exhaust the JVM heap.",
+      "recommendation": "No action required. No shipped code parses JSON through Jackson's DataInput-backed parser. A future release moves the bundled copy to a fixed version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing in the shipped jars hands a DataInput to Jackson, so the parser with the unbounded error buffer is never created.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7hhh-6rmp-j9qf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89425",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in tools.jackson.core jackson-core 3.1.7 and 3.2.3. Liquibase Secure 6.0.0 carries one Jackson 3 copy, 3.2.2, inside the Cassandra extension, where it is used by the bundled Cassandra driver. The license-tracking application in the 5.1.x and 5.2.x ZIP also carries Jackson 3 copies inside the advisory range. Earlier images carry no Jackson 3. The unbounded error-token buffer is in UTF8DataInputJsonParser, which Jackson creates only for input supplied as a java.io.DataInput. A bytecode scan of every class in every shipped jar, the Cassandra extension and the license-tracking application included, found no code outside Jackson itself that passes a DataInput to Jackson, so the parser with the unbounded buffer is never created.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-05T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.7|>=3.2.0|<3.2.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97687",
+      "description": "urllib3 is an HTTP client library for Python. From 1.26.0 until 2.8.0, the proxy_ssl_context, proxy_assert_hostname, proxy_assert_fingerprint, ssl_context, cert_reqs, verify_mode, use_forwarding_for_https=True, and CERT_NONE configuration paths fail to remain separated because target-server TLS settings are incorrectly applied to the HTTPS proxy connection. Applying cert_reqs=CERT_NONE can overwrite proxy_ssl_context.verify_mode in place, and the mutation persists so later connections reusing the same context may connect to the HTTPS proxy without certificate verification. An attacker who intercepts and impersonates the HTTPS proxy can then observe or modify forwarded traffic or receive a target TLS client certificate. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 through an HTTPS proxy, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable proxy code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        295,
+        440
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8988-9cw3-xx77",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97687",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-8988-9cw3-xx77",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The HTTPS-proxy TLS-setting confusion is only reached when Python code sends HTTPS requests through an HTTPS proxy with target-specific TLS settings, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=1.26.0|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97688",
+      "description": "urllib3 is an HTTP client library for Python. From 2.6.2 until 2.8.0, HTTPResponse.stream and HTTPResponse.read_chunked can enter an infinite loop because the Deflate decoder retains trailing bytes as unconsumed input after reaching end-of-stream and repeatedly decodes them without progress. The issue occurs when an untrusted server sends a chunked Deflate response whose decoded body exceeds a positive finite chunk size and whose encoded body has trailing bytes. The impact is excessive CPU usage and a request that does not complete, and network read timeouts do not interrupt the loop because no further socket read occurs. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 to stream responses from untrusted servers, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable streaming code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gh4c-6fx4-qh6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97688",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-gh4c-6fx4-qh6g",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The Deflate decoder infinite loop is only reached when Python code streams a chunked, Deflate-encoded HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Only Liquibase Secure 5.1.1 (urllib3 2.6.3) and 5.2.0 through 5.2.2 (urllib3 2.7.0) bundle a version inside the affected range; 5.0.0 through 5.0.3 bundle urllib3 1.26.15 or 1.26.18, which predate the vulnerable code, 5.1.0 bundles no standalone urllib3, and the urllib3 1.26.16 vendored inside pip in 5.0.0 through 5.1.1 is also outside the range. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=2.6.2|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97689",
+      "description": "urllib3 is an HTTP client library for Python. From 1.10.3 until 2.8.0, the HTTPResponse.read_chunked and HTTPResponse.stream methods can allocate unbounded memory because the streaming chunk parser buffers the chunk-size field until newline or EOF without a length bound. A malicious server that returns Transfer-Encoding: chunked followed by a very long run of bytes without a newline can exhaust the client process's memory. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 to read responses from untrusted servers, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.9,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable chunk parser requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vxq7-64xx-v4gw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97689",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-vxq7-64xx-v4gw",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The unbounded chunk-size buffering is only reached when Python code reads a chunked HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=1.10.3|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-0167",
+      "description": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.4,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the .netrc redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c42g-rmxf-64ch",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-0167",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-0167",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-0167.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The password leak needs a libcurl-based transfer that reads credentials from a .netrc file whose default entry omits both login and password, and then follows an HTTP redirect to another host. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.23 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.8 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.23|>=8.5|<8.5.0-2ubuntu10.8",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -23595,6 +24327,184 @@
           "versions": [
             {
               "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-0167",
+      "description": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.4,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the .netrc redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c42g-rmxf-64ch",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-0167",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-0167",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-0167.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4 is the libcurl shared library on Ubuntu jammy (Liquibase Secure 5.0.0 and 5.0.1), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the password leak needs a libcurl-based transfer that reads credentials from a .netrc file whose default entry omits both login and password, and then follows an HTTP redirect to another host. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu 7.81.0-1ubuntu1.23; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-0167",
+      "description": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.4,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the .netrc redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c42g-rmxf-64ch",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-0167",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-0167",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-0167.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the password leak needs a libcurl-based transfer that reads credentials from a .netrc file whose default entry omits both login and password, and then follows an HTTP redirect to another host. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu 8.5.0-2ubuntu10.8; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6, and 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-61700",
+      "description": "MariaDB Connector/J does not enforce allowLocalInfile=false when a server answers a query with a LOCAL INFILE request. When a client runs LOAD DATA LOCAL INFILE, a rogue or man-in-the-middle server can echo the same filename back and the connector sends the file content even though local infile was disabled. The server cannot redirect the request to a different file than the one named in the client's query.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, do not run LOAD DATA LOCAL INFILE on sensitive files in changelog SQL, and connect only to trusted MariaDB servers over a verified TLS connection.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wxmm-q36w-r9xj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-61700",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected. Liquibase never sets allowLocalInfile and never issues LOAD DATA LOCAL INFILE itself (the loadData change type sends INSERT statements), so exposure on those releases requires a user who sets allowLocalInfile=false in the JDBC URL, runs LOAD DATA LOCAL INFILE in changelog SQL, and connects to a rogue or man-in-the-middle server. With the driver default (allowLocalInfile=true) the fixed and unfixed drivers behave the same.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
               "status": "unaffected"
             }
           ]

@@ -86,6 +86,190 @@
           "ref": "pkg:pypi/urllib3"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-97687",
+      "description": "urllib3 is an HTTP client library for Python. From 1.26.0 until 2.8.0, the proxy_ssl_context, proxy_assert_hostname, proxy_assert_fingerprint, ssl_context, cert_reqs, verify_mode, use_forwarding_for_https=True, and CERT_NONE configuration paths fail to remain separated because target-server TLS settings are incorrectly applied to the HTTPS proxy connection. Applying cert_reqs=CERT_NONE can overwrite proxy_ssl_context.verify_mode in place, and the mutation persists so later connections reusing the same context may connect to the HTTPS proxy without certificate verification. An attacker who intercepts and impersonates the HTTPS proxy can then observe or modify forwarded traffic or receive a target TLS client certificate. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 through an HTTPS proxy, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable proxy code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        295,
+        440
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8988-9cw3-xx77",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97687",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-8988-9cw3-xx77",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The HTTPS-proxy TLS-setting confusion is only reached when Python code sends HTTPS requests through an HTTPS proxy with target-specific TLS settings, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=1.26.0|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97688",
+      "description": "urllib3 is an HTTP client library for Python. From 2.6.2 until 2.8.0, HTTPResponse.stream and HTTPResponse.read_chunked can enter an infinite loop because the Deflate decoder retains trailing bytes as unconsumed input after reaching end-of-stream and repeatedly decodes them without progress. The issue occurs when an untrusted server sends a chunked Deflate response whose decoded body exceeds a positive finite chunk size and whose encoded body has trailing bytes. The impact is excessive CPU usage and a request that does not complete, and network read timeouts do not interrupt the loop because no further socket read occurs. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 to stream responses from untrusted servers, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable streaming code requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gh4c-6fx4-qh6g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97688",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-gh4c-6fx4-qh6g",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The Deflate decoder infinite loop is only reached when Python code streams a chunked, Deflate-encoded HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Only Liquibase Secure 5.1.1 (urllib3 2.6.3) and 5.2.0 through 5.2.2 (urllib3 2.7.0) bundle a version inside the affected range; 5.0.0 through 5.0.3 bundle urllib3 1.26.15 or 1.26.18, which predate the vulnerable code, 5.1.0 bundles no standalone urllib3, and the urllib3 1.26.16 vendored inside pip in 5.0.0 through 5.1.1 is also outside the range. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=2.6.2|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97689",
+      "description": "urllib3 is an HTTP client library for Python. From 1.10.3 until 2.8.0, the HTTPResponse.read_chunked and HTTPResponse.stream methods can allocate unbounded memory because the streaming chunk parser buffers the chunk-size field until newline or EOF without a length bound. A malicious server that returns Transfer-Encoding: chunked followed by a very long run of bytes without a newline can exhaust the client process's memory. This issue is fixed in version 2.8.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 to read responses from untrusted servers, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.9,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "None of the check scripts Liquibase bundles and runs by default import urllib3. Reaching the vulnerable chunk parser requires a customer to author and configure their own custom check script that does so.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vxq7-64xx-v4gw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97689",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-vxq7-64xx-v4gw",
+          "title": "urllib3 Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The unbounded chunk-size buffering is only reached when Python code reads a chunked HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/>=1.10.3|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

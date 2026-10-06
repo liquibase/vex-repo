@@ -153,6 +153,56 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-61700",
+      "description": "MariaDB Connector/J does not enforce allowLocalInfile=false when a server answers a query with a LOCAL INFILE request. When a client runs LOAD DATA LOCAL INFILE, a rogue or man-in-the-middle server can echo the same filename back and the connector sends the file content even though local infile was disabled. The server cannot redirect the request to a different file than the one named in the client's query.",
+      "recommendation": "Upgrade to Liquibase Secure 5.2.2 or later.",
+      "workaround": "On Liquibase Secure 5.2.1 or earlier, do not run LOAD DATA LOCAL INFILE on sensitive files in changelog SQL, and connect only to trusted MariaDB servers over a verified TLS connection.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wxmm-q36w-r9xj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-61700",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected. Liquibase never sets allowLocalInfile and never issues LOAD DATA LOCAL INFILE itself (the loadData change type sends INSERT statements), so exposure on those releases requires a user who sets allowLocalInfile=false in the JDBC URL, runs LOAD DATA LOCAL INFILE in changelog SQL, and connects to a rogue or man-in-the-middle server. With the driver default (allowLocalInfile=true) the fixed and unfixed drivers behave the same.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.14|>=3.0.0|<3.3.5|>=3.4.0|<3.4.3|>=3.5.0|<3.5.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

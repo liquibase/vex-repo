@@ -1,0 +1,129 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-41695",
+      "description": "Spring Data Commons applications may be vulnerable to denial of service through resource exhaustion when attacker-controlled property path strings are passed to MappingContext property path resolution. Specifically, an application is vulnerable when attacker-controlled input is used as a property path string for path resolution, the consuming module or application exposes this resolution to untrusted callers (for example, when using Spring Data REST), and the targeted domain types contain recursive or sufficiently deeply nested property graphs, or attackers can submit a large number of unique invalid paths. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14.",
+      "recommendation": "No action required. No shipped code passes externally supplied strings to Spring Data property-path resolution.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data is absent from the Docker image and tar.gz, and the ZIP-only license-tracking application never routes request input into MappingContext property-path resolution.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-88fw-v6x4-3f58",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41695",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41695",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-data-commons because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The vulnerable cache is filled only when a caller passes externally supplied strings to MappingContext.getPersistentPropertyPath(String, ...), as Spring Data REST and store-specific query mappers do. A bytecode scan of the application found no caller of that method outside spring-data-commons itself, and Spring Data REST is not bundled. Its HTTP endpoints accept only fixed JSON request bodies and no sort, filter or property-path parameters.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.4.0|<3.4.15|>=3.5.0|<3.5.11.1|>=4.0.0|<4.0.5.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41716",
+      "description": "Spring Data's internal property-lookup cache accepts and permanently retains attacker-supplied strings as cache keys, allowing heap exhaustion through repeated requests. Affected applications are those using Spring Data features that forward HTTP-supplied strings to PropertyPath.from without prior filtering, in particular Querydsl web bindings (via QuerydslPredicateArgumentResolver) with the default permit-all visibility, and @ProjectedPayload form-parameter binding (via MapDataBinder). Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.3.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped code forwards HTTP-supplied strings to Spring Data property lookup.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data is absent from the Docker image and tar.gz, and the ZIP-only license-tracking application uses neither Querydsl web bindings nor @ProjectedPayload binding.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9fw2-h3hf-293r",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41716",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41716",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-data-commons because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory names two routes from HTTP input into the PropertyPath.from cache: Querydsl web bindings and @ProjectedPayload form binding through MapDataBinder. Querydsl is not bundled, so the Querydsl argument resolver is never registered. The application declares no @ProjectedPayload type, and its endpoints bind only concrete JSON request-body classes, with no Sort, Pageable or projection parameters.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.3.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.11.1|>=4.0.0|<4.0.5.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

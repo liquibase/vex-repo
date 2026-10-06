@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cbd8f135ba2a80a1593336f90d249164d0e93ed8f0325b5f5e585daac38a553d",
+  "@id": "merged-vex-4fbd895e68379fcba600ae04e65e287764e2b8708831b5ad5d03388ef177b067",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-05T04:32:42.458176618Z",
+  "timestamp": "2026-10-06T00:02:07.678619409Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "PYSEC-2023-192"
         ]
       },
-      "timestamp": "2026-10-05T04:32:28.594148472Z",
+      "timestamp": "2026-10-06T00:01:54.144974279Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -31,7 +31,7 @@
           "PYSEC-2026-1998"
         ]
       },
-      "timestamp": "2026-10-05T04:32:28.050509834Z",
+      "timestamp": "2026-10-06T00:01:53.6330421Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -49,7 +49,7 @@
           "PYSEC-2026-1994"
         ]
       },
-      "timestamp": "2026-10-05T04:32:28.231018728Z",
+      "timestamp": "2026-10-06T00:01:53.804029578Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -67,7 +67,7 @@
           "PYSEC-2026-1996"
         ]
       },
-      "timestamp": "2026-10-05T04:32:28.412854731Z",
+      "timestamp": "2026-10-06T00:01:53.974081304Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -85,7 +85,7 @@
           "PYSEC-2026-141"
         ]
       },
-      "timestamp": "2026-10-05T04:32:30.637319147Z",
+      "timestamp": "2026-10-06T00:01:55.993217427Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -103,7 +103,7 @@
           "PYSEC-2026-142"
         ]
       },
-      "timestamp": "2026-10-05T04:32:30.818541242Z",
+      "timestamp": "2026-10-06T00:01:56.161271715Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -112,6 +112,63 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-97687",
+        "aliases": [
+          "GHSA-8988-9cw3-xx77",
+          "PYSEC-2026-4175"
+        ]
+      },
+      "timestamp": "2026-10-06T00:02:07.219589594Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is an HTTP client library for Python. From 1.26.0 until 2.8.0, the proxy_ssl_context, proxy_assert_hostname, proxy_assert_fingerprint, ssl_context, cert_reqs, verify_mode, use_forwarding_for_https=True, and CERT_NONE configuration paths fail to remain separated because target-server TLS settings are incorrectly applied to the HTTPS proxy connection. Applying cert_reqs=CERT_NONE can overwrite proxy_ssl_context.verify_mode in place, and the mutation persists so later connections reusing the same context may connect to the HTTPS proxy without certificate verification. An attacker who intercepts and impersonates the HTTPS proxy can then observe or modify forwarded traffic or receive a target TLS client certificate. This issue is fixed in version 2.8.0.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The HTTPS-proxy TLS-setting confusion is only reached when Python code sends HTTPS requests through an HTTPS proxy with target-specific TLS settings, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-97688",
+        "aliases": [
+          "GHSA-gh4c-6fx4-qh6g",
+          "PYSEC-2026-4176"
+        ]
+      },
+      "timestamp": "2026-10-06T00:02:07.388252819Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is an HTTP client library for Python. From 2.6.2 until 2.8.0, HTTPResponse.stream and HTTPResponse.read_chunked can enter an infinite loop because the Deflate decoder retains trailing bytes as unconsumed input after reaching end-of-stream and repeatedly decodes them without progress. The issue occurs when an untrusted server sends a chunked Deflate response whose decoded body exceeds a positive finite chunk size and whose encoded body has trailing bytes. The impact is excessive CPU usage and a request that does not complete, and network read timeouts do not interrupt the loop because no further socket read occurs. This issue is fixed in version 2.8.0.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The Deflate decoder infinite loop is only reached when Python code streams a chunked, Deflate-encoded HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Only Liquibase Secure 5.1.1 (urllib3 2.6.3) and 5.2.0 through 5.2.2 (urllib3 2.7.0) bundle a version inside the affected range; 5.0.0 through 5.0.3 bundle urllib3 1.26.15 or 1.26.18, which predate the vulnerable code, 5.1.0 bundles no standalone urllib3, and the urllib3 1.26.16 vendored inside pip in 5.0.0 through 5.1.1 is also outside the range. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-97689",
+        "aliases": [
+          "GHSA-vxq7-64xx-v4gw",
+          "PYSEC-2026-4177"
+        ]
+      },
+      "timestamp": "2026-10-06T00:02:07.557803135Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is an HTTP client library for Python. From 1.10.3 until 2.8.0, the HTTPResponse.read_chunked and HTTPResponse.stream methods can allocate unbounded memory because the streaming chunk parser buffers the chunk-size field until newline or EOF without a length bound. A malicious server that returns Transfer-Encoding: chunked followed by a very long run of bytes without a newline can exhaust the client process's memory. This issue is fixed in version 2.8.0.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The unbounded chunk-size buffering is only reached when Python code reads a chunked HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
     }
   ]
 }

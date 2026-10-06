@@ -1226,6 +1226,71 @@
       ]
     },
     {
+      "id": "CVE-2025-0167",
+      "description": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
+      "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.4,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path performs libcurl transfers, so the .netrc redirect path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c42g-rmxf-64ch",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-0167",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-0167",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-0167.html",
+          "title": "curl Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The password leak needs a libcurl-based transfer that reads credentials from a .netrc file whose default entry omits both login and password, and then follows an HTTP redirect to another host. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu curl 7.81.0-1ubuntu1.23 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 7.81.0-1ubuntu1.20 and 7.81.0-1ubuntu1.21) and 8.5.0-2ubuntu10.8 (noble; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6); Liquibase Secure 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.23|>=8.5|<8.5.0-2ubuntu10.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-82209",
       "description": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
       "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",

@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c983defbd2c76692e649d7bcc8825439f115b16b2dfdbe0ab63a40a59dfe3e64",
+  "@id": "merged-vex-9919c1792d25d7c97916371c434e3192c35b0abd715ec3f73c0124d69510c9da",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-05T04:30:35.780165753Z",
+  "timestamp": "2026-10-06T00:00:03.052807322Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-6v53-7c9g-w56r"
         ]
       },
-      "timestamp": "2026-10-05T04:30:23.387828002Z",
+      "timestamp": "2026-10-05T23:59:50.591922591Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -24,9 +24,27 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-89425",
+        "aliases": [
+          "GHSA-7hhh-6rmp-j9qf"
+        ]
+      },
+      "timestamp": "2026-10-06T00:00:02.854323437Z",
+      "products": [
+        {
+          "@id": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "UTF8DataInputJsonParser._reportInvalidToken() in jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound and never consults the configured maximum error-token length. A malformed token supplied to a parser created from a DataInput is therefore accumulated in full, which can exhaust the JVM heap.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in tools.jackson.core jackson-core 3.1.7 and 3.2.3. Liquibase Secure 6.0.0 carries one Jackson 3 copy, 3.2.2, inside the Cassandra extension, where it is used by the bundled Cassandra driver. The license-tracking application in the 5.1.x and 5.2.x ZIP also carries Jackson 3 copies inside the advisory range. Earlier images carry no Jackson 3. The unbounded error-token buffer is in UTF8DataInputJsonParser, which Jackson creates only for input supplied as a java.io.DataInput. A bytecode scan of every class in every shipped jar, the Cassandra extension and the license-tracking application included, found no code outside Jackson itself that passes a DataInput to Jackson, so the parser with the unbounded buffer is never created."
+    },
+    {
+      "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-10-05T04:30:23.618981853Z",
+      "timestamp": "2026-10-05T23:59:50.788782183Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"

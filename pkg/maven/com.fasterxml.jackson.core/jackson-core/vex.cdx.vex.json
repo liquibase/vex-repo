@@ -52,6 +52,122 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-89407",
+      "description": "NumberInput.looksLikeValidNumber() in FasterXML jackson-core pre-validates stringified numbers with two regular expressions: PATTERN_FLOAT, present since 2.17.0, and PATTERN_FLOAT_TRAILING_DOT, added in 2.17.2. PATTERN_FLOAT places adjacent quantifiers over the same character class so input that ultimately fails to match forces Java's backtracking engine to retry every possible split point of the digit run. Matching cost therefore grows with the square of the input length. An attacker who can supply JSON that an application deserializes into a numeric target type reaches this method through jackson-databind's default String-to-number coercion for BigDecimal, BigInteger, Double and Float, and a small number of concurrent requests can exhaust a server's request-handling thread pool. The fix replaces both regular expressions with a hand-rolled single-pass scan.",
+      "recommendation": "No action required. Liquibase Secure never binds JSON strings to the numeric targets that reach the vulnerable check.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped Liquibase code binds JSON strings to Float, Double, Number or BigDecimal targets, so the backtracking check is never run on user-supplied text.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p6pp-m3f8-5c89",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89407",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-core 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries in-range copies, so this assessment does not rest on version. The copies were read from the version class of each copy in the shipped jars, including the obfuscated copy inside the core Liquibase Secure jar and copies relocated inside vendor drivers. In 6.0.0 the first-party copies are 2.22.2, the Couchbase SDK copy is 2.21.6, the snowflake-jdbc copy is 2.18.10 and the databricks-jdbc copy is 2.18.8; earlier releases carry older in-range copies. The vulnerable regular expression runs only when jackson-databind coerces a JSON string into a Float, Double, Number or BigDecimal target. A bytecode scan of every shipped jar found looksLikeValidNumber() called only by those jackson-databind number deserializers. Every Jackson binding call in Liquibase Secure's own code, including the changelog, snapshot, import-file, checks and license parsers, targets JsonNode trees, Object, Map or List of Map, where JSON strings stay strings and are never coerced. The license-tracking application in the 5.x ZIP binds request bodies whose fields are strings, string maps, whole numbers, booleans and dates only. The relocated vendor copies are private to their drivers and parse responses from the database service.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.17.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89425",
+      "description": "UTF8DataInputJsonParser._reportInvalidToken() in FasterXML jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound. Unlike sibling parser implementations, it never consults ErrorReportConfiguration.getMaxErrorTokenLength(). A malformed token supplied to a parser created through JsonFactory.createParser(DataInput) is therefore accumulated in full, which can drive the StringBuilder to many times the raw payload size and trigger OutOfMemoryError for the JVM. Releases before 2.8.0 do not contain the affected class.",
+      "recommendation": "No action required. No shipped code parses JSON through Jackson's DataInput-backed parser.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing in the shipped jars hands a DataInput to Jackson, so the parser with the unbounded error buffer is never created.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7hhh-6rmp-j9qf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89425",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-core 2.18.11, 2.21.7 and 2.22.3. Every published Liquibase Secure image from 5.0.0 through 6.0.0 carries in-range copies, so this assessment does not rest on version. The copies were read from the version class of each copy in the shipped jars, including the obfuscated copy inside the core Liquibase Secure jar and copies relocated inside vendor drivers. In 6.0.0 the first-party copies are 2.22.2, the Couchbase SDK copy is 2.21.6, the snowflake-jdbc copy is 2.18.10 and the databricks-jdbc copy is 2.18.8; earlier releases carry older in-range copies. The unbounded error-token buffer is in UTF8DataInputJsonParser, which Jackson creates only for input supplied as a java.io.DataInput through createParser(DataInput), readValue(DataInput) or readTree(DataInput). A bytecode scan of every class in every shipped jar, first-party and vendor, including the license-tracking application in the 5.x ZIP, found no code outside Jackson itself that passes a DataInput to Jackson. Liquibase Secure parses JSON from streams, readers, strings and files, which use the other parser implementations that do enforce the error-token limit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-02T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.8.0|<2.18.11|>=2.19.0|<2.21.7|>=2.22.0|<2.22.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
