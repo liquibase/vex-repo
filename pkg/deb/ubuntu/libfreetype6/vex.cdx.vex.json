@@ -1,0 +1,74 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-95512",
+      "description": "A flaw was found in FreeType, specifically within its CID font loader. A remote attacker could exploit this vulnerability by tricking a user into opening content that embeds or references a specially crafted CID-keyed font. This crafted font can cause repeated allocations and decryptions of subroutine data across multiple font dictionaries, leading to excessive memory and CPU consumption. This can result in a denial of service (DoS) for the application or service processing the font, potentially causing it to hang or terminate.",
+      "recommendation": "No action required. The next image rebuild includes the fixed Ubuntu package 2.13.2+dfsg-1ubuntu0.2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No shipped program opens fonts with the system FreeType; the JVM uses its bundled copy and Liquibase never renders text.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://gitlab.freedesktop.org/freetype/freetype/-/commit/f3ca71c9900fe860849b3163a6e2c1e765b291d9",
+          "title": "FreeType fix commit"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8881-1",
+          "title": "Ubuntu Security Notice USN-8881-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95512",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95512",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs the process to open an attacker-supplied CID-keyed font through the system FreeType. In the image the system libfreetype.so.6 is linked only by libfontconfig and the fc-* command-line tools. The JVM's font code (libfontmanager.so) links the FreeType copy bundled with the Temurin JDK, not the system one, and Liquibase never loads a font: it is a headless CLI whose only AWT use is GraphicsEnvironment.isHeadless() and Desktop.browse() in the report writer, neither of which initialises the font stack. Ubuntu fixed the package in 2.13.2+dfsg-1ubuntu0.2 (USN-8881-1); the next image rebuild picks it up.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libfreetype6",
+          "versions": [
+            {
+              "range": "vers:deb/<2.13.2+dfsg-1ubuntu0.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

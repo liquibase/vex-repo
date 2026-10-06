@@ -317,6 +317,63 @@
           "ref": "pkg:deb/ubuntu/libpcre2-8-0"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-103111",
+      "description": "PCRE2 before 10.49, when there is an attacker-controlled regular expression and certain JIT API usage, allows an out-of-bounds write with arbitrary data.",
+      "recommendation": "No action required. No shipped program compiles externally supplied patterns with the PCRE2 JIT.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable JIT path needs an attacker-controlled pattern and a caller-managed JIT stack; only grep -P qualifies and nothing in the image runs it.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/PCRE2Project/pcre2/security/advisories/GHSA-r9hj-j2rw-4q3m",
+          "title": "PCRE2 Security Advisory GHSA-r9hj-j2rw-4q3m"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-103111",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-103111",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Triggering the out-of-bounds write needs three things at once: JIT compilation, an application-created growable JIT stack assigned with pcre2_jit_stack_assign, and an attacker-controlled pattern with a very large number of capturing groups. In the image only GNU grep in -P mode uses that API, and nothing runs grep at runtime: the entrypoint calls ls, touch, rm, tr and env with fixed arguments, Liquibase evaluates regular expressions with java.util.regex, lpm is a static Go binary, and libselinux (the other pcre2 consumer, loaded by coreutils) compiles no patterns without an SELinux policy. No changelog, SQL, database response, argument or environment value ever becomes a pcre2 pattern.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
     }
   ]
 }

@@ -7329,7 +7329,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; Liquibase Secure never constructs fopen mode strings from external input.\n"
+          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; every fopen mode string in the shipped runtime is a constant.\n"
         }
       ],
       "cwes": [
@@ -7337,18 +7337,27 @@
       ],
       "advisories": [
         {
+          "url": "https://www.openwall.com/lists/oss-security/2026/08/27/6",
+          "title": "glibc advisory GLIBC-SA-2026-0015"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-18374",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
           "title": "NVD Entry"
         }
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension. Liquibase Secure's runtime never constructs fopen mode strings from external input; the JVM's own file I/O does not use this glibc idiom.",
+        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension; the file path is irrelevant. Every fopen call in the Temurin 21 JRE passes a constant mode string (\"r\", \"rb\", \"w\", \"a\" and similar), Java-level file I/O uses open(2) rather than fopen, the bash entrypoint has no user-controlled fopen mode, and lpm is a static Go binary that does not link glibc. No shipped program builds an fopen mode string from external input. The same glibc 2.39 source builds libc6, libc-bin and locales, and the reasoning applies to each.",
         "justification": "code_not_reachable",
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-22T00:00:00Z"
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
       },
       "affects": [
         {
@@ -7367,6 +7376,122 @@
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18374",
+      "description": "Passing an effectively empty string to the \",ccs=\" syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled. This usage pattern is not seen in applications in common GNU/Linux distributions.",
+      "recommendation": "No action required. Liquibase Secure never constructs glibc fopen mode strings from external or attacker-controlled input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; every fopen mode string in the shipped runtime is a constant.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/08/27/6",
+          "title": "glibc advisory GLIBC-SA-2026-0015"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-18374",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension; the file path is irrelevant. Every fopen call in the Temurin 21 JRE passes a constant mode string (\"r\", \"rb\", \"w\", \"a\" and similar), Java-level file I/O uses open(2) rather than fopen, the bash entrypoint has no user-controlled fopen mode, and lpm is a static Go binary that does not link glibc. No shipped program builds an fopen mode string from external input. The same glibc 2.39 source builds libc6, libc-bin and locales, and the reasoning applies to each.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18374",
+      "description": "Passing an effectively empty string to the \",ccs=\" syntax extension of the mode argument in the fopen function in the GNU C Library version 2.45 or earlier may result in a heap buffer overflow when the mode string input to the function is attacker controlled. This usage pattern is not seen in applications in common GNU/Linux distributions.",
+      "recommendation": "No action required. Liquibase Secure never constructs glibc fopen mode strings from external or attacker-controlled input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; every fopen mode string in the shipped runtime is a constant.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/08/27/6",
+          "title": "glibc advisory GLIBC-SA-2026-0015"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-18374",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension; the file path is irrelevant. Every fopen call in the Temurin 21 JRE passes a constant mode string (\"r\", \"rb\", \"w\", \"a\" and similar), Java-level file I/O uses open(2) rather than fopen, the bash entrypoint has no user-controlled fopen mode, and lpm is a static Go binary that does not link glibc. No shipped program builds an fopen mode string from external input. The same glibc 2.39 source builds libc6, libc-bin and locales, and the reasoning applies to each.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
         }
       ]
     },
@@ -7763,6 +7888,58 @@
       ]
     },
     {
+      "id": "CVE-2025-61731",
+      "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
+      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The affected cmd/go build path is not exercised by the Liquibase Secure runtime. Only `lpm add mysql --global` is invoked when INSTALL_MYSQL is set, and the runtime scripts do not call `go`, `pkg-config`, or any cgo build command.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib cmd/go build-time smuggling vulnerability fixed in Go 1.24.12 and 1.25.6. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable cmd/go path is not reachable.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56408",
       "description": "libexpat before 2.8.2 has an integer overflow in copyString.",
       "recommendation": "Upgrade to libexpat1 2.6.1-2ubuntu0.5 when available — Ubuntu has already published this fix, and it will be picked up by our own apt-get upgrade step. Liquibase Secure never links against or invokes system libexpat regardless of version, but the update closes the version gap as defense-in-depth.",
@@ -7857,58 +8034,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libexpat1"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61731",
-      "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
-      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.8,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The affected cmd/go build path is not exercised by the Liquibase Secure runtime. Only `lpm add mysql --global` is invoked when INSTALL_MYSQL is set, and the runtime scripts do not call `go`, `pkg-config`, or any cgo build command.\n"
-        }
-      ],
-      "cwes": [
-        88
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib cmd/go build-time smuggling vulnerability fixed in Go 1.24.12 and 1.25.6. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable cmd/go path is not reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     },
@@ -8208,8 +8333,8 @@
     },
     {
       "id": "CVE-2026-40228",
-      "description": "In systemd 259, systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set.",
-      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 is present only as an inherited base-image library dependency.",
+      "description": "systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set. ForwardToWall defaults to yes.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 and libudev1 are present only as inherited base-image library dependencies.",
       "ratings": [
         {
           "source": {
@@ -8228,7 +8353,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "Exploitation requires a running systemd-journald service with ForwardToWall enabled; Liquibase Secure's container has no init system and never runs systemd-journald or any other systemd service.\n"
+          "justification": "Exploitation requires a running systemd-journald service; Liquibase Secure's container has no init system and no journald binary.\n"
         }
       ],
       "cwes": [
@@ -8236,22 +8361,133 @@
       ],
       "advisories": [
         {
+          "url": "https://ubuntu.com/security/CVE-2026-40228",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40228",
           "title": "NVD Entry"
         }
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "This flaw requires systemd-journald to be running as a system service with ForwardToWall=yes, receiving a \"logger -p emerg\" invocation. A review of the running container found no systemd or systemd-journald process at all: the container has no init system, PID 1 is the Liquibase entrypoint script itself, and libsystemd0 ships only as a linked library dependency of other base-image packages, never as a running daemon. The vulnerable journald forwarding path cannot exist in a container that never runs journald.",
+        "detail": "The flaw is in the systemd-journald daemon: with ForwardToWall enabled (the default), a \"logger -p emerg\" message is forwarded to user terminals without stripping escape sequences. The forwarding path exists in systemd 255.4, the version Ubuntu noble ships, and no upstream fix exists. The Liquibase Secure container never runs it: the systemd, systemd-sysv and udev packages are not installed, no systemd-journald binary exists in the image, there is no init system and PID 1 is the Liquibase entrypoint script. libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1), pulled in by util-linux and apt, and contain no journald code.",
         "justification": "code_not_reachable",
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-22T00:00:00Z"
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
       },
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40228",
+      "description": "systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set. ForwardToWall defaults to yes.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 and libudev1 are present only as inherited base-image library dependencies.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-journald service; Liquibase Secure's container has no init system and no journald binary.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40228",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40228",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the systemd-journald daemon: with ForwardToWall enabled (the default), a \"logger -p emerg\" message is forwarded to user terminals without stripping escape sequences. The forwarding path exists in systemd 255.4, the version Ubuntu noble ships, and no upstream fix exists. The Liquibase Secure container never runs it: the systemd, systemd-sysv and udev packages are not installed, no systemd-journald binary exists in the image, there is no init system and PID 1 is the Liquibase entrypoint script. libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1), pulled in by util-linux and apt, and contain no journald code.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61732",
+      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
+      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not perform cgo builds at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The cgo build path required by the advisory does not exist in the Liquibase Secure runtime. The image only shells out to lpm for optional MySQL installation and never invokes a Go compiler.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib cgo comment parsing vulnerability fixed in Go 1.24.13 and 1.25.7. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so no cgo compilation path is reachable.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -8438,58 +8674,6 @@
           "versions": [
             {
               "range": "vers:maven/<4.1.135.Final|>=4.2.0.Final|<4.2.15.Final",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61732",
-      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
-      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not perform cgo builds at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.6,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The cgo build path required by the advisory does not exist in the Liquibase Secure runtime. The image only shells out to lpm for optional MySQL installation and never invokes a Go compiler.\n"
-        }
-      ],
-      "cwes": [
-        94
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib cgo comment parsing vulnerability fixed in Go 1.24.13 and 1.25.7. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so no cgo compilation path is reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
               "status": "unaffected"
             }
           ]
@@ -8903,6 +9087,58 @@
       ]
     },
     {
+      "id": "CVE-2026-42501",
+      "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The runtime never enters the Go toolchain or GOTOOLCHAIN-based download path described in the advisory. Only lpm is installed and invoked for optional MySQL setup.\n"
+        }
+      ],
+      "cwes": [
+        347
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42501",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib toolchain-download checksum validation flaw fixed in Go 1.25.10 and 1.26.3. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable toolchain-download path is not reachable.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-07T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-15146",
       "description": "GNU Wget does not validate the IP address provided by an FTP PASV response while operating in FTP passive mode. A malicious FTP server, or an HTTP server that redirects to an FTP URL, can exploit this behavior to redirect Wget's data connection to an arbitrary IP address and port. This allows an attacker to forge server-side requests from the machine running Wget, potentially accessing localhost services or internal network resources.",
       "recommendation": "No action required. Liquibase Secure uses wget only for fixed HTTPS downloads during image build and not in its runtime path.",
@@ -9061,58 +9297,6 @@
           "versions": [
             {
               "range": "vers:deb/<1.20.1-6ubuntu2.7",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-42501",
-      "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
-      "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The runtime never enters the Go toolchain or GOTOOLCHAIN-based download path described in the advisory. Only lpm is installed and invoked for optional MySQL setup.\n"
-        }
-      ],
-      "cwes": [
-        347
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42501",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib toolchain-download checksum validation flaw fixed in Go 1.25.10 and 1.26.3. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable toolchain-download path is not reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
               "status": "unaffected"
             }
           ]
@@ -9524,6 +9708,20 @@
       ]
     },
     {
+      "id": "CVE-2026-32280",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 DoS vulnerability (GO-2026-4947). Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-9076",
       "description": "Issue summary: When CMS password-based decryption (RFC 3211 / PWRI key unwrap) processes attacker-supplied CMS data, an attacker-chosen stream-mode KEK cipher can trigger a heap out-of-bounds read in kek_unwrap_key(). Impact summary: A heap buffer over-read may trigger a crash which leads to Denial of Service for an application if the input buffer ends at a memory page boundary and the following page is unmapped. There is no information disclosure as the over-read bytes are not revealed to the attacker.",
       "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMS password-based decryption at runtime.",
@@ -9700,20 +9898,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32280",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib crypto/x509 DoS vulnerability (GO-2026-4947). Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -10011,6 +10195,20 @@
       ]
     },
     {
+      "id": "CVE-2026-32282",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib internal/syscall/unix Root.Chmod symlink traversal vulnerability. Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-93990",
       "description": "Expat through 2.8.4 fails to validate low surrogates following high surrogates in UTF-16 input, allowing malformed UTF-16 sequences to be accepted. Attackers can craft UTF-16 encoded XML with lone high surrogates that consume following code units, hiding markup characters from the parser and enabling XML injection attacks.",
       "recommendation": "No action required. Liquibase does not use native libexpat for XML parsing.",
@@ -10148,20 +10346,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libpam-modules-bin"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32282",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib internal/syscall/unix Root.Chmod symlink traversal vulnerability. Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -10487,6 +10671,48 @@
       ]
     },
     {
+      "id": "CVE-2026-32281",
+      "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32281",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 certificate policy mapping DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-89161",
       "description": "In PCRE2 before 10.48, pcre2_jit_match mishandles a previously copied subject being passed in as a context. An incorrect free operation can occur.",
       "recommendation": "No action required. Liquibase does not link or invoke native libpcre2.",
@@ -10618,48 +10844,6 @@
       "affects": [
         {
           "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32281",
-      "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "cwes": [
-        295
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32281",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib crypto/x509 certificate policy mapping DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     },
@@ -10979,6 +11163,61 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.azure/azure-identity"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32283",
+      "description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32283",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls TLS 1.3 key update DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-89092",
       "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
       "recommendation": "No action required. This image does not run nscd.",
@@ -11120,61 +11359,6 @@
       ]
     },
     {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in azure-identity 1.12.2. Liquibase Secure uses azure-identity 1.18.2, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.azure/azure-identity"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32283",
-      "description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "cwes": [
-        770
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32283",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib crypto/tls TLS 1.3 key update DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2016-20013",
       "description": "sha256crypt and sha512crypt through 0.6 allow attackers to cause a denial of service (CPU consumption) because the algorithm's runtime is proportional to the square of the length of the password.",
       "recommendation": "No action required. The JVM never calls glibc's crypt() function.",
@@ -11493,6 +11677,64 @@
       ]
     },
     {
+      "id": "CVE-2026-27143",
+      "description": "Arithmetic over induction variables in loops were not correctly checked for underflow or overflow. As a result, the compiler would allow invalid indexing at runtime, potentially leading to memory corruption.",
+      "recommendation": "No action required. Liquibase Secure does not invoke the Go compiler or build Go code at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path lives in the Go compiler, which Liquibase Secure does not execute. The image only installs and optionally runs the prebuilt lpm helper.\n"
+        }
+      ],
+      "cwes": [],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27143",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go arithmetic-overflow compiler bug in loop induction variables is only reachable while compiling Go code with the toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not run the Go compiler or build Go code at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-76642",
       "description": "util-linux versions through 2.41.5 and 2.42.2 fail to check mount helper exit status before running post-mount hooks, allowing unprivileged users to execute privileged operations on pre-existing filesystems. Attackers can exploit X-mount.idmap or X-mount.owner hooks to clone filesystems with inherited suid bits or modify target inode permissions after a helper fails, achieving privilege escalation.",
       "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
@@ -11628,64 +11870,6 @@
       ]
     },
     {
-      "id": "CVE-2026-27143",
-      "description": "Arithmetic over induction variables in loops were not correctly checked for underflow or overflow. As a result, the compiler would allow invalid indexing at runtime, potentially leading to memory corruption.",
-      "recommendation": "No action required. Liquibase Secure does not invoke the Go compiler or build Go code at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 9.8,
-          "severity": "critical",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The vulnerable code path lives in the Go compiler, which Liquibase Secure does not execute. The image only installs and optionally runs the prebuilt lpm helper.\n"
-        }
-      ],
-      "cwes": [],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27143",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
-          "title": "Go Announce"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go arithmetic-overflow compiler bug in loop induction variables is only reachable while compiling Go code with the toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not run the Go compiler or build Go code at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-78408",
       "description": "The nsenter --join-cgroup option opens the target cgroup.procs file as root and leaves that file descriptor open across later namespace and credential changes and across execve(). Because the kernel checks later cgroup migrations using the credentials from the original open, a program run in an attacker-controlled target can inherit root's ability to move host processes between cgroups. After a privileged operator uses --join-cgroup against that target, an unprivileged user can migrate and terminate unrelated root processes.",
       "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
@@ -11997,141 +12181,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libblkid1"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-78409",
-      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
-      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
-        }
-      ],
-      "cwes": [
-        59
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/libmount1"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-78409",
-      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
-      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
-        }
-      ],
-      "cwes": [
-        59
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/libsmartcols1"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-78409",
-      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
-      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
-        }
-      ],
-      "cwes": [
-        59
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/libuuid1"
         }
       ]
     },
@@ -12236,6 +12285,141 @@
       },
       "affects": [
         {
+          "ref": "pkg:deb/ubuntu/libmount1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsmartcols1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libuuid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78409",
+      "description": "The X-mount.subdir option uses a detached-tree fast path on Linux 6.15 and later and passes the configured subdirectory to open_tree() with AT_SYMLINK_NOFOLLOW. That flag does not stop intermediate symlink traversal or keep resolution inside the newly mounted filesystem. A local unprivileged user with an fstab-authorized X-mount.subdir entry can attach a host path at the intended mountpoint.",
+      "recommendation": "No action required. This image never invokes mount, nsenter, or fstab- driven hooks.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "justification": "Nothing in this image's runtime calls mount with X-mount.subdir; single fixed non-root user.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78409",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-09-24T00:00:00Z"
+      },
+      "affects": [
+        {
           "ref": "pkg:deb/ubuntu/mount"
         }
       ]
@@ -12507,6 +12691,66 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libuuid1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61731",
+      "description": "Building a malicious file with cmd/go can cause a write to an attacker-controlled file with partial control of the file content.",
+      "recommendation": "No action required. Liquibase Secure does not run cmd/go or cgo builds at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable path is confined to Go toolchain builds and cgo processing. Liquibase Secure does not invoke the Go compiler.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "cmd/go build-time code smuggling via `#cgo pkg-config:` arguments is only reachable when compiling Go sources with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not run cmd/go, pkg-config, or cgo builds at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -12645,66 +12889,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libacl1"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61731",
-      "description": "Building a malicious file with cmd/go can cause a write to an attacker-controlled file with partial control of the file content.",
-      "recommendation": "No action required. Liquibase Secure does not run cmd/go or cgo builds at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.8,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The vulnerable path is confined to Go toolchain builds and cgo processing. Liquibase Secure does not invoke the Go compiler.\n"
-        }
-      ],
-      "cwes": [
-        88
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-xvqr-69v8-f3gv",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
-          "title": "Go Announce"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "cmd/go build-time code smuggling via `#cgo pkg-config:` arguments is only reachable when compiling Go sources with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not run cmd/go, pkg-config, or cgo builds at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     },
@@ -13039,6 +13223,66 @@
       ]
     },
     {
+      "id": "CVE-2025-61732",
+      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
+      "recommendation": "No action required. Liquibase Secure does not perform cgo builds at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go compiler/cgo processing, which Liquibase Secure does not execute at runtime.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8jvr-vh7g-f8gx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/K09ubi9FQFk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go compiler/cgo comment-parsing discrepancy is only reachable when building cgo binaries with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not execute the Go compiler or perform cgo builds at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2022-3219",
       "description": "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.",
       "recommendation": "No action required. GnuPG is not invoked at container runtime.",
@@ -13179,66 +13423,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/gpgconf"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61732",
-      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
-      "recommendation": "No action required. Liquibase Secure does not perform cgo builds at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.6,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The vulnerable code path is in Go compiler/cgo processing, which Liquibase Secure does not execute at runtime.\n"
-        }
-      ],
-      "cwes": [
-        94
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-8jvr-vh7g-f8gx",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://groups.google.com/g/golang-announce/c/K09ubi9FQFk",
-          "title": "Go Announce"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go compiler/cgo comment-parsing discrepancy is only reachable when building cgo binaries with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not execute the Go compiler or perform cgo builds at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     },
@@ -13611,6 +13795,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG vulnerability in OS packages. GnuPG is installed in the Docker image for package signature verification during build but is not invoked at runtime by Liquibase. The Liquibase application does not call any GnuPG binaries.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg2"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-34182",
       "description": "Issue Summary: Cryptographic Message Services (CMS) processing fails to perform sufficient input validation on the cipher and tag length fields of AuthEnvelopedData containers, leading to various potential compromises. Attackers may achieve key-equivalent functionality for a given CMS recipient and/or bypass integrity validation for a given message.",
       "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMS AuthEnvelopedData decryption at runtime.",
@@ -13787,20 +13985,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG vulnerability in OS packages. GnuPG is installed in the Docker image for package signature verification during build but is not invoked at runtime by Liquibase. The Liquibase application does not call any GnuPG binaries.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gnupg2"
         }
       ]
     },
@@ -14226,6 +14410,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-63076",
       "description": "When verifying the password-based MAC protection of a CMP message, OpenSSL reads the protectionAlg algorithm parameter with X509_ALGOR_get0() and treats the returned value as a PBMParameter after checking only that the pointer is not null, without validating the ASN.1 type. A remote attacker can crash an application acting as a CMP server that accepts PBM-protected messages, or a CMP client talking to a malicious or intercepted CMP server, causing a denial of service.",
       "recommendation": "No action required. Liquibase Secure does not invoke OpenSSL CMP password-based message verification at runtime.",
@@ -14386,20 +14584,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/dirmngr"
         }
       ]
     },
@@ -14804,6 +14988,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42496",
       "description": "Archive::Tar versions before 3.08 for Perl extract symlinks with attacker controlled targets outside the extraction directory. _make_special_file() passes the tar header's linkname to symlink() without validating it against absolute paths or .. segments. The secure-extract mode check that guards regular file extraction does not cover the symlink target. A subsequent open through the extracted name reads or writes the attacker chosen path.",
       "recommendation": "No action required. Liquibase Secure does not invoke Perl Archive::Tar extraction at runtime.",
@@ -14974,20 +15172,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gnupg"
         }
       ]
     },
@@ -15385,6 +15569,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package (localization). GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-l10n"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-48959",
       "description": "IO::Uncompress::Unzip versions before 2.220 for Perl allow CPU exhaustion via per-byte read loop in fastForward. fastForward() compares length $offset (the digit count of the offset, 1 to 19) against the chunk size $c instead of $offset itself, so $c shrinks from 16 KiB to 1-19 bytes per iteration. Extracting a named entry from an attacker supplied zip via IO::Uncompress::Unzip->new($zip, Name => $target) drives a per-byte read loop scaling with the entry's compressed size, up to the non-Zip64 4 GiB cap.",
       "recommendation": "No action required. Liquibase Secure does not invoke Perl IO::Uncompress::Unzip at runtime.",
@@ -15551,20 +15749,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package (localization). GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gnupg-l10n"
         }
       ]
     },
@@ -15963,6 +16147,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-utils"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-50812",
       "description": "A NULL pointer dereference in the SQLite Session Extension in SQLite 3.53.1 and SQLite trunk builds before check-in e807d4e3798efd53 allows an attacker who can supply a malformed changeset blob to cause a denial of service. The issue occurs when sqlite3changeset_apply_v3() applies a corrupt changeset and reaches sqlite3_value_type() with a NULL sqlite3_value pointer.",
       "recommendation": "No action required. Liquibase Secure does not invoke the affected SQLite Session Extension changeset-apply path.",
@@ -16127,20 +16325,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gnupg-utils"
         }
       ]
     },
@@ -16429,6 +16613,33 @@
       ]
     },
     {
+      "id": "CVE-2024-35255",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
+        "justification": "vulnerable_code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.microsoft.azure/msal4j"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-28388",
       "description": "OpenSSL can dereference a NULL pointer while processing a malformed delta CRL during X.509 certificate verification when delta-CRL handling is enabled.",
       "recommendation": "No action required. Liquibase Secure does not use OpenSSL's delta-CRL verification path at runtime.",
@@ -16581,33 +16792,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-35255",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Fixed in msal4j 1.15.1. Liquibase Secure uses msal4j 1.23.1, which includes the fix.",
-        "justification": "vulnerable_code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.microsoft.azure/msal4j"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpg"
         }
       ]
     },
@@ -16988,6 +17172,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg-agent"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-54874",
       "description": "Issue summary: Receiving a DTLS record for a future epoch while a handshake is in progress causes OpenSSL to buffer far more memory than the record itself requires. Impact summary: A peer can use a small amount of network traffic to make an OpenSSL DTLS endpoint retain a disproportionately large amount of memory, which may lead to a Denial of Service. Description: While a DTLS handshake is in progress, a peer may legitimately have already moved on to the next epoch before the local endpoint has processed the same transition. OpenSSL buffers such early records so that they can be processed once the local endpoint catches up. Buffering a record currently retains the entire read buffer it arrived in rather than just the bytes that make up the record itself, allowing a remote memory amplification DoS against DTLS servers.",
       "recommendation": "No action required. Liquibase Secure does not expose an OpenSSL DTLS server or client endpoint in its shipped runtime path.",
@@ -17152,20 +17350,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpg-agent"
         }
       ]
     },
@@ -17527,6 +17711,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg-wks-client"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-95818",
       "description": "A stack-based buffer overflow in the dynamic loader (ld.so) of the GNU C Library (glibc) versions 2.14 through 2.44 allows a local attacker to crash or corrupt the memory of setuid/setgid (AT_SECURE) programs. When such a program's DT_RPATH or DT_RUNPATH begins with $ORIGIN and is followed by NUL or '/', the loader reads past the end of the path buffer and writes past the end of a stack-allocated internal buffer.",
       "recommendation": "No action required. No setuid or setgid binary in the Liquibase Secure image uses $ORIGIN in its search path.",
@@ -17673,20 +17871,6 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/locales"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpg-wks-client"
         }
       ]
     },
@@ -18089,6 +18273,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpg-wks-server"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-58470",
       "description": "GNU Wget through 1.25.0, fixed in commit 43d3ba9, contains an integer overflow vulnerability in the parse_content_range() function within src/http.c that allows server-controlled values to cause signed integer arithmetic to overflow. Attackers can supply malicious Content-Range header values to trigger undefined behavior and download desynchronization in the affected client.",
       "recommendation": "No action required. Liquibase Secure does not invoke wget at runtime.",
@@ -18253,20 +18451,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpg-wks-server"
         }
       ]
     },
@@ -18665,6 +18849,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgconf"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-69419",
       "description": "Calling PKCS12_get_friendlyname() on a malicious PKCS#12 file can cause a one-byte out-of-bounds write before the allocated buffer while converting a BMPString friendly name from UTF-16BE to UTF-8.",
       "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
@@ -18829,20 +19027,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpgconf"
         }
       ]
     },
@@ -19239,6 +19423,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgsm"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-22795",
       "description": "A type confusion flaw in OpenSSL PKCS#12 parsing can dereference an invalid or NULL pointer when a malformed PKCS#12 file is processed, causing a denial of service.",
       "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
@@ -19405,20 +19603,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpgsm"
         }
       ]
     },
@@ -19815,6 +19999,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/gpgv"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-0915",
       "description": "Calling getnetbyaddr or getnetbyaddr_r in the GNU C Library with a configured DNS backend for networks and a zero-valued network query can leak stack contents to the configured DNS resolver.",
       "recommendation": "No action required. Liquibase Secure does not call glibc's getnetbyaddr family at runtime.",
@@ -19979,20 +20177,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/gpgv"
         }
       ]
     },
@@ -20393,6 +20577,20 @@
       ]
     },
     {
+      "id": "CVE-2025-68973",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/keyboxd"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-84782",
       "description": "OpenSSL's DTLS retransmission logic mishandles a handshake message write that was suspended part-way through: the retransmitted message is read from a stale buffer offset and overwrites the state the suspended write needs to resume. A peer can receive heap memory as plaintext handshake data, or the read can reach unmapped memory and crash the process.",
       "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
@@ -20548,20 +20746,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-68973",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/ubuntu/keyboxd"
         }
       ]
     },
@@ -20940,6 +21124,20 @@
       ]
     },
     {
+      "id": "CVE-2025-66418",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-75805",
       "description": "A CMP client that identifies the certificate to revoke with a PKCS#10 CSR dereferences a NULL pointer and crashes when a malicious or compromised CMP server returns a crafted name in the revocation response. The response passes message-protection checks before the affected code runs, so the attacker must control the server or hold the protection secret.",
       "recommendation": "No action required. Liquibase Secure does not call OpenSSL at runtime.",
@@ -21104,20 +21302,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-66418",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/urllib3"
         }
       ]
     },
@@ -21532,6 +21716,20 @@
       ]
     },
     {
+      "id": "CVE-2025-66471",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-91777",
       "description": "Forward-reference completion for @JsonIdentityInfo object IDs in FasterXML jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID. The affected paths are CollectionDeserializer.CollectionReferringAccumulator. resolveForwardReference() and the equivalent implementation in MapDeserializer. When a document first creates N unresolved object-ID references in an identity-enabled collection or map and then defines those same IDs in reverse order, completion performs on the order of N * (N + 1) / 2 identity comparisons, so a shallow document whose size grows linearly causes quadratic CPU work during deserialization. Exploitation requires an application that deserializes attacker-influenced JSON into an identity-enabled collection or map. This affects tools.jackson.core:jackson-databind from 3.0.0 through 3.1.6 and from 3.2.0 through 3.2.2. Users should upgrade to 3.1.7 or 3.2.3.",
       "recommendation": "No action required. Liquibase Secure does not use @JsonIdentityInfo, so the vulnerable forward-reference path is never enabled. A future release moves the bundled copy to 3.2.3.",
@@ -21712,20 +21910,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-66471",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/urllib3"
         }
       ]
     },
@@ -22155,6 +22339,33 @@
       ]
     },
     {
+      "id": "CVE-2024-45394",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
+        "justification": "code_not_present"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-21441",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-14017",
       "description": "When doing multi-threaded LDAPS transfers (LDAP over TLS) with libcurl, changing TLS options in one thread would inadvertently change them globally and therefore possibly also affect other concurrently setup transfers. Disabling certificate verification for a specific transfer could unintentionally disable the feature for other threads as well.",
       "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
@@ -22344,33 +22555,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-45394",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "False CPE match. cassandra-driver-kerberos is not the Authenticator 2FA app. The vulnerability applies to the Authenticator mobile application.",
-        "justification": "code_not_present"
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.instaclustr/cassandra-driver-kerberos"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-21441",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/urllib3"
         }
       ]
     },
@@ -22825,6 +23009,20 @@
       ]
     },
     {
+      "id": "CVE-2023-43804",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 cookie header leak vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. No HTTP requests are made via Python at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-15224",
       "description": "When doing SSH-based transfers using either SCP or SFTP, and asked to do public key authentication, curl would wrongly still ask and authenticate using a locally running SSH agent.",
       "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
@@ -23005,20 +23203,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2023-43804",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "urllib3 cookie header leak vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. No HTTP requests are made via Python at runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/urllib3"
         }
       ]
     },
@@ -23470,6 +23654,20 @@
       ]
     },
     {
+      "id": "CVE-2024-4340",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse ReDoS vulnerability. sqlparse is bundled as a transitive dependency within GraalVM Python extensions but its SQL parsing functionality is never invoked at runtime. Liquibase uses its own Java SQL parser; the Python sqlparse module is never called.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-6297",
       "description": "dpkg-deb does not properly sanitize directory permissions when extracting a control member into a temporary directory, which can leave temporary files behind on cleanup and, under repeated execution on adversarial .deb packages, lead to disk quota exhaustion or disk full conditions.",
       "recommendation": "No action required. Liquibase Secure does not extract .deb packages at runtime.",
@@ -23653,20 +23851,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2024-4340",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "sqlparse ReDoS vulnerability. sqlparse is bundled as a transitive dependency within GraalVM Python extensions but its SQL parsing functionality is never invoked at runtime. Liquibase uses its own Java SQL parser; the Python sqlparse module is never called.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/sqlparse"
         }
       ]
     },
@@ -24090,6 +24274,63 @@
       ]
     },
     {
+      "id": "CVE-2026-54284",
+      "description": "sqlparse: TokenList.__init__ materializes O(subtree) value per group, causing CPU denial of service before depth and token caps trigger. This issue is fixed in version 0.6.0.",
+      "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The vulnerable Python parser is only installed for build-time tooling and is not invoked by the Liquibase runtime.\n"
+        }
+      ],
+      "cwes": [
+        407,
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pwgv-4x5q-6m9f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54284",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-08-17T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-97688",
       "description": "urllib3 is an HTTP client library for Python. From 2.6.2 until 2.8.0, HTTPResponse.stream and HTTPResponse.read_chunked can enter an infinite loop because the Deflate decoder retains trailing bytes as unconsumed input after reaching end-of-stream and repeatedly decodes them without progress. The issue occurs when an untrusted server sends a chunked Deflate response whose decoded body exceeds a positive finite chunk size and whose encoded body has trailing bytes. The impact is excessive CPU usage and a request that does not complete, and network read timeouts do not interrupt the loop because no further socket read occurs. This issue is fixed in version 2.8.0.",
       "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 to stream responses from untrusted servers, upgrade to Liquibase Secure 6.0.0 or later, which bundles urllib3 2.8.0.",
@@ -24277,63 +24518,6 @@
       ]
     },
     {
-      "id": "CVE-2026-54284",
-      "description": "sqlparse: TokenList.__init__ materializes O(subtree) value per group, causing CPU denial of service before depth and token caps trigger. This issue is fixed in version 0.6.0.",
-      "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.7,
-          "severity": "high",
-          "method": "CVSSv40",
-          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv40",
-          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
-          "justification": "The vulnerable Python parser is only installed for build-time tooling and is not invoked by the Liquibase runtime.\n"
-        }
-      ],
-      "cwes": [
-        407,
-        1333
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-pwgv-4x5q-6m9f",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54284",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:pypi/sqlparse",
-          "versions": [
-            {
-              "range": "vers:pypi/<0.6.0",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2025-0167",
       "description": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
       "recommendation": "No action required. Liquibase Secure does not perform libcurl transfers at runtime.",
@@ -24512,6 +24696,234 @@
       ]
     },
     {
+      "id": "CVE-2026-97399",
+      "description": "The strncasecmp function in the GNU C Library 2.24 and later optimized for the Power8 architecture may read one byte beyond the input size limit, which may crash a program when that byte is not readable. This condition may happen when the input strings to the strncasecmp function are attacker controlled in an application and they match all the way up to the edge of their page and the neighbouring page is either not mapped or is not readable.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship a Power8 build of glibc.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Power8 assembly is not present in the amd64 and arm64 glibc builds the image ships.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0024",
+          "title": "glibc advisory GLIBC-SA-2026-0024"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-97399",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97399",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected strncasecmp is the Power8-optimised assembly variant (sysdeps/powerpc/powerpc64/power8), which glibc selects only on ppc64 and ppc64le builds. The Liquibase Secure image is published for linux/amd64 and linux/arm64 only, so the vulnerable routine is not compiled into the libc.so.6 it ships; the generic strncasecmp used on those architectures is not affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97399",
+      "description": "The strncasecmp function in the GNU C Library 2.24 and later optimized for the Power8 architecture may read one byte beyond the input size limit, which may crash a program when that byte is not readable. This condition may happen when the input strings to the strncasecmp function are attacker controlled in an application and they match all the way up to the edge of their page and the neighbouring page is either not mapped or is not readable.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship a Power8 build of glibc.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Power8 assembly is not present in the amd64 and arm64 glibc builds the image ships.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0024",
+          "title": "glibc advisory GLIBC-SA-2026-0024"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-97399",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97399",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected strncasecmp is the Power8-optimised assembly variant (sysdeps/powerpc/powerpc64/power8), which glibc selects only on ppc64 and ppc64le builds. The Liquibase Secure image is published for linux/amd64 and linux/arm64 only, so the vulnerable routine is not compiled into the libc.so.6 it ships; the generic strncasecmp used on those architectures is not affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97399",
+      "description": "The strncasecmp function in the GNU C Library 2.24 and later optimized for the Power8 architecture may read one byte beyond the input size limit, which may crash a program when that byte is not readable. This condition may happen when the input strings to the strncasecmp function are attacker controlled in an application and they match all the way up to the edge of their page and the neighbouring page is either not mapped or is not readable.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship a Power8 build of glibc.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Power8 assembly is not present in the amd64 and arm64 glibc builds the image ships.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0024",
+          "title": "glibc advisory GLIBC-SA-2026-0024"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-97399",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97399",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected strncasecmp is the Power8-optimised assembly variant (sysdeps/powerpc/powerpc64/power8), which glibc selects only on ppc64 and ppc64le builds. The Liquibase Secure image is published for linux/amd64 and linux/arm64 only, so the vulnerable routine is not compiled into the libc.so.6 it ships; the generic strncasecmp used on those architectures is not affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102633",
+      "description": "libexpat versions 2.7.2 through 2.8.5 contain an integer overflow vulnerability in the expat_realloc() function on 32-bit platforms when computing allocation sizes. Attackers supplying malicious XML to applications parsing with vulnerable libexpat can cause heap buffer overflow, memory corruption, or denial of service.",
+      "recommendation": "No action required. The image is 64-bit and no shipped program feeds external XML to libexpat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VulnCheck"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The size_t wrap cannot occur on the 64-bit builds the image ships, and no shipped program parses external XML with libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/libexpat/libexpat/pull/1392",
+          "title": "libexpat fix (pull request 1392)"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102633",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102633",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow needs 32-bit size_t arithmetic: a size near SIZE_MAX passes the 64-bit allocation-tracker check in expat_realloc and then wraps when the padding is added. The Liquibase Secure image is built for linux/amd64 and linux/arm64, both 64-bit, where that addition cannot wrap; the upstream fix notes that 64-bit platforms are not affected. The Ubuntu package 2.6.1-2ubuntu0.6 carries the backported allocation tracker, so this assessment rests on the architecture and on reachability, not on the version. Independently, nothing in the image parses untrusted XML with libexpat: the only library linking libexpat.so.1 is libfontconfig, which the JVM loads only when AWT font rendering initialises, and Liquibase is a headless CLI that parses changelog XML with the JDK's own java.xml parser. fontconfig's own XML input is the root-owned /etc/fonts configuration.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-59893",
       "description": "sqlparse is a non-validating SQL parser module for Python. Prior to 0.6.0, SQL_REGEX in sqlparse/keywords.py and the per-position loop in sqlparse/lexer.py repeatedly scan unmatched dollar-quoted literal and multiline-comment delimiters, causing quadratic CPU consumption through sqlparse.parse(), sqlparse.format(), and sqlparse.split(). This issue is fixed in version 0.6.0.",
       "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
@@ -24564,6 +24976,306 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-103111",
+      "description": "PCRE2 before 10.49, when there is an attacker-controlled regular expression and certain JIT API usage, allows an out-of-bounds write with arbitrary data.",
+      "recommendation": "No action required. No shipped program compiles externally supplied patterns with the PCRE2 JIT.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable JIT path needs an attacker-controlled pattern and a caller-managed JIT stack; only grep -P qualifies and nothing in the image runs it.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/PCRE2Project/pcre2/security/advisories/GHSA-r9hj-j2rw-4q3m",
+          "title": "PCRE2 Security Advisory GHSA-r9hj-j2rw-4q3m"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-103111",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-103111",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Triggering the out-of-bounds write needs three things at once: JIT compilation, an application-created growable JIT stack assigned with pcre2_jit_stack_assign, and an attacker-controlled pattern with a very large number of capturing groups. In the image only GNU grep in -P mode uses that API, and nothing runs grep at runtime: the entrypoint calls ls, touch, rm, tr and env with fixed arguments, Liquibase evaluates regular expressions with java.util.regex, lpm is a static Go binary, and libselinux (the other pcre2 consumer, loaded by coreutils) compiles no patterns without an SELinux policy. No changelog, SQL, database response, argument or environment value ever becomes a pcre2 pattern.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpcre2-8-0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95512",
+      "description": "A flaw was found in FreeType, specifically within its CID font loader. A remote attacker could exploit this vulnerability by tricking a user into opening content that embeds or references a specially crafted CID-keyed font. This crafted font can cause repeated allocations and decryptions of subroutine data across multiple font dictionaries, leading to excessive memory and CPU consumption. This can result in a denial of service (DoS) for the application or service processing the font, potentially causing it to hang or terminate.",
+      "recommendation": "No action required. The next image rebuild includes the fixed Ubuntu package 2.13.2+dfsg-1ubuntu0.2.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No shipped program opens fonts with the system FreeType; the JVM uses its bundled copy and Liquibase never renders text.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://gitlab.freedesktop.org/freetype/freetype/-/commit/f3ca71c9900fe860849b3163a6e2c1e765b291d9",
+          "title": "FreeType fix commit"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8881-1",
+          "title": "Ubuntu Security Notice USN-8881-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-95512",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95512",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation needs the process to open an attacker-supplied CID-keyed font through the system FreeType. In the image the system libfreetype.so.6 is linked only by libfontconfig and the fc-* command-line tools. The JVM's font code (libfontmanager.so) links the FreeType copy bundled with the Temurin JDK, not the system one, and Liquibase never loads a font: it is a headless CLI whose only AWT use is GraphicsEnvironment.isHeadless() and Desktop.browse() in the report writer, neither of which initialises the font stack. Ubuntu fixed the package in 2.13.2+dfsg-1ubuntu0.2 (USN-8881-1); the next image rebuild picks it up.",
+        "justification": "code_not_reachable",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libfreetype6",
+          "versions": [
+            {
+              "range": "vers:deb/<2.13.2+dfsg-1ubuntu0.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102474",
+      "description": "A flaw was found in dash. The printf builtin reserves four bytes before converting a Unicode escape (backslash-u or backslash-U), but the multi-byte token can need five or six bytes. A local user who can supply such an escape to dash printf or echo %b, including through dash -c and a positional argument, can write one or two bytes past that reservation.",
+      "recommendation": "No action required. The dash version in the image predates the Unicode escape support that carries this flaw.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "dash 0.5.12 has no Unicode escape handling in its printf builtin.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-102474",
+          "title": "Red Hat CVE page"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102474",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102474",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow is in the printf builtin's handling of the Unicode escapes (backslash-u and backslash-U), which dash gained in 0.5.13 together with dollar-single-quote quoting (upstream commit 776424a8). Ubuntu noble ships dash 0.5.12-6ubuntu5, whose printf.c has no Unicode escape handling and no CHECKSTRSPACE reservation to overrun; the Debian and Ubuntu patch series for 0.5.12 add only the backslash-e escape. The scanner matches on the package name, not on the presence of the code.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102473",
+      "description": "A flaw was found in dash. When built without libc fnmatch, the internal pmatch() matcher implements * by unbounded recursion over candidate positions. A local user who can plant filenames, or otherwise feed that matcher, can make a short multi-star pattern such as *.*.*.*.*.tar.gz consume excessive CPU.",
+      "recommendation": "No action required. No shipped code path invokes dash; Liquibase and its entrypoint use bash or exec binaries directly.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No untrusted input reaches dash; nothing in the image invokes /bin/sh.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-102473",
+          "title": "Red Hat CVE page"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102473",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102473",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Ubuntu builds dash with --disable-fnmatch, so the recursive pmatch matcher is present in 0.5.12-6ubuntu5. Reaching it needs dash to evaluate a multi-star pattern (globbing, case, ${var#pat}) against attacker-influenced names. Nothing in the image runs dash: /bin/sh is dash, but the entrypoint and the liquibase launcher are bash scripts, Liquibase's flow shell action runs bash -c, and its executeCommand change and other ProcessBuilder call sites exec the named binary directly without a shell. lpm is a static Go binary that spawns no processes on Linux. Only the operator who authors the changelog or flow file can invoke dash explicitly, and that operator already controls the container; the impact would be CPU exhaustion of their own unprivileged process.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-46675",
+      "description": "libpng's sequential reader can read through a dangling pointer when an application calls png_read_end after png_read_info without first starting to read the image rows. A crafted zTXt, iTXt or iCCP chunk can make libpng abandon decompression while zlib still expects more input, leaving a stale input pointer in libpng's zlib stream; png_read_end then resumes decompression from that pointer. For zTXt and iTXt the read is a heap use-after-free of the chunk buffer, for iCCP a stack use-after-return. The dangling pointer is only read, so the worst outcome is a crash. Affects libpng 1.6.0 through 1.6.58; fixed in 1.6.59.",
+      "recommendation": "No action required. No shipped program decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The system libpng is loaded only by the fontconfig tool chain, which the Liquibase JVM never initialises; no PNG is ever decoded.\n"
+        }
+      ],
+      "cwes": [
+        416,
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-qvg3-h654-xq3j",
+          "title": "libpng Security Advisory GHSA-qvg3-h654-xq3j"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/09/29/4",
+          "title": "libpng 1.6.59 announcement"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-46675",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-46675",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free needs an application to decode an attacker-supplied PNG with the system libpng and to call png_read_end after png_read_info without reading the image rows. In the image the system libpng16.so.16 is linked only by libfreetype, libfontconfig and the fc-* command-line tools, none of which the Liquibase JVM loads. The JDK's own image code does not use the system libpng: libsplashscreen carries a statically linked copy and ImageIO's PNG reader is pure Java. Liquibase is a headless CLI that never decodes images, so no shipped program can hand a PNG to the vulnerable reader.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64"
         }
       ]
     },

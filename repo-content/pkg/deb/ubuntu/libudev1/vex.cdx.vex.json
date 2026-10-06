@@ -1,0 +1,61 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-40228",
+      "description": "systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set. ForwardToWall defaults to yes.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-journald or any systemd service; libsystemd0 and libudev1 are present only as inherited base-image library dependencies.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a running systemd-journald service; Liquibase Secure's container has no init system and no journald binary.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40228",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40228",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the systemd-journald daemon: with ForwardToWall enabled (the default), a \"logger -p emerg\" message is forwarded to user terminals without stripping escape sequences. The forwarding path exists in systemd 255.4, the version Ubuntu noble ships, and no upstream fix exists. The Liquibase Secure container never runs it: the systemd, systemd-sysv and udev packages are not installed, no systemd-journald binary exists in the image, there is no init system and PID 1 is the Liquibase entrypoint script. libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1), pulled in by util-linux and apt, and contain no journald code.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1"
+        }
+      ]
+    }
+  ]
+}

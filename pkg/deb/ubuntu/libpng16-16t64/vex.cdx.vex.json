@@ -1,0 +1,69 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-46675",
+      "description": "libpng's sequential reader can read through a dangling pointer when an application calls png_read_end after png_read_info without first starting to read the image rows. A crafted zTXt, iTXt or iCCP chunk can make libpng abandon decompression while zlib still expects more input, leaving a stale input pointer in libpng's zlib stream; png_read_end then resumes decompression from that pointer. For zTXt and iTXt the read is a heap use-after-free of the chunk buffer, for iCCP a stack use-after-return. The dangling pointer is only read, so the worst outcome is a crash. Affects libpng 1.6.0 through 1.6.58; fixed in 1.6.59.",
+      "recommendation": "No action required. No shipped program decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The system libpng is loaded only by the fontconfig tool chain, which the Liquibase JVM never initialises; no PNG is ever decoded.\n"
+        }
+      ],
+      "cwes": [
+        416,
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-qvg3-h654-xq3j",
+          "title": "libpng Security Advisory GHSA-qvg3-h654-xq3j"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/09/29/4",
+          "title": "libpng 1.6.59 announcement"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-46675",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-46675",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free needs an application to decode an attacker-supplied PNG with the system libpng and to call png_read_end after png_read_info without reading the image rows. In the image the system libpng16.so.16 is linked only by libfreetype, libfontconfig and the fc-* command-line tools, none of which the Liquibase JVM loads. The JDK's own image code does not use the system libpng: libsplashscreen carries a statically linked copy and ImageIO's PNG reader is pure Java. Liquibase is a headless CLI that never decodes images, so no shipped program can hand a PNG to the vulnerable reader.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64"
+        }
+      ]
+    }
+  ]
+}

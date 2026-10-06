@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-e06a32ed08e4911c20486cc5044d6017349a13a3cd147cfefe4bf1714e39109a",
+  "@id": "merged-vex-b771c053e70b3533c9a729d3bb8924c2d13e015411e19c7b19e130f915e045df",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-06T11:40:01.826715232Z",
+  "timestamp": "2026-10-06T17:47:50.619359194Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-59375"
       },
-      "timestamp": "2026-10-06T11:40:01.329862527Z",
+      "timestamp": "2026-10-06T17:47:50.083719377Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2025-66382"
       },
-      "timestamp": "2026-10-06T11:40:01.290510379Z",
+      "timestamp": "2026-10-06T17:47:50.040876564Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -37,9 +37,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-102633"
+      },
+      "timestamp": "2026-10-06T17:47:50.600893979Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libexpat1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libexpat versions 2.7.2 through 2.8.5 contain an integer overflow vulnerability in the expat_realloc() function on 32-bit platforms when computing allocation sizes. Attackers supplying malicious XML to applications parsing with vulnerable libexpat can cause heap buffer overflow, memory corruption, or denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The overflow needs 32-bit size_t arithmetic: a size near SIZE_MAX passes the 64-bit allocation-tracker check in expat_realloc and then wraps when the padding is added. The Liquibase Secure image is built for linux/amd64 and linux/arm64, both 64-bit, where that addition cannot wrap; the upstream fix notes that 64-bit platforms are not affected. The Ubuntu package 2.6.1-2ubuntu0.6 carries the backported allocation tracker, so this assessment rests on the architecture and on reachability, not on the version. Independently, nothing in the image parses untrusted XML with libexpat: the only library linking libexpat.so.1 is libfontconfig, which the JVM loads only when AWT font rendering initialises, and Liquibase is a headless CLI that parses changelog XML with the JDK's own java.xml parser. fontconfig's own XML input is the root-owned /etc/fonts configuration."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-32776"
       },
-      "timestamp": "2026-10-06T11:40:01.647600797Z",
+      "timestamp": "2026-10-06T17:47:50.402189766Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-32777"
       },
-      "timestamp": "2026-10-06T11:40:01.608368561Z",
+      "timestamp": "2026-10-06T17:47:50.362843323Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-32778"
       },
-      "timestamp": "2026-10-06T11:40:01.765432335Z",
+      "timestamp": "2026-10-06T17:47:50.520402973Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-41080"
       },
-      "timestamp": "2026-10-06T11:40:01.687341964Z",
+      "timestamp": "2026-10-06T17:47:50.442214597Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-45186"
       },
-      "timestamp": "2026-10-06T11:40:01.725345241Z",
+      "timestamp": "2026-10-06T17:47:50.480829126Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-50219"
       },
-      "timestamp": "2026-10-06T11:40:01.569412174Z",
+      "timestamp": "2026-10-06T17:47:50.322604474Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-56131"
       },
-      "timestamp": "2026-10-06T11:40:01.204823364Z",
+      "timestamp": "2026-10-06T17:47:49.96121567Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-56132"
       },
-      "timestamp": "2026-10-06T11:40:01.086427099Z",
+      "timestamp": "2026-10-06T17:47:49.844999928Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-56403"
       },
-      "timestamp": "2026-10-06T11:40:01.410741709Z",
+      "timestamp": "2026-10-06T17:47:50.164021522Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -174,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-56404"
       },
-      "timestamp": "2026-10-06T11:40:01.370221075Z",
+      "timestamp": "2026-10-06T17:47:50.124615077Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -189,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-56405"
       },
-      "timestamp": "2026-10-06T11:40:01.448836075Z",
+      "timestamp": "2026-10-06T17:47:50.204397087Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -204,7 +219,7 @@
       "vulnerability": {
         "name": "CVE-2026-56406"
       },
-      "timestamp": "2026-10-06T11:40:00.926576381Z",
+      "timestamp": "2026-10-06T17:47:49.687963236Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -219,7 +234,7 @@
       "vulnerability": {
         "name": "CVE-2026-56407"
       },
-      "timestamp": "2026-10-06T11:40:01.046766121Z",
+      "timestamp": "2026-10-06T17:47:49.807043181Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -234,7 +249,7 @@
       "vulnerability": {
         "name": "CVE-2026-56408"
       },
-      "timestamp": "2026-10-06T11:40:01.48827668Z",
+      "timestamp": "2026-10-06T17:47:50.243178988Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -249,7 +264,7 @@
       "vulnerability": {
         "name": "CVE-2026-56409"
       },
-      "timestamp": "2026-10-06T11:40:01.126424203Z",
+      "timestamp": "2026-10-06T17:47:49.883938582Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -264,7 +279,7 @@
       "vulnerability": {
         "name": "CVE-2026-56410"
       },
-      "timestamp": "2026-10-06T11:40:01.007031887Z",
+      "timestamp": "2026-10-06T17:47:49.767235173Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -279,7 +294,7 @@
       "vulnerability": {
         "name": "CVE-2026-56411"
       },
-      "timestamp": "2026-10-06T11:40:00.966542632Z",
+      "timestamp": "2026-10-06T17:47:49.727819613Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -294,7 +309,7 @@
       "vulnerability": {
         "name": "CVE-2026-56412"
       },
-      "timestamp": "2026-10-06T11:40:01.528776561Z",
+      "timestamp": "2026-10-06T17:47:50.282737175Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -309,7 +324,7 @@
       "vulnerability": {
         "name": "CVE-2026-66046"
       },
-      "timestamp": "2026-10-06T11:40:00.887857202Z",
+      "timestamp": "2026-10-06T17:47:49.64780254Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -324,7 +339,7 @@
       "vulnerability": {
         "name": "CVE-2026-72522"
       },
-      "timestamp": "2026-10-06T11:40:01.165989551Z",
+      "timestamp": "2026-10-06T17:47:49.922477159Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -339,7 +354,7 @@
       "vulnerability": {
         "name": "CVE-2026-76641"
       },
-      "timestamp": "2026-10-06T11:40:00.847766827Z",
+      "timestamp": "2026-10-06T17:47:49.609059121Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -354,7 +369,7 @@
       "vulnerability": {
         "name": "CVE-2026-76957"
       },
-      "timestamp": "2026-10-06T11:40:01.249030834Z",
+      "timestamp": "2026-10-06T17:47:50.000628124Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"
@@ -369,7 +384,7 @@
       "vulnerability": {
         "name": "CVE-2026-93990"
       },
-      "timestamp": "2026-10-06T11:40:01.805896075Z",
+      "timestamp": "2026-10-06T17:47:50.560936069Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libexpat1"

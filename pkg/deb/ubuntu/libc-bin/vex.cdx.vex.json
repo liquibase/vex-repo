@@ -686,7 +686,7 @@
           "severity": "none",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; Liquibase Secure never constructs fopen mode strings from external input.\n"
+          "justification": "Exploitation requires passing an attacker-controlled \",ccs=\" mode string to glibc's fopen; every fopen mode string in the shipped runtime is a constant.\n"
         }
       ],
       "cwes": [
@@ -694,18 +694,27 @@
       ],
       "advisories": [
         {
+          "url": "https://www.openwall.com/lists/oss-security/2026/08/27/6",
+          "title": "glibc advisory GLIBC-SA-2026-0015"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-18374",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18374",
           "title": "NVD Entry"
         }
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension. Liquibase Secure's runtime never constructs fopen mode strings from external input; the JVM's own file I/O does not use this glibc idiom.",
+        "detail": "This heap buffer overflow requires an application to call glibc's fopen function with an attacker-controlled mode string containing an effectively empty \",ccs=\" syntax extension; the file path is irrelevant. Every fopen call in the Temurin 21 JRE passes a constant mode string (\"r\", \"rb\", \"w\", \"a\" and similar), Java-level file I/O uses open(2) rather than fopen, the bash entrypoint has no user-controlled fopen mode, and lpm is a static Go binary that does not link glibc. No shipped program builds an fopen mode string from external input. The same glibc 2.39 source builds libc6, libc-bin and locales, and the reasoning applies to each.",
         "justification": "code_not_reachable",
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-22T00:00:00Z"
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
       },
       "affects": [
         {
@@ -882,6 +891,63 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97399",
+      "description": "The strncasecmp function in the GNU C Library 2.24 and later optimized for the Power8 architecture may read one byte beyond the input size limit, which may crash a program when that byte is not readable. This condition may happen when the input strings to the strncasecmp function are attacker controlled in an application and they match all the way up to the edge of their page and the neighbouring page is either not mapped or is not readable.",
+      "recommendation": "No action required. The Liquibase Secure image does not ship a Power8 build of glibc.",
+      "ratings": [
+        {
+          "source": {
+            "name": "glibc"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable Power8 assembly is not present in the amd64 and arm64 glibc builds the image ships.\n"
+        }
+      ],
+      "cwes": [
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0024",
+          "title": "glibc advisory GLIBC-SA-2026-0024"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-97399",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97399",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected strncasecmp is the Power8-optimised assembly variant (sysdeps/powerpc/powerpc64/power8), which glibc selects only on ppc64 and ppc64le builds. The Liquibase Secure image is published for linux/amd64 and linux/arm64 only, so the vulnerable routine is not compiled into the libc.so.6 it ships; the generic strncasecmp used on those architectures is not affected.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libc-bin"
         }
       ]
     },

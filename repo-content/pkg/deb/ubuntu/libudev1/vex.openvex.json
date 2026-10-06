@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-7f64d0d00e8347c6be1353ebc0edab5c5757d65fd9da01118bc091a34e21bfce",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-06T17:47:55.581939834Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40228"
+      },
+      "timestamp": "2026-10-06T17:47:55.581940826Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libudev1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set. ForwardToWall defaults to yes.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in the systemd-journald daemon: with ForwardToWall enabled (the default), a \"logger -p emerg\" message is forwarded to user terminals without stripping escape sequences. The forwarding path exists in systemd 255.4, the version Ubuntu noble ships, and no upstream fix exists. The Liquibase Secure container never runs it: the systemd, systemd-sysv and udev packages are not installed, no systemd-journald binary exists in the image, there is no init system and PID 1 is the Liquibase entrypoint script. libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1), pulled in by util-linux and apt, and contain no journald code."
+    }
+  ]
+}

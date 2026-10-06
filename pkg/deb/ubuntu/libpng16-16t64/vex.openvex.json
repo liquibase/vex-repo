@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-07e70998aec451de37d929d5b61489138d066c74441a137a54446426f727205c",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-06T17:47:52.351875422Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-46675"
+      },
+      "timestamp": "2026-10-06T17:47:52.351876494Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpng16-16t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "libpng's sequential reader can read through a dangling pointer when an application calls png_read_end after png_read_info without first starting to read the image rows. A crafted zTXt, iTXt or iCCP chunk can make libpng abandon decompression while zlib still expects more input, leaving a stale input pointer in libpng's zlib stream; png_read_end then resumes decompression from that pointer. For zTXt and iTXt the read is a heap use-after-free of the chunk buffer, for iCCP a stack use-after-return. The dangling pointer is only read, so the worst outcome is a crash. Affects libpng 1.6.0 through 1.6.58; fixed in 1.6.59.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The use-after-free needs an application to decode an attacker-supplied PNG with the system libpng and to call png_read_end after png_read_info without reading the image rows. In the image the system libpng16.so.16 is linked only by libfreetype, libfontconfig and the fc-* command-line tools, none of which the Liquibase JVM loads. The JDK's own image code does not use the system libpng: libsplashscreen carries a statically linked copy and ImageIO's PNG reader is pure Java. Liquibase is a headless CLI that never decodes images, so no shipped program can hand a PNG to the vulnerable reader."
+    }
+  ]
+}
