@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c756740179a1da6905ca0104ac95d7c6a4db456393eb9cfd23ee97df8d7781c2",
+  "@id": "merged-vex-1b70b841cb9f91e70ec9d259345f6d8a323aa20ad8b2f7ab0994e5b471919cb5",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-05T04:28:11.494073538Z",
+  "timestamp": "2026-10-05T23:56:34.972995451Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-g9jj-cgmh-9f38"
         ]
       },
-      "timestamp": "2026-10-05T04:28:08.358125047Z",
+      "timestamp": "2026-10-05T23:56:31.29783502Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -30,7 +30,7 @@
           "GHSA-qxvw-fvwx-5cp7"
         ]
       },
-      "timestamp": "2026-10-05T04:28:08.524938516Z",
+      "timestamp": "2026-10-05T23:56:31.469076383Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -48,7 +48,7 @@
           "GHSA-xvr9-35cr-46v9"
         ]
       },
-      "timestamp": "2026-10-05T04:28:08.692862617Z",
+      "timestamp": "2026-10-05T23:56:31.639868154Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -58,6 +58,24 @@
       "status_notes": "The connector encodes and decodes all character data assuming the connection character set is UTF-8. A server can change character_set_client mid-session to a non-UTF-8 charset, after which the driver and server interpret the same bytes under different encodings. This causes silent data corruption and is a primitive that can defeat byte-wise quoting and escaping.",
       "justification": "vulnerable_code_not_present",
       "impact_statement": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-61700",
+        "aliases": [
+          "GHSA-wxmm-q36w-r9xj"
+        ]
+      },
+      "timestamp": "2026-10-05T23:56:34.961394973Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "MariaDB Connector/J does not enforce allowLocalInfile=false when a server answers a query with a LOCAL INFILE request. When a client runs LOAD DATA LOCAL INFILE, a rogue or man-in-the-middle server can echo the same filename back and the connector sends the file content even though local infile was disabled. The server cannot redirect the request to a different file than the one named in the client's query.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "Fixed in mariadb-java-client 3.5.9. Liquibase Secure 5.2.2 and later ship 3.5.9 or newer, which includes the fix. Releases 5.0.0 through 5.2.1 shipped 3.5.6 or 3.5.7 and are affected. Liquibase never sets allowLocalInfile and never issues LOAD DATA LOCAL INFILE itself (the loadData change type sends INSERT statements), so exposure on those releases requires a user who sets allowLocalInfile=false in the JDBC URL, runs LOAD DATA LOCAL INFILE in changelog SQL, and connects to a rogue or man-in-the-middle server. With the driver default (allowLocalInfile=true) the fixed and unfixed drivers behave the same."
     }
   ]
 }

@@ -59,6 +59,64 @@
           "ref": "pkg:maven/tools.jackson.core/jackson-core"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-89425",
+      "description": "UTF8DataInputJsonParser._reportInvalidToken() in jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound and never consults the configured maximum error-token length. A malformed token supplied to a parser created from a DataInput is therefore accumulated in full, which can exhaust the JVM heap.",
+      "recommendation": "No action required. No shipped code parses JSON through Jackson's DataInput-backed parser. A future release moves the bundled copy to a fixed version.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing in the shipped jars hands a DataInput to Jackson, so the parser with the unbounded error buffer is never created.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7hhh-6rmp-j9qf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-89425",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in tools.jackson.core jackson-core 3.1.7 and 3.2.3. Liquibase Secure 6.0.0 carries one Jackson 3 copy, 3.2.2, inside the Cassandra extension, where it is used by the bundled Cassandra driver. The license-tracking application in the 5.1.x and 5.2.x ZIP also carries Jackson 3 copies inside the advisory range. Earlier images carry no Jackson 3. The unbounded error-token buffer is in UTF8DataInputJsonParser, which Jackson creates only for input supplied as a java.io.DataInput. A bytecode scan of every class in every shipped jar, the Cassandra extension and the license-tracking application included, found no code outside Jackson itself that passes a DataInput to Jackson, so the parser with the unbounded buffer is never created.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-05T00:00:00Z",
+        "lastUpdated": "2026-10-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.7|>=3.2.0|<3.2.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

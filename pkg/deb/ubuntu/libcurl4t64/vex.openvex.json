@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-71696789ab9724a8d94d1ba789871757fac1c30bb4a619bfcfe45bd8923dfb90",
+  "@id": "merged-vex-fac61cf352a4e0826f6245119e626fe36f2fb6ab0f1fdf2c21be21fe7db2cb0e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-05T03:55:40.848951484Z",
+  "timestamp": "2026-10-05T23:23:51.3661994Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-0167",
+        "aliases": [
+          "CURL-CVE-2025-0167"
+        ]
+      },
+      "timestamp": "2026-10-05T23:23:51.327572121Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libcurl4t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When asked to use a .netrc file for credentials and to follow HTTP redirects, curl could leak the password used for the first host to the followed-to host under certain circumstances. This flaw only manifests itself if the .netrc file has a default entry that omits both login and password.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the password leak needs a libcurl-based transfer that reads credentials from a .netrc file whose default entry omits both login and password, and then follows an HTTP redirect to another host. curl is present in the image but nothing in the runtime path invokes it, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP traffic goes through the JDK HTTP client), and lpm is a statically linked Go binary, so no libcurl transfer ever happens in Liquibase Secure. Fixed in Ubuntu 8.5.0-2ubuntu10.8; Liquibase Secure 5.0.2 through 5.1.0 shipped 8.5.0-2ubuntu10.6, and 5.1.1 and later ship 8.5.0-2ubuntu10.8 or newer."
+    },
     {
       "vulnerability": {
         "name": "CVE-2025-14017",
@@ -12,7 +30,7 @@
           "CURL-CVE-2025-14017"
         ]
       },
-      "timestamp": "2026-10-05T03:55:39.871944731Z",
+      "timestamp": "2026-10-05T23:23:49.882461633Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -30,7 +48,7 @@
           "CURL-CVE-2025-14524"
         ]
       },
-      "timestamp": "2026-10-05T03:55:40.101383265Z",
+      "timestamp": "2026-10-05T23:23:50.101203622Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -48,7 +66,7 @@
           "CURL-CVE-2025-15079"
         ]
       },
-      "timestamp": "2026-10-05T03:55:40.330504762Z",
+      "timestamp": "2026-10-05T23:23:50.322747551Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -66,7 +84,7 @@
           "CURL-CVE-2025-15224"
         ]
       },
-      "timestamp": "2026-10-05T03:55:40.563216728Z",
+      "timestamp": "2026-10-05T23:23:50.544868606Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -84,7 +102,7 @@
           "CURL-CVE-2026-1965"
         ]
       },
-      "timestamp": "2026-10-05T03:55:38.712211032Z",
+      "timestamp": "2026-10-05T23:23:48.757202776Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
