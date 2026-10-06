@@ -55,6 +55,120 @@
           "ref": "pkg:deb/ubuntu/dash"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-102474",
+      "description": "A flaw was found in dash. The printf builtin reserves four bytes before converting a Unicode escape (backslash-u or backslash-U), but the multi-byte token can need five or six bytes. A local user who can supply such an escape to dash printf or echo %b, including through dash -c and a positional argument, can write one or two bytes past that reservation.",
+      "recommendation": "No action required. The dash version in the image predates the Unicode escape support that carries this flaw.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "dash 0.5.12 has no Unicode escape handling in its printf builtin.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-102474",
+          "title": "Red Hat CVE page"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102474",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102474",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow is in the printf builtin's handling of the Unicode escapes (backslash-u and backslash-U), which dash gained in 0.5.13 together with dollar-single-quote quoting (upstream commit 776424a8). Ubuntu noble ships dash 0.5.12-6ubuntu5, whose printf.c has no Unicode escape handling and no CHECKSTRSPACE reservation to overrun; the Debian and Ubuntu patch series for 0.5.12 add only the backslash-e escape. The scanner matches on the package name, not on the presence of the code.",
+        "justification": "vulnerable_code_not_present",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102473",
+      "description": "A flaw was found in dash. When built without libc fnmatch, the internal pmatch() matcher implements * by unbounded recursion over candidate positions. A local user who can plant filenames, or otherwise feed that matcher, can make a short multi-star pattern such as *.*.*.*.*.tar.gz consume excessive CPU.",
+      "recommendation": "No action required. No shipped code path invokes dash; Liquibase and its entrypoint use bash or exec binaries directly.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No untrusted input reaches dash; nothing in the image invokes /bin/sh.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-102473",
+          "title": "Red Hat CVE page"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102473",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102473",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Ubuntu builds dash with --disable-fnmatch, so the recursive pmatch matcher is present in 0.5.12-6ubuntu5. Reaching it needs dash to evaluate a multi-star pattern (globbing, case, ${var#pat}) against attacker-influenced names. Nothing in the image runs dash: /bin/sh is dash, but the entrypoint and the liquibase launcher are bash scripts, Liquibase's flow shell action runs bash -c, and its executeCommand change and other ProcessBuilder call sites exec the named binary directly without a shell. lpm is a static Go binary that spawns no processes on Linux. Only the operator who authors the changelog or flow file can invoke dash explicitly, and that operator already controls the container; the impact would be CPU exhaustion of their own unprivileged process.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dash"
+        }
+      ]
     }
   ]
 }

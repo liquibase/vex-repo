@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-884884495bb685c3ce0b116e4e6f9b6d285b5a3a16c2b1eb29114d23571cd7de",
+  "@id": "merged-vex-ed40cf9d08bbb54707e3927fa601bec4c5082c528b6ccd4e2d05dc364c1a3cd1",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-06T11:40:06.492652399Z",
+  "timestamp": "2026-10-06T17:47:55.506160017Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-10-06T11:40:06.397434102Z",
+      "timestamp": "2026-10-06T17:47:55.409352534Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-10-06T11:40:06.43694272Z",
+      "timestamp": "2026-10-06T17:47:55.448866001Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -39,16 +39,16 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-06T11:40:06.475782386Z",
+      "timestamp": "2026-10-06T17:47:55.488765963Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
         }
       ],
       "status": "not_affected",
-      "status_notes": "In systemd 259, systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set.",
+      "status_notes": "systemd-journald can send ANSI escape sequences to the terminals of arbitrary users when a \"logger -p emerg\" command is executed, if ForwardToWall=yes is set. ForwardToWall defaults to yes.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "This flaw requires systemd-journald to be running as a system service with ForwardToWall=yes, receiving a \"logger -p emerg\" invocation. A review of the running container found no systemd or systemd-journald process at all: the container has no init system, PID 1 is the Liquibase entrypoint script itself, and libsystemd0 ships only as a linked library dependency of other base-image packages, never as a running daemon. The vulnerable journald forwarding path cannot exist in a container that never runs journald."
+      "impact_statement": "The flaw is in the systemd-journald daemon: with ForwardToWall enabled (the default), a \"logger -p emerg\" message is forwarded to user terminals without stripping escape sequences. The forwarding path exists in systemd 255.4, the version Ubuntu noble ships, and no upstream fix exists. The Liquibase Secure container never runs it: the systemd, systemd-sysv and udev packages are not installed, no systemd-journald binary exists in the image, there is no init system and PID 1 is the Liquibase entrypoint script. libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1), pulled in by util-linux and apt, and contain no journald code."
     }
   ]
 }

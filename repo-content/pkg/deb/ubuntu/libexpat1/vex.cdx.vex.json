@@ -882,6 +882,63 @@
       ]
     },
     {
+      "id": "CVE-2026-102633",
+      "description": "libexpat versions 2.7.2 through 2.8.5 contain an integer overflow vulnerability in the expat_realloc() function on 32-bit platforms when computing allocation sizes. Attackers supplying malicious XML to applications parsing with vulnerable libexpat can cause heap buffer overflow, memory corruption, or denial of service.",
+      "recommendation": "No action required. The image is 64-bit and no shipped program feeds external XML to libexpat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VulnCheck"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The size_t wrap cannot occur on the 64-bit builds the image ships, and no shipped program parses external XML with libexpat.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/libexpat/libexpat/pull/1392",
+          "title": "libexpat fix (pull request 1392)"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-102633",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102633",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The overflow needs 32-bit size_t arithmetic: a size near SIZE_MAX passes the 64-bit allocation-tracker check in expat_realloc and then wraps when the padding is added. The Liquibase Secure image is built for linux/amd64 and linux/arm64, both 64-bit, where that addition cannot wrap; the upstream fix notes that 64-bit platforms are not affected. The Ubuntu package 2.6.1-2ubuntu0.6 carries the backported allocation tracker, so this assessment rests on the architecture and on reachability, not on the version. Independently, nothing in the image parses untrusted XML with libexpat: the only library linking libexpat.so.1 is libfontconfig, which the JVM loads only when AWT font rendering initialises, and Liquibase is a headless CLI that parses changelog XML with the JDK's own java.xml parser. fontconfig's own XML input is the root-owned /etc/fonts configuration.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56411",
       "description": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
       "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",
