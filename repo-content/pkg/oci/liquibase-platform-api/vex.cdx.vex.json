@@ -948,6 +948,289 @@
       ]
     },
     {
+      "id": "CVE-2026-101907",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 1.17.0 until 1.20.0, the fetch adapter bypasses the maxRedirects: 0 redirect policy. An Axios request uses the fetch adapter with maxRedirects set to zero and receives a redirect response. The underlying fetch implementation follows the redirect instead of returning the redirect response unchanged. The redirected request can access internal responses or reach state-changing internal endpoints despite redirects being disabled. This issue is fixed in version 1.20.0.",
+      "recommendation": "No action required. The platform does not issue runtime axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:H/SI:H/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not execute axios request code, so the vulnerable fetch-adapter redirect handling is unreachable.\n"
+        }
+      ],
+      "cwes": [
+        441,
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101907",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/axios/axios/security/advisories/GHSA-r4gj-5m52-g5wh",
+          "title": "GitHub Advisory GHSA-r4gj-5m52-g5wh"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Axios 1.18.1 is shipped in the api and llt runtime bundle, but the platform does not make runtime axios requests. The only non-test axios usage is importing AxiosError for exception mapping, so the fetch-adapter request path that mishandles maxRedirects is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios",
+          "versions": [
+            {
+              "range": "vers:npm/>=1.17.0|<1.20.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-101909",
+      "description": "Axios is a promise-based HTTP client for the browser and Node.js. From 0.28.0 until 0.34.0 and 1.15.1 until 1.20.0, ToFormData processes inherited serialization options and visitor properties supplied through prototype pollution. A separate same-process prototype-pollution flaw supplies inherited dots, indexes, metaTokens, maxDepth, visitor, or Blob values before object serialization. The inherited options alter toFormData field naming and data interpretation, maxDepth can force request failure, Blob changes value handling, and a polluted visitor can execute when an attacker already has the stronger ability to inject a function. Serialized field naming and data interpretation can change, maxDepth can cause request failure, Blob can alter value handling, and a polluted visitor can execute under the stronger function-injection primitive. This issue is fixed in versions 0.34.0 and 1.20.0.",
+      "recommendation": "No action required. The platform does not issue runtime axios requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.3,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not execute axios request code, so the vulnerable toFormData serialization path is unreachable.\n"
+        }
+      ],
+      "cwes": [
+        1321
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-101909",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/axios/axios/security/advisories/GHSA-x97p-jq2g-jp4f",
+          "title": "GitHub Advisory GHSA-x97p-jq2g-jp4f"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Axios 1.18.1 is shipped in the api and llt runtime bundle, but the platform does not make runtime axios requests. The only non-test axios usage is importing AxiosError for exception mapping, so the toFormData serialization path is not exercised by the deployed workload.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/axios",
+          "versions": [
+            {
+              "range": "vers:npm/>=1.15.1|<1.20.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102010",
+      "description": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-102010",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/gcc-14-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102010",
+      "description": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-102010",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libgcc-s1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102010",
+      "description": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-102010",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libgomp1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-5435",
       "description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to enforce the caller-supplied buffer length, and can result in an out-of-bounds write when printing TSIG records.",
       "recommendation": "No action required. No platform component calls the glibc resolver print functions.",
@@ -1002,6 +1285,546 @@
       "affects": [
         {
           "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102010",
+      "description": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102010",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-102010",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libstdc%2B%2B6"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102276",
+      "description": "brace-expansion can exhaust the native stack while expanding a crafted brace pattern, ending the process that expands it.",
+      "recommendation": "No action required. No shipped code path expands a brace pattern.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing the platform runs expands a brace pattern, and no caller can supply one.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102276",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The package is present in the api and llt images at a release below the fix. It arrives underneath the native add-on build tool's file-matching dependency, and the platform never runs that tool or calls a file-matching helper at run time. Expanding a brace pattern is therefore something no shipped code path does, and no caller can supply a pattern to expand.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/brace-expansion",
+          "versions": [
+            {
+              "range": "vers:npm/<1.1.19",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102278",
+      "description": "brace-expansion can exhaust the native stack while expanding deeply nested brace groups, ending the process that expands it.",
+      "recommendation": "No action required. No shipped code path expands a brace pattern.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing the platform runs expands a brace pattern, and no caller can supply one.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102278",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The package is present in the api and llt images at a release below the fix. It arrives underneath the native add-on build tool's file-matching dependency, and the platform never runs that tool or calls a file-matching helper at run time. Expanding a brace pattern is therefore something no shipped code path does, and no caller can supply a pattern to expand.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/brace-expansion",
+          "versions": [
+            {
+              "range": "vers:npm/<1.1.20",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54873",
+      "description": "OpenSSL can hold a QUIC packet buffer for longer than it needs to, letting a remote peer decide how long that memory stays allocated.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54873",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libcrypto3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The QUIC packet-buffer retention path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libcrypto3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54873",
+      "description": "OpenSSL can hold a QUIC packet buffer for longer than it needs to, letting a remote peer decide how long that memory stays allocated.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54873",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libssl3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The QUIC packet-buffer retention path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libssl3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54873",
+      "description": "OpenSSL 3.5.7 and related releases can retain QUIC packet buffers longer than necessary, allowing a malicious peer to force excessive memory usage.",
+      "recommendation": "No action required. The platform runtime does not use the system OpenSSL QUIC stack.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform runtime does not use the system OpenSSL QUIC stack.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54873",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-54873",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory 2026-09-29"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The libssl3t64 package sits in the Debian base for the api and llt images and nothing loads it. The Node.js binary links neither libssl nor libcrypto, it bundles its own OpenSSL, and neither native add-on in those images links them either. The platform also has no QUIC stack at all, so the packet-buffer retention path is doubly out of reach.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.5.7-1~deb13u3",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-72897",
+      "description": "A TLS server that calls SSL_set_SSL_CTX() part way through a handshake may read past the end of an internal array when the replacement context knows more signature algorithms than the original.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-72897",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libcrypto3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The SSL_set_SSL_CTX context switch is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libcrypto3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-72897",
+      "description": "A TLS server that calls SSL_set_SSL_CTX() part way through a handshake may read past the end of an internal array when the replacement context knows more signature algorithms than the original.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-72897",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libssl3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The SSL_set_SSL_CTX context switch is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libssl3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-72897",
+      "description": "A TLS server that calls SSL_set_SSL_CTX() to switch a connection to a different SSL_CTX during a handshake may read or write beyond an internal array when the replacement context knows about more provider signature algorithms than the original context.",
+      "recommendation": "No action required. The platform does not execute the system OpenSSL TLS server APIs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The api and llt images do not invoke the system OpenSSL TLS server APIs, so the SSL_set_SSL_CTX handshake path is not reachable.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-72897",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-72897",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory 2026-09-29"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The libssl3t64 package sits in the Debian base for the api and llt images and nothing loads it. The Node.js binary links neither libssl nor libcrypto, it bundles its own OpenSSL, and neither native add-on in those images links them either. The platform runs no TLS server against the system library, so SSL_set_SSL_CTX is never called.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.5.7-1~deb13u3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-84784",
+      "description": "A peer can flood the OpenSSL QUIC stack with NEW_CONNECTION_ID frames and, by withholding acknowledgements, force the control frame queue to grow without bound.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84784",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libcrypto3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The QUIC NEW_CONNECTION_ID handling path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libcrypto3"
         }
       ]
     },
@@ -1064,6 +1887,562 @@
       ]
     },
     {
+      "id": "CVE-2026-84784",
+      "description": "A peer can flood the OpenSSL QUIC stack with NEW_CONNECTION_ID frames and, by withholding acknowledgements, force the control frame queue to grow without bound.",
+      "recommendation": "No action required. Neither image loads the system OpenSSL library.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image loads the system OpenSSL library, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84784",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Alpine libssl3 package sits in the web and migrate images but nothing in either image loads it. The web image runs Node.js, which bundles its own OpenSSL and links no system TLS library, and its QUIC support is absent entirely. The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation; the only binaries that link the system library there are the BusyBox TLS helper and the package manager, neither of which serves TLS or speaks QUIC. The QUIC NEW_CONNECTION_ID handling path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libssl3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-84784",
+      "description": "A malicious peer can flood the OpenSSL QUIC stack with NEW_CONNECTION_ID frames and force excessive Control Frame Queue allocation when ACKs are withheld.",
+      "recommendation": "No action required. The platform does not execute the system OpenSSL QUIC stack.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not instantiate the system OpenSSL QUIC implementation, so the vulnerable control-frame queue path is not reachable.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84784",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-84784",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20260929.txt",
+          "title": "OpenSSL Security Advisory 2026-09-29"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The libssl3t64 package sits in the Debian base for the api and llt images and nothing loads it. The Node.js binary links neither libssl nor libcrypto, it bundles its own OpenSSL, and neither native add-on in those images links them either. The platform also has no QUIC stack, so the NEW_CONNECTION_ID handling path cannot be entered.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.5.7-1~deb13u3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-90711",
+      "description": "proxy-addr before 2.0.8 compiles an IPv4-mapped IPv6 trust subnet with a short prefix, or any IPv6 trust subnet with zero leading bits, into a value that matches every IPv4 address instead of the block it names. Every unauthenticated client is then trusted as a proxy, so the address the application reads from a request is whatever the client sends in X-Forwarded-For. The misconfiguration compiles without error.",
+      "recommendation": "No action required. The platform does not configure a trust subnet, and there is no supported way for a deployment to supply one.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Proxy trust is enabled as a boolean, never as a subnet, so the vulnerable subnet-matching code is not reached.\n"
+        }
+      ],
+      "cwes": [
+        290
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-90711",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw needs the application to hand proxy-addr a trust subnet written as an IPv6 address with zero leading bits, such as `::ffff:10.0.0.0/8` or `::/1`, which compiles to match every client. The platform enables proxy trust as a plain boolean rather than a subnet list, and exposes no setting, environment variable or configuration file that lets a deployment supply one, so the subnet-compilation path the flaw lives in is never entered.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/proxy-addr",
+          "versions": [
+            {
+              "range": "vers:npm/<2.0.8",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-93748",
+      "description": "http-cache-semantics through 4.2.0 can treat a request carrying a max-stale directive as satisfiable from a stored response that the cache should have revalidated, so a cache shared between users may return one user's stored response to another.",
+      "recommendation": "No action required. The platform runs no HTTP response cache and does not use this library on any request path.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No HTTP response cache exists in the platform, so no stored response can be served to the wrong user.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-93748",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw needs an HTTP response cache that serves stored responses to more than one user. The platform makes its outbound HTTP calls through undici and the native fetch API, neither of which uses this library, and it runs no shared response cache. The copy in the image arrives only underneath command-line and native-build tooling, which no request path invokes.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/http-cache-semantics"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-93749",
+      "description": "source-map-js before 1.2.2 can spend unbounded time in the event loop when it parses an indexed source map whose sections carry crafted offsets, stalling the process that parses it.",
+      "recommendation": "No action required. Source maps are parsed only by build tooling, never from caller-supplied input.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No runtime path parses a source map, and no caller can supply one.\n"
+        }
+      ],
+      "cwes": [
+        1284
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-93749",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Reaching the flaw means parsing a source map whose section offsets an attacker chose. The library is present underneath CSS build tooling, which runs when the web assets are compiled and not in any shipped request path. The api and llt runtimes have no CSS pipeline and parse no source maps, and nothing lets a caller submit one.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/source-map-js",
+          "versions": [
+            {
+              "range": "vers:npm/<1.2.2",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95619",
+      "description": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95619",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-95619",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/gcc-14-base"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95619",
+      "description": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95619",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-95619",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libgcc-s1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95619",
+      "description": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95619",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-95619",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libgomp1"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95619",
+      "description": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
+      "recommendation": "No action required. The affected standard-library code is not linked by any binary in the images.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No binary in the images imports the affected standard-library symbols.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-95619",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-95619",
+          "title": "Debian Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libstdc%2B%2B6"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-vcvr-r3jv-pc5j",
+      "description": "The Node.js `ImageResponse` implementation from `next/og` is affected by an upstream vulnerability that can lead to remote code execution when an application passes attacker-controlled values into SVG content, attributes, or styles during image generation.",
+      "recommendation": "No action required. The platform does not use the affected `next/og` image-generation API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The platform does not invoke `next/og` or `ImageResponse`, so attacker input cannot reach the vulnerable image-generation code.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/vercel/next.js/security/advisories/GHSA-vcvr-r3jv-pc5j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/vercel/next.js/releases/tag/v16.3.6",
+          "title": "Next.js v16.3.6 Release"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The api, llt and web images all carry Next.js, and none of them uses the Node.js `ImageResponse` implementation from `next/og`. The runtime code defines page metadata only and exposes no `next/og`, `ImageResponse`, `opengraph-image` or `twitter-image` route, so attacker-controlled input cannot reach the affected SVG image-generation path in any image.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/next",
+          "versions": [
+            {
+              "range": "vers:npm/<16.3.6",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-77117",
       "description": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
       "recommendation": "No action required. The platform never runs glibc iconv conversions.",
@@ -1118,6 +2497,62 @@
       "affects": [
         {
           "ref": "pkg:deb/debian/libc6"
+        }
+      ]
+    },
+    {
+      "id": "GHSA-wq5f-xc86-pv6w",
+      "description": "sharp before 0.35.5 bundles a librsvg build with a memory-handling flaw that, under certain runtime conditions on glibc-based Linux, can lead to remote code execution while rendering SVG input.",
+      "recommendation": "No action required. No image renders SVG through sharp.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 0,
+          "severity": "high",
+          "method": "other"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Nothing in the shipped images imports sharp or passes it SVG input.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-96889",
+          "title": "NVD Entry (librsvg)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The api and llt images carry sharp 0.35.4 and the libvips binaries it bundles, below the 0.35.5 release that picks up the fixed librsvg. It arrives as an optional dependency of Next.js, and nothing in those images imports sharp or renders an SVG: the only Next.js surface that would load it is the image optimizer, which those images do not serve. The web image removes sharp from the standalone output before the runtime image is assembled, so it does not carry the affected code at all.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/sharp",
+          "versions": [
+            {
+              "range": "vers:npm/<0.35.5",
+              "status": "affected"
+            }
+          ]
         }
       ]
     },
