@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-2eccc1eea670386641931a20e8c304224d9d95c09346698851e06b5527fc8ec2",
+  "@id": "merged-vex-a9a6f72a8f19ab4c4ae686abd7b91ef52d1c2c4f44cf7ac979bb8fe4de8fd205",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-07T17:28:41.309785077Z",
+  "timestamp": "2026-10-08T19:16:34.089206941Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-07T17:28:41.262927525Z",
+      "timestamp": "2026-10-08T19:16:34.028558277Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -21,7 +21,7 @@
       "status": "not_affected",
       "status_notes": "Spring MVC and WebFlux applications are vulnerable to Denial of Service (DoS) attacks when resolving static resources. An application can be vulnerable when it uses Spring MVC or Spring WebFlux, serves static resources from the file system, and has configured versioned resources support. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-webmvc because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that serves static resources from the file system and has versioned resource support configured. The application configures neither: it packages no static resources, sets no spring.web.resources static-location or resource-chain properties, and none of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry. Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set."
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that serves static resources from the file system and has versioned resource support configured. The application configures neither: it packages no static resources, sets no spring.web.resources static-location or resource-chain properties, and none of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry. Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set."
     },
     {
       "vulnerability": {
@@ -30,7 +30,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-07T17:28:41.295275595Z",
+      "timestamp": "2026-10-08T19:16:34.070896105Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -39,7 +39,7 @@
       "status": "not_affected",
       "status_notes": "Due to incorrect escaping, the use of JavaScriptUtils.javaScriptEscape() may lead to JavaScript code injection in the browser, potentially resulting in a cross-site scripting (XSS) vulnerability. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "No Liquibase Secure Docker image or tar.gz distribution contains Spring code. A scan of every class in every shipped jar, nested jars included, found no org.springframework class in any image from 5.0.0 through 6.0.0. The scanner reports spring-webmvc because the SBOM bundled in the 5.x images lists the dependencies of the license-tracking application. That application is a separately started Spring Boot service shipped only in the ZIP distribution from 5.0.0 through 5.2.2, and it was removed in 6.0.0. It carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. A bytecode scan of the application found JavaScriptUtils called only from the Spring JSP tag classes (EscapeBodyTag, EvalTag, MessageTag and UrlTag). The application bundles no JSP engine and renders no JSP views, and none of its own classes calls JavaScriptUtils.javaScriptEscape(), so the faulty escaping never runs."
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. A bytecode scan of the application found JavaScriptUtils called only from the Spring JSP tag classes (EscapeBodyTag, EvalTag, MessageTag and UrlTag). The application bundles no JSP engine and renders no JSP views, and none of its own classes calls JavaScriptUtils.javaScriptEscape(), so the faulty escaping never runs."
     }
   ]
 }
