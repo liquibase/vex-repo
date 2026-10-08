@@ -2015,6 +2015,323 @@
       ]
     },
     {
+      "id": "CVE-2026-27139",
+      "description": "On Unix platforms, when listing the contents of a directory using File.ReadDir or File.Readdir the returned FileInfo could reference a file outside of the Root in which the File was opened. The impact of this escape is limited to reading metadata provided by lstat from arbitrary locations on the filesystem without permitting reading or writing files outside the root.",
+      "recommendation": "No action required. lpm does not use os.Root, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.5,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The escape requires a directory opened through os.Root, which neither lpm nor any library linked into it uses.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rv83-g57w-fr8j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27139",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4602",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/EdhZqrQ98hk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib os.Root escape (GO-2026-4602), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The vulnerability only affects directory listings of a File opened through an os.Root (os.OpenRoot / Root.Open). A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no use of os.Root, os.OpenRoot or os.OpenInRoot: lpm lists directories through a plain os.Open followed by File.Readdir, which has no root boundary to escape. The third-party libraries linked into the lpm binary (spf13/cobra, spf13/pflag, inconshreveable/mousetrap, hashicorp/go-version) do not use os.Root either. Even where reached, the impact is limited to reading lstat metadata.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.8|>=1.26.0-0|<1.26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27142",
+      "description": "Actions which insert URLs into the content attribute of HTML meta tags are not escaped. This can allow XSS if the meta tag also has an http-equiv attribute with the value \"refresh\". A new GODEBUG setting has been added, htmlmetacontenturlescape, which can be used to disable escaping URLs in actions in the meta content attribute which follow \"url=\" by setting htmlmetacontenturlescape=0.",
+      "recommendation": "No action required. lpm does not use html/template, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "html/template is not linked into lpm, and lpm produces no HTML, so there is no XSS surface.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-j4j7-vw47-rhfq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27142",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4603",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/EdhZqrQ98hk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template meta content URL escaping flaw (GO-2026-4603), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.8|>=1.26.0-0|<1.26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32289",
+      "description": "Context was not properly tracked across template branches for JS template literals, leading to possibly incorrect escaping of content when branches were used. Additionally template actions within JS template literals did not properly track the brace depth, leading to incorrect escaping being applied. These issues could cause actions within JS template literals to be incorrectly or improperly escaped, leading to XSS vulnerabilities.",
+      "recommendation": "No action required. lpm does not use html/template, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "html/template is not linked into lpm, and lpm produces no HTML or JavaScript, so there is no XSS surface.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7mr4-xjxg-34g6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32289",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4865",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/0uYbvbPZRWU",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template JS template literal context-tracking flaw (GO-2026-4865), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML or JavaScript. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0-0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32288",
+      "description": "tar.Reader can allocate an unbounded amount of memory when reading a maliciously-crafted archive containing a large number of sparse regions encoded in the \"old GNU sparse map\" format.",
+      "recommendation": "No action required. lpm does not read tar archives, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "archive/tar is not used by lpm or any library linked into it, so a crafted tar archive is never parsed.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x4jj-h2v8-hqqv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32288",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4869",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/0uYbvbPZRWU",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib archive/tar unbounded allocation on old GNU sparse maps (GO-2026-4869), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of archive/tar. lpm downloads plain jar files and only handles archives through archive/zip. The third-party libraries linked into the lpm binary do not import archive/tar either, so tar.Reader is never used.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0-0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42507",
+      "description": "When returning errors, functions in the net/textproto package would include its input as part of the error. This might allow an attacker to inject misleading content to errors that are printed or logged.",
+      "recommendation": "No action required. Exploitation needs control of the HTTPS response from lpm's fixed download endpoints, and current images ship an lpm built with a fixed Go toolchain.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs an attacker-controlled HTTPS response from lpm's fixed download endpoints, and the only impact is a misleading console line.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h3gm-q7m7-mp28",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42507",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-5039",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/tKs3rmcBcKw",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/textproto error-message injection (GO-2026-5039), fixed in Go 1.25.11 and 1.26.4. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The flaw does not corrupt parsing. It only places unescaped server input into the text of returned errors. lpm reaches net/textproto through net/http when it downloads a jar or package manifest. Header parsing errors from http.Client.Get are discarded in favour of a fixed \"Unable to download from\" message, but a malformed chunked-encoding trailer is parsed by net/textproto while lpm reads the response body, and lpm prints that body-read error to the console before exiting. Injecting text therefore requires the attacker to control the HTTPS response from lpm's download endpoints (repo1.maven.org, maven.liquibase.com, github.com) or from a URL the user passes to lpm update --path, and the result is a single misleading console line with no effect on what lpm installs. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly. lpm 0.3.5 and later are built with Go 1.26.4 or newer, which escapes this text.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.11|>=1.26.0-0|<1.26.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61731",
       "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
       "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",

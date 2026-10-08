@@ -166,6 +166,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-11822",
+      "description": "SQLite before 3.53.2 contains memory corruption vulnerabilities in the FTS5 full-text search extension that allow attackers to cause process crashes, memory exhaustion, or arbitrary code execution by supplying a crafted database with malformed FTS5 page data. Attackers can trigger an out-of-bounds read in fts5LeafSeek() via an attacker-controlled loop bound and a heap buffer overflow write in fts5ChunkIterate() through a crafted continuation page causing an integer underflow, exploitable when an FTS5 MATCH query is executed against the malicious database.",
+      "recommendation": "No action required. Liquibase Secure does not use the system SQLite library or its FTS5 extension.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The system libsqlite3-0 library is present only as part of the Ubuntu base layer; no Liquibase Secure component loads it or runs FTS5 queries.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6qj8-gw6p-hc5p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11822",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sqlite.org/releaselog/3_53_2.html",
+          "title": "SQLite 3.53.2 Release Notes"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires a process linked against the system SQLite library to run an FTS5 MATCH query against an attacker-crafted database file. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container runs only the Liquibase Java CLI and its entrypoint script, neither of which loads the system SQLite library. The only image binaries linked against it are gpg and keyboxd from the eclipse-temurin base layer, and neither is invoked by the entrypoint or the CLI. SQLite support in Liquibase goes through the optional sqlite-jdbc driver, which carries its own embedded native library rather than linking the OS package. Ubuntu has published a fixed package (3.45.1-1ubuntu2.6), which current image builds pick up through the image's security package upgrade step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsqlite3-0",
+          "versions": [
+            {
+              "range": "vers:deb/<3.45.1-1ubuntu2.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

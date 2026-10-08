@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a9a6f72a8f19ab4c4ae686abd7b91ef52d1c2c4f44cf7ac979bb8fe4de8fd205",
+  "@id": "merged-vex-af281affaf3c822d6598c1a7e7205faa2de83084b1a196f2fab18516a205c471",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-08T19:16:34.089206941Z",
+  "timestamp": "2026-10-08T20:07:04.848436015Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-08T19:16:34.028558277Z",
+      "timestamp": "2026-10-08T20:07:04.715053082Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -30,7 +30,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-08T19:16:34.070896105Z",
+      "timestamp": "2026-10-08T20:07:04.753674606Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -40,6 +40,42 @@
       "status_notes": "Due to incorrect escaping, the use of JavaScriptUtils.javaScriptEscape() may lead to JavaScript code injection in the browser, potentially resulting in a cross-site scripting (XSS) vulnerability. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. A bytecode scan of the application found JavaScriptUtils called only from the Spring JSP tag classes (EscapeBodyTag, EvalTag, MessageTag and UrlTag). The application bundles no JSP engine and renders no JSP views, and none of its own classes calls JavaScriptUtils.javaScriptEscape(), so the faulty escaping never runs."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47884",
+        "aliases": [
+          "GHSA-pc63-qcmh-9cmg"
+        ]
+      },
+      "timestamp": "2026-10-08T20:07:04.79299049Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that renders views through XsltView, has a \"/**\" mapping that leads to view rendering, and leaves the view name implicit. A source review of the application found no XsltView, XsltViewResolver, ViewResolver or ModelAndView references, no .xsl resources, no spring.mvc.view properties and no \"/**\" mapping. All three of its controllers are @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names; its one HTML report is rendered by hand with mustache.java, not through a Spring view."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47890",
+        "aliases": [
+          "GHSA-j9f9-w8pj-32f8"
+        ]
+      },
+      "timestamp": "2026-10-08T20:07:04.83193822Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE) with view fragments. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that streams Server-Sent Events containing view fragments. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream, FragmentsRendering or WebFlux usage, and no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies."
     }
   ]
 }
