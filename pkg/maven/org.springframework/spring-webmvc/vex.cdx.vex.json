@@ -124,6 +124,126 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-47884",
+      "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
+      "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which uses only REST controllers with explicit paths and never configures XsltView, so the vulnerable view-rendering path cannot be reached.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pc63-qcmh-9cmg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47884",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-47884",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that renders views through XsltView, has a \"/**\" mapping that leads to view rendering, and leaves the view name implicit. A source review of the application found no XsltView, XsltViewResolver, ViewResolver or ModelAndView references, no .xsl resources, no spring.mvc.view properties and no \"/**\" mapping. All three of its controllers are @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names; its one HTML report is rendered by hand with mustache.java, not through a Spring view.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.2.26|>=5.3.0|<5.3.50|>=6.0.0|<6.0.31|>=6.1.0|<6.1.29|>=6.2.0|<6.2.20|>=7.0.0|<7.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47890",
+      "description": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE) with view fragments. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19.",
+      "recommendation": "No action required. No shipped component streams Server-Sent Events or renders view fragments.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which neither emits Server-Sent Events nor renders view fragments, so the vulnerable SSE fragment path is never executed.\n"
+        }
+      ],
+      "cwes": [
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-j9f9-w8pj-32f8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47890",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-47890",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that streams Server-Sent Events containing view fragments. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream, FragmentsRendering or WebFlux usage, and no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=6.2.0|<6.2.20|>=7.0.0|<7.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

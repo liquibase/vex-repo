@@ -25341,6 +25341,246 @@
       ]
     },
     {
+      "id": "CVE-2026-47884",
+      "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
+      "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which uses only REST controllers with explicit paths and never configures XsltView, so the vulnerable view-rendering path cannot be reached.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pc63-qcmh-9cmg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47884",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-47884",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that renders views through XsltView, has a \"/**\" mapping that leads to view rendering, and leaves the view name implicit. A source review of the application found no XsltView, XsltViewResolver, ViewResolver or ModelAndView references, no .xsl resources, no spring.mvc.view properties and no \"/**\" mapping. All three of its controllers are @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names; its one HTML report is rendered by hand with mustache.java, not through a Spring view.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.2.26|>=5.3.0|<5.3.50|>=6.0.0|<6.0.31|>=6.1.0|<6.1.29|>=6.2.0|<6.2.20|>=7.0.0|<7.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-47890",
+      "description": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE) with view fragments. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19.",
+      "recommendation": "No action required. No shipped component streams Server-Sent Events or renders view fragments.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which neither emits Server-Sent Events nor renders view fragments, so the vulnerable SSE fragment path is never executed.\n"
+        }
+      ],
+      "cwes": [
+        93
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-j9f9-w8pj-32f8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47890",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-47890",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that streams Server-Sent Events containing view fragments. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream, FragmentsRendering or WebFlux usage, and no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=6.2.0|<6.2.20|>=7.0.0|<7.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-10532",
+      "description": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback logback-core (HardenedObjectInputStream) allows Object Injection, albeit heavily restricted. An attacker able to influence serialized data sent to SimpleSocketServer or SimpleSSLSocketServer can instantiate Proxy objects. Although deserialization is heavily restricted by HardenedObjectInputStream and no practical way to achieve remote code execution or significant privilege escalation has been identified, this issue constitutes a bypass of the intended security restrictions. This issue affects logback through 1.5.33 inclusive.",
+      "recommendation": "No action required. Liquibase Secure never starts a logback socket server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N/E:P"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The vulnerable deserializer only runs inside logback's socket servers, which no Liquibase Secure component starts or configures.\n"
+        }
+      ],
+      "cwes": [
+        502
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jhq6-gfmj-v8fx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-10532",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html#1.5.34",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The issue is reachable only through logback's SimpleSocketServer or SimpleSSLSocketServer, which deserialize logging events received over a network socket through HardenedObjectInputStream. These are standalone server entry points that must be started explicitly. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and archived under /liquibase/dist in Docker images 5.0.0 through 5.2.0 (logback 1.5.16 in 5.0.0, 1.5.20 in 5.0.3, 1.5.25 in 5.1.0 and 1.5.32 in 5.1.1 and 5.2.0). It logs through Spring Boot's default logback setup, with its Log4j2 API calls routed there by log4j-to-slf4j; it has no logback configuration file and no socket appender or receiver, and never starts SimpleSocketServer or SimpleSSLSocketServer. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range. No shipped component opens a logback socket listener, so no attacker-supplied serialized data ever reaches the deserializer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.5.34",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-11822",
+      "description": "SQLite before 3.53.2 contains memory corruption vulnerabilities in the FTS5 full-text search extension that allow attackers to cause process crashes, memory exhaustion, or arbitrary code execution by supplying a crafted database with malformed FTS5 page data. Attackers can trigger an out-of-bounds read in fts5LeafSeek() via an attacker-controlled loop bound and a heap buffer overflow write in fts5ChunkIterate() through a crafted continuation page causing an integer underflow, exploitable when an FTS5 MATCH query is executed against the malicious database.",
+      "recommendation": "No action required. Liquibase Secure does not use the system SQLite library or its FTS5 extension.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The system libsqlite3-0 library is present only as part of the Ubuntu base layer; no Liquibase Secure component loads it or runs FTS5 queries.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6qj8-gw6p-hc5p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11822",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sqlite.org/releaselog/3_53_2.html",
+          "title": "SQLite 3.53.2 Release Notes"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires a process linked against the system SQLite library to run an FTS5 MATCH query against an attacker-crafted database file. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container runs only the Liquibase Java CLI and its entrypoint script, neither of which loads the system SQLite library. The only image binaries linked against it are gpg and keyboxd from the eclipse-temurin base layer, and neither is invoked by the entrypoint or the CLI. SQLite support in Liquibase goes through the optional sqlite-jdbc driver, which carries its own embedded native library rather than linking the OS package. Ubuntu has published a fixed package (3.45.1-1ubuntu2.6), which current image builds pick up through the image's security package upgrade step.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsqlite3-0",
+          "versions": [
+            {
+              "range": "vers:deb/<3.45.1-1ubuntu2.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-71491",
       "description": "sqlparse: Quadratic O(n²) denial of service in group_comments. This issue is fixed in version 0.6.0.",
       "recommendation": "No action required for runtime use. If the build-time Python tooling is refreshed, upgrade sqlparse to 0.6.0 or later.",
@@ -25391,6 +25631,323 @@
           "versions": [
             {
               "range": "vers:pypi/<0.6.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27139",
+      "description": "On Unix platforms, when listing the contents of a directory using File.ReadDir or File.Readdir the returned FileInfo could reference a file outside of the Root in which the File was opened. The impact of this escape is limited to reading metadata provided by lstat from arbitrary locations on the filesystem without permitting reading or writing files outside the root.",
+      "recommendation": "No action required. lpm does not use os.Root, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.5,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The escape requires a directory opened through os.Root, which neither lpm nor any library linked into it uses.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rv83-g57w-fr8j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27139",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4602",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/EdhZqrQ98hk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib os.Root escape (GO-2026-4602), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The vulnerability only affects directory listings of a File opened through an os.Root (os.OpenRoot / Root.Open). A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no use of os.Root, os.OpenRoot or os.OpenInRoot: lpm lists directories through a plain os.Open followed by File.Readdir, which has no root boundary to escape. The third-party libraries linked into the lpm binary (spf13/cobra, spf13/pflag, inconshreveable/mousetrap, hashicorp/go-version) do not use os.Root either. Even where reached, the impact is limited to reading lstat metadata.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.8|>=1.26.0-0|<1.26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27142",
+      "description": "Actions which insert URLs into the content attribute of HTML meta tags are not escaped. This can allow XSS if the meta tag also has an http-equiv attribute with the value \"refresh\". A new GODEBUG setting has been added, htmlmetacontenturlescape, which can be used to disable escaping URLs in actions in the meta content attribute which follow \"url=\" by setting htmlmetacontenturlescape=0.",
+      "recommendation": "No action required. lpm does not use html/template, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "html/template is not linked into lpm, and lpm produces no HTML, so there is no XSS surface.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-j4j7-vw47-rhfq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27142",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4603",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/EdhZqrQ98hk",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template meta content URL escaping flaw (GO-2026-4603), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.8|>=1.26.0-0|<1.26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32289",
+      "description": "Context was not properly tracked across template branches for JS template literals, leading to possibly incorrect escaping of content when branches were used. Additionally template actions within JS template literals did not properly track the brace depth, leading to incorrect escaping being applied. These issues could cause actions within JS template literals to be incorrectly or improperly escaped, leading to XSS vulnerabilities.",
+      "recommendation": "No action required. lpm does not use html/template, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "html/template is not linked into lpm, and lpm produces no HTML or JavaScript, so there is no XSS surface.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7mr4-xjxg-34g6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32289",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4865",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/0uYbvbPZRWU",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template JS template literal context-tracking flaw (GO-2026-4865), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML or JavaScript. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0-0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32288",
+      "description": "tar.Reader can allocate an unbounded amount of memory when reading a maliciously-crafted archive containing a large number of sparse regions encoded in the \"old GNU sparse map\" format.",
+      "recommendation": "No action required. lpm does not read tar archives, so the vulnerable path is not reachable in any published Liquibase Secure image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "archive/tar is not used by lpm or any library linked into it, so a crafted tar archive is never parsed.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x4jj-h2v8-hqqv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32288",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4869",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/0uYbvbPZRWU",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib archive/tar unbounded allocation on old GNU sparse maps (GO-2026-4869), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of archive/tar. lpm downloads plain jar files and only handles archives through archive/zip. The third-party libraries linked into the lpm binary do not import archive/tar either, so tar.Reader is never used.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0-0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42507",
+      "description": "When returning errors, functions in the net/textproto package would include its input as part of the error. This might allow an attacker to inject misleading content to errors that are printed or logged.",
+      "recommendation": "No action required. Exploitation needs control of the HTTPS response from lpm's fixed download endpoints, and current images ship an lpm built with a fixed Go toolchain.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs an attacker-controlled HTTPS response from lpm's fixed download endpoints, and the only impact is a misleading console line.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h3gm-q7m7-mp28",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42507",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-5039",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/tKs3rmcBcKw",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/textproto error-message injection (GO-2026-5039), fixed in Go 1.25.11 and 1.26.4. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The flaw does not corrupt parsing. It only places unescaped server input into the text of returned errors. lpm reaches net/textproto through net/http when it downloads a jar or package manifest. Header parsing errors from http.Client.Get are discarded in favour of a fixed \"Unable to download from\" message, but a malformed chunked-encoding trailer is parsed by net/textproto while lpm reads the response body, and lpm prints that body-read error to the console before exiting. Injecting text therefore requires the attacker to control the HTTPS response from lpm's download endpoints (repo1.maven.org, maven.liquibase.com, github.com) or from a URL the user passes to lpm update --path, and the result is a single misleading console line with no effect on what lpm installs. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly. lpm 0.3.5 and later are built with Go 1.26.4 or newer, which escapes this text.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.11|>=1.26.0-0|<1.26.4",
               "status": "unaffected"
             }
           ]

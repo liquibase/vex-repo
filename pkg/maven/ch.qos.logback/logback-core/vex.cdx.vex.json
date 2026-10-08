@@ -1,0 +1,67 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-10532",
+      "description": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback logback-core (HardenedObjectInputStream) allows Object Injection, albeit heavily restricted. An attacker able to influence serialized data sent to SimpleSocketServer or SimpleSSLSocketServer can instantiate Proxy objects. Although deserialization is heavily restricted by HardenedObjectInputStream and no practical way to achieve remote code execution or significant privilege escalation has been identified, this issue constitutes a bypass of the intended security restrictions. This issue affects logback through 1.5.33 inclusive.",
+      "recommendation": "No action required. Liquibase Secure never starts a logback socket server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N/E:P"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "The vulnerable deserializer only runs inside logback's socket servers, which no Liquibase Secure component starts or configures.\n"
+        }
+      ],
+      "cwes": [
+        502
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jhq6-gfmj-v8fx",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-10532",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html#1.5.34",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The issue is reachable only through logback's SimpleSocketServer or SimpleSSLSocketServer, which deserialize logging events received over a network socket through HardenedObjectInputStream. These are standalone server entry points that must be started explicitly. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and archived under /liquibase/dist in Docker images 5.0.0 through 5.2.0 (logback 1.5.16 in 5.0.0, 1.5.20 in 5.0.3, 1.5.25 in 5.1.0 and 1.5.32 in 5.1.1 and 5.2.0). It logs through Spring Boot's default logback setup, with its Log4j2 API calls routed there by log4j-to-slf4j; it has no logback configuration file and no socket appender or receiver, and never starts SimpleSocketServer or SimpleSSLSocketServer. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range. No shipped component opens a logback socket listener, so no attacker-supplied serialized data ever reaches the deserializer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.5.34",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

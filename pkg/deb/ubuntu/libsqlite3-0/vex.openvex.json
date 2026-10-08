@@ -1,15 +1,33 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b01dec1915367c9ba4270421242ee93c8442380fc7c4675364408da54271d359",
+  "@id": "merged-vex-d8945a4cc3b1d24c5c19cb7c777c6696118745efb7fefdf1601e8b2a79db6fbf",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-08T19:16:16.994170745Z",
+  "timestamp": "2026-10-08T20:06:48.675798853Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-11822",
+        "aliases": [
+          "BIT-sqlite-2026-11822"
+        ]
+      },
+      "timestamp": "2026-10-08T20:06:48.659006699Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsqlite3-0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "SQLite before 3.53.2 contains memory corruption vulnerabilities in the FTS5 full-text search extension that allow attackers to cause process crashes, memory exhaustion, or arbitrary code execution by supplying a crafted database with malformed FTS5 page data. Attackers can trigger an out-of-bounds read in fts5LeafSeek() via an attacker-controlled loop bound and a heap buffer overflow write in fts5ChunkIterate() through a crafted continuation page causing an integer underflow, exploitable when an FTS5 MATCH query is executed against the malicious database.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires a process linked against the system SQLite library to run an FTS5 MATCH query against an attacker-crafted database file. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container runs only the Liquibase Java CLI and its entrypoint script, neither of which loads the system SQLite library. The only image binaries linked against it are gpg and keyboxd from the eclipse-temurin base layer, and neither is invoked by the entrypoint or the CLI. SQLite support in Liquibase goes through the optional sqlite-jdbc driver, which carries its own embedded native library rather than linking the OS package. Ubuntu has published a fixed package (3.45.1-1ubuntu2.6), which current image builds pick up through the image's security package upgrade step."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-39113"
       },
-      "timestamp": "2026-10-08T19:16:16.88895545Z",
+      "timestamp": "2026-10-08T20:06:48.544641604Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -24,7 +42,7 @@
       "vulnerability": {
         "name": "CVE-2026-50812"
       },
-      "timestamp": "2026-10-08T19:16:16.932575728Z",
+      "timestamp": "2026-10-08T20:06:48.581996317Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -39,7 +57,7 @@
       "vulnerability": {
         "name": "CVE-2026-50813"
       },
-      "timestamp": "2026-10-08T19:16:16.97533682Z",
+      "timestamp": "2026-10-08T20:06:48.619932361Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
