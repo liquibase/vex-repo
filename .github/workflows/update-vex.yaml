@@ -10,6 +10,13 @@ permissions:
   contents: write
   pull-requests: write
 
+# Runs share the automation/update-vex branch and each builds from main as of
+# its own checkout, so overlapping runs produce PRs that conflict with each
+# other. Queue them instead; each queued run checks out the main left by the last.
+concurrency:
+  group: update-vex
+  cancel-in-progress: false
+
 jobs:
   update-vex:
     name: Generate and update VEX content
