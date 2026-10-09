@@ -27732,6 +27732,298 @@
       ]
     },
     {
+      "id": "CVE-2026-94448",
+      "description": "When a JavaScript template literal contains consecutive expressions, the context tracking state was not properly reset upon entering a new expression. We now ensure that template-literal expression entries correctly reset context variables so all subsequent regular expression literals are accurately recognized and escaped.",
+      "recommendation": "No action required. The html/template package is not part of the lpm binary shipped in Liquibase Secure images.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wpfx-qch4-q5j2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94448",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6599",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template context-tracking flaw for consecutive expressions in JavaScript template literals (GO-2026-6599), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. Every published tag ships an lpm built with a Go toolchain older than the fix (6.0.0 and 5.2.2 ship lpm built with go1.26.8), so this assessment rests on reachability, not on version. Listing the full transitive package set of every shipped lpm Linux build (0.2.14 through 0.3.6, and 0.3.7) shows that html/template is not compiled into the binary at all; lpm renders no HTML and only links text/template through its command-line library, which this advisory does not affect. Liquibase itself is a Java application and does not use Go.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97030",
+      "description": "A trusted template author may have previously written a valid template wherein the use of the 'yield' keyword would not be correctly escaped. We now ensure that valid keyword uses are escaped and non-keyword uses are not escaped.",
+      "recommendation": "No action required. The html/template package is not part of the lpm binary shipped in Liquibase Secure images.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-22jx-p735-qcpm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97030",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6600",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib html/template escaping flaw for the JavaScript 'yield' keyword (GO-2026-6600), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, and every published tag ships an lpm built with a Go toolchain older than the fix (6.0.0 and 5.2.2 ship lpm built with go1.26.8). Listing the full transitive package set of every shipped lpm Linux build (0.2.14 through 0.3.6, and 0.3.7) shows that html/template is not compiled into the binary at all; lpm renders no HTML templates. Liquibase itself is a Java application and does not use Go.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78659",
+      "description": "When \"Trailer\" headers are sent by a client, the HTTP server internally uses the header values to populate the Request.Trailer map passed to the server handler. Because Request.Trailer is a map, each entry incurs memory overhead. For HTTP/2 servers, a malicious client can exploit this by sending a \"Trailer\" header that declares a large number of fields, causing the server to allocate a disproportionate amount of memory while bypassing Server.MaxHeaderValueCount and Server.MaxHeaderBytes limits. This exploit is not applicable for HTTP/1 servers, which do not support multiplexing a large number of requests over one TCP connection, and whose Server.MaxHeaderBytes are calculated differently.",
+      "recommendation": "No action required. lpm runs no HTTP server, and the client-side case needs a malicious download server and costs at most memory in a short-lived helper.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78659",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6603",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http HTTP/2 server memory exhaustion via client-declared Trailer headers (GO-2026-6603), fixed in Go 1.26.9. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, and every published tag ships an lpm built with a Go toolchain older than the fix (6.0.0 and 5.2.2 ship lpm built with go1.26.8). The advisory targets servers, but the missing limit is in the shared HTTP/2 frame reader, and Go's HTTP/2 client also builds Response.Trailer from a server's \"Trailer\" header, so lpm runs this code on HTTP/2 downloads (govulncheck reports it reachable from http.Client.Get). Exploiting it against lpm needs a malicious HTTP/2 server: control of repo1.maven.org, maven.liquibase.com or github.com, or a URL the user passes to lpm update --path. lpm sends one request at a time, so the multiplexing that makes the server case severe does not apply; the impact is bounded memory use in a short-lived helper. lpm runs no HTTP server. Liquibase itself is a Java application and does not use Go's HTTP stack.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56857",
+      "description": "On Windows, when the target of Root.Mkdir or Root.MkdirAll is a junction pointing to an empty location, the operation can create a directory at the junction target even when that target is located outside the root. This only applies to operations where the last path component is a junction (path/to/junction, but not path/junction/target).",
+      "recommendation": "No action required. The Liquibase Secure container image runs on Linux, and lpm does not use os.Root.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-c3q7-m35p-9qq7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56857",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6604",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib os.Root.Mkdir / Root.MkdirAll junction traversal on Windows (GO-2026-6604), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The flaw only exists on Windows, where NTFS junctions can redirect the last path component; the Liquibase Secure container image is Linux-only (Ubuntu base, linux/amd64 and linux/arm64 lpm builds). In addition, a source review of lpm found no use of os.Root or os.OpenRoot, so the affected API is never called. Liquibase itself is a Java application and does not use Go.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-56866",
+      "description": "When http.Transport sends an HTTP/1 CONNECT request with a non-empty Request.Body, it writes the body directly to the connection without framing after the request headers. If the server rejects the CONNECT request with a non-2xx keep-alive response, Transport returns the connection to the idle pool. Because CONNECT requests do not have a request body, the server may interpret the trailing body bytes as a subsequent pipelined HTTP/1.1 request on the connection, leaving the pooled connection desynchronized and causing the next caller that reuses it to read the response to the injected request. In reverse proxies (including httputil.ReverseProxy) that forward CONNECT requests through a shared Transport, this can lead to cross-user response poisoning.",
+      "recommendation": "No action required. lpm never sends a CONNECT request with a body and does not act as a proxy.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f5vf-8pvc-394g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56866",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6605",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http HTTP/1 client connection desynchronization after a rejected CONNECT request that carried a body (GO-2026-6605), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The flaw requires the calling program to send its own CONNECT request with a non-empty Request.Body through a shared Transport, typically a reverse proxy forwarding CONNECT. lpm issues only plain GET requests through http.Client.Get, one at a time, and never builds a CONNECT request. The CONNECT request that Go's Transport sends on its own to tunnel HTTPS through a proxy has no body, so it cannot trigger the flaw. lpm does not link net/http/httputil and acts as no proxy. Liquibase itself is a Java application and does not use Go's HTTP stack. govulncheck reports net/http as reachable because the affected connection read loop runs for every HTTP/1 response lpm receives; the desync needs the caller to send a CONNECT request with a body, which lpm never does.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97031",
+      "description": "Multiple ECH outer extension references are not permitted under RFC 9849; previously, a client could send a well-crafted packet that could trigger memory exhaustion in the server process by specifying multiple references. We now reject these as malformed and curb the memory amplification vector as a result.",
+      "recommendation": "No action required. Neither Liquibase nor the bundled lpm helper runs a TLS server.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hq7w-2xrq-wp2j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97031",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6607",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls server memory exhaustion via malformed Encrypted Client Hello (ECH) outer extension references (GO-2026-6607), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The flaw is in the TLS server's processing of a client's ECH payload. lpm is an HTTPS client only: a source review found no TLS or HTTP listener and no tls.Config of any kind, and its only network use is http.Client.Get. The vulnerable server-side handshake code never runs in lpm. Liquibase itself is a Java application and does not use Go's TLS stack. govulncheck flags this advisory for lpm only through shared crypto/tls entry points such as tls.Conn.HandshakeContext; the fixed function (decodeInnerClientHello) runs only inside a TLS server with ECH keys configured, which lpm never starts.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-94440",
+      "description": "Parsing a multipart form can bypass memory limits and read an arbitrarily long line into memory when the remaining limit at the start of a part is less than 400 bytes.",
+      "recommendation": "No action required. lpm never parses multipart forms.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-874m-fcc5-9gqf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94440",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6608",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/textproto / mime/multipart memory-limit bypass when parsing multipart form part headers (GO-2026-6608), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The bypassed limit is the per-part header memory budget that mime/multipart applies while reading a multipart form; the plain textproto header reader used by net/http has no such budget to bypass. lpm never parses multipart content: a source review found no calls to multipart.Reader, ReadForm, ParseMultipartForm, or FormFile, and lpm runs no HTTP server that would receive form uploads. It only downloads manifests and jars with http.Client.Get. Liquibase itself is a Java application and does not use Go. govulncheck reports the textproto code as reachable, because net/http calls textproto.Reader.ReadMIMEHeader for every HTTP/1 response and trailer lpm receives. That entry point passes an unlimited budget (math.MaxInt64), so the condition the fix addresses, a remaining budget under 400 bytes, cannot arise.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78667",
+      "description": "When parsing a Range header containing a large number of small ranges, FileServer(FS), ServeContent, and ServeFile(FS) can consume an excessive amount of CPU.",
+      "recommendation": "No action required. Neither Liquibase nor the bundled lpm helper serves files over HTTP.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f4xw-m386-m277",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78667",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6609",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http CPU exhaustion when parsing a Range header with many small ranges in FileServer, ServeContent, and ServeFile (GO-2026-6609), fixed in Go 1.26.9 and 1.27.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The flaw is in server-side file serving, where the attacker supplies the Range header. A source review of lpm found no FileServer, ServeContent, ServeFile, NewFileTransport, or HTTP server of any kind; lpm only issues outbound GET requests and sends no Range header. Liquibase itself is a Java application and does not use Go's HTTP stack.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29145",
       "description": "Apache Tomcat authentication bypass where OCSP validation soft-fails even when soft-fail is explicitly disabled, allowing revoked client certificates to authenticate.",
       "recommendation": "No action required. Liquibase does not start a Tomcat server.",
@@ -27776,6 +28068,72 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78660",
+      "description": "Historically, we have been rather lax about malformed framing-related headers in our HTTP/2 implementation, as they cannot interfere with HTTP/2 framing. However, this makes it possible for our HTTP/2 implementation to forward responses containing such headers to an HTTP/1 client when acting as a reverse proxy. If the HTTP/1 client also does not behave strictly enough, this can result in response smuggling.",
+      "recommendation": "No action required. lpm does not forward HTTP responses to other clients.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78660",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6610",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http HTTP/2 transport accepting malformed framing-related response headers (GO-2026-6610), fixed in Go 1.26.9. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. The advisory notes that such headers cannot interfere with HTTP/2 framing itself. The harm arises only when a Go program acting as a reverse proxy forwards the response to an HTTP/1 client, enabling response smuggling. lpm is not a proxy: it fetches a manifest or jar with http.Client.Get, reads the body into memory, and writes it to disk. It never forwards responses, runs no HTTP server, and does not link net/http/httputil. Liquibase itself is a Java application and does not use Go's HTTP stack. lpm's HTTP/2 client runs the affected response-header handling on every HTTP/2 download (govulncheck reports it reachable), but such headers cannot affect HTTP/2 framing; the harm needs a proxy that forwards the response to an HTTP/1 client, and lpm forwards nothing.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-78669",
+      "description": "A malicious HTTP/2 peer can cause excessive CPU consumption in the client or server by opening a large number of streams and then sending many small SETTINGS frames containing SETTINGS_INITIAL_WINDOW_SIZE values.",
+      "recommendation": "No action required. lpm opens one HTTP/2 stream at a time to its download servers, and runs no HTTP server.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78669",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6611",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http HTTP/2 CPU exhaustion from many streams combined with repeated SETTINGS_INITIAL_WINDOW_SIZE changes (GO-2026-6611), fixed in Go 1.26.9. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper, built with go1.26.8 in the 6.0.0 and 5.2.2 tags. lpm's HTTP client does negotiate HTTP/2 with its download servers, so the SETTINGS handling code is present. The CPU cost grows with the number of open streams on the connection, and against a client only the client opens streams, since Go's client disables server push. lpm sends one GET request at a time with no concurrency, so a connection carries at most one stream and the amplification the advisory describes does not arise. Exploitation would also require lpm to talk to a malicious HTTP/2 server: either control of its download endpoints (repo1.maven.org, maven.liquibase.com, github.com) or a URL the user passes to lpm. The only impact would be CPU use in a short-lived helper. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly. Liquibase itself is a Java application and does not use Go's HTTP stack.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
