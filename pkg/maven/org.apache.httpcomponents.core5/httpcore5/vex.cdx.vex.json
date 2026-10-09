@@ -1,0 +1,67 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-54399",
+      "description": "Uncontrolled Resource Consumption vulnerability in the HTTP/1.1 message parser in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows a remote attacker to cause a denial of service through memory exhaustion by sending messages with excessive number of headers / excessive header length.",
+      "recommendation": "No action required. Liquibase Secure uses httpcore5 only as an outbound HTTP client to endpoints the operator configures and does not run an HttpComponents server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The NVD score assumes an unauthenticated attacker sending requests to a listening HttpComponents server. Liquibase Secure runs no such server. Exploitation would need an attacker-controlled HTTPS response from an operator-configured endpoint, and the impact would be limited to the CLI process the operator started.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hf6x-8p5f-cgmf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54399",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://lists.apache.org/thread/zmxh1pl2zohov5ntdh4lt85gfrlchgpy",
+          "title": "Apache HttpComponents Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache HttpComponents Core HTTP/1.1 message parser memory exhaustion (GHSA-hf6x-8p5f-cgmf), fixed in httpcore5 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5 5.2.4. Liquibase Secure never starts an HTTP server with HttpComponents. httpcore5 is used only by outbound HTTPS clients: the DataStax Astra DevOps SDK in the Cassandra extension, the Databricks JDBC driver (a relocated copy inside the Databricks extension) and, from 5.2.1, the AWS SDK Apache client in the AWS, MongoDB and Cassandra extensions and the optional Ph-Eye remote filter in the checks policy engine. In each case the parser reads responses only from HTTPS endpoints the operator configures. An attacker would have to control the TLS response from one of those trusted endpoints to send an oversized header block. The impact would be an out-of-memory failure of the short-lived Liquibase CLI process making the call. There is no listening socket that an unauthenticated remote attacker can reach.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.httpcomponents.core5/httpcore5",
+          "versions": [
+            {
+              "range": "vers:maven/<5.4.3|>=5.5-alpha1|<5.5-beta2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

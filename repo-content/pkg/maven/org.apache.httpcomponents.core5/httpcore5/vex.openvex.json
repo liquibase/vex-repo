@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-1760be3930cc48088d5bf31ac31559ce76d9ad0c95c18707bf191a0ea9142f32",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-09T01:06:59.660937143Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54399",
+        "aliases": [
+          "GHSA-hf6x-8p5f-cgmf"
+        ]
+      },
+      "timestamp": "2026-10-09T01:06:59.660938276Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.httpcomponents.core5/httpcore5"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Uncontrolled Resource Consumption vulnerability in the HTTP/1.1 message parser in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows a remote attacker to cause a denial of service through memory exhaustion by sending messages with excessive number of headers / excessive header length.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Apache HttpComponents Core HTTP/1.1 message parser memory exhaustion (GHSA-hf6x-8p5f-cgmf), fixed in httpcore5 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5 5.2.4. Liquibase Secure never starts an HTTP server with HttpComponents. httpcore5 is used only by outbound HTTPS clients: the DataStax Astra DevOps SDK in the Cassandra extension, the Databricks JDBC driver (a relocated copy inside the Databricks extension) and, from 5.2.1, the AWS SDK Apache client in the AWS, MongoDB and Cassandra extensions and the optional Ph-Eye remote filter in the checks policy engine. In each case the parser reads responses only from HTTPS endpoints the operator configures. An attacker would have to control the TLS response from one of those trusted endpoints to send an oversized header block. The impact would be an out-of-memory failure of the short-lived Liquibase CLI process making the call. There is no listening socket that an unauthenticated remote attacker can reach."
+    }
+  ]
+}
