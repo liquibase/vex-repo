@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-a0cf33eef51846c4786ef8df75784ee6911613315a9555c8e756332728e8a9be",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-09T01:06:59.73699536Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54428",
+        "aliases": [
+          "GHSA-v3jc-474w-2wm6"
+        ]
+      },
+      "timestamp": "2026-10-09T01:06:59.736996883Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.httpcomponents.core5/httpcore5-h2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Allocation of resources without limits or throttling in the HTTP/2 HPACK decoder in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows a remote attacker to cause a denial of service through memory exhaustion by sending oversized compressed header blocks before the HTTP/2 SETTINGS acknowledgement causes the configured header list size limit to be applied.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Apache HttpComponents Core HTTP/2 HPACK decoder memory exhaustion before the SETTINGS acknowledgement (GHSA-v3jc-474w-2wm6), fixed in httpcore5-h2 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5-h2 5.2.4 (Cassandra extension), and the Databricks extension carries a relocated copy below 5.4.3. The HPACK decoder only runs on HTTP/2 connections, and HttpComponents only negotiates HTTP/2 through its asynchronous client and server stacks (H2AsyncClientBuilder, HttpAsyncClients, H2 servers). Liquibase Secure code uses only the classic HTTP/1.1 client (the AWS SDK Apache client and the Ph-Eye filter). The Databricks JDBC driver bundled in the Databricks extension contains an HttpComponents async client that can negotiate HTTP/2, but the driver uses it only for its DBFS volume putFiles API and an unused incubator result fetcher; Liquibase calls neither, so no HTTP/2 connection is opened. The AWS extension excludes the AWS SDK's netty async client and builds its S3 client on the JDK URLConnection client. Liquibase Secure also runs no HTTP server."
+    }
+  ]
+}

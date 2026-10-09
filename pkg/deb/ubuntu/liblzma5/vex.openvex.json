@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-509d4288af88648b6b10d601fba7dd713ce74a45f4a1a4d24a413215e911bda6",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-09T01:06:42.963819143Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-34743",
+        "aliases": [
+          "GHSA-x872-m794-cxhv"
+        ]
+      },
+      "timestamp": "2026-10-09T01:06:42.963821478Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/liblzma5"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "XZ Utils provide a general-purpose data-compression library plus command-line tools. Prior to version 5.8.3, if lzma_index_decoder() was used to decode an Index that contained no Records, the resulting lzma_index was left in a state where a subsequent lzma_index_append() would allocate too little memory, and a buffer overflow would occur. This issue has been patched in version 5.8.3.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "XZ Utils liblzma heap buffer overflow when lzma_index_append() is called on an index produced by lzma_index_decoder() from an Index with no Records. Liquibase Secure inherits liblzma5 from the Ubuntu base image, where dpkg-deb, apt and libsystemd link it. The Liquibase CLI runs on the JVM, which does not link liblzma. The container entrypoint invokes no xz-capable tool. The Liquibase release archive is a gzip tarball, so the image build does not use liblzma to unpack it either. A source review found no references to liblzma or xz in Liquibase Secure. Ubuntu has published fixed packages (5.6.1+really5.4.5-1ubuntu0.3 for 24.04, 5.2.5-2ubuntu1.1 for 22.04, USN-8362-1); image builds from 5.2.1 onward carry the fix."
+    }
+  ]
+}

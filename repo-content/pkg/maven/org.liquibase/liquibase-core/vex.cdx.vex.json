@@ -26016,6 +26016,247 @@
       ]
     },
     {
+      "id": "CVE-2026-54399",
+      "description": "Uncontrolled Resource Consumption vulnerability in the HTTP/1.1 message parser in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows a remote attacker to cause a denial of service through memory exhaustion by sending messages with excessive number of headers / excessive header length.",
+      "recommendation": "No action required. Liquibase Secure uses httpcore5 only as an outbound HTTP client to endpoints the operator configures and does not run an HttpComponents server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The NVD score assumes an unauthenticated attacker sending requests to a listening HttpComponents server. Liquibase Secure runs no such server. Exploitation would need an attacker-controlled HTTPS response from an operator-configured endpoint, and the impact would be limited to the CLI process the operator started.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hf6x-8p5f-cgmf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54399",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://lists.apache.org/thread/zmxh1pl2zohov5ntdh4lt85gfrlchgpy",
+          "title": "Apache HttpComponents Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache HttpComponents Core HTTP/1.1 message parser memory exhaustion (GHSA-hf6x-8p5f-cgmf), fixed in httpcore5 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5 5.2.4. Liquibase Secure never starts an HTTP server with HttpComponents. httpcore5 is used only by outbound HTTPS clients: the DataStax Astra DevOps SDK in the Cassandra extension, the Databricks JDBC driver (a relocated copy inside the Databricks extension) and, from 5.2.1, the AWS SDK Apache client in the AWS, MongoDB and Cassandra extensions and the optional Ph-Eye remote filter in the checks policy engine. In each case the parser reads responses only from HTTPS endpoints the operator configures. An attacker would have to control the TLS response from one of those trusted endpoints to send an oversized header block. The impact would be an out-of-memory failure of the short-lived Liquibase CLI process making the call. There is no listening socket that an unauthenticated remote attacker can reach.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.httpcomponents.core5/httpcore5",
+          "versions": [
+            {
+              "range": "vers:maven/<5.4.3|>=5.5-alpha1|<5.5-beta2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54428",
+      "description": "Allocation of resources without limits or throttling in the HTTP/2 HPACK decoder in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows a remote attacker to cause a denial of service through memory exhaustion by sending oversized compressed header blocks before the HTTP/2 SETTINGS acknowledgement causes the configured header list size limit to be applied.",
+      "recommendation": "No action required. Liquibase Secure does not open HTTP/2 connections through HttpComponents, so the HPACK decoder is never used.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable HPACK decoder only runs on HTTP/2 connections. Liquibase Secure code uses only the classic HTTP/1.1 HttpComponents client, and the HTTP/2-capable async client inside the Databricks JDBC driver serves only APIs Liquibase never calls.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-v3jc-474w-2wm6",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54428",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://lists.apache.org/thread/5zjp8vczvxq19pw2rvhs21q446bhl0sd",
+          "title": "Apache HttpComponents Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Apache HttpComponents Core HTTP/2 HPACK decoder memory exhaustion before the SETTINGS acknowledgement (GHSA-v3jc-474w-2wm6), fixed in httpcore5-h2 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5-h2 5.2.4 (Cassandra extension), and the Databricks extension carries a relocated copy below 5.4.3. The HPACK decoder only runs on HTTP/2 connections, and HttpComponents only negotiates HTTP/2 through its asynchronous client and server stacks (H2AsyncClientBuilder, HttpAsyncClients, H2 servers). Liquibase Secure code uses only the classic HTTP/1.1 client (the AWS SDK Apache client and the Ph-Eye filter). The Databricks JDBC driver bundled in the Databricks extension contains an HttpComponents async client that can negotiate HTTP/2, but the driver uses it only for its DBFS volume putFiles API and an unused incubator result fetcher; Liquibase calls neither, so no HTTP/2 connection is opened. The AWS extension excludes the AWS SDK's netty async client and builds its S3 client on the JDK URLConnection client. Liquibase Secure also runs no HTTP server.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.httpcomponents.core5/httpcore5-h2",
+          "versions": [
+            {
+              "range": "vers:maven/<5.4.3|>=5.5-alpha1|<5.5-beta2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-11824",
+      "description": "SQLite before 3.53.2 contains a heap-based buffer overflow vulnerability in the FTS5 full-text search extension that allows attackers to cause a crash or execute arbitrary code by supplying a crafted database with malicious continuation page metadata specifying a szLeaf value smaller than 4. Attackers can trigger an integer underflow in fts5ChunkIterate() causing an inflated remaining byte count during FTS5 MATCH query processing, leading to a heap buffer overflow of attacker-controlled data in applications compiled with SQLITE_ENABLE_FTS5.",
+      "recommendation": "No action required. Liquibase Secure does not use the system SQLite library or its FTS5 extension.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The system libsqlite3-0 library is present only as part of the Ubuntu base layer. No Liquibase Secure component loads it or runs FTS5 queries.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8g48-4wfm-7247",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-11824",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8480-1",
+          "title": "Ubuntu Security Notice USN-8480-1"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This issue requires a process linked against the system SQLite library, built with FTS5, to run an FTS5 MATCH query against an attacker-crafted database file. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container runs only the Liquibase Java CLI and its entrypoint script, and neither loads the system SQLite library. The only image binaries linked against it are gpg (and, on Ubuntu 24.04 images, keyboxd) from the eclipse-temurin base layer, and neither the entrypoint nor the CLI invokes them. SQLite support in Liquibase goes through the optional sqlite-jdbc driver, which carries its own embedded native library and does not link the OS package. Ubuntu has published fixed packages (3.45.1-1ubuntu2.6 for 24.04, 3.37.2-2ubuntu0.6 for 22.04, USN-8480-1); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsqlite3-0",
+          "versions": [
+            {
+              "range": "vers:deb/<3.45.1-1ubuntu2.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33845",
+      "description": "A flaw in GnuTLS DTLS handshake parsing allows malformed fragments with zero length and non-zero offset, leading to an integer underflow during reassembly and resulting in an out-of-bounds read. This issue is remotely exploitable and may cause information disclosure or denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a DTLS handshake. No process in the Liquibase Secure image uses DTLS, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cmj5-x3xf-69wq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33845",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33845",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS DTLS handshake fragment reassembly integer underflow leading to an out-of-bounds read. The flaw is only reachable through DTLS, the datagram (UDP) variant of TLS. Liquibase Secure inherits libgnutls30t64 from the Ubuntu base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. Nothing in the image opens a DTLS session. A source review found no references to GnuTLS or DTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-15308",
       "description": "An issue was found in Python's incremental HTML parser (html.parser.HTMLParser). When application code repeatedly feeds small pieces of attacker-controlled data into the parser while an HTML construct remains unterminated, the parser can be driven to consume disproportionate CPU time, resulting in a denial of service.",
       "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
@@ -26061,6 +26302,482 @@
       "affects": [
         {
           "ref": "pkg:generic/cpython"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33846",
+      "description": "A heap buffer overflow vulnerability exists in the DTLS handshake fragment reassembly logic of GnuTLS. The issue arises in merge_handshake_packet() where incoming handshake fragments are matched and merged based solely on handshake type, without validating that the message_length field remains consistent across all fragments of the same logical message. An attacker can exploit this by sending crafted DTLS fragments with conflicting message_length values, causing the implementation to allocate a buffer based on a smaller initial fragment and subsequently write beyond its bounds using larger, inconsistent fragments. Because the merge operation does not enforce proper bounds checking against the allocated buffer size, this results in an out-of-bounds write on the heap. The vulnerability is remotely exploitable without authentication via the DTLS handshake path and can lead to application crashes or potential memory corruption.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a DTLS handshake. No process in the Liquibase Secure image uses DTLS, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        130
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qcj7-gqxf-2cqq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33846",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33846",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS DTLS handshake fragment reassembly heap buffer overflow in merge_handshake_packet(). The flaw is only reachable through DTLS, the datagram (UDP) variant of TLS. Liquibase Secure inherits libgnutls30t64 from the Ubuntu base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. Nothing in the image opens a DTLS session. A source review found no references to GnuTLS or DTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3832",
+      "description": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Liquibase runtime does not load GnuTLS, and no GnuTLS-linked tool (apt, dirmngr, curl) is invoked by the entrypoint or the CLI.\n"
+        }
+      ],
+      "cwes": [
+        179
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3rqj-4qqw-jgwr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3832",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3832",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS multi-record OCSP response logic error that can let a TLS client with OCSP verification enabled accept a revoked server certificate. Liquibase Secure inherits libgnutls30t64 from the Ubuntu base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3833",
+      "description": "A flaw was found in gnutls. This vulnerability occurs because gnutls performs case-sensitive comparisons of nameConstraints labels, specifically for dNSName (DNS) or rfc822Name (email) constraints within excludedSubtrees or permittedSubtrees. A remote attacker can exploit this by crafting a leaf certificate with casing differences in the Subject Alternative Name (SAN), leading to a policy bypass where a certificate that should be rejected is instead accepted. This could result in unauthorized access or information disclosure.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Liquibase runtime does not load GnuTLS, and no GnuTLS-linked tool (apt, dirmngr, curl) is invoked by the entrypoint or the CLI.\n"
+        }
+      ],
+      "cwes": [
+        178
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6rgh-57xm-37v8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3833",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3833",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS case-sensitive nameConstraints comparison that can let a certificate violating a CA's name constraints be accepted. Liquibase Secure inherits libgnutls30t64 from the Ubuntu base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34743",
+      "description": "XZ Utils provide a general-purpose data-compression library plus command-line tools. Prior to version 5.8.3, if lzma_index_decoder() was used to decode an Index that contained no Records, the resulting lzma_index was left in a state where a subsequent lzma_index_append() would allocate too little memory, and a buffer overflow would occur. This issue has been patched in version 5.8.3.",
+      "recommendation": "No action required. Liquibase Secure does not use liblzma at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "liblzma5 is present only for OS package tooling in the Ubuntu base layer. No Liquibase Secure component loads it.\n"
+        }
+      ],
+      "cwes": [
+        122
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34743",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8362-1",
+          "title": "Ubuntu Security Notice USN-8362-1"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "XZ Utils liblzma heap buffer overflow when lzma_index_append() is called on an index produced by lzma_index_decoder() from an Index with no Records. Liquibase Secure inherits liblzma5 from the Ubuntu base image, where dpkg-deb, apt and libsystemd link it. The Liquibase CLI runs on the JVM, which does not link liblzma. The container entrypoint invokes no xz-capable tool. The Liquibase release archive is a gzip tarball, so the image build does not use liblzma to unpack it either. A source review found no references to liblzma or xz in Liquibase Secure. Ubuntu has published fixed packages (5.6.1+really5.4.5-1ubuntu0.3 for 24.04, 5.2.5-2ubuntu1.1 for 22.04, USN-8362-1); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/liblzma5",
+          "versions": [
+            {
+              "range": "vers:deb/<5.6.1+really5.4.5-1ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33845",
+      "description": "A flaw in GnuTLS DTLS handshake parsing allows malformed fragments with zero length and non-zero offset, leading to an integer underflow during reassembly and resulting in an out-of-bounds read. This issue is remotely exploitable and may cause information disclosure or denial of service.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a DTLS handshake. No process in the Liquibase Secure image uses DTLS, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        191
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cmj5-x3xf-69wq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33845",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33845",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS DTLS handshake fragment reassembly integer underflow leading to an out-of-bounds read. The flaw is only reachable through DTLS, the datagram (UDP) variant of TLS. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. Nothing in the image opens a DTLS session. A source review found no references to GnuTLS or DTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33846",
+      "description": "A heap buffer overflow vulnerability exists in the DTLS handshake fragment reassembly logic of GnuTLS. The issue arises in merge_handshake_packet() where incoming handshake fragments are matched and merged based solely on handshake type, without validating that the message_length field remains consistent across all fragments of the same logical message. An attacker can exploit this by sending crafted DTLS fragments with conflicting message_length values, causing the implementation to allocate a buffer based on a smaller initial fragment and subsequently write beyond its bounds using larger, inconsistent fragments. Because the merge operation does not enforce proper bounds checking against the allocated buffer size, this results in an out-of-bounds write on the heap. The vulnerability is remotely exploitable without authentication via the DTLS handshake path and can lead to application crashes or potential memory corruption.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or DTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a DTLS handshake. No process in the Liquibase Secure image uses DTLS, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        130
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qcj7-gqxf-2cqq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33846",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33846",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS DTLS handshake fragment reassembly heap buffer overflow in merge_handshake_packet(). The flaw is only reachable through DTLS, the datagram (UDP) variant of TLS. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. Nothing in the image opens a DTLS session. A source review found no references to GnuTLS or DTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3832",
+      "description": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Liquibase runtime does not load GnuTLS, and no GnuTLS-linked tool (apt, dirmngr, curl) is invoked by the entrypoint or the CLI.\n"
+        }
+      ],
+      "cwes": [
+        179
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3rqj-4qqw-jgwr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3832",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3832",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS multi-record OCSP response logic error that can let a TLS client with OCSP verification enabled accept a revoked server certificate. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3833",
+      "description": "A flaw was found in gnutls. This vulnerability occurs because gnutls performs case-sensitive comparisons of nameConstraints labels, specifically for dNSName (DNS) or rfc822Name (email) constraints within excludedSubtrees or permittedSubtrees. A remote attacker can exploit this by crafting a leaf certificate with casing differences in the Subject Alternative Name (SAN), leading to a policy bypass where a certificate that should be rejected is instead accepted. This could result in unauthorized access or information disclosure.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The Liquibase runtime does not load GnuTLS, and no GnuTLS-linked tool (apt, dirmngr, curl) is invoked by the entrypoint or the CLI.\n"
+        }
+      ],
+      "cwes": [
+        178
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6rgh-57xm-37v8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3833",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3833",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS case-sensitive nameConstraints comparison that can let a certificate violating a CA's name constraints be accepted. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.9",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

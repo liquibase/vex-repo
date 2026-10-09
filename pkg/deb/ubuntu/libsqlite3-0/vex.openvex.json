@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-5dca0d5941f52cce0ee6146b7861c3fcfcb5908d255f04fef7fa538797a8159a",
+  "@id": "merged-vex-d2b36a0798bcc327a07670d0d90a694333aa389f0ac18424619b3ae6ee2eb150",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T00:43:27.140297192Z",
+  "timestamp": "2026-10-09T01:06:44.843910824Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "BIT-sqlite-2026-11822"
         ]
       },
-      "timestamp": "2026-10-09T00:43:27.125453061Z",
+      "timestamp": "2026-10-09T01:06:44.785116588Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -25,9 +25,27 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-11824",
+        "aliases": [
+          "BIT-sqlite-2026-11824"
+        ]
+      },
+      "timestamp": "2026-10-09T01:06:44.826051464Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsqlite3-0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "SQLite before 3.53.2 contains a heap-based buffer overflow vulnerability in the FTS5 full-text search extension that allows attackers to cause a crash or execute arbitrary code by supplying a crafted database with malicious continuation page metadata specifying a szLeaf value smaller than 4. Attackers can trigger an integer underflow in fts5ChunkIterate() causing an inflated remaining byte count during FTS5 MATCH query processing, leading to a heap buffer overflow of attacker-controlled data in applications compiled with SQLITE_ENABLE_FTS5.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This issue requires a process linked against the system SQLite library, built with FTS5, to run an FTS5 MATCH query against an attacker-crafted database file. Liquibase Secure inherits libsqlite3-0 from the Ubuntu base image, but the stock container runs only the Liquibase Java CLI and its entrypoint script, and neither loads the system SQLite library. The only image binaries linked against it are gpg (and, on Ubuntu 24.04 images, keyboxd) from the eclipse-temurin base layer, and neither the entrypoint nor the CLI invokes them. SQLite support in Liquibase goes through the optional sqlite-jdbc driver, which carries its own embedded native library and does not link the OS package. Ubuntu has published fixed packages (3.45.1-1ubuntu2.6 for 24.04, 3.37.2-2ubuntu0.6 for 22.04, USN-8480-1); image builds from 5.2.1 onward carry the fix."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-39113"
       },
-      "timestamp": "2026-10-09T00:43:27.02578095Z",
+      "timestamp": "2026-10-09T01:06:44.661017552Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -42,7 +60,7 @@
       "vulnerability": {
         "name": "CVE-2026-50812"
       },
-      "timestamp": "2026-10-09T00:43:27.059121452Z",
+      "timestamp": "2026-10-09T01:06:44.702230609Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
@@ -57,7 +75,7 @@
       "vulnerability": {
         "name": "CVE-2026-50813"
       },
-      "timestamp": "2026-10-09T00:43:27.092254277Z",
+      "timestamp": "2026-10-09T01:06:44.74380564Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsqlite3-0"
