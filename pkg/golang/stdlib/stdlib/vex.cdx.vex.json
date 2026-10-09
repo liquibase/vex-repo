@@ -3093,6 +3093,121 @@
       ]
     },
     {
+      "id": "CVE-2026-78663",
+      "description": "The HTTP/2 server can refund connection-level flow control twice for the same data: once when a client resets a stream (refunding data for any sent-but-unread portion of the stream), and again when a request handler reads the buffered data. A malicious client can exploit this to bypass the configured connection-level flow control limit (MaxReceiveBufferPerConnection). Total buffered data is still limited by the concurrent stream limit and stream-level flow control.",
+      "recommendation": "No action required. The Go binary in the Liquibase Secure image is a client-only helper and runs no HTTP/2 server.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-78663",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6612",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/U2fTuyDJznI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/2 server double flow-control refund (GO-2026-6612). Fixed in Go 1.26.9 and 1.27.2; the Go toolchains in the published Liquibase Secure images (go1.25.1 in 5.0.0/5.0.1 through go1.26.8 in 5.2.2 and 6.0.0) are below the fix. The only Go binary in the image is the optional lpm package-manager helper. The default entrypoint runs it only when INSTALL_MYSQL is set, and otherwise runs the Java CLI or a command the user passes. A source review of lpm at the shipped tags found no HTTP server: no ListenAndServe, http.Server, handler registration or listener. lpm's only network use is a single sequential http.Client Get whose body it reads into memory. The flaw is in the HTTP/2 server's handling of client stream resets, so it needs a Go process that accepts HTTP/2 connections. lpm accepts none. govulncheck flags this advisory for lpm only through shared net/http entry points such as http.Client.Get; the fixed functions (http2serverConn) run only inside a server, which lpm never starts.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-94439",
+      "description": "When an HTTP server handler sends a 2xx response to an HTTP/1 CONNECT request and returns without hijacking the connection, the server improperly continues to read and serve requests from the connection. Since a 2xx response to an HTTP/1 CONNECT converts the connection into a tunnel, the server should not treat the connection as continuing to contain HTTP. The impact of this misbehavior is mostly limited to potential request smuggling, where an intermediate proxy considers the data on the connection to be tunneled and the server considers it to be HTTP.",
+      "recommendation": "No action required. The Go binary in the Liquibase Secure image is a client-only helper and runs no HTTP server.",
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-2gfw-j3c5-j46w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94439",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6613",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/U2fTuyDJznI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/1 server connection desynchronization after a 2xx response to CONNECT (GO-2026-6613). Fixed in Go 1.26.9 and 1.27.2; the Go toolchains in the published Liquibase Secure images (go1.25.1 in 5.0.0/5.0.1 through go1.26.8 in 5.2.2 and 6.0.0) are below the fix. The only Go binary in the image is the optional lpm package-manager helper. The default entrypoint runs it only when INSTALL_MYSQL is set, and otherwise runs the Java CLI or a command the user passes. A source review of lpm at the shipped tags found no HTTP server (no ListenAndServe, http.Server, handler registration or listener) and no CONNECT handling. lpm's only network use is an outbound http.Client Get. The flaw requires a Go HTTP server handler that answers a CONNECT request, which lpm does not have. govulncheck flags this advisory for lpm only through shared net/http entry points such as http.Client.Get; the fixed function (chunkWriter.writeHeader) runs only inside a server, which lpm never starts.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97032",
+      "description": "HTTP/2 servers could end up crashing due to inadvertently modifying their HPACK encoder concurrently. This happens because the server modifies the HPACK encoder from two goroutines without synchronization: one uses the encoder to encode a HEADERS frame as part of a response sent to a client and the other modifies the encoder's table size when handling a SETTINGS frame containing SETTINGS_HEADER_TABLE_SIZE that a client sends. A malicious client can repeatedly send a request while changing the header table size to crash the server.",
+      "recommendation": "No action required. The Go binary in the Liquibase Secure image is a client-only helper and runs no HTTP/2 server.",
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97032",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6617",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/U2fTuyDJznI",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib HTTP/2 server crash from an HPACK encoder race (GO-2026-6617). Fixed in Go 1.26.9 and 1.27.2; the Go toolchains in the published Liquibase Secure images (go1.25.1 in 5.0.0/5.0.1 through go1.26.8 in 5.2.2 and 6.0.0) are below the fix. The only Go binary in the image is the optional lpm package-manager helper. The default entrypoint runs it only when INSTALL_MYSQL is set, and otherwise runs the Java CLI or a command the user passes. A source review of lpm at the shipped tags found no HTTP server: no ListenAndServe, http.Server, handler registration or listener. lpm's only network use is an outbound http.Client Get. The race is between the server's response-writing goroutine and its handling of a client's SETTINGS_HEADER_TABLE_SIZE, so it needs a Go HTTP/2 server. lpm runs none. govulncheck flags this advisory for lpm only through shared net/http entry points such as http.Client.Get; the fixed functions (http2serverConn.processSetting, startFrameWrite) run only inside a server, which lpm never starts.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42501",
       "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
       "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",
