@@ -1,10 +1,29 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-db5284e7473f0790609b87ccf70b6908742e77854c736e9f2da2099dc53261b4",
+  "@id": "merged-vex-b502655daf53f5b3c4fe2e040cbe8b67561e023cad5960bfed0e0d7782752f1d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T14:31:39.868780214Z",
+  "timestamp": "2026-10-09T14:47:40.274066001Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-47912",
+        "aliases": [
+          "BIT-golang-2025-47912",
+          "GO-2025-4010"
+        ]
+      },
+      "timestamp": "2026-10-09T14:47:40.189028387Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The Parse function permits values other than IPv6 addresses to be included in square brackets within the host component of a URL. RFC 3986 permits IPv6 addresses to be included within the host component, enclosed within square brackets. For example: \"http://[::1]/\". IPv4 addresses and hostnames must not appear within square brackets. Parse did not enforce this requirement.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Go stdlib net/url bracketed-host validation flaw (GO-2025-4010), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's net/url. lpm parses URLs when its HTTP client fetches a download URL (from its package manifest or passed by the operator), when it follows a redirect from that server, and when it reads the HTTP_PROXY/HTTPS_PROXY environment variables. lpm makes no allow-list or host-comparison decision of its own based on the parsed host, so the lax parsing of a bracketed host has nothing to bypass. Influencing it needs an attacker who controls the operator's environment or command line, or the download server itself. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly."
+    },
     {
       "vulnerability": {
         "name": "CVE-2025-58183",
@@ -13,7 +32,7 @@
           "GO-2025-4014"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.790899133Z",
+      "timestamp": "2026-10-09T14:47:38.427186057Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -25,13 +44,51 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-58185",
+        "aliases": [
+          "BIT-golang-2025-58185",
+          "GO-2025-4011"
+        ]
+      },
+      "timestamp": "2026-10-09T14:47:40.223463748Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Parsing a maliciously crafted DER payload could allocate large amounts of memory, causing memory exhaustion.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Go stdlib encoding/asn1 DER memory exhaustion (GO-2025-4011), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's ASN.1 parser. lpm never parses DER itself. The parser is reached only through X.509 certificate parsing: the image's own system CA bundle, and the server certificate chain during the TLS handshake of lpm's outbound HTTPS downloads. A crafted certificate would have to come from the server lpm connects to, or from a network attacker on that connection's path. The impact is limited to memory exhaustion of the short-lived lpm process. Liquibase and the database connection are unaffected. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-58186",
+        "aliases": [
+          "BIT-golang-2025-58186",
+          "GO-2025-4012"
+        ]
+      },
+      "timestamp": "2026-10-09T14:47:40.257077137Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Despite HTTP headers having a default limit of 1MB, the number of cookies that can be parsed does not have a limit. By sending a lot of very small cookies such as \"a=;\", an attacker can make an HTTP server allocate a large amount of structs, causing large memory consumption.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib net/http unbounded cookie parsing (GO-2025-4012), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's net/http. The advisory describes an HTTP server parsing request cookies. lpm runs no HTTP server. lpm's HTTP client has no cookie jar, and lpm never reads request or response cookies, so the cookie parser is never invoked on downloaded responses either. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-58187",
         "aliases": [
           "BIT-golang-2025-58187",
           "GO-2025-4007"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.159517111Z",
+      "timestamp": "2026-10-09T14:47:39.553338561Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -50,7 +107,7 @@
           "GO-2025-4013"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.078081895Z",
+      "timestamp": "2026-10-09T14:47:39.485498661Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -63,13 +120,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-58189",
+        "aliases": [
+          "BIT-golang-2025-58189",
+          "GO-2025-4008"
+        ]
+      },
+      "timestamp": "2026-10-09T14:47:40.154773934Z",
+      "products": [
+        {
+          "@id": "pkg:golang/stdlib"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When Conn.Handshake fails during ALPN negotiation the error contains attacker controlled information (the ALPN protocols sent by the client) which is not escaped.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Go stdlib crypto/tls ALPN error-message injection (GO-2025-4008), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's crypto/tls. The unescaped text is the list of ALPN protocols a TLS client offers, and it appears in the error a TLS server returns when ALPN negotiation fails. lpm is a command-line HTTPS client only. It runs no TLS or HTTP server, so the server-side negotiation that builds this error never runs in lpm. The worst case is a misleading error line, with no effect on what lpm installs. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-61723",
         "aliases": [
           "BIT-golang-2025-61723",
           "GO-2025-4009"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.117594312Z",
+      "timestamp": "2026-10-09T14:47:39.520300973Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -88,7 +164,7 @@
           "GO-2025-4015"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.483851797Z",
+      "timestamp": "2026-10-09T14:47:38.988039349Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -107,7 +183,7 @@
           "GO-2025-4006"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.523378041Z",
+      "timestamp": "2026-10-09T14:47:39.020885913Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -126,7 +202,7 @@
           "GO-2026-4341"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.666563172Z",
+      "timestamp": "2026-10-09T14:47:38.326043605Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -144,7 +220,7 @@
           "GO-2025-4175"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.602062042Z",
+      "timestamp": "2026-10-09T14:47:39.086939972Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -163,7 +239,7 @@
           "GO-2026-4342"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.708820314Z",
+      "timestamp": "2026-10-09T14:47:38.360075712Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -181,7 +257,7 @@
           "GO-2025-4155"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.749829502Z",
+      "timestamp": "2026-10-09T14:47:38.393828493Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -199,7 +275,7 @@
           "GO-2026-4340"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.850471716Z",
+      "timestamp": "2026-10-09T14:47:40.120914009Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -218,7 +294,7 @@
           "GO-2026-4339"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.831740099Z",
+      "timestamp": "2026-10-09T14:47:38.460795726Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -237,7 +313,7 @@
           "GO-2026-4339"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.203211984Z",
+      "timestamp": "2026-10-09T14:47:38.757675575Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -256,7 +332,7 @@
           "GO-2026-4433"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.873058367Z",
+      "timestamp": "2026-10-09T14:47:38.493519066Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -275,7 +351,7 @@
           "GO-2026-4433"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.244158487Z",
+      "timestamp": "2026-10-09T14:47:38.790076847Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -294,7 +370,7 @@
           "GO-2026-4338"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.881462925Z",
+      "timestamp": "2026-10-09T14:47:39.319085389Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -312,7 +388,7 @@
           "GO-2026-4337"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.626749208Z",
+      "timestamp": "2026-10-09T14:47:38.292698395Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -330,7 +406,7 @@
           "GO-2026-4601"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.585677867Z",
+      "timestamp": "2026-10-09T14:47:38.258550385Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -348,7 +424,7 @@
           "GO-2026-4602"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.653076252Z",
+      "timestamp": "2026-10-09T14:47:39.953144315Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -367,7 +443,7 @@
           "GO-2026-4871"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.921412752Z",
+      "timestamp": "2026-10-09T14:47:39.352194303Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -385,7 +461,7 @@
           "GO-2026-4603"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.693127135Z",
+      "timestamp": "2026-10-09T14:47:39.987044535Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -404,7 +480,7 @@
           "GO-2026-4868"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.121781818Z",
+      "timestamp": "2026-10-09T14:47:38.69214564Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -423,7 +499,7 @@
           "GO-2026-4867"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.960766466Z",
+      "timestamp": "2026-10-09T14:47:39.385927936Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -441,7 +517,7 @@
           "GO-2026-5037"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.724402419Z",
+      "timestamp": "2026-10-09T14:47:39.18862469Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -460,7 +536,7 @@
           "GO-2026-4947"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.959258615Z",
+      "timestamp": "2026-10-09T14:47:38.560445042Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -478,7 +554,7 @@
           "GO-2026-4946"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.040999598Z",
+      "timestamp": "2026-10-09T14:47:38.626351032Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -497,7 +573,7 @@
           "GO-2026-4864"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.00008271Z",
+      "timestamp": "2026-10-09T14:47:38.593810523Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -515,7 +591,7 @@
           "GO-2026-4870"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.081738496Z",
+      "timestamp": "2026-10-09T14:47:38.659283854Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -534,7 +610,7 @@
           "GO-2026-4869"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.771808784Z",
+      "timestamp": "2026-10-09T14:47:40.054663132Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -553,7 +629,7 @@
           "GO-2026-4865"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.732577113Z",
+      "timestamp": "2026-10-09T14:47:40.021614482Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -572,7 +648,7 @@
           "GO-2026-4981"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.323982053Z",
+      "timestamp": "2026-10-09T14:47:38.855026679Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -591,7 +667,7 @@
           "GO-2026-4918"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.364937319Z",
+      "timestamp": "2026-10-09T14:47:38.887404787Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -610,7 +686,7 @@
           "GO-2026-5972"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.279573871Z",
+      "timestamp": "2026-10-09T14:47:39.653737462Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -629,7 +705,7 @@
           "GO-2026-4986"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.405520567Z",
+      "timestamp": "2026-10-09T14:47:38.919250032Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -647,7 +723,7 @@
           "GO-2026-5026"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.199664545Z",
+      "timestamp": "2026-10-09T14:47:39.5872343Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -665,7 +741,7 @@
           "GO-2026-4970"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.842061441Z",
+      "timestamp": "2026-10-09T14:47:39.287025706Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -684,7 +760,7 @@
           "GO-2026-4982"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.643917166Z",
+      "timestamp": "2026-10-09T14:47:39.121027526Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -703,7 +779,7 @@
           "GO-2026-4976"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.76376599Z",
+      "timestamp": "2026-10-09T14:47:39.221565289Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -722,7 +798,7 @@
           "GO-2026-4980"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.80263553Z",
+      "timestamp": "2026-10-09T14:47:39.254411723Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -741,7 +817,7 @@
           "GO-2026-4971"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.283845357Z",
+      "timestamp": "2026-10-09T14:47:38.822966455Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -760,7 +836,7 @@
           "GO-2026-4977"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.445658628Z",
+      "timestamp": "2026-10-09T14:47:38.954164375Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -779,7 +855,7 @@
           "GO-2026-4984"
         ]
       },
-      "timestamp": "2026-10-09T14:31:37.917800457Z",
+      "timestamp": "2026-10-09T14:47:38.526278601Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -798,7 +874,7 @@
           "GO-2026-4984"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.162793914Z",
+      "timestamp": "2026-10-09T14:47:38.725216488Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -817,7 +893,7 @@
           "GO-2026-5038"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.683423166Z",
+      "timestamp": "2026-10-09T14:47:39.154179739Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -836,7 +912,7 @@
           "GO-2026-5856"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.611204828Z",
+      "timestamp": "2026-10-09T14:47:39.919033285Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -855,7 +931,7 @@
           "GO-2026-5039"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.811310749Z",
+      "timestamp": "2026-10-09T14:47:40.088090239Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -874,7 +950,7 @@
           "GO-2026-5942"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.238432401Z",
+      "timestamp": "2026-10-09T14:47:39.620163718Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -892,7 +968,7 @@
           "GO-2026-6089"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.321046519Z",
+      "timestamp": "2026-10-09T14:47:39.686059397Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -911,7 +987,7 @@
           "GO-2026-6091"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.362399058Z",
+      "timestamp": "2026-10-09T14:47:39.717473009Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -930,7 +1006,7 @@
           "GO-2026-6088"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.403442424Z",
+      "timestamp": "2026-10-09T14:47:39.75027402Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -949,7 +1025,7 @@
           "GO-2026-6218"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.444261517Z",
+      "timestamp": "2026-10-09T14:47:39.782664426Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -968,7 +1044,7 @@
           "GO-2026-6090"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.487047542Z",
+      "timestamp": "2026-10-09T14:47:39.816486766Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -983,7 +1059,7 @@
       "vulnerability": {
         "name": "CVE-2026-56864"
       },
-      "timestamp": "2026-10-09T14:31:39.529098305Z",
+      "timestamp": "2026-10-09T14:47:39.851370494Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -998,7 +1074,7 @@
       "vulnerability": {
         "name": "CVE-2026-56865"
       },
-      "timestamp": "2026-10-09T14:31:39.570082637Z",
+      "timestamp": "2026-10-09T14:47:39.885047823Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -1017,7 +1093,7 @@
           "CVE-2025-58187"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.999735887Z",
+      "timestamp": "2026-10-09T14:47:39.41961105Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -1035,7 +1111,7 @@
           "CVE-2025-61723"
         ]
       },
-      "timestamp": "2026-10-09T14:31:39.038220583Z",
+      "timestamp": "2026-10-09T14:47:39.4517529Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
@@ -1053,7 +1129,7 @@
           "CVE-2025-58188"
         ]
       },
-      "timestamp": "2026-10-09T14:31:38.561799304Z",
+      "timestamp": "2026-10-09T14:47:39.053229409Z",
       "products": [
         {
           "@id": "pkg:golang/stdlib"
