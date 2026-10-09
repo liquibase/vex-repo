@@ -16,6 +16,67 @@
           "ref": "pkg:maven/org.springframework/spring-core"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-41848",
+      "description": "Applications may be vulnerable to a Regular Expression Denial of Service (ReDoS) attack if an attacker is able to provide a pattern which is then directly or indirectly supplied to one of the following methods in AntPathMatcher: match(String pattern, String path), matchStart(String pattern, String path), extractUriTemplateVariables(String pattern, String path). Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component passes externally supplied patterns to AntPathMatcher.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Framework ships only inside the 5.x license-tracking application, which never lets request input act as an AntPathMatcher pattern.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-659m-px2c-25wj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41848",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41848",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-core from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-core 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The ReDoS requires an attacker to supply the pattern argument of AntPathMatcher.match, matchStart or extractUriTemplateVariables. A source and bytecode review of the application found no use of AntPathMatcher or PathMatcher. Its request mappings are fixed paths declared in code (v1/track, v1/report and v1/health), and no request input is ever used as a path pattern.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-core",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

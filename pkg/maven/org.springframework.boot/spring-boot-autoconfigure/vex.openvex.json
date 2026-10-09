@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-69ac030aa41c040943124d7becd055386b6c3042628d380037b1cb48d5c3b691",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-09T14:31:46.696530145Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41001",
+        "aliases": [
+          "GHSA-ggg2-9786-hwc8"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:46.696531237Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.boot/spring-boot-autoconfigure"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring Boot's ArtemisEmbeddedConfigurationFactory uses a fixed, static path for the embedded Artemis message broker's data directory when no explicit path is configured. A local attacker on the same host can pre-create this predictable directory or place a symlink before the application starts. Affected versions: Spring Boot 4.0.0 through 4.0.6; 3.5.0 through 3.5.14; 3.4.0 through 3.4.16; 3.3.0 through 3.3.19; 2.7.33 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-boot-autoconfigure from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-boot-autoconfigure 3.4.2 in 5.0.0 to 5.0.2, 3.5.7 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.6 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The flaw is in ArtemisEmbeddedConfigurationFactory, which Spring Boot activates only when the embedded Apache Artemis broker (artemis-jakarta-server) is on the classpath. In Spring Boot 4.0.x (images 5.1.0 to 5.2.0) the Artemis auto-configuration moved out of spring-boot-autoconfigure into the separate spring-boot-artemis module, which the application does not bundle, so the reported jar contains no Artemis classes. The application declares only the web, data-jpa and liquibase Spring Boot starters, none of which brings in Artemis, sets no spring.artemis properties, and uses no JMS or messaging; so the embedded broker is never configured and its data directory is never created."
+    }
+  ]
+}

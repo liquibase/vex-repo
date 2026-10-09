@@ -1,0 +1,68 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-41001",
+      "description": "Spring Boot's ArtemisEmbeddedConfigurationFactory uses a fixed, static path for the embedded Artemis message broker's data directory when no explicit path is configured. A local attacker on the same host can pre-create this predictable directory or place a symlink before the application starts. Affected versions: Spring Boot 4.0.0 through 4.0.6; 3.5.0 through 3.5.14; 3.4.0 through 3.4.16; 3.3.0 through 3.3.19; 2.7.33 and earlier.",
+      "recommendation": "No action required. No shipped component bundles or starts an embedded Artemis broker.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Boot ships only inside the 5.x license-tracking application, which does not bundle the Artemis embedded broker, so the vulnerable auto-configuration never activates.\n"
+        }
+      ],
+      "cwes": [
+        377
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ggg2-9786-hwc8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41001",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41001",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-boot-autoconfigure from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-boot-autoconfigure 3.4.2 in 5.0.0 to 5.0.2, 3.5.7 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.6 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The flaw is in ArtemisEmbeddedConfigurationFactory, which Spring Boot activates only when the embedded Apache Artemis broker (artemis-jakarta-server) is on the classpath. In Spring Boot 4.0.x (images 5.1.0 to 5.2.0) the Artemis auto-configuration moved out of spring-boot-autoconfigure into the separate spring-boot-artemis module, which the application does not bundle, so the reported jar contains no Artemis classes. The application declares only the web, data-jpa and liquibase Spring Boot starters, none of which brings in Artemis, sets no spring.artemis properties, and uses no JMS or messaging; so the embedded broker is never configured and its data directory is never created.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.boot/spring-boot-autoconfigure",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.34|>=3.3.0|<3.3.20|>=3.4.0|<3.4.17|>=3.5.0|<3.5.15|>=4.0.0|<4.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

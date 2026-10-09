@@ -58,6 +58,67 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-41851",
+      "description": "Applications which accept user-supplied Spring Expression Language (SpEL) expressions may be vulnerable to a Denial of Service (DoS) attack if the evaluation of a SpEL expression triggers unbounded cache growth. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component evaluates user-supplied SpEL expressions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Framework ships only inside the 5.x license-tracking application, which never evaluates SpEL built from request input.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wxpp-56q6-5pcg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41851",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41851",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-expression from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-expression 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that evaluates user-supplied SpEL expressions. A source and bytecode review of the application found no ExpressionParser, SpelExpressionParser or evaluation-context usage. Its only SpEL is a single fixed @ConditionalOnExpression evaluated once at startup from configuration, and no request input reaches any expression.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-expression",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

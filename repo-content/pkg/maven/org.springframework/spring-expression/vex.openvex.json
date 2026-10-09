@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-8d18d064e4f35789086818d815f59088e69ee1c2f68ffa268692ea83ac692612",
+  "@id": "merged-vex-e39328af1f174df79698bc2e3c0413e94354a0212164c3a4265fc130f2375f57",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T01:07:02.147847847Z",
+  "timestamp": "2026-10-09T14:31:47.163261655Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-r5w3-xv2f-j59q"
         ]
       },
-      "timestamp": "2026-10-09T01:07:02.1478494Z",
+      "timestamp": "2026-10-09T14:31:47.108228412Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-expression"
@@ -22,6 +22,24 @@
       "status_notes": "Applications that evaluate user-supplied Spring Expression Language (SpEL) expressions are vulnerable to an Algorithmic Denial of Service (DoS). By providing a specially crafted expression, an attacker can trigger excessive resource consumption during evaluation, leading to application degradation or unavailability.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Spring Expression is a transitive dependency of spring-context, declared provided/optional at core/liquibase-standard/pom.xml:85. Repo search found no org.springframework.expression imports, no SpelExpressionParser, and no StandardEvaluationContext usage. The only parseExpression() hit is the custom tokenizer in commercial-databases/liquibase-commercial-couchbase/src/main/java/ liquibase/ext/couchbase/provider/ExpressionDocumentKeyProvider.java:38, which does not evaluate SpEL. The reactor also pins <spring.version>7.0.8</spring.version> in core/pom.xml:79."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41851",
+        "aliases": [
+          "GHSA-wxpp-56q6-5pcg"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:47.147195324Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-expression"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Applications which accept user-supplied Spring Expression Language (SpEL) expressions may be vulnerable to a Denial of Service (DoS) attack if the evaluation of a SpEL expression triggers unbounded cache growth. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-expression from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-expression 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that evaluates user-supplied SpEL expressions. A source and bytecode review of the application found no ExpressionParser, SpelExpressionParser or evaluation-context usage. Its only SpEL is a single fixed @ConditionalOnExpression evaluated once at startup from configuration, and no request input reaches any expression."
     }
   ]
 }

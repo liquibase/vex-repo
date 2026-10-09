@@ -26782,6 +26782,124 @@
       ]
     },
     {
+      "id": "CVE-2026-40226",
+      "description": "In nspawn in systemd 233 through 259 before 260, an escape-to-host action can occur via a crafted optional config file.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-nspawn; libsystemd0 and libudev1 are present only as inherited base-image library dependencies.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a host that launches containers with systemd-nspawn; the vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container never runs systemd-nspawn.\n"
+        }
+      ],
+      "cwes": [
+        348
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hc7r-6254-88w5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40226",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-9mj4-rrc3-gjcx",
+          "title": "systemd Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40226",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd-nspawn, the systemd container manager: a crafted optional .nspawn settings file can let a container escape to the host. Exploitation requires the host to launch containers with systemd-nspawn. In Ubuntu, systemd-nspawn ships in the separate systemd-container binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no nspawn code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs the Liquibase CLI and never invokes systemd-nspawn or any systemd service. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) and 255.4-1ubuntu8.16 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.2.0 (noble, 255.4-1ubuntu8.11 to 8.15) carry unfixed builds; 5.2.1 carries 255.4-1ubuntu8.16 and 5.2.2 and 6.0.0 carry 255.4-1ubuntu8.17.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40226",
+      "description": "In nspawn in systemd 233 through 259 before 260, an escape-to-host action can occur via a crafted optional config file.",
+      "recommendation": "No action required. Liquibase Secure's container never runs systemd-nspawn; libsystemd0 and libudev1 are present only as inherited base-image library dependencies.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a host that launches containers with systemd-nspawn; the vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container never runs systemd-nspawn.\n"
+        }
+      ],
+      "cwes": [
+        348
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hc7r-6254-88w5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40226",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-9mj4-rrc3-gjcx",
+          "title": "systemd Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40226",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd-nspawn, the systemd container manager: a crafted optional .nspawn settings file can let a container escape to the host. Exploitation requires the host to launch containers with systemd-nspawn. In Ubuntu, systemd-nspawn ships in the separate systemd-container binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no nspawn code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs the Liquibase CLI and never invokes systemd-nspawn or any systemd service. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) and 255.4-1ubuntu8.16 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.2.0 (noble, 255.4-1ubuntu8.11 to 8.15) carry unfixed builds; 5.2.1 carries 255.4-1ubuntu8.16 and 5.2.2 and 6.0.0 carry 255.4-1ubuntu8.17.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-4360",
       "description": "An issue was found in Python's tarfile module. TarFile.extract() does not fully apply the filter argument when extracting hardlink members, so a crafted tar archive can cause an extracted file to be written with unexpected ownership even when a restrictive filter such as filter=\"data\" is requested.",
       "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
@@ -26831,6 +26949,433 @@
       "affects": [
         {
           "ref": "pkg:generic/cpython"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41001",
+      "description": "Spring Boot's ArtemisEmbeddedConfigurationFactory uses a fixed, static path for the embedded Artemis message broker's data directory when no explicit path is configured. A local attacker on the same host can pre-create this predictable directory or place a symlink before the application starts. Affected versions: Spring Boot 4.0.0 through 4.0.6; 3.5.0 through 3.5.14; 3.4.0 through 3.4.16; 3.3.0 through 3.3.19; 2.7.33 and earlier.",
+      "recommendation": "No action required. No shipped component bundles or starts an embedded Artemis broker.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Boot ships only inside the 5.x license-tracking application, which does not bundle the Artemis embedded broker, so the vulnerable auto-configuration never activates.\n"
+        }
+      ],
+      "cwes": [
+        377
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ggg2-9786-hwc8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41001",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41001",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-boot-autoconfigure from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-boot-autoconfigure 3.4.2 in 5.0.0 to 5.0.2, 3.5.7 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.6 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The flaw is in ArtemisEmbeddedConfigurationFactory, which Spring Boot activates only when the embedded Apache Artemis broker (artemis-jakarta-server) is on the classpath. In Spring Boot 4.0.x (images 5.1.0 to 5.2.0) the Artemis auto-configuration moved out of spring-boot-autoconfigure into the separate spring-boot-artemis module, which the application does not bundle, so the reported jar contains no Artemis classes. The application declares only the web, data-jpa and liquibase Spring Boot starters, none of which brings in Artemis, sets no spring.artemis properties, and uses no JMS or messaging; so the embedded broker is never configured and its data directory is never created.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.boot/spring-boot-autoconfigure",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.34|>=3.3.0|<3.3.20|>=3.4.0|<3.4.17|>=3.5.0|<3.5.15|>=4.0.0|<4.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41711",
+      "description": "Applications using Spring Data Commons may be vulnerable to a Denial of Service (DoS) attack leading to a StackOverflowException when parsing Sort parameters. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped component accepts sort parameters from HTTP requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data ships only inside the 5.x license-tracking application, which has no endpoint that binds Sort or Pageable from request input, so the vulnerable sort parser is never fed attacker data.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5vpf-xvv7-c8vh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41711",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41711",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The stack overflow is triggered when Spring Data parses an HTTP sort parameter into a Sort, which happens only for controller methods that accept a Sort or Pageable argument. A source and bytecode review of the application found that its three @RestController classes (v1/track, v1/report and v1/health) take only fixed JSON request bodies or no arguments at all, with no Sort, Pageable, @RequestParam or @PathVariable parameters. Its one Pageable use is an internal PageRequest with constant values. Spring Data REST is not bundled.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.0.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41721",
+      "description": "Spring Data Commons contains a vulnerability that can lead to a Denial of Service (DoS) condition if Spring Data Web Support is enabled in conjunction with a Controller method using @ProjectedPayload, when an attacker sends a specially crafted HTTP request that causes the application to allocate lots of memory. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped component binds @ProjectedPayload types from HTTP requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data ships only inside the 5.x license-tracking application, which declares no @ProjectedPayload controller method, the precondition for the vulnerable binding path.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5m4m-73w9-8433",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41721",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41721",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory requires a controller method that binds a @ProjectedPayload type with Spring Data web support enabled. Spring Boot's auto-configuration enables Spring Data web support, but a bytecode review of the application found no @ProjectedPayload type; its three @RestController classes bind only concrete JSON request-body classes or take no arguments.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.0.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41844",
+      "description": "A Spring MVC or Spring WebFlux application which configures a mapping for \"/**\" where the view name is not explicitly specified allows an attacker to craft a link resulting in a 302 redirect to an arbitrary external host via the redirect: prefix. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component maps \"/**\" to view rendering.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which uses only REST controllers with explicit paths and never resolves view names from the request path.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h3qp-gqrc-q736",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41844",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41844",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires a \"/**\" mapping that resolves to view rendering without an explicit view name, so that the view name is derived from the request path and a \"redirect:\" prefix can be injected. A source and bytecode review of the application found no view controllers, ViewResolver, ModelAndView, WebMvcConfigurer or \"/**\" handler mapping of its own. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41846",
+      "description": "Spring MVC applications which accept user-supplied values in the cssClass, cssErrorClass, or cssStyle attributes of JSP form tags allow arbitrary HTML/JavaScript code injection, potentially resulting in a cross-site scripting (XSS) vulnerability. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component renders JSP pages.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which has no JSP engine and no JSP pages, so the vulnerable form tags never run.\n"
+        }
+      ],
+      "cwes": [
+        79
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-957g-f97v-vppc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41846",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41846",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The flaw is in the Spring JSP form tag library, which runs only when JSP pages are rendered. The application contains no JSP files or taglib declarations and does not bundle a JSP engine (tomcat-embed-jasper), so Spring form tags are never executed. Its one HTML report is rendered with mustache.java from a fixed template, not through Spring views.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41848",
+      "description": "Applications may be vulnerable to a Regular Expression Denial of Service (ReDoS) attack if an attacker is able to provide a pattern which is then directly or indirectly supplied to one of the following methods in AntPathMatcher: match(String pattern, String path), matchStart(String pattern, String path), extractUriTemplateVariables(String pattern, String path). Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component passes externally supplied patterns to AntPathMatcher.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Framework ships only inside the 5.x license-tracking application, which never lets request input act as an AntPathMatcher pattern.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-659m-px2c-25wj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41848",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41848",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-core from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-core 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The ReDoS requires an attacker to supply the pattern argument of AntPathMatcher.match, matchStart or extractUriTemplateVariables. A source and bytecode review of the application found no use of AntPathMatcher or PathMatcher. Its request mappings are fixed paths declared in code (v1/track, v1/report and v1/health), and no request input is ever used as a path pattern.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-core",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41851",
+      "description": "Applications which accept user-supplied Spring Expression Language (SpEL) expressions may be vulnerable to a Denial of Service (DoS) attack if the evaluation of a SpEL expression triggers unbounded cache growth. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component evaluates user-supplied SpEL expressions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Framework ships only inside the 5.x license-tracking application, which never evaluates SpEL built from request input.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wxpp-56q6-5pcg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41851",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41851",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-expression from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-expression 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that evaluates user-supplied SpEL expressions. A source and bytecode review of the application found no ExpressionParser, SpelExpressionParser or evaluation-context usage. Its only SpEL is a single fixed @ConditionalOnExpression evaluated once at startup from configuration, and no request input reaches any expression.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-expression",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
