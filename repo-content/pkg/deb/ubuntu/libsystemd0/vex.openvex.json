@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ddb67b4d03329caa79b87d113512c4f6d8e0eebb764dd4c72c79169ac3c99159",
+  "@id": "merged-vex-68e06d5e07045ece6fca426cadb573550772942c2295969297f886f234bfc0f8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T01:06:47.653383386Z",
+  "timestamp": "2026-10-09T14:31:32.755623462Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-10-09T01:06:47.553761352Z",
+      "timestamp": "2026-10-09T14:31:32.61133198Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-10-09T01:06:47.593769499Z",
+      "timestamp": "2026-10-09T14:31:32.652103151Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -37,9 +37,27 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-40226",
+        "aliases": [
+          "GHSA-9mj4-rrc3-gjcx"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:32.737155099Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In nspawn in systemd 233 through 259 before 260, an escape-to-host action can occur via a crafted optional config file.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in systemd-nspawn, the systemd container manager: a crafted optional .nspawn settings file can let a container escape to the host. Exploitation requires the host to launch containers with systemd-nspawn. In Ubuntu, systemd-nspawn ships in the separate systemd-container binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no nspawn code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs the Liquibase CLI and never invokes systemd-nspawn or any systemd service. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) and 255.4-1ubuntu8.16 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.2.0 (noble, 255.4-1ubuntu8.11 to 8.15) carry unfixed builds; 5.2.1 carries 255.4-1ubuntu8.16 and 5.2.2 and 6.0.0 carry 255.4-1ubuntu8.17."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-09T01:06:47.635086589Z",
+      "timestamp": "2026-10-09T14:31:32.694302129Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"

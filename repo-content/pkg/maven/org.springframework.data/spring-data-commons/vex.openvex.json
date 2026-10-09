@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-31b4138eb830a4c376cabc66ffedef74a0138a7dba4f1a711d8adfd551475747",
+  "@id": "merged-vex-dc5fe76104014415548de284701f1ad1c02b12f257c02d612ae86c00f046e4ff",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T01:07:01.995083337Z",
+  "timestamp": "2026-10-09T14:31:46.904106499Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-88fw-v6x4-3f58"
         ]
       },
-      "timestamp": "2026-10-09T01:07:01.933931395Z",
+      "timestamp": "2026-10-09T14:31:46.769199439Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.data/spring-data-commons"
@@ -25,12 +25,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41711",
+        "aliases": [
+          "GHSA-5vpf-xvv7-c8vh"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:46.847807395Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.data/spring-data-commons"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Applications using Spring Data Commons may be vulnerable to a Denial of Service (DoS) attack leading to a StackOverflowException when parsing Sort parameters. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The stack overflow is triggered when Spring Data parses an HTTP sort parameter into a Sort, which happens only for controller methods that accept a Sort or Pageable argument. A source and bytecode review of the application found that its three @RestController classes (v1/track, v1/report and v1/health) take only fixed JSON request bodies or no arguments at all, with no Sort, Pageable, @RequestParam or @PathVariable parameters. Its one Pageable use is an internal PageRequest with constant values. Spring Data REST is not bundled."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-41716",
         "aliases": [
           "GHSA-9fw2-h3hf-293r"
         ]
       },
-      "timestamp": "2026-10-09T01:07:01.976089115Z",
+      "timestamp": "2026-10-09T14:31:46.808916435Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework.data/spring-data-commons"
@@ -40,6 +58,24 @@
       "status_notes": "Spring Data's internal property-lookup cache accepts and permanently retains attacker-supplied strings as cache keys, allowing heap exhaustion through repeated requests. Affected applications are those using Spring Data features that forward HTTP-supplied strings to PropertyPath.from without prior filtering, in particular Querydsl web bindings (via QuerydslPredicateArgumentResolver) with the default permit-all visibility, and @ProjectedPayload form-parameter binding (via MapDataBinder). Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.3.0 through 3.3.16; 2.7.19 and earlier.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory names two routes from HTTP input into the PropertyPath.from cache: Querydsl web bindings and @ProjectedPayload form binding through MapDataBinder. Querydsl is not bundled, so the Querydsl argument resolver is never registered. The application declares no @ProjectedPayload type, and its endpoints bind only concrete JSON request-body classes, with no Sort, Pageable or projection parameters."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41721",
+        "aliases": [
+          "GHSA-5m4m-73w9-8433"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:46.887503975Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework.data/spring-data-commons"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring Data Commons contains a vulnerability that can lead to a Denial of Service (DoS) condition if Spring Data Web Support is enabled in conjunction with a Controller method using @ProjectedPayload, when an attacker sends a specially crafted HTTP request that causes the application to allocate lots of memory. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory requires a controller method that binds a @ProjectedPayload type with Spring Data web support enabled. Spring Boot's auto-configuration enables Spring Data web support, but a bytecode review of the application found no @ProjectedPayload type; its three @RestController classes bind only concrete JSON request-body classes or take no arguments."
     }
   ]
 }

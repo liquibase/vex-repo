@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b346f1ac36c013c93a24bd5244cb80dd7534b6b1a90257f5034de60ca8c3eb9c",
+  "@id": "merged-vex-97cd034eefd2ce1a824b3004c7f7f3d00aa529a7989ce888201de04104ba7793",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T01:07:02.372036994Z",
+  "timestamp": "2026-10-09T14:31:47.450547349Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-09T01:07:02.224860998Z",
+      "timestamp": "2026-10-09T14:31:47.235451159Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -25,12 +25,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41844",
+        "aliases": [
+          "GHSA-h3qp-gqrc-q736"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:47.394319085Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A Spring MVC or Spring WebFlux application which configures a mapping for \"/**\" where the view name is not explicitly specified allows an attacker to craft a link resulting in a 302 redirect to an arbitrary external host via the redirect: prefix. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires a \"/**\" mapping that resolves to view rendering without an explicit view name, so that the view name is derived from the request path and a \"redirect:\" prefix can be injected. A source and bytecode review of the application found no view controllers, ViewResolver, ModelAndView, WebMvcConfigurer or \"/**\" handler mapping of its own. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-41845",
         "aliases": [
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-09T01:07:02.267269254Z",
+      "timestamp": "2026-10-09T14:31:47.274682886Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -43,12 +61,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41846",
+        "aliases": [
+          "GHSA-957g-f97v-vppc"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:47.433445821Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC applications which accept user-supplied values in the cssClass, cssErrorClass, or cssStyle attributes of JSP form tags allow arbitrary HTML/JavaScript code injection, potentially resulting in a cross-site scripting (XSS) vulnerability. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The flaw is in the Spring JSP form tag library, which runs only when JSP pages are rendered. The application contains no JSP files or taglib declarations and does not bundle a JSP engine (tomcat-embed-jasper), so Spring form tags are never executed. Its one HTML report is rendered with mustache.java from a fixed template, not through Spring views."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-47884",
         "aliases": [
           "GHSA-pc63-qcmh-9cmg"
         ]
       },
-      "timestamp": "2026-10-09T01:07:02.312308653Z",
+      "timestamp": "2026-10-09T14:31:47.314375698Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -66,7 +102,7 @@
           "GHSA-j9f9-w8pj-32f8"
         ]
       },
-      "timestamp": "2026-10-09T01:07:02.354455494Z",
+      "timestamp": "2026-10-09T14:31:47.354008279Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"

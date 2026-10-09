@@ -1,15 +1,33 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-cd293f0d4f1e109c3d299a4d48d4248159756e8a1cce2bfb4baefecd3b866721",
+  "@id": "merged-vex-3f0b8f8180e90a028af2319398c1f35ca849ce2b6ef376a5f6dd0644aa66c109",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T01:06:47.729986388Z",
+  "timestamp": "2026-10-09T14:31:32.892746513Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-40226",
+        "aliases": [
+          "GHSA-9mj4-rrc3-gjcx"
+        ]
+      },
+      "timestamp": "2026-10-09T14:31:32.874773164Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libudev1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In nspawn in systemd 233 through 259 before 260, an escape-to-host action can occur via a crafted optional config file.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in systemd-nspawn, the systemd container manager: a crafted optional .nspawn settings file can let a container escape to the host. Exploitation requires the host to launch containers with systemd-nspawn. In Ubuntu, systemd-nspawn ships in the separate systemd-container binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no nspawn code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs the Liquibase CLI and never invokes systemd-nspawn or any systemd service. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) and 255.4-1ubuntu8.16 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.2.0 (noble, 255.4-1ubuntu8.11 to 8.15) carry unfixed builds; 5.2.1 carries 255.4-1ubuntu8.16 and 5.2.2 and 6.0.0 carry 255.4-1ubuntu8.17."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-09T01:06:47.72998758Z",
+      "timestamp": "2026-10-09T14:31:32.833508984Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"

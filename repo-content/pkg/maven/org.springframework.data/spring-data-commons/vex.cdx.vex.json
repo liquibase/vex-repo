@@ -124,6 +124,128 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-41711",
+      "description": "Applications using Spring Data Commons may be vulnerable to a Denial of Service (DoS) attack leading to a StackOverflowException when parsing Sort parameters. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped component accepts sort parameters from HTTP requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data ships only inside the 5.x license-tracking application, which has no endpoint that binds Sort or Pageable from request input, so the vulnerable sort parser is never fed attacker data.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5vpf-xvv7-c8vh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41711",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41711",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The stack overflow is triggered when Spring Data parses an HTTP sort parameter into a Sort, which happens only for controller methods that accept a Sort or Pageable argument. A source and bytecode review of the application found that its three @RestController classes (v1/track, v1/report and v1/health) take only fixed JSON request bodies or no arguments at all, with no Sort, Pageable, @RequestParam or @PathVariable parameters. Its one Pageable use is an internal PageRequest with constant values. Spring Data REST is not bundled.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.0.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41721",
+      "description": "Spring Data Commons contains a vulnerability that can lead to a Denial of Service (DoS) condition if Spring Data Web Support is enabled in conjunction with a Controller method using @ProjectedPayload, when an attacker sends a specially crafted HTTP request that causes the application to allocate lots of memory. Affected versions: Spring Data Commons 4.0.0 through 4.0.5; 3.5.0 through 3.5.11; 3.4.0 through 3.4.14; 3.0.0 through 3.3.16; 2.7.19 and earlier.",
+      "recommendation": "No action required. No shipped component binds @ProjectedPayload types from HTTP requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring Data ships only inside the 5.x license-tracking application, which declares no @ProjectedPayload controller method, the precondition for the vulnerable binding path.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5m4m-73w9-8433",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41721",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41721",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory requires a controller method that binds a @ProjectedPayload type with Spring Data web support enabled. Spring Boot's auto-configuration enables Spring Data web support, but a bytecode review of the application found no @ProjectedPayload type; its three @RestController classes bind only concrete JSON request-body classes or take no arguments.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework.data/spring-data-commons",
+          "versions": [
+            {
+              "range": "vers:maven/<2.7.20|>=3.0.0|<3.3.17|>=3.4.0|<3.4.15|>=3.5.0|<3.5.12|>=4.0.0|<4.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
