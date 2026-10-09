@@ -1,0 +1,72 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-5958",
+      "description": "When sed is invoked with both -i (in-place edit) and --follow-symlinks, the function open_next_file() performs two separate, non-atomic filesystem operations on the same path: it resolves the symlink to its target and stores the resolved path for determining where output is written, then opens the original symlink path (not the resolved one) to read the file. Between these two calls there is a race window. If an attacker atomically replaces the symlink with a different target during that window, sed will read content from the new (attacker-chosen) symlink target and write the processed result to the path recorded in the first step. This can lead to arbitrary file overwrite with attacker-controlled content in the context of the sed process. This issue was fixed in version 4.10.",
+      "recommendation": "No action required. Liquibase Secure never invokes sed, and the flaw needs sed -i --follow-symlinks plus a local attacker racing a symlink swap.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.1,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "sed is an unused base-image utility. Liquibase Secure never runs it, let alone with -i and --follow-symlinks, so the race cannot be triggered.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9r7w-j29g-xqx8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5958",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8229-1",
+          "title": "Ubuntu Security Notice USN-8229-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-5958",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GNU sed time-of-check/time-of-use race in open_next_file(), fixed upstream in sed 4.10 and in Ubuntu sed 4.8-1ubuntu2.1 (jammy) and 4.9-2ubuntu0.24.04.1 (noble). The affected builds are jammy sed 4.8-1ubuntu2 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble sed 4.9-2build1 in the 5.0.2 to 5.1.1 tags. Tags from 5.2.0 ship the fixed 4.9-2ubuntu0.24.04.1. sed is present only because it is an essential package of the Ubuntu base image. Nothing in Liquibase Secure runs it: the container entrypoint and the liquibase launcher script contain no sed invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The flaw is also only reachable when sed is run with both -i and --follow-symlinks, while a local attacker replaces the symlink being edited during the race window. Neither condition occurs in the image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/sed",
+          "versions": [
+            {
+              "range": "vers:deb/<4.8-1ubuntu2.1|>=4.9|<4.9-2ubuntu0.24.04.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

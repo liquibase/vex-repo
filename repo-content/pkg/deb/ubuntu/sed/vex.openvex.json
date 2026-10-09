@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-9d03a2d5483adba2c0dfbb0f8ebff5d9e7116f0e6051f0d7e6e964ebba3f58ea",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-09T14:47:36.502524225Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5958"
+      },
+      "timestamp": "2026-10-09T14:47:36.502525176Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/sed"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When sed is invoked with both -i (in-place edit) and --follow-symlinks, the function open_next_file() performs two separate, non-atomic filesystem operations on the same path: it resolves the symlink to its target and stores the resolved path for determining where output is written, then opens the original symlink path (not the resolved one) to read the file. Between these two calls there is a race window. If an attacker atomically replaces the symlink with a different target during that window, sed will read content from the new (attacker-chosen) symlink target and write the processed result to the path recorded in the first step. This can lead to arbitrary file overwrite with attacker-controlled content in the context of the sed process. This issue was fixed in version 4.10.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GNU sed time-of-check/time-of-use race in open_next_file(), fixed upstream in sed 4.10 and in Ubuntu sed 4.8-1ubuntu2.1 (jammy) and 4.9-2ubuntu0.24.04.1 (noble). The affected builds are jammy sed 4.8-1ubuntu2 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble sed 4.9-2build1 in the 5.0.2 to 5.1.1 tags. Tags from 5.2.0 ship the fixed 4.9-2ubuntu0.24.04.1. sed is present only because it is an essential package of the Ubuntu base image. Nothing in Liquibase Secure runs it: the container entrypoint and the liquibase launcher script contain no sed invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The flaw is also only reachable when sed is run with both -i and --follow-symlinks, while a local attacker replaces the symlink being edited during the race window. Neither condition occurs in the image."
+    }
+  ]
+}

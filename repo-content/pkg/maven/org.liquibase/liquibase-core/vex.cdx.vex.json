@@ -27380,6 +27380,190 @@
       ]
     },
     {
+      "id": "CVE-2026-5958",
+      "description": "When sed is invoked with both -i (in-place edit) and --follow-symlinks, the function open_next_file() performs two separate, non-atomic filesystem operations on the same path: it resolves the symlink to its target and stores the resolved path for determining where output is written, then opens the original symlink path (not the resolved one) to read the file. Between these two calls there is a race window. If an attacker atomically replaces the symlink with a different target during that window, sed will read content from the new (attacker-chosen) symlink target and write the processed result to the path recorded in the first step. This can lead to arbitrary file overwrite with attacker-controlled content in the context of the sed process. This issue was fixed in version 4.10.",
+      "recommendation": "No action required. Liquibase Secure never invokes sed, and the flaw needs sed -i --follow-symlinks plus a local attacker racing a symlink swap.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.1,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "sed is an unused base-image utility. Liquibase Secure never runs it, let alone with -i and --follow-symlinks, so the race cannot be triggered.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9r7w-j29g-xqx8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5958",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8229-1",
+          "title": "Ubuntu Security Notice USN-8229-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-5958",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GNU sed time-of-check/time-of-use race in open_next_file(), fixed upstream in sed 4.10 and in Ubuntu sed 4.8-1ubuntu2.1 (jammy) and 4.9-2ubuntu0.24.04.1 (noble). The affected builds are jammy sed 4.8-1ubuntu2 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble sed 4.9-2build1 in the 5.0.2 to 5.1.1 tags. Tags from 5.2.0 ship the fixed 4.9-2ubuntu0.24.04.1. sed is present only because it is an essential package of the Ubuntu base image. Nothing in Liquibase Secure runs it: the container entrypoint and the liquibase launcher script contain no sed invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The flaw is also only reachable when sed is run with both -i and --follow-symlinks, while a local attacker replaces the symlink being edited during the race window. Neither condition occurs in the image.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/sed",
+          "versions": [
+            {
+              "range": "vers:deb/<4.8-1ubuntu2.1|>=4.9|<4.9-2ubuntu0.24.04.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-58189",
+      "description": "When Conn.Handshake fails during ALPN negotiation the error contains attacker controlled information (the ALPN protocols sent by the client) which is not escaped.",
+      "recommendation": "No action required. Liquibase does not use Go's TLS stack, and the bundled lpm helper never acts as a TLS server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw is in server-side ALPN negotiation. The only Go code in the image, lpm, is an outbound HTTPS client and never accepts TLS connections.\n"
+        }
+      ],
+      "cwes": [
+        532
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxq7-xw9v-rcv3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58189",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4008",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls ALPN error-message injection (GO-2025-4008), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's crypto/tls. The unescaped text is the list of ALPN protocols a TLS client offers, and it appears in the error a TLS server returns when ALPN negotiation fails. lpm is a command-line HTTPS client only. It runs no TLS or HTTP server, so the server-side negotiation that builds this error never runs in lpm. The worst case is a misleading error line, with no effect on what lpm installs. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-47912",
+      "description": "The Parse function permits values other than IPv6 addresses to be included in square brackets within the host component of a URL. RFC 3986 permits IPv6 addresses to be included within the host component, enclosed within square brackets. For example: \"http://[::1]/\". IPv4 addresses and hostnames must not appear within square brackets. Parse did not enforce this requirement.",
+      "recommendation": "No action required. Liquibase does not use Go's URL parser, and the bundled lpm helper only fetches fixed or operator-supplied URLs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "lpm parses only its manifest, redirect and proxy URLs and makes no security decision based on the parsed host, so the lax bracket parsing has no security effect.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-447v-2qg4-h8hc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-47912",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4010",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/url bracketed-host validation flaw (GO-2025-4010), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's net/url. lpm parses URLs when its HTTP client fetches a download URL (from its package manifest or passed by the operator), when it follows a redirect from that server, and when it reads the HTTP_PROXY/HTTPS_PROXY environment variables. lpm makes no allow-list or host-comparison decision of its own based on the parsed host, so the lax parsing of a bracketed host has nothing to bypass. Influencing it needs an attacker who controls the operator's environment or command line, or the download server itself. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-6069",
       "description": "The html.parser.HTMLParser class had worst-case quadratic complexity when processing certain crafted malformed inputs at end-of-file, potentially leading to an amplified denial of service.",
       "recommendation": "Upgrade to the latest Liquibase Secure release when available. The fix is present in this codebase's own build of the bundled Python runtime, but only a published release carries it to a running deployment.",
@@ -27425,6 +27609,125 @@
       "affects": [
         {
           "ref": "pkg:generic/cpython"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-58185",
+      "description": "Parsing a maliciously crafted DER payload could allocate large amounts of memory, causing memory exhaustion.",
+      "recommendation": "No action required. Liquibase does not use Go's ASN.1 parser, and the bundled lpm helper is exposed only when it is run and an attacker controls the TLS server or network path of its download.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The DER parser is reached only through certificates presented to lpm's outbound HTTPS client. Exploiting it needs control of that TLS server or network path, and can only crash the optional lpm helper.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jwmf-chvc-rf92",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58185",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4011",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib encoding/asn1 DER memory exhaustion (GO-2025-4011), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's ASN.1 parser. lpm never parses DER itself. The parser is reached only through X.509 certificate parsing: the image's own system CA bundle, and the server certificate chain during the TLS handshake of lpm's outbound HTTPS downloads. A crafted certificate would have to come from the server lpm connects to, or from a network attacker on that connection's path. The impact is limited to memory exhaustion of the short-lived lpm process. Liquibase and the database connection are unaffected. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-58186",
+      "description": "Despite HTTP headers having a default limit of 1MB, the number of cookies that can be parsed does not have a limit. By sending a lot of very small cookies such as \"a=;\", an attacker can make an HTTP server allocate a large amount of structs, causing large memory consumption.",
+      "recommendation": "No action required. Liquibase does not use Go's HTTP stack, and the bundled lpm helper neither serves HTTP nor parses cookies.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The cookie parser is never invoked. lpm runs no HTTP server, and its outbound client has no cookie jar and never reads cookies.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rjcg-56ph-3qvg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-58186",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2025-4012",
+          "title": "Go Vulnerability Database"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib net/http unbounded cookie parsing (GO-2025-4012), fixed in Go 1.24.8 and 1.25.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. The scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.0 and 5.0.1 tags. The 5.0.2 tag and later ship lpm built with go1.25.3 or newer, which includes the fix. Liquibase itself is a Java application and does not use Go's net/http. The advisory describes an HTTP server parsing request cookies. lpm runs no HTTP server. lpm's HTTP client has no cookie jar, and lpm never reads request or response cookies, so the cookie parser is never invoked on downloaded responses either. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.8|>=1.25.0|<1.25.2",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
