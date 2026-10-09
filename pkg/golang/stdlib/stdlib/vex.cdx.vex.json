@@ -2332,6 +2332,67 @@
       ]
     },
     {
+      "id": "CVE-2025-61730",
+      "description": "During the TLS 1.3 handshake if multiple messages are sent in records that span encryption level boundaries (for instance the Client Hello and Encrypted Extensions messages), the subsequent messages may be processed before the encryption level changes. This can cause some minor information disclosure if a network-local attacker can inject messages during the handshake.",
+      "recommendation": "No action required. Liquibase does not use Go's TLS stack, and the bundled lpm helper is exposed only when it is run and an attacker can inject traffic into its outbound TLS handshake.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase runs on the JVM and never uses Go's crypto/tls. The only Go code in the image is the optional lpm helper, and exploiting it needs a network-local attacker injecting records into its outbound TLS 1.3 handshake while it is run, for minor information disclosure only.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gr56-3gp6-6gmj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61730",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4340",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls TLS 1.3 handshake encryption-level flaw (GO-2026-4340), fixed in Go 1.24.12 and 1.25.6. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.x tags (5.0.1 through 5.0.3 ship lpm built with go1.25.1 to go1.25.5). Liquibase itself is a Java application and does not use Go's crypto/tls. lpm reaches crypto/tls only as an HTTPS client when it downloads a jar or package manifest, and in the Docker image it runs only when INSTALL_MYSQL is set or a user invokes it explicitly. Exploitation requires a network-local attacker who can inject handshake records into that short-lived outbound connection, and the stated impact is minor information disclosure; the advisory describes no integrity or availability impact. Image tags from 5.1.0 on ship lpm built with go1.25.7 or newer, which includes the fix, and the current image definition installs lpm 0.3.7, whose release binary is built with go1.26.8.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-08T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-61731",
       "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
       "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",
