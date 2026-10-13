@@ -189,6 +189,132 @@
       ]
     },
     {
+      "id": "CVE-2026-22695",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From 1.6.51 to 1.6.53, there is a heap buffer over-read in the libpng simplified API function png_image_finish_read when processing interlaced 16-bit PNGs with 8-bit output format and non-minimal row stride. This is a regression introduced by the fix for CVE-2025-65018. This vulnerability is fixed in 1.6.54.",
+      "recommendation": "No action required. The libpng build in the affected images predates the flawed code, and no program in the image calls libpng's simplified read API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The flawed code arrived with the CVE-2025-65018 fix, which the unfixed libpng build in the images predates, and the only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_image_finish_read.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-mmq5-27w3-rxpp",
+          "title": "libpng Security Advisory GHSA-mmq5-27w3-rxpp"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22695",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-22695",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The heap over-read is in libpng's simplified read API, png_image_finish_read, when it decodes an interlaced 16-bit PNG into an 8-bit output buffer with a non-minimal row stride. It is a regression introduced by the fix for CVE-2025-65018, so only libpng builds that carry that fix contain the flawed code. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Docker images 5.0.2 and 5.0.3 carry 1.6.43-5build1, which predates Ubuntu's CVE-2025-65018 fix (1.6.43-5ubuntu0.1), so the flawed code is not in the shipped library. Ubuntu fixed this regression in 1.6.43-5ubuntu0.3 (noble); 5.1.0 and 5.1.1 carry 1.6.43-5ubuntu0.5 and 5.2.0 and later carry 1.6.43-5ubuntu0.6. The function is unreachable as well. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType uses only libpng's sequential read functions (png_read_info, png_read_image and their png_set_* transforms). It never calls png_image_finish_read. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22801",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From 1.6.26 to 1.6.53, there is an integer truncation in the libpng simplified write API functions png_write_image_16bit and png_write_image_8bit causes heap buffer over-read when the caller provides a negative row stride (for bottom-up image layouts) or a stride exceeding 65535 bytes. The bug was introduced in libpng 1.6.26 (October 2016) by casts added to silence compiler warnings on 16-bit systems. This vulnerability is fixed in 1.6.54.",
+      "recommendation": "No action required. No program in the Liquibase Secure image encodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, only decodes PNG data, so libpng's simplified write functions are never called.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-vgjq-8cw5-ggw8",
+          "title": "libpng Security Advisory GHSA-vgjq-8cw5-ggw8"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22801",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-22801",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The heap over-read is in libpng's simplified write API, png_write_image_16bit and png_write_image_8bit, reached through png_image_write_to_file, png_image_write_to_stdio or png_image_write_to_memory. It needs an application that encodes a PNG with the system libpng and passes a negative row stride or a stride larger than 65535 bytes. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType uses only libpng's sequential read functions (png_read_info, png_read_image and their png_set_* transforms). It calls no libpng write function, so the simplified write API is never entered. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.43-5ubuntu0.3 (noble). Docker images 5.0.2 and 5.0.3 carry the unfixed 1.6.43-5build1; 5.1.0 and 5.1.1 carry 1.6.43-5ubuntu0.5 and 5.2.0 and later carry 1.6.43-5ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-25646",
       "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to 1.6.55, an out-of-bounds read vulnerability exists in the png_set_quantize() API function. When the function is called with no histogram and the number of colors in the palette is more than twice the maximum supported by the user's display, certain palettes will cause the function to enter into an infinite loop that reads past the end of an internal heap-allocated buffer. The images that trigger this vulnerability are valid per the PNG specification. This vulnerability is fixed in 1.6.55.",
       "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
