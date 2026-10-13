@@ -30311,6 +30311,191 @@
       ]
     },
     {
+      "id": "CVE-2026-33636",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.6.36 through 1.6.55, an out-of-bounds read and write exists in libpng's ARM/AArch64 Neon-optimized palette expansion path. When expanding 8-bit paletted rows to RGB or RGBA, the Neon loop processes a final partial chunk without verifying that enough input pixels remain. Because the implementation works backward from the end of the row, the final iteration dereferences pointers before the start of the row buffer (OOB read) and writes expanded pixel data to the same underflowed positions (OOB write). This is reachable via normal decoding of attacker-controlled PNG input if Neon is enabled. Version 1.6.56 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No program in the image decodes PNG data with the system libpng, so the Neon palette-expansion path is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-wjr5-c57x-95m2",
+          "title": "libpng Security Advisory GHSA-wjr5-c57x-95m2"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33636",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33636",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read and write is in libpng's ARM/AArch64 Neon palette-expansion path. It is reached only when an application uses the system libpng to decode an attacker-supplied paletted PNG on an ARM CPU with Neon enabled. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1. Liquibase is a headless command-line tool that never decodes untrusted images, and the JVM does not use the system libpng. The JDK's PNG codec in javax.imageio is pure Java, and the JDK's native image code carries its own bundled libpng. The only image handling in the Liquibase codebase is PDF redaction in the checks policy engine. It renders pages and writes them as PNG through javax.imageio, so it never loads the system libpng. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed the issue in 1.6.37-3ubuntu0.5 (jammy) and 1.6.43-5ubuntu0.6 (noble).",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33636",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.6.36 through 1.6.55, an out-of-bounds read and write exists in libpng's ARM/AArch64 Neon-optimized palette expansion path. When expanding 8-bit paletted rows to RGB or RGBA, the Neon loop processes a final partial chunk without verifying that enough input pixels remain. Because the implementation works backward from the end of the row, the final iteration dereferences pointers before the start of the row buffer (OOB read) and writes expanded pixel data to the same underflowed positions (OOB write). This is reachable via normal decoding of attacker-controlled PNG input if Neon is enabled. Version 1.6.56 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.6,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No program in the image decodes PNG data with the system libpng, so the Neon palette-expansion path is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125,
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-wjr5-c57x-95m2",
+          "title": "libpng Security Advisory GHSA-wjr5-c57x-95m2"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33636",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33636",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read and write is in libpng's ARM/AArch64 Neon palette-expansion path. It is reached only when an application uses the system libpng to decode an attacker-supplied paletted PNG on an ARM CPU with Neon enabled. Liquibase is a headless command-line tool that never decodes untrusted images. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; in the image it is linked only through libfreetype6, which the Liquibase JVM does not load. The JDK does not use the system libpng: its PNG codec in javax.imageio is pure Java, its font code links the JDK's own bundled FreeType, and libsplashscreen carries a statically linked libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed the issue in 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.2 and 5.0.3 (1.6.43-5build1) and 5.1.0 and 5.1.1 (1.6.43-5ubuntu0.5) carry unfixed builds; 5.2.0 and later carry 1.6.43-5ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34757",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From 1.0.9 to before 1.6.57, passing a pointer obtained from png_get_PLTE, png_get_tRNS, or png_get_hIST back into the corresponding setter on the same png_struct/png_info pair causes the setter to read from freed memory and copy its contents into the replacement buffer. The setter frees the internal buffer before copying from the caller-supplied pointer, which now dangles. The freed region may contain stale data (producing silently corrupted chunk metadata) or data from subsequent heap allocations (leaking unrelated heap contents into the chunk struct). This vulnerability is fixed in 1.6.57.",
+      "recommendation": "No action required. No program in the Liquibase Secure image calls the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a calling program that feeds libpng getter results back into its setters. No program in the image calls the system libpng at all.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-6fr7-g8h7-v645",
+          "title": "libpng Security Advisory GHSA-6fr7-g8h7-v645"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34757",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-34757",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free happens only when an application's own code takes the pointer returned by png_get_PLTE, png_get_tRNS or png_get_hIST and passes it back into the matching png_set_* call on the same png_struct. That is an API-usage pattern in the calling program. A crafted PNG cannot trigger it on its own. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1. Neither Liquibase nor the JVM calls the system libpng. The JDK's PNG codec in javax.imageio is pure Java, and the JDK's native image code carries its own bundled libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one uses libpng. Ubuntu fixed the issue in 1.6.37-3ubuntu0.5 (jammy) and 1.6.43-5ubuntu0.6 (noble).",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-34483",
       "analysis": {
         "state": "not_affected",
@@ -30321,6 +30506,519 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34757",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From 1.0.9 to before 1.6.57, passing a pointer obtained from png_get_PLTE, png_get_tRNS, or png_get_hIST back into the corresponding setter on the same png_struct/png_info pair causes the setter to read from freed memory and copy its contents into the replacement buffer. The setter frees the internal buffer before copying from the caller-supplied pointer, which now dangles. The freed region may contain stale data (producing silently corrupted chunk metadata) or data from subsequent heap allocations (leaking unrelated heap contents into the chunk struct). This vulnerability is fixed in 1.6.57.",
+      "recommendation": "No action required. No program in the Liquibase Secure image calls the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a calling program that feeds libpng getter results back into its setters. No program in the image calls the system libpng at all.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-6fr7-g8h7-v645",
+          "title": "libpng Security Advisory GHSA-6fr7-g8h7-v645"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34757",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-34757",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free happens only when an application's own code takes the pointer returned by png_get_PLTE, png_get_tRNS or png_get_hIST and passes it back into the matching png_set_* call on the same png_struct. That is an API-usage pattern in the calling program. A crafted PNG cannot trigger it on its own. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; in the image it is linked only through libfreetype6, which the Liquibase JVM does not load. The JDK does not use the system libpng: its PNG codec in javax.imageio is pure Java, its font code links the JDK's own bundled FreeType, and libsplashscreen carries a statically linked libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed the issue in 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.2 and 5.0.3 (1.6.43-5build1) and 5.1.0 and 5.1.1 (1.6.43-5ubuntu0.5) carry unfixed builds; 5.2.0 and later carry 1.6.43-5ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40930",
+      "description": "LIBPNG is a reference library for use in applications that process PNG (Portable Network Graphics) raster image files. In version 1.8.0, three inter-frame chunk discard paths in the push-mode APNG parser clear the chunk-header flag without consuming the chunk body and CRC, allowing attacker-controlled bytes inside an ignored ancillary chunk to be reinterpreted as a fresh chunk header on the next call to png_process_data. Commit faf06924688b62d7c1654b5ceddedbde66ffadb4 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG or APNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No program in the image feeds data to libpng's push-mode APNG parser.\n"
+        }
+      ],
+      "cwes": [
+        436
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-c4v6-gxrq-6g2x",
+          "title": "libpng Security Advisory GHSA-c4v6-gxrq-6g2x"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40930",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40930",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the push-mode APNG parser. It is reached only when an application streams attacker-supplied animated PNG data through png_process_data. Ubuntu's libpng1.6 package carries the APNG patch, which is why the jammy package received a fix. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1. Neither Liquibase nor the JVM calls the system libpng, and certainly not its progressive reader. The JDK's PNG codec in javax.imageio is pure Java, and the JDK's native image code carries its own bundled libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one uses libpng. Ubuntu fixed the issue in 1.6.37-3ubuntu0.6 (jammy).",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3731",
+      "description": "A weakness has been identified in libssh up to 0.11.3. The impacted element is the function sftp_extensions_get_name/sftp_extensions_get_data of the file src/sftp.c of the component SFTP Extension Name Handler. Executing a manipulation of the argument idx can lead to out-of-bounds read. The attack may be performed from remote. Upgrading to version 0.11.4 and 0.12.0 is sufficient to resolve this issue.",
+      "recommendation": "No action required. Liquibase Secure does not open SFTP sessions through libssh.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh SFTP session, so the vulnerable extension lookup is never reached.\n"
+        }
+      ],
+      "cwes": [
+        119,
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wg5h-wgv3-pgqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3731",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/libssh-2026-sftp-extensions.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3731",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read is in libssh's SFTP client extension handling (sftp_extensions_get_name and sftp_extensions_get_data). It is reached only when a program opens an SFTP session with libssh and asks for server extension entries. libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, so no SFTP session is ever opened through libssh. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.7 (jammy) and 0.10.6-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.7|>=0.10|<0.10.6-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40225",
+      "description": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "recommendation": "No action required. The Liquibase Secure container runs no udev daemon. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 6.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a udev daemon that processes hardware events. The vulnerable helpers are not part of libsystemd0 or libudev1, and the Liquibase Secure container runs no udev daemon.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-396h-m3pm-fpm5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40225",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-vpfq-8p5f-jcqx",
+          "title": "systemd Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40225",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40225",
+      "description": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "recommendation": "No action required. The Liquibase Secure container runs no udev daemon. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 6.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a udev daemon that processes hardware events. The vulnerable helpers are not part of libsystemd0 or libudev1, and the Liquibase Secure container runs no udev daemon.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-396h-m3pm-fpm5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40225",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-vpfq-8p5f-jcqx",
+          "title": "systemd Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40225",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39817",
+      "description": "The \"go tool pack\" subcommand (usually used only by the compiler as an internal tool with known-good inputs) does not sanitize output filenames. Extracting a malicious archive file with the \"pack\" subcommand can write files to arbitrary locations on the filesystem.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or its pack tool.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's pack tool, which is not present in the image. The only Go binary in the image is lpm.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qc64-m6c2-v4x7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39817",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4979",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the \"go tool pack\" command, which the Go vulnerability database (GO-2026-4979) lists against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0 and go1.25.8 in 5.1.1, all before the fix; 5.2.0 (go1.26.4) and later already carry it. govulncheck in source mode against the lpm sources of 5.0.0 and 5.1.1, with the matching toolchain pinned and GOOS=linux, does not report GO-2026-4979. The image does not install the Go toolchain: there is no go command and no pack tool, and the entrypoint never runs either one. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI. Fixed in Go 1.25.10 and 1.26.3.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0-0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39819",
+      "description": "The \"go bug\" command writes to two files with predictable names in the system temporary directory (for example, \"/tmp\"). An attacker with access to the temporary directory can create a symlink in one of these names, causing \"go bug\" to overwrite the target of the symlink.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or the go command.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's go command, which is not present in the image. The only Go binary in the image is lpm.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5m4p-2gjx-p2g8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39819",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4978",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the \"go bug\" command, which writes predictable files under the system temporary directory; the Go vulnerability database (GO-2026-4978) lists it against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0 and go1.25.8 in 5.1.1, all before the fix; 5.2.0 (go1.26.4) and later already carry it. govulncheck in source mode against the lpm sources of 5.0.0 and 5.1.1, with the matching toolchain pinned and GOOS=linux, does not report GO-2026-4978. The image does not install the Go toolchain, so there is no go command and \"go bug\" cannot be run. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI. Fixed in Go 1.25.10 and 1.26.3.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0-0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34268",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Difficult to exploit vulnerability allows unauthenticated attacker with logon to the infrastructure where Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition executes to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.2.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a service that passes untrusted data to the java.security APIs, or a sandboxed client that runs untrusted code. Liquibase Secure is a command-line client that is neither.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xvmr-9p7m-jmwv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34268",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "This is a Java SE Security component issue (security-libs, java.security) from the April 2026 Critical Patch Update. It affects Java 21.0.10 and earlier and is fixed in OpenJDK 21.0.11. Liquibase Secure 5.0.0 and 5.0.1 ship Temurin 21.0.8, 5.0.2 and 5.0.3 ship 21.0.9, and 5.1.0 and 5.1.1 ship 21.0.10. 5.2.0 and later ship 21.0.11 or newer, so they already carry the fix. In the earlier images, exploitation is hard: the attacker must already have a logon to the host running the JVM and must deliver crafted data to the java.security APIs. That means a service that passes untrusted input to those APIs, or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure is neither. It is a short-lived command-line client that starts no listener, runs no untrusted code, and only connects outbound to the database and service endpoints its operator configures. A successful attack yields at most limited read access.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

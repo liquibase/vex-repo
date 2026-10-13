@@ -1,15 +1,53 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-62d2990b1c7de40f4888daf65b471ce28d6f671897c53225b0de94b94b29fc26",
+  "@id": "merged-vex-98f462808163385d1f2c1ffd068a68921482135387617eb86db53c0e0ef10bde",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T15:48:31.109092703Z",
+  "timestamp": "2026-10-13T17:23:53.217435744Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-33636",
+        "aliases": [
+          "A-496616027",
+          "ASB-A-496616027",
+          "GHSA-wjr5-c57x-95m2"
+        ]
+      },
+      "timestamp": "2026-10-13T17:23:53.157916689Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpng16-16t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.6.36 through 1.6.55, an out-of-bounds read and write exists in libpng's ARM/AArch64 Neon-optimized palette expansion path. When expanding 8-bit paletted rows to RGB or RGBA, the Neon loop processes a final partial chunk without verifying that enough input pixels remain. Because the implementation works backward from the end of the row, the final iteration dereferences pointers before the start of the row buffer (OOB read) and writes expanded pixel data to the same underflowed positions (OOB write). This is reachable via normal decoding of attacker-controlled PNG input if Neon is enabled. Version 1.6.56 fixes the issue.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The out-of-bounds read and write is in libpng's ARM/AArch64 Neon palette-expansion path. It is reached only when an application uses the system libpng to decode an attacker-supplied paletted PNG on an ARM CPU with Neon enabled. Liquibase is a headless command-line tool that never decodes untrusted images. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; in the image it is linked only through libfreetype6, which the Liquibase JVM does not load. The JDK does not use the system libpng: its PNG codec in javax.imageio is pure Java, its font code links the JDK's own bundled FreeType, and libsplashscreen carries a statically linked libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed the issue in 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.2 and 5.0.3 (1.6.43-5build1) and 5.1.0 and 5.1.1 (1.6.43-5ubuntu0.5) carry unfixed builds; 5.2.0 and later carry 1.6.43-5ubuntu0.6."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-34757",
+        "aliases": [
+          "GHSA-6fr7-g8h7-v645"
+        ]
+      },
+      "timestamp": "2026-10-13T17:23:53.200686254Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpng16-16t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From 1.0.9 to before 1.6.57, passing a pointer obtained from png_get_PLTE, png_get_tRNS, or png_get_hIST back into the corresponding setter on the same png_struct/png_info pair causes the setter to read from freed memory and copy its contents into the replacement buffer. The setter frees the internal buffer before copying from the caller-supplied pointer, which now dangles. The freed region may contain stale data (producing silently corrupted chunk metadata) or data from subsequent heap allocations (leaking unrelated heap contents into the chunk struct). This vulnerability is fixed in 1.6.57.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The use-after-free happens only when an application's own code takes the pointer returned by png_get_PLTE, png_get_tRNS or png_get_hIST and passes it back into the matching png_set_* call on the same png_struct. That is an API-usage pattern in the calling program. A crafted PNG cannot trigger it on its own. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; in the image it is linked only through libfreetype6, which the Liquibase JVM does not load. The JDK does not use the system libpng: its PNG codec in javax.imageio is pure Java, its font code links the JDK's own bundled FreeType, and libsplashscreen carries a statically linked libpng. The only image handling in the Liquibase codebase writes PNGs through javax.imageio. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed the issue in 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.2 and 5.0.3 (1.6.43-5build1) and 5.1.0 and 5.1.1 (1.6.43-5ubuntu0.5) carry unfixed builds; 5.2.0 and later carry 1.6.43-5ubuntu0.6."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-46675"
       },
-      "timestamp": "2026-10-13T15:48:31.109093424Z",
+      "timestamp": "2026-10-13T17:23:53.115162118Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16t64"

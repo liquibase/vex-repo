@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-3db5f4cf0cff966674ed67ecd5079fe3bc0851376445a7818c71114eedac7473",
+  "@id": "merged-vex-3dafdef6ad8548e2db9747d479132cdf1dac741279e6feb5d421bc07dcd13884",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T15:48:31.762661694Z",
+  "timestamp": "2026-10-13T17:23:54.047989154Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-3731"
+      },
+      "timestamp": "2026-10-13T17:23:54.031203816Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A weakness has been identified in libssh up to 0.11.3. The impacted element is the function sftp_extensions_get_name/sftp_extensions_get_data of the file src/sftp.c of the component SFTP Extension Name Handler. Executing a manipulation of the argument idx can lead to out-of-bounds read. The attack may be performed from remote. Upgrading to version 0.11.4 and 0.12.0 is sufficient to resolve this issue.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The out-of-bounds read is in libssh's SFTP client extension handling (sftp_extensions_get_name and sftp_extensions_get_data). It is reached only when a program opens an SFTP session with libssh and asks for server extension entries. libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, so no SFTP session is ever opened through libssh. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.7 (jammy) and 0.10.6-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-59843"
       },
-      "timestamp": "2026-10-13T15:48:31.575324902Z",
+      "timestamp": "2026-10-13T17:23:53.782886182Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -24,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-59845"
       },
-      "timestamp": "2026-10-13T15:48:31.608128658Z",
+      "timestamp": "2026-10-13T17:23:53.824875109Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-59846"
       },
-      "timestamp": "2026-10-13T15:48:31.642414872Z",
+      "timestamp": "2026-10-13T17:23:53.865466602Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-59847"
       },
-      "timestamp": "2026-10-13T15:48:31.676965128Z",
+      "timestamp": "2026-10-13T17:23:53.906133824Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-59848"
       },
-      "timestamp": "2026-10-13T15:48:31.711810673Z",
+      "timestamp": "2026-10-13T17:23:53.948073452Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-59850"
       },
-      "timestamp": "2026-10-13T15:48:31.747563996Z",
+      "timestamp": "2026-10-13T17:23:53.990025683Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"

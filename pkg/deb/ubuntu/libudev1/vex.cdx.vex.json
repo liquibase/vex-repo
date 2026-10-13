@@ -115,6 +115,71 @@
           "ref": "pkg:deb/ubuntu/libudev1"
         }
       ]
+    },
+    {
+      "id": "CVE-2026-40225",
+      "description": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "recommendation": "No action required. The Liquibase Secure container runs no udev daemon. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 6.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:P/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a udev daemon that processes hardware events. The vulnerable helpers are not part of libsystemd0 or libudev1, and the Liquibase Secure container runs no udev daemon.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-396h-m3pm-fpm5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40225",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-vpfq-8p5f-jcqx",
+          "title": "systemd Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-40225",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-6a7c94242533402b4d53eecde17520e4cf3ea82c89b937331d0126c66d0f119b",
+  "@id": "merged-vex-b627c2e33d405b8bd8c0db564eec6473da44fa03a494ff837a375ec0ffb6b991",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T15:48:33.860407516Z",
+  "timestamp": "2026-10-13T17:23:56.663370248Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-10-13T15:48:33.741710667Z",
+      "timestamp": "2026-10-13T17:23:56.478760424Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-10-13T15:48:33.777639741Z",
+      "timestamp": "2026-10-13T17:23:56.52062371Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -37,12 +37,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-40225",
+        "aliases": [
+          "GHSA-vpfq-8p5f-jcqx"
+        ]
+      },
+      "timestamp": "2026-10-13T17:23:56.64694379Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-40226",
         "aliases": [
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-10-13T15:48:33.846176691Z",
+      "timestamp": "2026-10-13T17:23:56.603654016Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -57,7 +75,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-13T15:48:33.811975429Z",
+      "timestamp": "2026-10-13T17:23:56.562163407Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"

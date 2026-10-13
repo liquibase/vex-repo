@@ -353,6 +353,72 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-3731",
+      "description": "A weakness has been identified in libssh up to 0.11.3. The impacted element is the function sftp_extensions_get_name/sftp_extensions_get_data of the file src/sftp.c of the component SFTP Extension Name Handler. Executing a manipulation of the argument idx can lead to out-of-bounds read. The attack may be performed from remote. Upgrading to version 0.11.4 and 0.12.0 is sufficient to resolve this issue.",
+      "recommendation": "No action required. Liquibase Secure does not open SFTP sessions through libssh.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh SFTP session, so the vulnerable extension lookup is never reached.\n"
+        }
+      ],
+      "cwes": [
+        119,
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wg5h-wgv3-pgqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3731",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/libssh-2026-sftp-extensions.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-3731",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read is in libssh's SFTP client extension handling (sftp_extensions_get_name and sftp_extensions_get_data). It is reached only when a program opens an SFTP session with libssh and asks for server extension entries. libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, so no SFTP session is ever opened through libssh. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.7 (jammy) and 0.10.6-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.7|>=0.10|<0.10.6-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
