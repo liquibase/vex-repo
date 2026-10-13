@@ -124,6 +124,136 @@
       ]
     },
     {
+      "id": "CVE-2026-42014",
+      "description": "A flaw was found in GnuTLS. The gnutls_pkcs11_token_set_pin function, used for changing the Security Officer PIN, can lead to a use-after-free vulnerability. This occurs when an attacker attempts to change the PIN with a NULL old PIN for a token that lacks a protected authentication path.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or its PKCS#11 API at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 6.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a program that changes a PKCS#11 token PIN through GnuTLS. Nothing in the Liquibase Secure image does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        825
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m4m5-7xc2-xc7g",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42014",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2026-04-29-9",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2026-04-29-9"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-42014",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Use-after-free in gnutls_pkcs11_token_set_pin() when changing a PKCS#11 token's Security Officer PIN with a NULL old PIN. The flaw is local and only reachable by a program that calls this GnuTLS PKCS#11 PIN-change API, such as p11tool, which the image does not install. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these changes PKCS#11 token PINs, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM and does not load GnuTLS. A source review found no references to GnuTLS or its PKCS#11 API in Liquibase Secure. Ubuntu has published the fixed package 3.8.3-1.1ubuntu3.6 for 24.04 in USN-8284-1, which image builds from 5.2.1 onward carry.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42015",
+      "description": "A flaw was found in gnutls. An off-by-one error exists in the PKCS#12 bag element bounds check. This vulnerability allows a remote attacker to write past the internal array of a PKCS#12 bag when appending to a bag that already contains 32 elements. This memory corruption could lead to a denial of service (DoS) or potentially other unspecified impacts.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or its PKCS#12 API at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a program that appends to PKCS#12 bags through GnuTLS. Nothing in the Liquibase Secure image does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        193
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-45p2-c2m2-2656",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42015",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2026-04-29-11",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2026-04-29-11"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-42015",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Off-by-one in the GnuTLS PKCS#12 bag element bounds check, allowing a write past the bag's internal array when a 33rd element is appended. The flaw is only reachable by a program that builds PKCS#12 bags through the GnuTLS PKCS#12 API, such as certtool, which the image does not install. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these builds PKCS#12 bags, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which handles any PKCS#12 keystores with its own Java implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.8.3-1.1ubuntu3.6 for 24.04 in USN-8284-1, which image builds from 5.2.1 onward carry.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-3832",
       "description": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
       "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
@@ -537,6 +667,71 @@
       "analysis": {
         "state": "not_affected",
         "detail": "When a certificate carries URI or SRV Subject Alternative Names, GnuTLS hostname verification can wrongly fall back to matching the DNS hostname against the Common Name, which allows service spoofing. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.8.3-1.1ubuntu3.6 for 24.04.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-42013",
+      "description": "A flaw was found in gnutls. When validating certificates, an oversized Subject Alternative Name (SAN) could cause the validation process to incorrectly fall back to checking the Common Name (CN) field. This could allow a remote attacker to bypass proper certificate validation, potentially leading to spoofing or man-in-the-middle attacks.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a GnuTLS client that verifies a peer certificate hostname. The Liquibase runtime does not load GnuTLS; its TLS connections use the Java TLS stack.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-2pw7-g86g-76q7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42013",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2026-04-29-8",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2026-04-29-8"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-42013",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS X.509 hostname verification incorrectly falls back to matching the Common Name when a certificate carries an oversized Subject Alternative Name. The flaw is only reachable by a process that verifies a peer certificate hostname through GnuTLS. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and its own certificate hostname checks and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.8.3-1.1ubuntu3.6 for 24.04 in USN-8284-1, which image builds from 5.2.1 onward carry.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-10-09T00:00:00Z",
         "lastUpdated": "2026-10-09T00:00:00Z"
