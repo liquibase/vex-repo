@@ -939,6 +939,134 @@
       ]
     },
     {
+      "id": "CVE-2026-24515",
+      "description": "In libexpat before 2.7.4, XML_ExternalEntityParserCreate does not copy unknown encoding handler user data.",
+      "recommendation": "No action required. No program in the Liquibase Secure image uses libexpat's external-entity parser API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.5,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libexpat's external-entity parser API with an unknown-encoding handler; fontconfig, the only libexpat user in the image, calls neither.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mpwv-4wmh-cvf7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24515",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-24515",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The NULL pointer dereference needs an application to create an external-entity parser with libexpat's XML_ExternalEntityParserCreate API while an unknown-encoding handler is registered, and then parse attacker-controlled XML. libexpat1 is an inherited base-image library; the only package that depends on it is libfontconfig1. Liquibase Secure parses changelogs and other XML with the JVM's own XML parser, not libexpat. The JVM loads libexpat only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses libexpat to read fontconfig's own configuration, the files under /etc/fonts owned by root plus an optional per-user file that only the account running Liquibase can write. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. fontconfig never calls XML_ExternalEntityParserCreate and never registers an unknown-encoding handler. Ubuntu fixed this in 2.4.7-1ubuntu0.7 (jammy) and 2.6.1-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 2.4.7-1ubuntu0.6) and 5.0.2 and 5.0.3 (noble, 2.6.1-2ubuntu0.3) carry unfixed builds; 5.1.0 through 5.2.1 carry 2.6.1-2ubuntu0.4, 5.2.2 carries 2.6.1-2ubuntu0.5 and 6.0.0 carries 2.6.1-2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.7-1ubuntu0.7|>=2.6|<2.6.1-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-25210",
+      "description": "In libexpat before 2.7.4, the doContent function does not properly determine the buffer size bufSize because there is no integer overflow check for tag buffer reallocation.",
+      "recommendation": "No action required. libexpat in the Liquibase Secure image parses only fontconfig's own configuration files.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "fontconfig, the only libexpat user in the image, parses only its own configuration files, so no attacker-controlled XML reaches doContent.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-857q-6v86-xp84",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25210",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-25210",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The integer overflow is in libexpat's doContent tag-buffer reallocation and is reached only when a process parses attacker-controlled XML with system libexpat, with tag names large enough to overflow the buffer-size computation. libexpat1 is an inherited base-image library; the only package that depends on it is libfontconfig1. Liquibase Secure parses changelogs and other XML with the JVM's own XML parser, not libexpat. The JVM loads libexpat only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses libexpat to read fontconfig's own configuration, the files under /etc/fonts owned by root plus an optional per-user file that only the account running Liquibase can write. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. That configuration is the only XML libexpat parses in the image, and none of it comes from an attacker. Ubuntu fixed this in 2.4.7-1ubuntu0.7 (jammy) and 2.6.1-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 2.4.7-1ubuntu0.6) and 5.0.2 and 5.0.3 (noble, 2.6.1-2ubuntu0.3) carry unfixed builds; 5.1.0 through 5.2.1 carry 2.6.1-2ubuntu0.4, 5.2.2 carries 2.6.1-2ubuntu0.5 and 6.0.0 carries 2.6.1-2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.7-1ubuntu0.7|>=2.6|<2.6.1-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-56411",
       "description": "xmlwf in libexpat before 2.8.2 has an integer overflow in endDoctypeDecl via NOTATION declarations.",
       "recommendation": "No action required. Liquibase Secure does not ship or invoke xmlwf, and never links against or invokes system libexpat.",

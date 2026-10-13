@@ -31635,6 +31635,134 @@
       ]
     },
     {
+      "id": "CVE-2026-24515",
+      "description": "In libexpat before 2.7.4, XML_ExternalEntityParserCreate does not copy unknown encoding handler user data.",
+      "recommendation": "No action required. No program in the Liquibase Secure image uses libexpat's external-entity parser API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 2.5,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libexpat's external-entity parser API with an unknown-encoding handler; fontconfig, the only libexpat user in the image, calls neither.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mpwv-4wmh-cvf7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24515",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-24515",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The NULL pointer dereference needs an application to create an external-entity parser with libexpat's XML_ExternalEntityParserCreate API while an unknown-encoding handler is registered, and then parse attacker-controlled XML. libexpat1 is an inherited base-image library; the only package that depends on it is libfontconfig1. Liquibase Secure parses changelogs and other XML with the JVM's own XML parser, not libexpat. The JVM loads libexpat only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses libexpat to read fontconfig's own configuration, the files under /etc/fonts owned by root plus an optional per-user file that only the account running Liquibase can write. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. fontconfig never calls XML_ExternalEntityParserCreate and never registers an unknown-encoding handler. Ubuntu fixed this in 2.4.7-1ubuntu0.7 (jammy) and 2.6.1-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 2.4.7-1ubuntu0.6) and 5.0.2 and 5.0.3 (noble, 2.6.1-2ubuntu0.3) carry unfixed builds; 5.1.0 through 5.2.1 carry 2.6.1-2ubuntu0.4, 5.2.2 carries 2.6.1-2ubuntu0.5 and 6.0.0 carries 2.6.1-2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.7-1ubuntu0.7|>=2.6|<2.6.1-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-25210",
+      "description": "In libexpat before 2.7.4, the doContent function does not properly determine the buffer size bufSize because there is no integer overflow check for tag buffer reallocation.",
+      "recommendation": "No action required. libexpat in the Liquibase Secure image parses only fontconfig's own configuration files.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "fontconfig, the only libexpat user in the image, parses only its own configuration files, so no attacker-controlled XML reaches doContent.\n"
+        }
+      ],
+      "cwes": [
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-857q-6v86-xp84",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25210",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-25210",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The integer overflow is in libexpat's doContent tag-buffer reallocation and is reached only when a process parses attacker-controlled XML with system libexpat, with tag names large enough to overflow the buffer-size computation. libexpat1 is an inherited base-image library; the only package that depends on it is libfontconfig1. Liquibase Secure parses changelogs and other XML with the JVM's own XML parser, not libexpat. The JVM loads libexpat only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses libexpat to read fontconfig's own configuration, the files under /etc/fonts owned by root plus an optional per-user file that only the account running Liquibase can write. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. That configuration is the only XML libexpat parses in the image, and none of it comes from an attacker. Ubuntu fixed this in 2.4.7-1ubuntu0.7 (jammy) and 2.6.1-2ubuntu0.4 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 2.4.7-1ubuntu0.6) and 5.0.2 and 5.0.3 (noble, 2.6.1-2ubuntu0.3) carry unfixed builds; 5.1.0 through 5.2.1 carry 2.6.1-2ubuntu0.4, 5.2.2 carries 2.6.1-2ubuntu0.5 and 6.0.0 carries 2.6.1-2ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libexpat1",
+          "versions": [
+            {
+              "range": "vers:deb/<2.4.7-1ubuntu0.7|>=2.6|<2.6.1-2ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-24734",
       "analysis": {
         "state": "not_affected",
@@ -31645,6 +31773,458 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-25646",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to 1.6.55, an out-of-bounds read vulnerability exists in the png_set_quantize() API function. When the function is called with no histogram and the number of colors in the palette is more than twice the maximum supported by the user's display, certain palettes will cause the function to enter into an infinite loop that reads past the end of an internal heap-allocated buffer. The images that trigger this vulnerability are valid per the PNG specification. This vulnerability is fixed in 1.6.55.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_set_quantize(), so the vulnerable function is never entered.\n"
+        }
+      ],
+      "cwes": [
+        122,
+        125,
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-g8hp-mq4h-rqm3",
+          "title": "libpng Security Advisory GHSA-g8hp-mq4h-rqm3"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25646",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-25646",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read needs an application to call libpng's png_set_quantize() without a histogram while decoding a PNG whose palette has more colors than the display supports. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType never calls png_set_quantize(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.37-3ubuntu0.4 (jammy) and 1.6.43-5ubuntu0.5 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-25646",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to 1.6.55, an out-of-bounds read vulnerability exists in the png_set_quantize() API function. When the function is called with no histogram and the number of colors in the palette is more than twice the maximum supported by the user's display, certain palettes will cause the function to enter into an infinite loop that reads past the end of an internal heap-allocated buffer. The images that trigger this vulnerability are valid per the PNG specification. This vulnerability is fixed in 1.6.55.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_set_quantize(), so the vulnerable function is never entered.\n"
+        }
+      ],
+      "cwes": [
+        122,
+        125,
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-g8hp-mq4h-rqm3",
+          "title": "libpng Security Advisory GHSA-g8hp-mq4h-rqm3"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25646",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-25646",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read needs an application to call libpng's png_set_quantize() without a histogram while decoding a PNG whose palette has more colors than the display supports. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType never calls png_set_quantize(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.43-5ubuntu0.5 (noble). Docker images 5.0.2 and 5.0.3 carry the unfixed 1.6.43-5build1; 5.1.0 and 5.1.1 carry 1.6.43-5ubuntu0.5 and 5.2.0 and later carry 1.6.43-5ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33416",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.2.1 through 1.6.55, png_set_tRNS and png_set_PLTE each alias a heap-allocated buffer between png_struct and png_info, sharing a single allocation across two structs with independent lifetimes. The trans_alpha aliasing has been present since at least libpng 1.0, and the palette aliasing since at least 1.2.1. Both affect all prior release lines png_set_tRNS sets png_ptr->trans_alpha = info_ptr->trans_alpha (256-byte buffer) and png_set_PLTE sets info_ptr->palette = png_ptr->palette (768-byte buffer). In both cases, calling png_free_data (with PNG_FREE_TRNS or PNG_FREE_PLTE) frees the buffer through info_ptr while the corresponding png_ptr pointer remains dangling. Subsequent row-transform functions dereference and, in some code paths, write to the freed memory. A second call to png_set_tRNS or png_set_PLTE has the same effect, because both functions call png_free_data internally before reallocating the info_ptr buffer. Version 1.6.56 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never frees or resets tRNS or PLTE data, and no installed font carries PNG glyphs.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-m4pc-p4q3-4c7j",
+          "title": "libpng Security Advisory GHSA-m4pc-p4q3-4c7j"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33416",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33416",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free needs an application that, while decoding a PNG with the system libpng, frees tRNS or PLTE data with png_free_data() or sets it a second time with png_set_tRNS() or png_set_PLTE(), and then runs libpng's row transforms. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType calls none of png_free_data(), png_set_tRNS() or png_set_PLTE(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.37-3ubuntu0.5 (jammy) and 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33416",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.2.1 through 1.6.55, png_set_tRNS and png_set_PLTE each alias a heap-allocated buffer between png_struct and png_info, sharing a single allocation across two structs with independent lifetimes. The trans_alpha aliasing has been present since at least libpng 1.0, and the palette aliasing since at least 1.2.1. Both affect all prior release lines png_set_tRNS sets png_ptr->trans_alpha = info_ptr->trans_alpha (256-byte buffer) and png_set_PLTE sets info_ptr->palette = png_ptr->palette (768-byte buffer). In both cases, calling png_free_data (with PNG_FREE_TRNS or PNG_FREE_PLTE) frees the buffer through info_ptr while the corresponding png_ptr pointer remains dangling. Subsequent row-transform functions dereference and, in some code paths, write to the freed memory. A second call to png_set_tRNS or png_set_PLTE has the same effect, because both functions call png_free_data internally before reallocating the info_ptr buffer. Version 1.6.56 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never frees or resets tRNS or PLTE data, and no installed font carries PNG glyphs.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-m4pc-p4q3-4c7j",
+          "title": "libpng Security Advisory GHSA-m4pc-p4q3-4c7j"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33416",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33416",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free needs an application that, while decoding a PNG with the system libpng, frees tRNS or PLTE data with png_free_data() or sets it a second time with png_set_tRNS() or png_set_PLTE(), and then runs libpng's row transforms. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType calls none of png_free_data(), png_set_tRNS() or png_set_PLTE(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.2 and 5.0.3 (1.6.43-5build1) and 5.1.0 and 5.1.1 (1.6.43-5ubuntu0.5) carry unfixed builds; 5.2.0 and later carry 1.6.43-5ubuntu0.6.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-27135",
+      "description": "nghttp2 is an implementation of the Hypertext Transfer Protocol version 2 in C. Prior to version 1.68.1, the nghttp2 library stops reading the incoming data when user facing public API nghttp2_session_terminate_session or nghttp2_session_terminate_session2 is called by the application. They might be called internally by the library when it detects the situation that is subject to connection error. Due to the missing internal state validation, the library keeps reading the rest of the data after one of those APIs is called. Then receiving a malformed frame that causes FRAME_SIZE_ERROR causes assertion failure. nghttp2 v1.68.1 adds missing state validation to avoid assertion failure. No known workarounds are available.",
+      "recommendation": "No action required. Liquibase Secure does not use libnghttp2 at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "libnghttp2 is loaded only through libcurl by the curl binary, which nothing in the Liquibase Secure runtime invokes; the Liquibase CLI uses Java HTTP clients.\n"
+        }
+      ],
+      "cwes": [
+        617
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/nghttp2/nghttp2/security/advisories/GHSA-6933-cjhr-5qg6",
+          "title": "nghttp2 Security Advisory GHSA-6933-cjhr-5qg6"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-27135",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-27135",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The assertion failure is in the libnghttp2 HTTP/2 framing library and can only abort a process that speaks HTTP/2 through it to a malicious peer. In the image the only consumer of libnghttp2.so.14 is libcurl, and the only consumer of libcurl is the curl binary. The Liquibase CLI is a Java process that makes its HTTP connections with Java HTTP clients and never loads libcurl, and lpm is a statically linked Go binary. The container entrypoint runs only the Liquibase CLI and the optional lpm helper and never invokes curl. curl runs only if an operator starts it explicitly, for example as the container command, and the impact would be an abort of that operator's own curl process. Ubuntu fixed this in 1.43.0-1ubuntu0.3 (jammy) and 1.59.0-1ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 1.43.0-1ubuntu0.2) and 5.0.2 through 5.1.1 (noble, 1.59.0-1ubuntu0.2) carry unfixed builds; 5.2.0 and 5.2.1 carry 1.59.0-1ubuntu0.3, and 5.2.2 and 6.0.0 carry 1.59.0-1ubuntu0.4.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libnghttp2-14",
+          "versions": [
+            {
+              "range": "vers:deb/<1.43.0-1ubuntu0.3|>=1.59|<1.59.0-1ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-29111",
+      "description": "systemd, a system and service manager, (as PID 1) hits an assert and freezes execution when an unprivileged IPC API call is made with spurious data. On version v249 and older the effect is not an assert, but stack overwriting, with the attacker controlled content. From version v250 and newer this is not possible as the safety check causes an assert instead. This IPC call was added in v239, so versions older than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11 contain patches. No known workarounds are available.",
+      "recommendation": "No action required. The Liquibase Secure container never runs systemd. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires systemd running as PID 1. The vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container has no init system.\n"
+        }
+      ],
+      "cwes": [
+        269
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-gx6q-6f99-m764",
+          "title": "systemd Security Advisory GHSA-gx6q-6f99-m764"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-29111",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-29111",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd running as PID 1, which mishandles a crafted unprivileged IPC call: from v250 onward it hits an assert and freezes, and in v249 and older it overwrites its stack with attacker-controlled content. Exploitation needs systemd to be the running service manager. In Ubuntu, the service manager ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of the PID 1 code. No Liquibase Secure image installs the systemd, systemd-sysv, udev or init packages, there is no systemd binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-29111",
+      "description": "systemd, a system and service manager, (as PID 1) hits an assert and freezes execution when an unprivileged IPC API call is made with spurious data. On version v249 and older the effect is not an assert, but stack overwriting, with the attacker controlled content. From version v250 and newer this is not possible as the safety check causes an assert instead. This IPC call was added in v239, so versions older than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11 contain patches. No known workarounds are available.",
+      "recommendation": "No action required. The Liquibase Secure container never runs systemd. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires systemd running as PID 1. The vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container has no init system.\n"
+        }
+      ],
+      "cwes": [
+        269
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-gx6q-6f99-m764",
+          "title": "systemd Security Advisory GHSA-gx6q-6f99-m764"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-29111",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-29111",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd running as PID 1, which mishandles a crafted unprivileged IPC call: from v250 onward it hits an assert and freezes, and in v249 and older it overwrites its stack with attacker-controlled content. Exploitation needs systemd to be the running service manager. In Ubuntu, the service manager ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of the PID 1 code. No Liquibase Secure image installs the systemd, systemd-sysv, udev or init packages, there is no systemd binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libudev1",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

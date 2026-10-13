@@ -186,6 +186,136 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-25646",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to 1.6.55, an out-of-bounds read vulnerability exists in the png_set_quantize() API function. When the function is called with no histogram and the number of colors in the palette is more than twice the maximum supported by the user's display, certain palettes will cause the function to enter into an infinite loop that reads past the end of an internal heap-allocated buffer. The images that trigger this vulnerability are valid per the PNG specification. This vulnerability is fixed in 1.6.55.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_set_quantize(), so the vulnerable function is never entered.\n"
+        }
+      ],
+      "cwes": [
+        122,
+        125,
+        126
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-g8hp-mq4h-rqm3",
+          "title": "libpng Security Advisory GHSA-g8hp-mq4h-rqm3"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25646",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-25646",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The out-of-bounds read needs an application to call libpng's png_set_quantize() without a histogram while decoding a PNG whose palette has more colors than the display supports. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType never calls png_set_quantize(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.37-3ubuntu0.4 (jammy) and 1.6.43-5ubuntu0.5 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-33416",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. In versions 1.2.1 through 1.6.55, png_set_tRNS and png_set_PLTE each alias a heap-allocated buffer between png_struct and png_info, sharing a single allocation across two structs with independent lifetimes. The trans_alpha aliasing has been present since at least libpng 1.0, and the palette aliasing since at least 1.2.1. Both affect all prior release lines png_set_tRNS sets png_ptr->trans_alpha = info_ptr->trans_alpha (256-byte buffer) and png_set_PLTE sets info_ptr->palette = png_ptr->palette (768-byte buffer). In both cases, calling png_free_data (with PNG_FREE_TRNS or PNG_FREE_PLTE) frees the buffer through info_ptr while the corresponding png_ptr pointer remains dangling. Subsequent row-transform functions dereference and, in some code paths, write to the freed memory. A second call to png_set_tRNS or png_set_PLTE has the same effect, because both functions call png_free_data internally before reallocating the info_ptr buffer. Version 1.6.56 fixes the issue.",
+      "recommendation": "No action required. No program in the Liquibase Secure image decodes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never frees or resets tRNS or PLTE data, and no installed font carries PNG glyphs.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-m4pc-p4q3-4c7j",
+          "title": "libpng Security Advisory GHSA-m4pc-p4q3-4c7j"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33416",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-33416",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The use-after-free needs an application that, while decoding a PNG with the system libpng, frees tRNS or PLTE data with png_free_data() or sets it a second time with png_set_tRNS() or png_set_PLTE(), and then runs libpng's row transforms. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, which has no libpng dependency, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that links libpng, and it decodes PNG data only for color bitmap glyphs; the image's only fonts are DejaVu TrueType fonts, which have none. The system FreeType calls none of png_free_data(), png_set_tRNS() or png_set_PLTE(). The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 1.6.37-3ubuntu0.5 (jammy) and 1.6.43-5ubuntu0.6 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
