@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-214e08e9ee9d3ffd575306c44238b10b6d11ab8a1602cdd879b1579745116bc1",
+  "@id": "merged-vex-2596cbce03728a8ec0868771b27b7ebb4793f36a60a1c4b205bb55ee99940876",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T15:48:33.974995241Z",
+  "timestamp": "2026-10-13T17:23:56.846937189Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40225",
+        "aliases": [
+          "GHSA-vpfq-8p5f-jcqx"
+        ]
+      },
+      "timestamp": "2026-10-13T17:23:56.83031347Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libudev1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-40226",
@@ -12,7 +30,7 @@
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-10-13T15:48:33.960613527Z",
+      "timestamp": "2026-10-13T17:23:56.787592329Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"
@@ -27,7 +45,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-13T15:48:33.926472544Z",
+      "timestamp": "2026-10-13T17:23:56.744718593Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"
