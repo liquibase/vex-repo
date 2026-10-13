@@ -1,0 +1,68 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-4878",
+      "description": "A flaw was found in libcap. A local unprivileged user can exploit a Time-of-check-to-time-of-use (TOCTOU) race condition in the cap_set_file() function. This allows an attacker with write access to a parent directory to redirect file capability updates to an attacker-controlled file. By doing so, capabilities can be injected into or stripped from unintended executables, leading to privilege escalation.",
+      "recommendation": "No action required. Liquibase Secure does not set file capabilities, and nothing in the image calls cap_set_file() at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a privileged process to update file capabilities on a path the attacker can manipulate. No process in the Liquibase Secure image calls cap_set_file(), and the default non-root user cannot set file capabilities.\n"
+        }
+      ],
+      "cwes": [
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4878",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-4878",
+          "title": "Ubuntu CVE Tracker"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2026-4878",
+          "title": "Red Hat CVE Page"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcap TOCTOU race in cap_set_file() that lets a local user with write access to a parent directory redirect a file-capability update to a file they control. Ubuntu fixed it in libcap2 1:2.44-1ubuntu0.22.04.3 (jammy) and 1:2.66-5ubuntu2.4 (noble). The affected builds are jammy libcap2 1:2.44-1ubuntu0.22.04.2 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble libcap2 1:2.66-5ubuntu2.2 in the 5.0.2 to 5.1.1 tags. Tags from 5.2.0 ship the fixed 1:2.66-5ubuntu2.4. libcap2 is present only as a dependency of the systemd libraries (libsystemd0, and libudev1 on 24.04). The image does not install libcap2-bin, so there is no setcap binary. cap_set_file() is only used when a privileged process writes file capabilities, and nothing in the image does that: the entrypoint and the liquibase launcher never set file capabilities, the Liquibase CLI runs on the JVM and does not call libcap, and lpm is a statically linked Go binary. A source review found no references to cap_set_file, setcap or libcap in Liquibase Secure. The image runs as the unprivileged liquibase user (uid 1001) by default, which cannot write file capabilities, so there is no privileged capability update for an attacker to redirect.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcap2",
+          "versions": [
+            {
+              "range": "vers:deb/<1:2.44-1ubuntu0.22.04.3|>=1:2.66|<1:2.66-5ubuntu2.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
