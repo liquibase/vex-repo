@@ -1,0 +1,85 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-e55db50d2bd42bffd3e29e011a24b9ad609740abd4a6c3373bc39b445891e868",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-13T19:01:51.499650867Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2023-5752",
+        "aliases": [
+          "GHSA-mq26-g339-26xf",
+          "PYSEC-2023-228"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:51.356513003Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When installing a package from a Mercurial VCS URL (ie \"pip install hg+...\") with pip prior to v23.3, the specified Mercurial revision could be used to inject arbitrary configuration options to the \"hg clone\" call (ie \"--config\"). Controlling the Mercurial configuration can modify how and which repository is installed. This vulnerability does not affect users who aren't installing from Mercurial.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Only the 23.2.1 copies, in 5.0.0 through 5.2.2, are in range; 6.0.0 is not. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package from a Mercurial VCS URL (pip install hg+...), which never happens."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-8869",
+        "aliases": [
+          "GHSA-4xh5-x5gv-qwph",
+          "PYSEC-2026-1795"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:51.398854498Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When extracting a tar archive pip may not check symbolic links point into the extraction directory if the tarfile module doesn't implement PEP 706. This is a vulnerability in pip's fallback implementation of tar extraction for Python versions that don't implement PEP 706; if you're using a Python version that implements PEP 706 then pip doesn't use the vulnerable fallback code.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to extract an attacker-supplied source distribution with its fallback tar extraction, which never happens. That fallback would not be used here either: the embedded Python standard library implements the PEP 706 tar extraction filters in every image."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-13346",
+        "aliases": [
+          "GHSA-qwm4-qh6w-59xr",
+          "PYSEC-2026-3721"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:51.441938892Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "pip would incorrectly handle doubly-encoded package URLs from indexes allowing for files to be installed to arbitrary locations on disk even when installing wheels. This vulnerability requires downloading or installing a package from a malicious package index to succeed, malicious packages alone are not able to exploit this vulnerability. Note that this vulnerability only materially impacts users running `pip download` with the `--only-binary` option as installing source distributions from an untrusted index is already an unsafe operation that executes code during install time.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to download or install from a malicious package index, which never happens."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-1703",
+        "aliases": [
+          "GHSA-6vgw-5pg2-w6jp",
+          "PYSEC-2026-1796"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:51.48389954Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When pip is installing and extracting a maliciously crafted wheel archive, files may be extracted outside the installation directory. The path traversal is limited to prefixes of the installation directory, thus isn't able to inject or overwrite executable files in typical situations.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a maliciously crafted wheel, which never happens."
+    }
+  ]
+}
