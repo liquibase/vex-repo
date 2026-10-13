@@ -32529,6 +32529,582 @@
       ]
     },
     {
+      "id": "CVE-2026-22018",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.2.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure is a short-lived command-line client that neither exposes the affected Libraries APIs to untrusted network input nor runs untrusted code in a Java sandbox, and 5.2.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-376j-8f52-gp2x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22018",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Libraries partial-denial-of-service issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. For the earlier images, exploitation needs an attacker to supply data to the affected Libraries APIs over the network, for example through a web service, or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure is neither. It runs as a short-lived command-line client that starts no listener, runs no untrusted code, and only connects outbound to the database and service endpoints its operator configures.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22021",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via HTTPS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.2.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure hosts no TLS service and runs no untrusted code in a Java sandbox; it only connects outbound to operator-configured endpoints, and 5.2.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9grw-5h83-65p3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22021",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE JSSE partial-denial-of-service issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. For the earlier images, exploitation needs an attacker to send crafted HTTPS traffic to the affected JSSE code, for example by reaching a TLS service the JVM hosts, or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure hosts no TLS service: it is a short-lived command-line client that starts no listener and only opens outbound TLS connections to the database and service endpoints its operator configures, so the only peer able to send it TLS data is one of those trusted endpoints or an attacker already in that network path.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-23865",
+      "description": "An integer overflow in the tt_var_load_item_variation_store function of the Freetype library in versions 2.13.2 and 2.13.3 may allow for an out of bounds read operation when parsing HVAR/VVAR/MVAR tables in OpenType variable fonts. This issue is fixed in version 2.14.2.",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases never open a variable font: Liquibase loads no font files of its own and the image installs only static TrueType fonts.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The overflow is reached only when the JDK's FreeType parses a variable font. Liquibase never loads a font file of its own and the image's only fonts are static TrueType fonts, and 5.2.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-878v-mxg6-vj8f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23865",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/03/03/8",
+          "title": "FreeType 2.14.2 announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE 2D (FreeType) issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The flaw is an integer overflow in FreeType's tt_var_load_item_variation_store, reached only while FreeType parses the HVAR, VVAR or MVAR table of an OpenType variable font. The JDK ships its own FreeType (lib/libfreetype.so), which it uses to rasterise text: 2.13.3, in range, in the 21.0.8 to 21.0.10 JREs of Docker images 5.0.0 through 5.1.1, and the fixed 2.14.2 or later from 5.2.0. Exploitation needs the JVM to open an attacker-supplied variable font. The JDK opens either a font file passed to Font.createFont or a font that fontconfig lists from the system font directories, owned by root, or from per-user font directories that only the account running Liquibase can write. No class in the jars shipped in the 5.0.0 through 5.1.1 images calls Font.createFont. The image's only installed fonts are the DejaVu TrueType fonts under /usr/share/fonts/truetype/dejavu, which are static fonts with no fvar, HVAR, VVAR or MVAR table. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-23865",
+      "description": "An integer overflow in the tt_var_load_item_variation_store function of the Freetype library in versions 2.13.2 and 2.13.3 may allow for an out of bounds read operation when parsing HVAR/VVAR/MVAR tables in OpenType variable fonts. This issue is fixed in version 2.14.2.",
+      "recommendation": "No action required. No font in the Liquibase Secure image is a variable font.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Meta"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The system FreeType, loaded only through fontconfig, parses the variation tables only for variable fonts, and the image's only fonts are static TrueType fonts.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-878v-mxg6-vj8f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23865",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-23865",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/03/03/8",
+          "title": "FreeType 2.14.2 announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The integer overflow is in FreeType's tt_var_load_item_variation_store and is reached only while FreeType parses the HVAR, VVAR or MVAR table of an OpenType variable font. libfreetype6 is an inherited base-image library. The JDK rasterises text with its own bundled FreeType, not this one. The system FreeType reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses the system FreeType to read the font files it lists, from the system font directories, owned by root, and from per-user font directories that only the account running Liquibase can write. The image's only installed fonts are the DejaVu TrueType fonts under /usr/share/fonts/truetype/dejavu, which are static fonts with no fvar, HVAR, VVAR or MVAR table. The fc-* tools that also link it are never run by the image. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 2.13.2+dfsg-1ubuntu0.1 (noble); the jammy package (2.11.1) does not contain the code. Docker images 5.0.2 through 5.1.0 carry the unfixed 2.13.2+dfsg-1build3; 5.1.1 and later carry 2.13.2+dfsg-1ubuntu0.1.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libfreetype6",
+          "versions": [
+            {
+              "range": "vers:deb/>=2.13.2|<2.13.2+dfsg-1ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-2219",
+      "description": "It was discovered that dpkg-deb (a component of dpkg, the Debian package management system) does not properly validate the end of the data stream when uncompressing a zstd-compressed .deb archive, which may result in denial of service (infinite loop spinning the CPU).",
+      "recommendation": "No action required. Liquibase Secure does not extract .deb packages at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path invokes dpkg-deb, so the vulnerable zstd decompression path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x8w5-j8fh-hpvp",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-2219",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8249-1",
+          "title": "Ubuntu Security Notice USN-8249-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-2219",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The infinite loop needs dpkg-deb to decompress a zstd-compressed .deb archive supplied by an attacker. dpkg is used only by the package manager while the image is built, and the build's one direct call is \"dpkg --print-architecture\", which reads no archive. The container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb; the entrypoint runs another program only when the operator names it as the container's first argument. The Liquibase CLI is a Java process and lpm is a statically linked Go binary, so dpkg-deb's decompression path is never reached by Liquibase Secure. The flaw came with upstream dpkg's own zstd support in 1.21.18. Ubuntu's jammy dpkg reads zstd archives through an older Ubuntu patch instead, and Ubuntu lists it as not affected: Docker images 5.0.0 (1.21.1ubuntu2.3) and 5.0.1 (1.21.1ubuntu2.6) are not affected. Ubuntu fixed noble in 1.22.6ubuntu6.6 (USN-8249-1). Docker images 5.0.2 through 5.1.1 carry the unfixed 1.22.6ubuntu6.5; 5.2.0 and later carry 1.22.6ubuntu6.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dpkg",
+          "versions": [
+            {
+              "range": "vers:deb/>=1.22|<1.22.6ubuntu6.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22741",
+      "description": "Spring MVC and WebFlux applications are vulnerable to cache poisoning when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is configuring the resource chain support with caching enabled; the application adds support for encoded resources resolution; the resource cache must be empty when the attacker has access to the application. When all the conditions above are met, the attacker can send malicious requests and poison the resource cache with resources using the wrong encoding. This can cause a denial of service by breaking the front-end application for clients.",
+      "recommendation": "No action required. No shipped component enables the Spring resource chain cache or encoded resource resolution.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources and enables neither the resource chain cache nor encoded resource resolution that the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wg35-8jpf-2xv3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22741",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22741",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to configure the Spring resource chain with caching enabled and to add encoded resource resolution. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler or resource resolver. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22745",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service attacks when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is serving static resources from the file system; the application is running on a Windows platform. When all the conditions above are met, the attacker can send malicious requests that are slow to resolve and that can keep HTTP connections in use. This can cause a Denial of Service on the application.",
+      "recommendation": "No action required. No shipped component serves static resources from the file system.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources from the file system, and the Docker images run on Linux rather than the Windows platform the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6p4f-wcwh-5vvm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22745",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22745",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to serve static resources from the file system and to run on Windows. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler, so it serves nothing from the file system; Spring Boot's default static locations are classpath locations only. The Docker images run on Linux. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-25854",
+      "description": "Occasional URL redirection to untrusted Site ('Open Redirect') vulnerability in Apache Tomcat via the LoadBalancerDrainingValve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.18, from 10.1.0-M1 through 10.1.52, from 9.0.0.M23 through 9.0.115, from 8.5.30 through 8.5.100. Other, unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures Tomcat's LoadBalancerDrainingValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "The open redirect occurs only in LoadBalancerDrainingValve, which must be explicitly configured; no shipped component adds it, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9m3c-qcxr-9x87",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25854",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Occasional open redirect in Tomcat's LoadBalancerDrainingValve, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs LoadBalancerDrainingValve to be explicitly added to the server's pipeline, on a cluster node that a load balancer has put in the draining state. Tomcat never installs the valve by default and Spring Boot never configures it. The application sets no server properties, and none of its classes references a Tomcat valve, the Tomcat API or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.30|<9.0.116|>=10.1.0-M1|<10.1.53|>=11.0.0-M1|<11.0.20",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-3219",
+      "description": "pip handles concatenated tar and ZIP files as ZIP files regardless of filename or whether a file is both a tar and ZIP file. This behavior could result in confusing installation behavior, such as installing \"incorrect\" files according to the filename of the archive. New behavior only proceeds with installation if the file identifies uniquely as a ZIP or tar archive, not as both.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Python Software Foundation"
+          },
+          "score": 4.6,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the package installation the flaw requires never occurs.\n"
+        }
+      ],
+      "cwes": [
+        434
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-58qw-9mgm-455v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package from an archive that is both a valid tar and a valid ZIP file, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-48988",
       "analysis": {
         "state": "not_affected",

@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-8f932985ae9d6ae32794b3c5b3528873b782fcced20618dc1aadcbd95792595c",
+  "@id": "merged-vex-a707d02679b61628f263e412af09205060219235584eeee524aef02474e4a5ee",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T21:16:36.657831736Z",
+  "timestamp": "2026-10-13T21:37:20.371026319Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "GHSA-83qj-6fr2-vhqg"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.144962848Z",
+      "timestamp": "2026-10-13T21:37:19.75201919Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -32,7 +32,7 @@
           "GHSA-h3gc-qfqq-6h8f"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.178544183Z",
+      "timestamp": "2026-10-13T21:37:19.79267673Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -50,7 +50,7 @@
           "GHSA-gqp3-2cvr-x8m3"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.212725432Z",
+      "timestamp": "2026-10-13T21:37:19.832345717Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -68,7 +68,7 @@
           "GHSA-wr62-c79q-cv37"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.248722094Z",
+      "timestamp": "2026-10-13T21:37:19.872492584Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -86,7 +86,7 @@
           "GHSA-25xr-qj8w-c4vf"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.285687834Z",
+      "timestamp": "2026-10-13T21:37:19.912623476Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -104,7 +104,7 @@
           "GHSA-wmwf-9ccg-fff5"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.319908926Z",
+      "timestamp": "2026-10-13T21:37:19.953016156Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -122,7 +122,7 @@
           "GHSA-mgp5-rv84-w37q"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.10969666Z",
+      "timestamp": "2026-10-13T21:37:19.713151518Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -140,7 +140,7 @@
           "GHSA-563x-q5rq-57qp"
         ]
       },
-      "timestamp": "2026-10-13T21:16:35.925115557Z",
+      "timestamp": "2026-10-13T21:37:19.514883713Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -152,13 +152,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-25854",
+        "aliases": [
+          "BIT-tomcat-2026-25854",
+          "GHSA-9m3c-qcxr-9x87"
+        ]
+      },
+      "timestamp": "2026-10-13T21:37:20.352386848Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Occasional URL redirection to untrusted Site ('Open Redirect') vulnerability in Apache Tomcat via the LoadBalancerDrainingValve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.18, from 10.1.0-M1 through 10.1.52, from 9.0.0.M23 through 9.0.115, from 8.5.30 through 8.5.100. Other, unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Occasional open redirect in Tomcat's LoadBalancerDrainingValve, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs LoadBalancerDrainingValve to be explicitly added to the server's pipeline, on a cluster node that a load balancer has put in the draining state. Tomcat never installs the valve by default and Spring Boot never configures it. The application sets no server properties, and none of its classes references a Tomcat valve, the Tomcat API or a web server factory customizer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-29129",
         "aliases": [
           "BIT-tomcat-2026-29129",
           "GHSA-69cc-cv78-qc8g"
         ]
       },
-      "timestamp": "2026-10-13T21:16:35.96397891Z",
+      "timestamp": "2026-10-13T21:37:19.554415171Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -176,7 +195,7 @@
           "GHSA-95jq-rwvf-vjx4"
         ]
       },
-      "timestamp": "2026-10-13T21:16:35.887694473Z",
+      "timestamp": "2026-10-13T21:37:19.47464776Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -195,7 +214,7 @@
           "GHSA-h468-7pvh-8vr8"
         ]
       },
-      "timestamp": "2026-10-13T21:16:35.999980712Z",
+      "timestamp": "2026-10-13T21:37:19.593497046Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -213,7 +232,7 @@
           "GHSA-rv64-5gf8-9qq8"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.034219625Z",
+      "timestamp": "2026-10-13T21:37:19.633047512Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -231,7 +250,7 @@
           "GHSA-x4m4-345f-5h5g"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.073141774Z",
+      "timestamp": "2026-10-13T21:37:19.67280876Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -249,7 +268,7 @@
           "GHSA-gx5v-xp9w-j4cg"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.356883514Z",
+      "timestamp": "2026-10-13T21:37:19.994611855Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -268,7 +287,7 @@
           "GHSA-r29c-68gh-xp6x"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.390986334Z",
+      "timestamp": "2026-10-13T21:37:20.034571088Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -287,7 +306,7 @@
           "GHSA-fv25-8xcx-gqjc"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.431682333Z",
+      "timestamp": "2026-10-13T21:37:20.073855403Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -306,7 +325,7 @@
           "GHSA-h6fc-48rj-7qqh"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.469026716Z",
+      "timestamp": "2026-10-13T21:37:20.113973167Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -325,7 +344,7 @@
           "GHSA-5mp6-jrq3-r938"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.505212726Z",
+      "timestamp": "2026-10-13T21:37:20.15317445Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -344,7 +363,7 @@
           "GHSA-5m62-pw8w-7w9f"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.540367506Z",
+      "timestamp": "2026-10-13T21:37:20.19278423Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -362,7 +381,7 @@
           "GHSA-gcx9-497g-6cp6"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.574766761Z",
+      "timestamp": "2026-10-13T21:37:20.232154639Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -381,7 +400,7 @@
           "GHSA-9xv2-5v5q-p794"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.609105904Z",
+      "timestamp": "2026-10-13T21:37:20.271766415Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -400,7 +419,7 @@
           "GHSA-h3x4-894j-xpx5"
         ]
       },
-      "timestamp": "2026-10-13T21:16:36.643080767Z",
+      "timestamp": "2026-10-13T21:37:20.312309911Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
