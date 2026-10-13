@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-fb1fc0158d4c87c6fd0cc3e4ee8e5e4a99734a3def73eef9fe59fb0c5d7f6c7b",
+  "@id": "merged-vex-ccd13d659e54d771dd26c4ea074c06ec75cd1589d6105d3d6bea5406a360e7c2",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T12:21:49.367183699Z",
+  "timestamp": "2026-10-13T12:39:55.97020986Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-13T12:21:49.218066931Z",
+      "timestamp": "2026-10-13T12:39:55.756629728Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-13T12:21:49.251913717Z",
+      "timestamp": "2026-10-13T12:39:55.783832154Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-13T12:21:49.287190918Z",
+      "timestamp": "2026-10-13T12:39:55.811106188Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-13T12:21:49.32065929Z",
+      "timestamp": "2026-10-13T12:39:55.837505059Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -67,9 +67,54 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-42009"
+      },
+      "timestamp": "2026-10-13T12:39:55.895152943Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. A remote attacker could exploit an issue in the Datagram Transport Layer Security (DTLS) packet reordering logic. The comparator function, responsible for ordering DTLS packets by sequence numbers, did not correctly handle packets with duplicate sequence numbers. This could lead to unstable packet ordering or undefined behavior, resulting in a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A flaw in GnuTLS's DTLS packet reordering, where duplicate sequence numbers are mishandled. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these use TLS over TCP, not DTLS, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42010"
+      },
+      "timestamp": "2026-10-13T12:39:55.925430177Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. Servers configured with RSA-PSK (Rivest Shamir Adleman - Pre-Shared Key) wrongfully matched usernames containing a NUL character with truncated usernames. A remote attacker could exploit this by sending a specially crafted username, leading to an authentication bypass. This vulnerability allows an attacker to gain unauthorized access by circumventing the authentication process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A GnuTLS authentication bypass in servers configured for RSA-PSK key exchange, where usernames containing a NUL character match truncated usernames. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these are TLS clients, not RSA-PSK servers, and none is invoked by the entrypoint or the CLI. Nothing in the image runs a GnuTLS server. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42011"
+      },
+      "timestamp": "2026-10-13T12:39:55.95589919Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. This vulnerability occurs because permitted name constraints were incorrectly ignored when previous Certificate Authorities (CAs) only had excluded name constraints. A remote attacker could exploit this to bypass critical name constraint checks during certificate validation. This bypass could lead to the acceptance of invalid certificates, potentially enabling spoofing or man-in-the-middle attacks against affected systems.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS ignores permitted name constraints when earlier CAs in the chain carry only excluded name constraints, so a certificate that violates a CA's constraints can be accepted. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-5260"
       },
-      "timestamp": "2026-10-13T12:21:49.353067964Z",
+      "timestamp": "2026-10-13T12:39:55.864984995Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"

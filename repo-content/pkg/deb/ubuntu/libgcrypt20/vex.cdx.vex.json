@@ -61,6 +61,71 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-41989",
+      "description": "Libgcrypt before 1.12.2 sometimes allows a heap-based buffer overflow and denial of service via crafted ECDH ciphertext to gcry_pk_decrypt.",
+      "recommendation": "No action required. Liquibase Secure does not use libgcrypt at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "MITRE"
+          },
+          "score": 6.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The JVM does not load libgcrypt, and no libgcrypt consumer that performs ECDH decryption is invoked by the entrypoint or the CLI.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wrv8-79m2-qg24",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41989",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8319-1",
+          "title": "Ubuntu Security Notice USN-8319-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-41989",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A heap-based buffer overflow in libgcrypt's gcry_pk_decrypt when decrypting crafted ECDH ciphertext. Ubuntu fixed it in libgcrypt20 1.9.4-3ubuntu3.2 (jammy) and 1.10.3-2ubuntu0.1 (noble) in USN-8319-1. The affected builds are jammy libgcrypt20 1.9.4-3ubuntu3 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble libgcrypt20 1.10.3-2build1 in the 5.0.2 to 5.2.0 tags. Tags from 5.2.1 ship a fixed build. libgcrypt20 is pulled in only as a dependency of OS tooling (GnuPG, apt's libapt-pkg and the systemd libraries). The container entrypoint runs only the Liquibase CLI, a user-supplied command, or, when INSTALL_MYSQL is set, the lpm package manager. None of these performs libgcrypt public-key decryption. The Liquibase CLI runs on the JVM, which uses its own Java cryptography providers and does not load libgcrypt. A source review found no references to libgcrypt in Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-09T00:00:00Z",
+        "lastUpdated": "2026-10-09T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgcrypt20",
+          "versions": [
+            {
+              "range": "vers:deb/<1.9.4-3ubuntu3.2|>=1.10|<1.10.3-2ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
