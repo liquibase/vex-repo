@@ -63,6 +63,71 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-2219",
+      "description": "It was discovered that dpkg-deb (a component of dpkg, the Debian package management system) does not properly validate the end of the data stream when uncompressing a zstd-compressed .deb archive, which may result in denial of service (infinite loop spinning the CPU).",
+      "recommendation": "No action required. Liquibase Secure does not extract .deb packages at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path invokes dpkg-deb, so the vulnerable zstd decompression path is never reached.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x8w5-j8fh-hpvp",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-2219",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8249-1",
+          "title": "Ubuntu Security Notice USN-8249-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-2219",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The infinite loop needs dpkg-deb to decompress a zstd-compressed .deb archive supplied by an attacker. dpkg is used only by the package manager while the image is built, and the build's one direct call is \"dpkg --print-architecture\", which reads no archive. The container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb; the entrypoint runs another program only when the operator names it as the container's first argument. The Liquibase CLI is a Java process and lpm is a statically linked Go binary, so dpkg-deb's decompression path is never reached by Liquibase Secure. The flaw came with upstream dpkg's own zstd support in 1.21.18. Ubuntu's jammy dpkg reads zstd archives through an older Ubuntu patch instead, and Ubuntu lists it as not affected: Docker images 5.0.0 (1.21.1ubuntu2.3) and 5.0.1 (1.21.1ubuntu2.6) are not affected. Ubuntu fixed noble in 1.22.6ubuntu6.6 (USN-8249-1). Docker images 5.0.2 through 5.1.1 carry the unfixed 1.22.6ubuntu6.5; 5.2.0 and later carry 1.22.6ubuntu6.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dpkg",
+          "versions": [
+            {
+              "range": "vers:deb/>=1.22|<1.22.6ubuntu6.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

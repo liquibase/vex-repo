@@ -126,6 +126,67 @@
       ]
     },
     {
+      "id": "CVE-2026-22745",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service attacks when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is serving static resources from the file system; the application is running on a Windows platform. When all the conditions above are met, the attacker can send malicious requests that are slow to resolve and that can keep HTTP connections in use. This can cause a Denial of Service on the application.",
+      "recommendation": "No action required. No shipped component serves static resources from the file system.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources from the file system, and the Docker images run on Linux rather than the Windows platform the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6p4f-wcwh-5vvm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22745",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22745",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to serve static resources from the file system and to run on Windows. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler, so it serves nothing from the file system; Spring Boot's default static locations are classpath locations only. The Docker images run on Linux. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-47884",
       "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
       "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",
@@ -544,6 +605,67 @@
           "versions": [
             {
               "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22741",
+      "description": "Spring MVC and WebFlux applications are vulnerable to cache poisoning when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is configuring the resource chain support with caching enabled; the application adds support for encoded resources resolution; the resource cache must be empty when the attacker has access to the application. When all the conditions above are met, the attacker can send malicious requests and poison the resource cache with resources using the wrong encoding. This can cause a denial of service by breaking the front-end application for clients.",
+      "recommendation": "No action required. No shipped component enables the Spring resource chain cache or encoded resource resolution.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources and enables neither the resource chain cache nor encoded resource resolution that the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wg35-8jpf-2xv3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22741",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22741",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to configure the Spring resource chain with caching enabled and to add encoded resource resolution. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler or resource resolver. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
               "status": "unaffected"
             }
           ]

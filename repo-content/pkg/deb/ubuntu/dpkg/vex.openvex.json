@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-26d4c7c305709b13e97bd68ee2e2aa4a54368ef9388bba3d5c06bfce54b2987a",
+  "@id": "merged-vex-8dd6b485d61b3ab68a8d51947583eb09d22a80c7e8ecce2df44f59a1e188b4a4",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T21:16:13.357466625Z",
+  "timestamp": "2026-10-13T21:36:53.644450223Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-6297"
       },
-      "timestamp": "2026-10-13T21:16:13.357467992Z",
+      "timestamp": "2026-10-13T21:36:53.586490513Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/dpkg"
@@ -19,6 +19,21 @@
       "status_notes": "dpkg-deb does not properly sanitize directory permissions when extracting a control member into a temporary directory, which can leave temporary files behind on cleanup and, under repeated execution on adversarial .deb packages, lead to disk quota exhaustion or disk full conditions.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The leftover temporary files need dpkg-deb to extract the control member of an attacker-supplied .deb archive. dpkg is used only by the package manager while the image is built; the container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary, so dpkg-deb's extraction path is never reached by Liquibase Secure. Fixed in Ubuntu dpkg 1.21.1ubuntu2.6 (jammy) and 1.22.6ubuntu6.5 (noble); only Liquibase Secure 5.0.0 shipped an affected build (1.21.1ubuntu2.3), Liquibase Secure 5.0.1 ships 1.21.1ubuntu2.6, and Liquibase Secure 5.0.2 and later ship 1.22.6ubuntu6.5 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-2219"
+      },
+      "timestamp": "2026-10-13T21:36:53.627321394Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/dpkg"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "It was discovered that dpkg-deb (a component of dpkg, the Debian package management system) does not properly validate the end of the data stream when uncompressing a zstd-compressed .deb archive, which may result in denial of service (infinite loop spinning the CPU).",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The infinite loop needs dpkg-deb to decompress a zstd-compressed .deb archive supplied by an attacker. dpkg is used only by the package manager while the image is built, and the build's one direct call is \"dpkg --print-architecture\", which reads no archive. The container entrypoint and the liquibase launcher script never invoke dpkg or dpkg-deb; the entrypoint runs another program only when the operator names it as the container's first argument. The Liquibase CLI is a Java process and lpm is a statically linked Go binary, so dpkg-deb's decompression path is never reached by Liquibase Secure. The flaw came with upstream dpkg's own zstd support in 1.21.18. Ubuntu's jammy dpkg reads zstd archives through an older Ubuntu patch instead, and Ubuntu lists it as not affected: Docker images 5.0.0 (1.21.1ubuntu2.3) and 5.0.1 (1.21.1ubuntu2.6) are not affected. Ubuntu fixed noble in 1.22.6ubuntu6.6 (USN-8249-1). Docker images 5.0.2 through 5.1.1 carry the unfixed 1.22.6ubuntu6.5; 5.2.0 and later carry 1.22.6ubuntu6.6."
     }
   ]
 }

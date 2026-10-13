@@ -230,6 +230,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-3219",
+      "description": "pip handles concatenated tar and ZIP files as ZIP files regardless of filename or whether a file is both a tar and ZIP file. This behavior could result in confusing installation behavior, such as installing \"incorrect\" files according to the filename of the archive. New behavior only proceeds with installation if the file identifies uniquely as a ZIP or tar archive, not as both.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Python Software Foundation"
+          },
+          "score": 4.6,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the package installation the flaw requires never occurs.\n"
+        }
+      ],
+      "cwes": [
+        434
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-58qw-9mgm-455v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3219",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package from an archive that is both a valid tar and a valid ZIP file, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

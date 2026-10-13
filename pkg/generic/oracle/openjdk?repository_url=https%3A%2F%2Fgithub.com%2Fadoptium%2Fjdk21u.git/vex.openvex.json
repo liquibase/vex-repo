@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-15db05b816219302d3f62f4da893833f65dfc529fe004a47555ea7a6305b7372",
+  "@id": "merged-vex-76d3c435e3e6624f65b885ac60dc47b071fb48aec39f5bedf3ba18511dd0df1d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T21:16:28.484590799Z",
+  "timestamp": "2026-10-13T21:37:11.111121744Z",
   "version": 1,
   "statements": [
     {
@@ -14,7 +14,7 @@
           "BIT-jre-2025-53066"
         ]
       },
-      "timestamp": "2026-10-13T21:16:27.890548436Z",
+      "timestamp": "2026-10-13T21:37:10.32139091Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -34,7 +34,7 @@
           "BIT-jre-2026-21932"
         ]
       },
-      "timestamp": "2026-10-13T21:16:27.753229964Z",
+      "timestamp": "2026-10-13T21:37:10.160408639Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -54,7 +54,7 @@
           "BIT-jre-2026-21945"
         ]
       },
-      "timestamp": "2026-10-13T21:16:27.786955859Z",
+      "timestamp": "2026-10-13T21:37:10.201441263Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-22007"
       },
-      "timestamp": "2026-10-13T21:16:28.430749354Z",
+      "timestamp": "2026-10-13T21:37:10.930643471Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-22013"
       },
-      "timestamp": "2026-10-13T21:16:28.46878176Z",
+      "timestamp": "2026-10-13T21:37:10.971485792Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -99,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-22016"
       },
-      "timestamp": "2026-10-13T21:16:27.81970484Z",
+      "timestamp": "2026-10-13T21:37:10.241950603Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -112,9 +112,59 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-22018"
+      },
+      "timestamp": "2026-10-13T21:37:11.01229502Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Oracle Java SE Libraries partial-denial-of-service issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. For the earlier images, exploitation needs an attacker to supply data to the affected Libraries APIs over the network, for example through a web service, or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure is neither. It runs as a short-lived command-line client that starts no listener, runs no untrusted code, and only connects outbound to the database and service endpoints its operator configures."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22021"
+      },
+      "timestamp": "2026-10-13T21:37:11.053736117Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JSSE). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via HTTPS to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized ability to cause a partial denial of service (partial DOS) of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Oracle Java SE JSSE partial-denial-of-service issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. For the earlier images, exploitation needs an attacker to send crafted HTTPS traffic to the affected JSSE code, for example by reaching a TLS service the JVM hosts, or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure hosts no TLS service: it is a short-lived command-line client that starts no listener and only opens outbound TLS connections to the database and service endpoints its operator configures, so the only peer able to send it TLS data is one of those trusted endpoints or an attacker already in that network path."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-23865",
+        "aliases": [
+          "BIT-java-2026-23865",
+          "BIT-java-min-2026-23865",
+          "BIT-jre-2026-23865"
+        ]
+      },
+      "timestamp": "2026-10-13T21:37:11.093399884Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An integer overflow in the tt_var_load_item_variation_store function of the Freetype library in versions 2.13.2 and 2.13.3 may allow for an out of bounds read operation when parsing HVAR/VVAR/MVAR tables in OpenType variable fonts. This issue is fixed in version 2.14.2.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Oracle Java SE 2D (FreeType) issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The flaw is an integer overflow in FreeType's tt_var_load_item_variation_store, reached only while FreeType parses the HVAR, VVAR or MVAR table of an OpenType variable font. The JDK ships its own FreeType (lib/libfreetype.so), which it uses to rasterise text: 2.13.3, in range, in the 21.0.8 to 21.0.10 JREs of Docker images 5.0.0 through 5.1.1, and the fixed 2.14.2 or later from 5.2.0. Exploitation needs the JVM to open an attacker-supplied variable font. The JDK opens either a font file passed to Font.createFont or a font that fontconfig lists from the system font directories, owned by root, or from per-user font directories that only the account running Liquibase can write. No class in the jars shipped in the 5.0.0 through 5.1.1 images calls Font.createFont. The image's only installed fonts are the DejaVu TrueType fonts under /usr/share/fonts/truetype/dejavu, which are static fonts with no fvar, HVAR, VVAR or MVAR table. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-34268"
       },
-      "timestamp": "2026-10-13T21:16:28.393184065Z",
+      "timestamp": "2026-10-13T21:37:10.889083166Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -129,7 +179,7 @@
       "vulnerability": {
         "name": "CVE-2026-34282"
       },
-      "timestamp": "2026-10-13T21:16:27.855230647Z",
+      "timestamp": "2026-10-13T21:37:10.281939041Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -150,7 +200,7 @@
           "GHSA-4xp6-rcgg-m9qq"
         ]
       },
-      "timestamp": "2026-10-13T21:16:27.924220723Z",
+      "timestamp": "2026-10-13T21:37:10.361603412Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -165,7 +215,7 @@
       "vulnerability": {
         "name": "CVE-2026-46917"
       },
-      "timestamp": "2026-10-13T21:16:28.139230235Z",
+      "timestamp": "2026-10-13T21:37:10.605151927Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -180,7 +230,7 @@
       "vulnerability": {
         "name": "CVE-2026-46968"
       },
-      "timestamp": "2026-10-13T21:16:28.171492807Z",
+      "timestamp": "2026-10-13T21:37:10.645738691Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -195,7 +245,7 @@
       "vulnerability": {
         "name": "CVE-2026-47010"
       },
-      "timestamp": "2026-10-13T21:16:28.205933887Z",
+      "timestamp": "2026-10-13T21:37:10.685500662Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -210,7 +260,7 @@
       "vulnerability": {
         "name": "CVE-2026-47021"
       },
-      "timestamp": "2026-10-13T21:16:28.241890975Z",
+      "timestamp": "2026-10-13T21:37:10.725556592Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -225,7 +275,7 @@
       "vulnerability": {
         "name": "CVE-2026-47027"
       },
-      "timestamp": "2026-10-13T21:16:28.277219221Z",
+      "timestamp": "2026-10-13T21:37:10.765602761Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -240,7 +290,7 @@
       "vulnerability": {
         "name": "CVE-2026-47059"
       },
-      "timestamp": "2026-10-13T21:16:28.316475661Z",
+      "timestamp": "2026-10-13T21:37:10.805334938Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -255,7 +305,7 @@
       "vulnerability": {
         "name": "CVE-2026-47063"
       },
-      "timestamp": "2026-10-13T21:16:27.959046821Z",
+      "timestamp": "2026-10-13T21:37:10.401274015Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -270,7 +320,7 @@
       "vulnerability": {
         "name": "CVE-2026-60147"
       },
-      "timestamp": "2026-10-13T21:16:28.354756926Z",
+      "timestamp": "2026-10-13T21:37:10.846404482Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -285,7 +335,7 @@
       "vulnerability": {
         "name": "CVE-2026-60589"
       },
-      "timestamp": "2026-10-13T21:16:28.104010614Z",
+      "timestamp": "2026-10-13T21:37:10.565010509Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -300,7 +350,7 @@
       "vulnerability": {
         "name": "CVE-2026-61308"
       },
-      "timestamp": "2026-10-13T21:16:28.029596033Z",
+      "timestamp": "2026-10-13T21:37:10.482403074Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -315,7 +365,7 @@
       "vulnerability": {
         "name": "CVE-2026-62574"
       },
-      "timestamp": "2026-10-13T21:16:27.992981605Z",
+      "timestamp": "2026-10-13T21:37:10.442086381Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -330,7 +380,7 @@
       "vulnerability": {
         "name": "CVE-2026-70907"
       },
-      "timestamp": "2026-10-13T21:16:28.067640723Z",
+      "timestamp": "2026-10-13T21:37:10.523280615Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
