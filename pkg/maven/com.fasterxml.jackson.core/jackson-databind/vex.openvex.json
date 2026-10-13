@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b72d8c7c9ae4d142d767383c305b78767522e0384ac88d24a3ddb2623e09ca3f",
+  "@id": "merged-vex-23612211834dce7eb25936f9934814c882aff3ca64e5c2c2596c3257fd65fb06",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T13:28:45.722626254Z",
+  "timestamp": "2026-10-13T15:48:41.515349797Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-wjgm-6hv5-3cvf"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.530321705Z",
+      "timestamp": "2026-10-13T15:48:41.194681121Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -30,7 +30,7 @@
           "GHSA-j3rv-43j4-c7qm"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.306784036Z",
+      "timestamp": "2026-10-13T15:48:41.022267949Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -48,7 +48,7 @@
           "GHSA-rmj7-2vxq-3g9f"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.350360491Z",
+      "timestamp": "2026-10-13T15:48:41.056512258Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -61,12 +61,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-54514",
+        "aliases": [
+          "GHSA-hgj6-7826-r7m5"
+        ]
+      },
+      "timestamp": "2026-10-13T15:48:41.365003388Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.0.0 until 2.18.8, 2.21.4, and 3.1.4, JDKFromStringDeserializer constructed InetSocketAddress with new InetSocketAddress(host, port), which performs eager DNS name resolution for hostname inputs at deserialization time. An application that binds untrusted JSON into a type containing an InetSocketAddress field issues an attacker-chosen DNS query during readValue, before any application-level validation or connect logic. The fix uses InetSocketAddress.createUnresolved(host, port), deferring DNS to an explicit connect. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.18.8 and 2.21.4. Docker images 5.0.0 through 5.2.0 carry in-range copies wherever Jackson ships: the first-party copies bundled in the Liquibase extensions (2.17.2 to 2.21.2), the copies relocated inside the Couchbase SDK, databricks-jdbc and snowflake-jdbc (2.17.1 to 2.20.1), and the license-tracking application archived under /liquibase/dist (2.20.0 to 2.21.2). In 5.2.1 only the relocated databricks-jdbc and snowflake-jdbc copies (2.18.7) are in range, and 5.2.2 and 6.0.0 carry none. Versions were read from the PackageVersion class or Maven metadata in each jar. This assessment does not rest on version. The vulnerable path is reached only when Jackson binds a JSON string to a java.net.InetSocketAddress target, at which point the standard deserializer resolves the host name. A source review found no Liquibase type that Jackson binds with an InetSocketAddress field. The only InetSocketAddress use in Liquibase reads the address of a configured HTTP proxy and has nothing to do with Jackson. The license-tracking application, which must be extracted and started by hand, is the only shipped component that binds JSON received over the network: the request body of its track endpoint, mapped to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes has an InetSocketAddress field. Copies of Jackson relocated inside vendor JDBC drivers are private to those drivers, which use them for their own protocol messages with the database service; Liquibase never hands them JSON."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-54515",
         "aliases": [
           "GHSA-5jmj-h7xm-6q6v"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.396398822Z",
+      "timestamp": "2026-10-13T15:48:41.08993478Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -79,12 +97,84 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-54516",
+        "aliases": [
+          "GHSA-9fxm-vc8v-hj55"
+        ]
+      },
+      "timestamp": "2026-10-13T15:48:41.399246705Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, POJOPropertiesCollector._renameProperties() allows a property with @JsonProperty(\"renamed\") on the getter and @JsonIgnore on the setter to be renamed rather than dropped. With MapperFeature.INFER_PROPERTY_MUTATORS enabled (default), the private backing field is retained; during deserialization BeanDeserializerFactory.addBeanProps() sees hasField()==true, builds a FieldProperty, and makes the backing field writable. An attacker supplying the renamed JSON key writes the backing field directly, bypassing the @JsonIgnore on the setter. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.21.4. Only 2.21.0 to 2.21.3 are in range. In-range copies ship in Docker images 5.1.0 (2.21.0) and 5.1.1 (2.21.2) inside the license-tracking application archived under /liquibase/dist, and in 5.2.0 both there and as the first-party copy bundled in the Liquibase extensions (2.21.2). Every other copy, including the 2.17.x and 2.18.x copies relocated inside vendor drivers, is outside the range, and 5.2.1 onward carry none. Versions were read from the PackageVersion class or Maven metadata in each jar. This assessment does not rest on version. The vulnerable path needs a property whose getter is renamed with @JsonProperty while its setter carries @JsonIgnore, deserialized from attacker JSON. A scan of every class in the 5.2.0 image found @JsonIgnore only on fields and getters, never on a setter. In Liquibase code it appears only on one getter of a MongoDB snapshot object; current sources add getter-only uses in mix-ins for an outgoing usage payload, which is only serialized. The license-tracking application declares no @JsonIgnore on the classes it binds from its track endpoint, so the setter-ignore bypass cannot occur."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54517",
+        "aliases": [
+          "GHSA-5hh8-q8hv-fr38"
+        ]
+      },
+      "timestamp": "2026-10-13T15:48:41.432550822Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, in BeanDeserializer._deserializeUsingPropertyBased, the active-view (@JsonView) filter was applied only to creator properties; the regular property-buffering branch performed no prop.visibleInView(activeView) check. A change making SetterlessProperty.isMerging() return true routed setterless Collection/Map properties through this unguarded path, so a setterless collection annotated with a restricted @JsonView is populated from attacker JSON even when the active view excludes it. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.21.4. Only 2.21.0 to 2.21.3 are in range. In-range copies ship in Docker images 5.1.0 (2.21.0) and 5.1.1 (2.21.2) inside the license-tracking application archived under /liquibase/dist, and in 5.2.0 both there and as the first-party copy bundled in the Liquibase extensions (2.21.2). Every other copy, including the 2.17.x and 2.18.x copies relocated inside vendor drivers, is outside the range, and 5.2.1 onward carry none. Versions were read from the PackageVersion class or Maven metadata in each jar. This assessment does not rest on version. The vulnerable path needs a setterless collection or map property restricted with @JsonView, deserialized from attacker JSON under an active view. A source review found no @JsonView annotation and no view-scoped reader anywhere in Liquibase, and a scan of every class in the 5.2.0 image found @JsonView only inside the relocated Jackson copies themselves. The license-tracking application declares no @JsonView and binds its track endpoint with no active view, so the missing view check is never exercised."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-54518",
+        "aliases": [
+          "GHSA-rcqc-6cw3-h962"
+        ]
+      },
+      "timestamp": "2026-10-13T15:48:41.466434415Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, UnwrappedPropertyHandler.processUnwrappedCreatorProperties() replays buffered JSON into creator parameters but never consults prop.visibleInView(activeView). The normal property-based creator path gates creator properties on the active view, but this unwrapped-creator replay path bypasses that check, so a constructor parameter annotated with both @JsonView(AdminView.class) and @JsonUnwrapped is populated from attacker JSON even when a more restrictive view is active. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.21.4. Only 2.21.0 to 2.21.3 are in range. In-range copies ship in Docker images 5.1.0 (2.21.0) and 5.1.1 (2.21.2) inside the license-tracking application archived under /liquibase/dist, and in 5.2.0 both there and as the first-party copy bundled in the Liquibase extensions (2.21.2). Every other copy, including the 2.17.x and 2.18.x copies relocated inside vendor drivers, is outside the range, and 5.2.1 onward carry none. Versions were read from the PackageVersion class or Maven metadata in each jar. This assessment does not rest on version. The vulnerable path needs a creator parameter annotated with both @JsonView and @JsonUnwrapped, deserialized from attacker JSON under an active view. A source review found no @JsonView and no @JsonUnwrapped anywhere in Liquibase. A scan of every class in the 5.2.0 image found @JsonView only inside the relocated Jackson copies themselves and @JsonUnwrapped only on a Log4j layout getter that serializes log events. The license-tracking application declares neither annotation, so the unchecked unwrapped-creator replay is never reached."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59888",
+        "aliases": [
+          "GHSA-3pjw-73gf-8qr5"
+        ]
+      },
+      "timestamp": "2026-10-13T15:48:41.500975869Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.15.0 until 2.18.8, 2.21.4, and 3.1.4, Java Records using a PropertyNamingStrategy can bypass @JsonIgnore because POJOPropertiesCollector._removeUnwantedIgnorals() records an ignored component under its original implicit name before _renameUsing() applies the naming strategy, allowing the renamed JSON key to be assigned to the Record constructor parameter. This issue is fixed in versions 2.18.8, 2.21.4, and 3.1.4.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-databind 2.18.8 and 2.21.4. Docker images 5.0.0 through 5.2.0 carry in-range copies wherever Jackson ships: the first-party copies bundled in the Liquibase extensions (2.17.2 to 2.21.2), the copies relocated inside the Couchbase SDK, databricks-jdbc and snowflake-jdbc (2.17.1 to 2.20.1), and the license-tracking application archived under /liquibase/dist (2.20.0 to 2.21.2). In 5.2.1 only the relocated databricks-jdbc and snowflake-jdbc copies (2.18.7) are in range, and 5.2.2 and 6.0.0 carry none. Versions were read from the PackageVersion class or Maven metadata in each jar. This assessment does not rest on version. The vulnerable path needs a Java record with a @JsonIgnore component, deserialized under a PropertyNamingStrategy that renames it. A scan of every class in the 5.2.0 image found no record with a @JsonIgnore component. Liquibase configures no PropertyNamingStrategy and uses no @JsonNaming. The AWS SDK bundled with the AWS extension applies a naming strategy to EC2 metadata and service error responses, but it is compiled for Java 8 and declares no records. The license-tracking application sets no naming strategy and binds its track endpoint to plain classes, not records. Copies of Jackson relocated inside vendor JDBC drivers are private to those drivers, which use them for their own protocol messages with the database service; Liquibase never hands them JSON."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-59889",
         "aliases": [
           "GHSA-5gvw-p9qm-jgwh"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.57315254Z",
+      "timestamp": "2026-10-13T15:48:41.228946862Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -102,7 +192,7 @@
           "GHSA-q4xh-88c3-wmh7"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.442109429Z",
+      "timestamp": "2026-10-13T15:48:41.1248834Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -120,7 +210,7 @@
           "GHSA-vvgp-rfg2-7rr6"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.616534425Z",
+      "timestamp": "2026-10-13T15:48:41.263008193Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -138,7 +228,7 @@
           "GHSA-gx83-3vf8-gh7j"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.486247694Z",
+      "timestamp": "2026-10-13T15:48:41.159049713Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -156,7 +246,7 @@
           "GHSA-wv8q-qhhj-9h54"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.661460557Z",
+      "timestamp": "2026-10-13T15:48:41.297052981Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"
@@ -174,7 +264,7 @@
           "GHSA-cxp5-3px4-pw24"
         ]
       },
-      "timestamp": "2026-10-13T13:28:45.703815584Z",
+      "timestamp": "2026-10-13T15:48:41.331164732Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-databind"

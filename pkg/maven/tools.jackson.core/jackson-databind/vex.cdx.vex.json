@@ -221,13 +221,13 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. The 6.0.0 image is the only published Liquibase Secure image that ships Jackson 3: one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The 5.x images ship no Jackson 3 at all. 3.2.2 is inside the advisory range, so this assessment does not rest on version. The vulnerable cache is filled only through name-based polymorphic typing with a fallback, such as @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), applied to attacker-chosen type IDs. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonTypeInfo, @JsonSubTypes or default typing. Liquibase's own code does not use Jackson 3. With no polymorphic type handling configured for Jackson 3, no type-ID cache is ever created.",
+        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. Two components ship Jackson 3. The 6.0.0 image carries one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The license-tracking application, a separately started Spring Boot service shipped in 5.x as an unextracted archive under /liquibase/dist and removed in 6.0.0, carries 3.0.4 in 5.1.0, 3.1.0 in 5.1.1, 3.1.2 in 5.2.0, 3.2.0 in 5.2.1 and 3.2.1 in 5.2.2. All of these are inside the advisory range, so this assessment does not rest on version. The vulnerable cache is filled only through name-based polymorphic typing with a fallback, such as @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), applied to attacker-chosen type IDs. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonTypeInfo, @JsonSubTypes or default typing. The license-tracking application's own classes use no Jackson annotations and never enable default typing. Liquibase's own code does not use Jackson 3. With no polymorphic type handling configured for Jackson 3, no type-ID cache is ever created.",
         "justification": "code_not_reachable",
         "response": [
           "update"
         ],
         "firstIssued": "2026-09-30T00:00:00Z",
-        "lastUpdated": "2026-10-01T00:00:00Z"
+        "lastUpdated": "2026-10-13T00:00:00Z"
       },
       "affects": [
         {
@@ -285,13 +285,13 @@
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. The 6.0.0 image is the only published Liquibase Secure image that ships Jackson 3: one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The 5.x images ship no Jackson 3 at all. 3.2.2 is inside the advisory range, so this assessment does not rest on version. The quadratic lookup runs only when JSON is deserialized into a collection or map of @JsonIdentityInfo-enabled values. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonIdentityInfo or Jackson object-ID generator. Liquibase's own code does not use Jackson 3. With no object identity configured, the forward-reference accumulator is never created.",
+        "detail": "Fixed in tools.jackson.core:jackson-databind 3.1.7 and 3.2.3. Two components ship Jackson 3. The 6.0.0 image carries one copy at 3.2.2, inside liquibase-commercial-cassandra, read from its PackageVersion class. The license-tracking application, a separately started Spring Boot service shipped in 5.x as an unextracted archive under /liquibase/dist and removed in 6.0.0, carries 3.0.4 in 5.1.0, 3.1.0 in 5.1.1, 3.1.2 in 5.2.0, 3.2.0 in 5.2.1 and 3.2.1 in 5.2.2. All of these are inside the advisory range, so this assessment does not rest on version. The quadratic lookup runs only when JSON is deserialized into a collection or map of @JsonIdentityInfo-enabled values. A scan of every class in that jar, the Cassandra driver and JDBC wrapper included, found no @JsonIdentityInfo or Jackson object-ID generator. The license-tracking application's own classes use no Jackson annotations, so none of its types enables object identity. Liquibase's own code does not use Jackson 3. With no object identity configured, the forward-reference accumulator is never created.",
         "justification": "code_not_reachable",
         "response": [
           "update"
         ],
         "firstIssued": "2026-09-30T00:00:00Z",
-        "lastUpdated": "2026-10-01T00:00:00Z"
+        "lastUpdated": "2026-10-13T00:00:00Z"
       },
       "affects": [
         {
@@ -299,6 +299,311 @@
           "versions": [
             {
               "range": "vers:maven/>=3.0.0|<3.1.7|>=3.2.0|<3.2.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54514",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.0.0 until 2.18.8, 2.21.4, and 3.1.4, JDKFromStringDeserializer constructed InetSocketAddress with new InetSocketAddress(host, port), which performs eager DNS name resolution for hostname inputs at deserialization time. An application that binds untrusted JSON into a type containing an InetSocketAddress field issues an attacker-chosen DNS query during readValue, before any application-level validation or connect logic. The fix uses InetSocketAddress.createUnresolved(host, port), deferring DNS to an explicit connect. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
+      "recommendation": "No action required. No shipped component binds JSON to InetSocketAddress with Jackson 3, so the eager DNS lookup cannot be triggered.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No type that Jackson 3 deserializes in a shipped component has an InetSocketAddress field, so the eager DNS resolution is never reached.\n"
+        }
+      ],
+      "cwes": [
+        918
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hgj6-7826-r7m5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54514",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-hgj6-7826-r7m5",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact with its own version line. Fixed in tools.jackson.core:jackson-databind 3.1.4. The only in-range copies are inside the license-tracking application archived under /liquibase/dist in Docker images 5.1.0 (3.0.4), 5.1.1 (3.1.0) and 5.2.0 (3.1.2), read from the jars' Maven metadata. Images 5.2.1 and 5.2.2 carry 3.2.0 and 3.2.1 there, 6.0.0 carries 3.2.2 inside liquibase-commercial-cassandra, and the 5.0.x images carry no Jackson 3; all of these are outside the range. Liquibase's own code does not use Jackson 3. This assessment does not rest on version. The license-tracking application is a Spring Boot 4 service that must be extracted and started by hand. It binds the request body of its track endpoint with Jackson 3, to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes has an InetSocketAddress field, so the eager DNS lookup in the deserializer is never triggered.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54516",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, POJOPropertiesCollector._renameProperties() allows a property with @JsonProperty(\"renamed\") on the getter and @JsonIgnore on the setter to be renamed rather than dropped. With MapperFeature.INFER_PROPERTY_MUTATORS enabled (default), the private backing field is retained; during deserialization BeanDeserializerFactory.addBeanProps() sees hasField()==true, builds a FieldProperty, and makes the backing field writable. An attacker supplying the renamed JSON key writes the backing field directly, bypassing the @JsonIgnore on the setter. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "recommendation": "No action required. No class bound by Jackson 3 combines a renamed getter with an ignored setter, so the bypass cannot be reached.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No class bound by Jackson 3 declares @JsonIgnore, so no backing field is made writable by the rename bug.\n"
+        }
+      ],
+      "cwes": [
+        915
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9fxm-vc8v-hj55",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54516",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-9fxm-vc8v-hj55",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact with its own version line. Fixed in tools.jackson.core:jackson-databind 3.1.4. The only in-range copies are inside the license-tracking application archived under /liquibase/dist in Docker images 5.1.0 (3.0.4), 5.1.1 (3.1.0) and 5.2.0 (3.1.2), read from the jars' Maven metadata. Images 5.2.1 and 5.2.2 carry 3.2.0 and 3.2.1 there, 6.0.0 carries 3.2.2 inside liquibase-commercial-cassandra, and the 5.0.x images carry no Jackson 3; all of these are outside the range. Liquibase's own code does not use Jackson 3. This assessment does not rest on version. The license-tracking application is a Spring Boot 4 service that must be extracted and started by hand. It binds the request body of its track endpoint with Jackson 3, to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes declares @JsonIgnore, so there is no ignored setter for the rename bug to bypass.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54517",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, in BeanDeserializer._deserializeUsingPropertyBased, the active-view (@JsonView) filter was applied only to creator properties; the regular property-buffering branch performed no prop.visibleInView(activeView) check. A change making SetterlessProperty.isMerging() return true routed setterless Collection/Map properties through this unguarded path, so a setterless collection annotated with a restricted @JsonView is populated from attacker JSON even when the active view excludes it. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "recommendation": "No action required. No shipped component uses @JsonView with Jackson 3, so the view-bypass path cannot be reached.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No class bound by Jackson 3 declares @JsonView or is read with an active view, so the unguarded view filter is never reached.\n"
+        }
+      ],
+      "cwes": [
+        863
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5hh8-q8hv-fr38",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54517",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-5hh8-q8hv-fr38",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact with its own version line. Fixed in tools.jackson.core:jackson-databind 3.1.4. The only in-range copies are inside the license-tracking application archived under /liquibase/dist in Docker images 5.1.0 (3.0.4), 5.1.1 (3.1.0) and 5.2.0 (3.1.2), read from the jars' Maven metadata. Images 5.2.1 and 5.2.2 carry 3.2.0 and 3.2.1 there, 6.0.0 carries 3.2.2 inside liquibase-commercial-cassandra, and the 5.0.x images carry no Jackson 3; all of these are outside the range. Liquibase's own code does not use Jackson 3. This assessment does not rest on version. The license-tracking application is a Spring Boot 4 service that must be extracted and started by hand. It binds the request body of its track endpoint with Jackson 3, to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes declares @JsonView, and the application deserializes with no active view, so the missing view check is never exercised.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-54518",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.21.0 until 2.21.4 and 3.1.4, UnwrappedPropertyHandler.processUnwrappedCreatorProperties() replays buffered JSON into creator parameters but never consults prop.visibleInView(activeView). The normal property-based creator path gates creator properties on the active view, but this unwrapped-creator replay path bypasses that check, so a constructor parameter annotated with both @JsonView(AdminView.class) and @JsonUnwrapped is populated from attacker JSON even when a more restrictive view is active. This vulnerability is fixed in 2.21.4 and 3.1.4.",
+      "recommendation": "No action required. No shipped component uses @JsonView or @JsonUnwrapped with Jackson 3, so the view-bypass path cannot be reached.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No class bound by Jackson 3 combines @JsonView with @JsonUnwrapped on a creator parameter, so the missing view check is never exercised.\n"
+        }
+      ],
+      "cwes": [
+        863
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rcqc-6cw3-h962",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54518",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-rcqc-6cw3-h962",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact with its own version line. Fixed in tools.jackson.core:jackson-databind 3.1.4. The only in-range copies are inside the license-tracking application archived under /liquibase/dist in Docker images 5.1.0 (3.0.4), 5.1.1 (3.1.0) and 5.2.0 (3.1.2), read from the jars' Maven metadata. Images 5.2.1 and 5.2.2 carry 3.2.0 and 3.2.1 there, 6.0.0 carries 3.2.2 inside liquibase-commercial-cassandra, and the 5.0.x images carry no Jackson 3; all of these are outside the range. Liquibase's own code does not use Jackson 3. This assessment does not rest on version. The license-tracking application is a Spring Boot 4 service that must be extracted and started by hand. It binds the request body of its track endpoint with Jackson 3, to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes declares @JsonView or @JsonUnwrapped, so the unchecked unwrapped-creator replay is never reached.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59888",
+      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.15.0 until 2.18.8, 2.21.4, and 3.1.4, Java Records using a PropertyNamingStrategy can bypass @JsonIgnore because POJOPropertiesCollector._removeUnwantedIgnorals() records an ignored component under its original implicit name before _renameUsing() applies the naming strategy, allowing the renamed JSON key to be assigned to the Record constructor parameter. This issue is fixed in versions 2.18.8, 2.21.4, and 3.1.4.",
+      "recommendation": "No action required. No shipped component deserializes records under a naming strategy with Jackson 3, so the bypass cannot be reached.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No record is bound by Jackson 3 in a shipped component, and no naming strategy is configured, so the renamed-key bypass never applies.\n"
+        }
+      ],
+      "cwes": [
+        915
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3pjw-73gf-8qr5",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59888",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-3pjw-73gf-8qr5",
+          "title": "FasterXML Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact with its own version line. Fixed in tools.jackson.core:jackson-databind 3.1.4. The only in-range copies are inside the license-tracking application archived under /liquibase/dist in Docker images 5.1.0 (3.0.4), 5.1.1 (3.1.0) and 5.2.0 (3.1.2), read from the jars' Maven metadata. Images 5.2.1 and 5.2.2 carry 3.2.0 and 3.2.1 there, 6.0.0 carries 3.2.2 inside liquibase-commercial-cassandra, and the 5.0.x images carry no Jackson 3; all of these are outside the range. Liquibase's own code does not use Jackson 3. This assessment does not rest on version. The license-tracking application is a Spring Boot 4 service that must be extracted and started by hand. It binds the request body of its track endpoint with Jackson 3, to plain classes made of strings, booleans, dates, a string map and nested user records. None of those classes is a record, and the application configures no naming strategy, so the record @JsonIgnore bypass never applies.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/tools.jackson.core/jackson-databind",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.1.4",
               "status": "unaffected"
             }
           ]
