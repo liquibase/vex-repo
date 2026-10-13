@@ -681,6 +681,74 @@
       ]
     },
     {
+      "id": "CVE-2026-32990",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat due to an incomplete fix of CVE-2025-66614. This issue affects Apache Tomcat: from 11.0.15 through 11.0.19, from 10.1.50 through 10.1.52, from 9.0.113 through 9.0.115. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "recommendation": "No action required. Liquibase Secure does not run a Tomcat TLS connector with multiple virtual hosts or connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The SNI/Host check only matters for a TLS connector serving several virtual hosts with differing client certificate requirements. No Liquibase Secure component configures TLS, virtual hosts or connector-level client certificate authentication on Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8mc5-53m5-3qj2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32990",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix of CVE-2025-66614, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116: the strict check that the TLS SNI host name matches the HTTP Host header ignored differences in case, so it could be bypassed. It matters only when Tomcat terminates TLS itself with more than one SSLHostConfig, one of which requires client certificate authentication at the Connector while another does not. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. Only 5.1.0 (11.0.15) and 5.1.1 (11.0.18) carry an in-range version. 5.0.0 to 5.0.2 (10.1.34) and 5.0.3 (10.1.48) predate the strict SNI check, which the CVE-2025-66614 fix added in 10.1.50, and 5.2.0 and later carry 11.0.22 or newer, which include the fix. The application listens on a single plain HTTP connector with the Spring Boot defaults: it sets no server properties, ships no keystore, and none of its classes references the Tomcat API, an SSL bundle or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.113|<9.0.116|>=10.1.50|<10.1.53|>=11.0.15|<11.0.20",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29146",
       "analysis": {
         "state": "not_affected",
