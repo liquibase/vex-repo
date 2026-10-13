@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b03458401b4a36e57c92017622e2bbc59c5a2f3c1d882096b28d2aa6a2a485e2",
+  "@id": "merged-vex-d9ae6f23c67f54646f26afcd917f8859eaaf41c45a778e3628adfd332f1a4bf6",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T13:28:31.194226414Z",
+  "timestamp": "2026-10-13T15:48:29.737651075Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-13T13:28:30.697369095Z",
+      "timestamp": "2026-10-13T15:48:29.315840087Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-13T13:28:30.74102906Z",
+      "timestamp": "2026-10-13T15:48:29.350722137Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-13T13:28:30.78547928Z",
+      "timestamp": "2026-10-13T15:48:29.384488544Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-13T13:28:30.82960118Z",
+      "timestamp": "2026-10-13T15:48:29.418166961Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-42009"
       },
-      "timestamp": "2026-10-13T13:28:30.915777917Z",
+      "timestamp": "2026-10-13T15:48:29.485481232Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-42010"
       },
-      "timestamp": "2026-10-13T13:28:30.958850534Z",
+      "timestamp": "2026-10-13T15:48:29.519374773Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -99,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-42011"
       },
-      "timestamp": "2026-10-13T13:28:31.003066171Z",
+      "timestamp": "2026-10-13T15:48:29.554568526Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -114,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-42012"
       },
-      "timestamp": "2026-10-13T13:28:31.046368662Z",
+      "timestamp": "2026-10-13T15:48:29.587622901Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -129,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-42013"
       },
-      "timestamp": "2026-10-13T13:28:31.089784385Z",
+      "timestamp": "2026-10-13T15:48:29.621508491Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -144,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-42014"
       },
-      "timestamp": "2026-10-13T13:28:31.132364126Z",
+      "timestamp": "2026-10-13T15:48:29.654342298Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -159,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-42015"
       },
-      "timestamp": "2026-10-13T13:28:31.175251382Z",
+      "timestamp": "2026-10-13T15:48:29.68801745Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -174,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-5260"
       },
-      "timestamp": "2026-10-13T13:28:30.873158555Z",
+      "timestamp": "2026-10-13T15:48:29.452207151Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -184,6 +184,21 @@
       "status_notes": "A flaw was found in libgnutls. A remote attacker, by sending an extremely short premaster secret during an RSA key exchange to a server using an RSA key backed by a PKCS#11 token, could trigger a short heap overread. This memory corruption vulnerability could lead to information disclosure.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GnuTLS short heap overread when a TLS server using an RSA key held on a PKCS#11 token receives a very short premaster secret during RSA key exchange. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these are TLS clients, and none is invoked by the entrypoint or the CLI. The flaw is in the server side of RSA key exchange, and nothing in the image runs a GnuTLS TLS server or uses a PKCS#11-backed server key. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 24.04 as 3.8.3-1.1ubuntu3.6 (USN-8284-1), which image builds from 5.2.1 onward carry."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5419"
+      },
+      "timestamp": "2026-10-13T15:48:29.722325443Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. The PKCS#7 padding check, performed during decryption, was not constant-time. This timing side-channel could allow a remote attacker to potentially leak sensitive information about the padding bytes through observable timing differences. This vulnerability is a form of information disclosure.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS non-constant-time PKCS#7 padding check during decryption, a timing side channel that needs an attacker to observe many decryptions by a GnuTLS-using process. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images (3.8.3-1.1ubuntu3.4 and 3.8.3-1.1ubuntu3.5), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which performs TLS and cryptography with its own Java implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu published the fix for 24.04 as 3.8.3-1.1ubuntu3.6 (USN-8284-1), which image builds from 5.2.1 onward carry. Ubuntu lists the 22.04 package (libgnutls30, in the 5.0.0 and 5.0.1 images) as not affected because the code is not present there."
     }
   ]
 }
