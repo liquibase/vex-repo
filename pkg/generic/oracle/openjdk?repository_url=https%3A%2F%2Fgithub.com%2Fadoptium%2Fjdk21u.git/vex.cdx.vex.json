@@ -620,6 +620,71 @@
       ]
     },
     {
+      "id": "CVE-2026-22007",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Difficult to exploit vulnerability allows unauthenticated attacker with logon to the infrastructure where Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition executes to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security.",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.2.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 2.9,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure is a short-lived command-line client that neither exposes the java.security APIs to untrusted input nor runs untrusted code in a Java sandbox, and 5.2.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rj5j-26xx-hh3v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22007",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Security component issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. For the earlier images, exploitation needs a local logon to the host plus either a service that passes attacker-supplied data to the java.security APIs or a sandboxed Java Web Start or applet client that runs untrusted code. Liquibase Secure is neither. It runs as a command-line client that starts no listener, runs no untrusted code, and only connects outbound to the database and service endpoints its operator configures.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-22016",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JAXP). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses Temurin JRE and does not run as a sandboxed Java client.",
@@ -667,6 +732,71 @@
           "versions": [
             {
               "range": "vers:generic/oracle/openjdk/<21.0.10",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22013",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: JGSS). Supported versions that are affected are Oracle Java SE: 8u481, 8u481-b50, 8u481-perf, 11.0.30, 17.0.18, 21.0.10, 25.0.2, 26; Oracle GraalVM for JDK: 17.0.18 and 21.0.10; Oracle GraalVM Enterprise Edition: 21.3.17. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks require human interaction from a person other than the attacker. Successful attacks of this vulnerability can result in unauthorized access to critical data or complete access to all Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. This vulnerability does not apply to Java deployments, typically in servers, that load and run only trusted code (e.g., code installed by an administrator).",
+      "recommendation": "No action required for Liquibase Secure 5.2.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.2.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerability applies only to sandboxed Java deployments that run untrusted code. Liquibase Secure runs only trusted code, and 5.2.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "cwes": [
+        693
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-75hh-423h-rvwg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22013",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuapr2026.html",
+          "title": "Oracle Critical Patch Update Advisory - April 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-04-21",
+          "title": "OpenJDK Vulnerability Advisory 2026-04-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE JGSS component issue from the April 2026 Critical Patch Update, fixed in OpenJDK 21.0.11. The scan reported Temurin 21.0.10. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, 21.0.10 in 5.1.0 and 5.1.1, and 21.0.11 or later from 5.2.0 onward, so 5.2.0 and later already carry the fix. Oracle states this vulnerability applies only to deployments that load and run untrusted code and rely on the Java sandbox, such as sandboxed Java Web Start applications or applets, and does not apply to deployments that run only trusted code installed by an administrator. Liquibase Secure is a command-line client that runs only its own code and extensions installed by its operator, and does not use the Java sandbox.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.11",
               "status": "unaffected"
             }
           ]

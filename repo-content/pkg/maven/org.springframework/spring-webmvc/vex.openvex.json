@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cdf02a08a071408079b6bbf46ca2579dda1e6f677f55801b41d39f7bbe7ded9e",
+  "@id": "merged-vex-6cdecf32b285aa85b52087f2a591e3cfb756374699efb957541c9e0d790c70c8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T17:24:13.156634527Z",
+  "timestamp": "2026-10-13T19:01:50.591694855Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41841",
+        "aliases": [
+          "GHSA-mq64-j8f9-9gcj"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:50.490637301Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Information Disclosure attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs several resource handlers with different locations, at least one of which requires authentication, sharing one resource cache, so that a public resource resolved and cached first is served in place of a protected one with the same name. The application has no Spring Security or other authentication, so no resource is protected. It packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-41842",
@@ -12,7 +30,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-13T17:24:12.930553061Z",
+      "timestamp": "2026-10-13T19:01:50.234201697Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -25,12 +43,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41843",
+        "aliases": [
+          "GHSA-72pg-x5f8-j25j"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:50.532705557Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Path Traversal attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs static resources served from the file system with versioned resource support configured. The application serves nothing from the file system: it sets no spring.web.resources properties, so only Spring Boot's default classpath locations are mapped, and it packages no static resources there. None of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry, and Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-41844",
         "aliases": [
           "GHSA-h3qp-gqrc-q736"
         ]
       },
-      "timestamp": "2026-10-13T17:24:13.09827128Z",
+      "timestamp": "2026-10-13T19:01:50.405088438Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -48,7 +84,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-13T17:24:12.972288414Z",
+      "timestamp": "2026-10-13T19:01:50.277116081Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -66,7 +102,7 @@
           "GHSA-957g-f97v-vppc"
         ]
       },
-      "timestamp": "2026-10-13T17:24:13.140063682Z",
+      "timestamp": "2026-10-13T19:01:50.447072794Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -79,12 +115,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41853",
+        "aliases": [
+          "GHSA-cjpg-rgq5-fr37"
+        ]
+      },
+      "timestamp": "2026-10-13T19:01:50.574886297Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Multipart request smuggling attacks. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs an application that accepts multipart requests and sits behind a web application firewall or proxy that parses multipart bodies and makes security decisions on their content, so that a request the firewall reads as harmless is parsed differently by Spring. Spring Boot registers its standard multipart resolver by default and the application does not turn it off, but no handler accepts multipart content. Its only controllers are three @RestController classes: v1/track takes a JSON @RequestBody, and v1/report and v1/health are GET methods without parameters. None of its classes references MultipartFile, @RequestPart, @RequestParam, a MultipartResolver or the servlet request, and it sets no spring.servlet.multipart properties. Liquibase ships no firewall or proxy in front of it."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-47884",
         "aliases": [
           "GHSA-pc63-qcmh-9cmg"
         ]
       },
-      "timestamp": "2026-10-13T17:24:13.013868282Z",
+      "timestamp": "2026-10-13T19:01:50.320267457Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -102,7 +156,7 @@
           "GHSA-j9f9-w8pj-32f8"
         ]
       },
-      "timestamp": "2026-10-13T17:24:13.055478154Z",
+      "timestamp": "2026-10-13T19:01:50.362655363Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
