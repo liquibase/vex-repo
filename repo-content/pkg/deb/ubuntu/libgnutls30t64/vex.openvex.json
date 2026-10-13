@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-3a189d9f0b69dc34af793ba0ff7ac83a71d872c5332a51b069a40c519176e016",
+  "@id": "merged-vex-71b0ed78519f3ef894c7b78ab399c29c113bfe518e49d8e17142629866c9570e",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:35.70388363Z",
+  "timestamp": "2026-10-13T12:21:49.576996113Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-09T15:32:35.561925552Z",
+      "timestamp": "2026-10-13T12:21:49.433008207Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-09T15:32:35.604381427Z",
+      "timestamp": "2026-10-13T12:21:49.46605268Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-09T15:32:35.645359281Z",
+      "timestamp": "2026-10-13T12:21:49.498576308Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-09T15:32:35.686033752Z",
+      "timestamp": "2026-10-13T12:21:49.530789002Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -64,6 +64,21 @@
       "status_notes": "A flaw was found in gnutls. This vulnerability occurs because gnutls performs case-sensitive comparisons of nameConstraints labels, specifically for dNSName (DNS) or rfc822Name (email) constraints within excludedSubtrees or permittedSubtrees. A remote attacker can exploit this by crafting a leaf certificate with casing differences in the Subject Alternative Name (SAN), leading to a policy bypass where a certificate that should be rejected is instead accepted. This could result in unauthorized access or information disclosure.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GnuTLS case-sensitive nameConstraints comparison that can let a certificate violating a CA's name constraints be accepted. Liquibase Secure inherits libgnutls30t64 from the Ubuntu base image, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5260"
+      },
+      "timestamp": "2026-10-13T12:21:49.563993155Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libgnutls. A remote attacker, by sending an extremely short premaster secret during an RSA key exchange to a server using an RSA key backed by a PKCS#11 token, could trigger a short heap overread. This memory corruption vulnerability could lead to information disclosure.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS short heap overread when a TLS server using an RSA key held on a PKCS#11 token receives a very short premaster secret during RSA key exchange. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 to 5.2.0 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these are TLS clients, and none is invoked by the entrypoint or the CLI. The flaw is in the server side of RSA key exchange, and nothing in the image runs a GnuTLS TLS server or uses a PKCS#11-backed server key. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 24.04 as 3.8.3-1.1ubuntu3.6 (USN-8284-1), which image builds from 5.2.1 onward carry."
     }
   ]
 }
