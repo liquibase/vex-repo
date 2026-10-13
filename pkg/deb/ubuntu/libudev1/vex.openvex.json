@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-fdbea691836663710604698cb3dee9e374cb653367ce23b5e2b4612155eb569f",
+  "@id": "merged-vex-6d6c960dda6145bec21c8d0b8e8340d690cd451673c8764727ca77ff4685079d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T19:01:33.875576926Z",
+  "timestamp": "2026-10-13T20:13:52.220316071Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-29111",
+        "aliases": [
+          "GHSA-gx6q-6f99-m764"
+        ]
+      },
+      "timestamp": "2026-10-13T20:13:52.206469159Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libudev1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "systemd, a system and service manager, (as PID 1) hits an assert and freezes execution when an unprivileged IPC API call is made with spurious data. On version v249 and older the effect is not an assert, but stack overwriting, with the attacker controlled content. From version v250 and newer this is not possible as the safety check causes an assert instead. This IPC call was added in v239, so versions older than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11 contain patches. No known workarounds are available.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in systemd running as PID 1, which mishandles a crafted unprivileged IPC call: from v250 onward it hits an assert and freezes, and in v249 and older it overwrites its stack with attacker-controlled content. Exploitation needs systemd to be the running service manager. In Ubuntu, the service manager ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of the PID 1 code. No Liquibase Secure image installs the systemd, systemd-sysv, udev or init packages, there is no systemd binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-40225",
@@ -12,7 +30,7 @@
           "GHSA-vpfq-8p5f-jcqx"
         ]
       },
-      "timestamp": "2026-10-13T19:01:33.858871752Z",
+      "timestamp": "2026-10-13T20:13:52.174363Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"
@@ -30,7 +48,7 @@
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-10-13T19:01:33.815854128Z",
+      "timestamp": "2026-10-13T20:13:52.143012101Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"
@@ -45,7 +63,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-13T19:01:33.774265893Z",
+      "timestamp": "2026-10-13T20:13:52.110904654Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libudev1"

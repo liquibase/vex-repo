@@ -286,6 +286,70 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-29111",
+      "description": "systemd, a system and service manager, (as PID 1) hits an assert and freezes execution when an unprivileged IPC API call is made with spurious data. On version v249 and older the effect is not an assert, but stack overwriting, with the attacker controlled content. From version v250 and newer this is not possible as the safety check causes an assert instead. This IPC call was added in v239, so versions older than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11 contain patches. No known workarounds are available.",
+      "recommendation": "No action required. The Liquibase Secure container never runs systemd. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires systemd running as PID 1. The vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container has no init system.\n"
+        }
+      ],
+      "cwes": [
+        269
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/systemd/systemd/security/advisories/GHSA-gx6q-6f99-m764",
+          "title": "systemd Security Advisory GHSA-gx6q-6f99-m764"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-29111",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-29111",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd running as PID 1, which mishandles a crafted unprivileged IPC call: from v250 onward it hits an assert and freezes, and in v249 and older it overwrites its stack with attacker-controlled content. Exploitation needs systemd to be the running service manager. In Ubuntu, the service manager ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of the PID 1 code. No Liquibase Secure image installs the systemd, systemd-sysv, udev or init packages, there is no systemd binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
