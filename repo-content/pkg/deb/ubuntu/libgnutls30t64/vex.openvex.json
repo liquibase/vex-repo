@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a3fcd0286a6f517d8d2f969ec04316ae81022ccfb6f49cb0c09fd0e380c2cdfb",
+  "@id": "merged-vex-801ba9d18b5dcc5eaaa487849a2553d9b6d95037b380b9022e49922d9cd807d8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T22:15:25.51450472Z",
+  "timestamp": "2026-10-14T13:37:10.25595186Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-9820"
+      },
+      "timestamp": "2026-10-14T13:37:10.238972476Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in the GnuTLS library, specifically in the gnutls_pkcs11_token_init() function that handles PKCS#11 token initialization. When a token label longer than expected is processed, the function writes past the end of a fixed-size stack buffer. This programming error can cause the application using GnuTLS to crash or, in certain conditions, be exploited for code execution. As a result, systems or applications relying on GnuTLS may be vulnerable to a denial of service or local privilege escalation attacks.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS stack buffer overflow in gnutls_pkcs11_token_init(), reached only when an application initializes a PKCS#11 token with a label longer than 32 characters; GnuTLS rates it low and fixed it in 3.8.11. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 and later images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, none of them initializes PKCS#11 tokens, and the image ships no gnutls-bin. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 24.04 as 3.8.3-1.1ubuntu3.5 (USN-8043-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 3.8.3-1.1ubuntu3.4; 5.1.1 and 5.2.0 carry 3.8.3-1.1ubuntu3.5, and 5.2.1 and later carry 3.8.3-1.1ubuntu3.6."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-13T22:15:25.080495306Z",
+      "timestamp": "2026-10-14T13:37:09.659226692Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -24,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-13T22:15:25.115710324Z",
+      "timestamp": "2026-10-14T13:37:09.703141728Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-13T22:15:25.150449598Z",
+      "timestamp": "2026-10-14T13:37:09.746649049Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-13T22:15:25.185247572Z",
+      "timestamp": "2026-10-14T13:37:09.790820926Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-42009"
       },
-      "timestamp": "2026-10-13T22:15:25.255209496Z",
+      "timestamp": "2026-10-14T13:37:09.880319714Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-42010"
       },
-      "timestamp": "2026-10-13T22:15:25.291066221Z",
+      "timestamp": "2026-10-14T13:37:09.924957051Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-42011"
       },
-      "timestamp": "2026-10-13T22:15:25.326397929Z",
+      "timestamp": "2026-10-14T13:37:09.96929992Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-42012"
       },
-      "timestamp": "2026-10-13T22:15:25.361153358Z",
+      "timestamp": "2026-10-14T13:37:10.014768176Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-42013"
       },
-      "timestamp": "2026-10-13T22:15:25.396872516Z",
+      "timestamp": "2026-10-14T13:37:10.059940085Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-42014"
       },
-      "timestamp": "2026-10-13T22:15:25.430618719Z",
+      "timestamp": "2026-10-14T13:37:10.104663077Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-42015"
       },
-      "timestamp": "2026-10-13T22:15:25.464715556Z",
+      "timestamp": "2026-10-14T13:37:10.148723497Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -174,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-5260"
       },
-      "timestamp": "2026-10-13T22:15:25.219867518Z",
+      "timestamp": "2026-10-14T13:37:09.836423722Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"
@@ -189,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-5419"
       },
-      "timestamp": "2026-10-13T22:15:25.500185417Z",
+      "timestamp": "2026-10-14T13:37:10.194226984Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30t64"

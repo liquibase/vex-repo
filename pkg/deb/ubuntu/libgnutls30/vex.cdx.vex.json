@@ -254,6 +254,75 @@
       ]
     },
     {
+      "id": "CVE-2025-9820",
+      "description": "A flaw was found in the GnuTLS library, specifically in the gnutls_pkcs11_token_init() function that handles PKCS#11 token initialization. When a token label longer than expected is processed, the function writes past the end of a fixed-size stack buffer. This programming error can cause the application using GnuTLS to crash or, in certain conditions, be exploited for code execution. As a result, systems or applications relying on GnuTLS may be vulnerable to a denial of service or local privilege escalation attacks.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or initialize PKCS#11 tokens at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a caller to initialize a PKCS#11 token through GnuTLS. No process in the Liquibase Secure image does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-337w-h8w7-m899",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-9820",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2025-11-18",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2025-11-18"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8043-1",
+          "title": "Ubuntu Security Notice USN-8043-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-9820",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS stack buffer overflow in gnutls_pkcs11_token_init(), reached only when an application initializes a PKCS#11 token with a label longer than 32 characters; GnuTLS rates it low and fixed it in 3.8.11. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, none of them initializes PKCS#11 tokens, and the image ships no gnutls-bin. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-3832",
       "description": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
       "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",

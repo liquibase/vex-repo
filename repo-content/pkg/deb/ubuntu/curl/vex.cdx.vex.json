@@ -1291,6 +1291,75 @@
       ]
     },
     {
+      "id": "CVE-2025-10148",
+      "description": "curl's WebSocket code did not update the 32-bit mask pattern for each new outgoing frame as the specification says. Instead it used a fixed mask that persisted and was used throughout the entire connection. A predictable mask pattern allows for a malicious server to induce traffic between the two communicating parties that could be interpreted by an involved proxy (configured or transparent) as genuine, real, HTTP traffic with content and thereby poison its cache. That cached poisoned content could then be served to all users of that proxy.",
+      "recommendation": "No action required. Liquibase Secure never makes curl or libcurl WebSocket transfers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a curl or libcurl WebSocket connection that Liquibase Secure never makes. curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        340
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxvq-c3r3-8gwq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-10148",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-10148.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-10148",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "curl's WebSocket client reused one 32-bit mask for every outgoing frame of a connection, so a malicious WebSocket server could induce traffic that an intermediate proxy might cache as genuine HTTP; upstream fixed it in 8.16.0 and considers only 8.11.0 through 8.15.0 affected, because WebSocket was experimental before 8.11.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or to WebSocket transfers through curl. Ubuntu lists the 22.04 package (7.81.0, in the 5.0.0 and 5.0.1 images) as not affected because the code is not present there, and published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-82209",
       "description": "When libpsl support is enabled, libcurl fails to enforce the Public Suffix List boundary check when processing a Set-Cookie header where the Domain attribute explicitly matches an origin host that is itself a public suffix. Instead of coercing it into a strict host-only cookie, libcurl saves the cookie with wildcard domain scope, inappropriately including it in subsequent outbound requests or HTTP redirects to arbitrary sibling subdomains under the same public suffix.",
       "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
@@ -1336,6 +1405,75 @@
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/curl"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14819",
+      "description": "When doing TLS related transfers with reused easy or multi handles and altering the CURLSSLOPT_NO_PARTIALCHAIN option, libcurl could accidentally reuse a CA store cached in memory for which the partial chain option was reversed. Contrary to the user's wishes and expectations. This could make libcurl find and accept a trust chain that it otherwise would not.",
+      "recommendation": "No action required. Liquibase Secure does not use libcurl or change its TLS partial-chain option.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl handles that are reused for TLS transfers with a changed CURLSSLOPT_NO_PARTIALCHAIN setting. Liquibase Secure never does this, and the curl command-line tool is the only libcurl consumer in the image.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vqhr-m87q-9jqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14819",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14819.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14819",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl could reuse a cached CA store whose CURLSSLOPT_NO_PARTIALCHAIN setting differed from the current transfer's when an application reused easy or multi handles for TLS transfers and changed that option between them; upstream fixed it in 8.18.0, the affected range is 7.87.0 through 8.17.0, and the curl command-line tool itself is not affected, only applications that call the libcurl API. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or CURLSSLOPT_NO_PARTIALCHAIN. Ubuntu lists the 22.04 package (7.81.0, in the 5.0.0 and 5.0.1 images) as not affected because the code is not present there, and published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
