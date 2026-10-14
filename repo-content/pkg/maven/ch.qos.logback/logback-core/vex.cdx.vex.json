@@ -119,6 +119,128 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-1225",
+      "description": "ACE vulnerability in configuration file processing by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file. The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
+      "recommendation": "No action required. No shipped component reads a logback configuration file that an attacker could modify.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 1.8,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:H/UI:N/VC:L/VI:L/VA:L/SC:L/SI:L/SA:L/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:N/AU:N/R:X/V:X/RE:M/U:Green"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:H/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "Exploitation requires write access to a logback configuration file; no shipped component uses one.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qqpg-mvqg-649v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1225",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw lets an attacker who can already modify a logback configuration file instantiate classes from the class path, and is fixed in logback 1.5.25. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2 and 1.5.20 in 5.0.3, both in range; 5.1.0 and later carry 1.5.25 or newer. The application ships no logback configuration file, its start script passes no logging configuration, and it logs through Spring Boot's built-in default setup, so there is no configuration file to tamper with; exploitation needs an attacker who already has write access to the host to supply one. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.5.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-11226",
+      "description": "ACE vulnerability in conditional configuration file processing by QOS.CH logback-core up to and including version 1.5.18 in Java applications, allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution. A successful attack requires the presence of Janino library and Spring Framework to be present on the user's class path. In addition, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.",
+      "recommendation": "No action required. No shipped component uses a conditional logback configuration file or bundles Janino.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:N/VC:H/VI:H/VA:N/SC:L/SI:L/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:P/AU:N/R:X/V:X/RE:M/U:Green"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "Exploitation requires an attacker-controlled conditional logback configuration file and Janino on the class path; no shipped component has either, and planting them already requires host-level privilege.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-25qh-j22f-pwp8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-11226",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in logback's conditional (if/then/else) configuration processing and lets an attacker who can already modify a logback configuration file, or inject an environment variable pointing to one, execute code. Conditional processing needs the Janino library on the class path, and the flaw is fixed in logback 1.5.19 and 1.3.16. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 1.5.20 or newer. The application does not bundle Janino, ships no logback configuration file, and logs through Spring Boot's built-in default setup, which contains no conditional processing, so exploitation needs an attacker who already has write access to the host or its environment, and who also adds Janino to the application. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.3.16|>=1.4.0|<1.5.19",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

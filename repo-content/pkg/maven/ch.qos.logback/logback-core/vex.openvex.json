@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-df5401e5093bba8b87d93daa9cf6e2fb89eb536d172fe6e4e36c5b08260999e7",
+  "@id": "merged-vex-ff01b9dece5e410da1fae26461b5f9aa6bd808f7916a3141b8a9a78632cdba8d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T17:56:55.638033775Z",
+  "timestamp": "2026-10-14T19:12:46.057935016Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-11226",
+        "aliases": [
+          "GHSA-25qh-j22f-pwp8"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:46.041038792Z",
+      "products": [
+        {
+          "@id": "pkg:maven/ch.qos.logback/logback-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "ACE vulnerability in conditional configuration file processing by QOS.CH logback-core up to and including version 1.5.18 in Java applications, allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution. A successful attack requires the presence of Janino library and Spring Framework to be present on the user's class path. In addition, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The flaw is in logback's conditional (if/then/else) configuration processing and lets an attacker who can already modify a logback configuration file, or inject an environment variable pointing to one, execute code. Conditional processing needs the Janino library on the class path, and the flaw is fixed in logback 1.5.19 and 1.3.16. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 1.5.20 or newer. The application does not bundle Janino, ships no logback configuration file, and logs through Spring Boot's built-in default setup, which contains no conditional processing, so exploitation needs an attacker who already has write access to the host or its environment, and who also adds Janino to the application. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-10532",
@@ -12,7 +30,7 @@
           "GHSA-jhq6-gfmj-v8fx"
         ]
       },
-      "timestamp": "2026-10-14T17:56:55.587288691Z",
+      "timestamp": "2026-10-14T19:12:45.902222725Z",
       "products": [
         {
           "@id": "pkg:maven/ch.qos.logback/logback-core"
@@ -25,12 +43,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-1225",
+        "aliases": [
+          "GHSA-qqpg-mvqg-649v"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:45.994872911Z",
+      "products": [
+        {
+          "@id": "pkg:maven/ch.qos.logback/logback-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "ACE vulnerability in configuration file processing by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file. The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The flaw lets an attacker who can already modify a logback configuration file instantiate classes from the class path, and is fixed in logback 1.5.25. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2 and 1.5.20 in 5.0.3, both in range; 5.1.0 and later carry 1.5.25 or newer. The application ships no logback configuration file, its start script passes no logging configuration, and it logs through Spring Boot's built-in default setup, so there is no configuration file to tamper with; exploitation needs an attacker who already has write access to the host to supply one. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-9828",
         "aliases": [
           "GHSA-p47f-322f-whfh"
         ]
       },
-      "timestamp": "2026-10-14T17:56:55.624598914Z",
+      "timestamp": "2026-10-14T19:12:45.949231787Z",
       "products": [
         {
           "@id": "pkg:maven/ch.qos.logback/logback-core"

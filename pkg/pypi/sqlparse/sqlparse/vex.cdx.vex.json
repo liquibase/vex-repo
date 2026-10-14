@@ -347,6 +347,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2023-30608",
+      "description": "sqlparse contains a regular expression vulnerable to ReDoS (Regular Expression Denial of Service), introduced in commit e75e358. Parsing a crafted SQL string makes the parser spend exponential time in the regular expression, so the calling process hangs. Fixed in sqlparse 0.4.4 by commit c457abd5f.",
+      "recommendation": "No action required for the default configuration. If you run a custom Python check on Liquibase Secure 5.0.0 through 5.0.2 that calls split_statements() or tokenize() from liquibase_utilities, or imports sqlparse itself, upgrade to 5.0.3 or later, which ships sqlparse 0.5.3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No bundled check calls sqlparse. Reaching the regular expression needs a customer-written check plus a changeset authored by the attacker, who at that point already controls the deployed DDL.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rrm6-wvj7-cwh2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-30608",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in sqlparse 0.4.4. Liquibase Secure 5.0.0 through 5.0.2 ship sqlparse 0.4.3 inside the GraalPy virtual environment of the checks extension; 5.0.3 and later ship 0.5.3, and 6.0.0 ships 0.6.0, all outside the range. sqlparse is not run by any check Liquibase bundles, but the helper module liquibase_utilities.py shipped in 5.0.0 through 5.1.1 imports it and exposes split_statements() (sqlparse.split) and tokenize() (sqlparse.parse) to customer-authored Python checks; from 5.2.0 the helper no longer imports sqlparse. The vulnerable regular expression is therefore reachable only when a customer has written and configured a custom Python check that calls those helpers, or imports sqlparse itself, on changelog SQL. The SQL it parses is the changelog the operator is deploying, so an attacker would need to author a changeset in that changelog, which already grants them DDL on the target; the impact of the ReDoS is a hung checks run on the operator's own host.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/>=0.1.15|<0.4.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
