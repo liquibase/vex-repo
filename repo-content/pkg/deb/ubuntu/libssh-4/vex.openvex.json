@@ -1,15 +1,45 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-417e48a0207145c91b6e156b99c53de43b93a6e6187ab0275785d135656fbd7d",
+  "@id": "merged-vex-5525882a088c5a7274506070a287647abe729ee137b409890600a5e6f55d8fe4",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:13.848759309Z",
+  "timestamp": "2026-10-14T17:56:45.547521429Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-8114"
+      },
+      "timestamp": "2026-10-14T17:56:45.532467306Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh, a library that implements the SSH protocol. When calculating the session ID during the key exchange (KEX) process, an allocation failure in cryptographic functions may lead to a NULL pointer dereference. This issue can cause the client or server to crash.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The NULL pointer dereference happens while computing the session ID during an SSH key exchange, so it needs an active libssh session and is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.5 (jammy) and 0.10.6-2ubuntu0.2 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 0.9.6-2ubuntu0.22.04.4; the noble images 5.0.2 and later already carry 0.10.6-2ubuntu0.2 or newer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-8277"
+      },
+      "timestamp": "2026-10-14T17:56:45.495135017Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh's handling of key exchange (KEX) processes when a client repeatedly sends incorrect KEX guesses. The library fails to free memory during these rekey operations, which can gradually exhaust system memory. This issue can lead to crashes on the client side, particularly when using libgcrypt, which impacts application stability and availability.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The memory leak is in libssh's key exchange and rekey handling, which runs only inside an open libssh session, so it is not reachable from Liquibase Secure. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble) (USN-8051-1). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-0964"
       },
-      "timestamp": "2026-10-14T13:37:13.652690582Z",
+      "timestamp": "2026-10-14T17:56:45.308303874Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -24,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0965"
       },
-      "timestamp": "2026-10-14T13:37:13.697473884Z",
+      "timestamp": "2026-10-14T17:56:45.345490664Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -39,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0966"
       },
-      "timestamp": "2026-10-14T13:37:13.74091802Z",
+      "timestamp": "2026-10-14T17:56:45.382475421Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -54,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-0967"
       },
-      "timestamp": "2026-10-14T13:37:13.786361406Z",
+      "timestamp": "2026-10-14T17:56:45.420371957Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -69,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-0968"
       },
-      "timestamp": "2026-10-14T13:37:13.831628966Z",
+      "timestamp": "2026-10-14T17:56:45.458399227Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -84,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-3731"
       },
-      "timestamp": "2026-10-14T13:37:13.607419825Z",
+      "timestamp": "2026-10-14T17:56:45.271691276Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -99,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-59843"
       },
-      "timestamp": "2026-10-14T13:37:13.339904008Z",
+      "timestamp": "2026-10-14T17:56:45.043281253Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -114,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-59845"
       },
-      "timestamp": "2026-10-14T13:37:13.385569717Z",
+      "timestamp": "2026-10-14T17:56:45.081293715Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -129,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-59846"
       },
-      "timestamp": "2026-10-14T13:37:13.429940038Z",
+      "timestamp": "2026-10-14T17:56:45.119882262Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -144,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-59847"
       },
-      "timestamp": "2026-10-14T13:37:13.473793792Z",
+      "timestamp": "2026-10-14T17:56:45.157300583Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -159,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-59848"
       },
-      "timestamp": "2026-10-14T13:37:13.519923483Z",
+      "timestamp": "2026-10-14T17:56:45.195375888Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -174,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-59850"
       },
-      "timestamp": "2026-10-14T13:37:13.563420509Z",
+      "timestamp": "2026-10-14T17:56:45.233132268Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"

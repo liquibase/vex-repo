@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-2d3ac38e4004d622981a495a920017f0bf44ff5f8154a56014a41e234bcb9779",
+  "@id": "merged-vex-6b3d68bf9192ede427c8f26055ad33f894a310c591888c83b5c02c5b89805439",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:37.069717375Z",
+  "timestamp": "2026-10-14T17:57:05.056966433Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "PYSEC-2023-192"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.830892929Z",
+      "timestamp": "2026-10-14T17:57:04.817203722Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -25,13 +25,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2024-37891",
+        "aliases": [
+          "GHSA-34jh-p97f-mpxf",
+          "PYSEC-2026-1995"
+        ]
+      },
+      "timestamp": "2026-10-14T17:57:05.04248967Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is a user-friendly HTTP client library for Python. When using urllib3's proxy support with ProxyManager, the Proxy-Authorization header is only sent to the configured proxy, as expected. However, when sending HTTP requests without using urllib3's proxy support, it's possible to accidentally configure the Proxy-Authorization header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the Proxy-Authorization HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects. Exploitation requires setting the Proxy-Authorization header without using urllib3's built-in proxy support, not disabling HTTP redirects, and either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin. Users are advised to update to either version 1.26.19 or version 2.2.2.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The header leak is only reached when Python code sets a Proxy-Authorization header by hand without urllib3's ProxyManager and follows a cross-origin redirect, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-66418",
         "aliases": [
           "GHSA-gm62-xv2j-4w53",
           "PYSEC-2026-1998"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.699899409Z",
+      "timestamp": "2026-10-14T17:57:04.705420215Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -49,7 +68,7 @@
           "PYSEC-2026-1994"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.743307738Z",
+      "timestamp": "2026-10-14T17:57:04.744012976Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -67,7 +86,7 @@
           "PYSEC-2026-1996"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.787270558Z",
+      "timestamp": "2026-10-14T17:57:04.781207655Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -85,7 +104,7 @@
           "PYSEC-2026-141"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.87416105Z",
+      "timestamp": "2026-10-14T17:57:04.853760015Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -103,7 +122,7 @@
           "PYSEC-2026-142"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.917747672Z",
+      "timestamp": "2026-10-14T17:57:04.89095206Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -121,7 +140,7 @@
           "PYSEC-2026-4175"
         ]
       },
-      "timestamp": "2026-10-14T13:37:36.962916294Z",
+      "timestamp": "2026-10-14T17:57:04.929442325Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -140,7 +159,7 @@
           "PYSEC-2026-4176"
         ]
       },
-      "timestamp": "2026-10-14T13:37:37.008062937Z",
+      "timestamp": "2026-10-14T17:57:04.967157562Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -159,7 +178,7 @@
           "PYSEC-2026-4177"
         ]
       },
-      "timestamp": "2026-10-14T13:37:37.053089734Z",
+      "timestamp": "2026-10-14T17:57:05.004441377Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"

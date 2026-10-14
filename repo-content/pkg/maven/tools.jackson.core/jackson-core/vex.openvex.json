@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ff5a23bdfed78626c66600cfc321b24019e9f55e8460290d37d62078d7b0220e",
+  "@id": "merged-vex-c4b96af792c8b8c554853824276a42fa87839ed755f003ba12e0dca6110cca60",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:35.132076027Z",
+  "timestamp": "2026-10-14T17:57:03.366989957Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18401",
+        "aliases": [
+          "GHSA-72hv-8253-57qq"
+        ]
+      },
+      "timestamp": "2026-10-14T17:57:03.353361399Z",
+      "products": [
+        {
+          "@id": "pkg:maven/tools.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The non-blocking (asynchronous) JSON parser in jackson-core does not enforce the maxNumberLength constraint of StreamReadConstraints (default 1000 characters). A JSON document with an arbitrarily long number supplied to an application that uses the async parser API causes unbounded allocation and an OutOfMemoryError. The synchronous parsers enforce the limit correctly.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in tools.jackson.core jackson-core 3.1.0. The license-tracking application in the Liquibase Secure 5.1.0 ZIP carries Jackson 3 copy 3.0.4, which is in range; 5.0.x images carry no Jackson 3, and the application was removed in 6.0.0. The missing number-length check is only in the non-blocking parser. The application is a Spring MVC service whose only endpoint taking input is LicenseTrackEndpoint, and Spring MVC message conversion uses the blocking parser; a bytecode scan of the application found no code that creates a non-blocking parser. The scanner did not report this purl; the entry is recorded so the Jackson 3 copy has an assessment."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-29062",
@@ -12,7 +30,7 @@
           "GHSA-6v53-7c9g-w56r"
         ]
       },
-      "timestamp": "2026-10-14T13:37:35.026243677Z",
+      "timestamp": "2026-10-14T17:57:03.242195193Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -29,7 +47,7 @@
           "GHSA-7hhh-6rmp-j9qf"
         ]
       },
-      "timestamp": "2026-10-14T13:37:35.114518454Z",
+      "timestamp": "2026-10-14T17:57:03.315876993Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -44,7 +62,7 @@
       "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-10-14T13:37:35.070423425Z",
+      "timestamp": "2026-10-14T17:57:03.27842896Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"

@@ -187,6 +187,128 @@
       ]
     },
     {
+      "id": "CVE-2026-22735",
+      "description": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE). This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "recommendation": "No action required. No shipped component streams Server-Sent Events.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 2.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which never emits Server-Sent Events, so the vulnerable SSE path is never executed.\n"
+        }
+      ],
+      "cwes": [
+        667
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6hcq-hmm3-jj3c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22735",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22735",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The stream corruption occurs only in an application that streams Server-Sent Events. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream or WebFlux usage: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so the SSE writing path is never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.47|>=6.1.0|<6.1.26|>=6.2.0|<6.2.17|>=7.0.0|<7.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22737",
+      "description": "Use of Java scripting engine enabled (e.g. JRuby, Jython) template views in Spring MVC and Spring WebFlux applications can result in disclosure of content from files outside the configured locations for script template views. This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "recommendation": "No action required. No shipped component configures script template views.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which renders no Spring views and configures no script template views, so the vulnerable path resolution is never used.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4773-3jfm-qmx3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22737",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22737",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The advisory requires an application that renders script template views (ScriptTemplateView) through a Java scripting engine such as JRuby or Jython. A source review of the application found no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so no script template view is configured.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.47|>=6.1.0|<6.1.26|>=6.2.0|<6.2.17|>=7.0.0|<7.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-47884",
       "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
       "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",

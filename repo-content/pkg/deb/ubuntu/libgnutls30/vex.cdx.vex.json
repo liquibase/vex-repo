@@ -323,6 +323,71 @@
       ]
     },
     {
+      "id": "CVE-2025-14831",
+      "description": "A flaw was found in GnuTLS. This vulnerability allows a denial of service (DoS) by excessive CPU (Central Processing Unit) and memory consumption via specially crafted malicious certificates containing a large number of name constraints and subject alternative names (SANs).",
+      "recommendation": "No action required. Liquibase Secure does not verify certificates with GnuTLS at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs GnuTLS to verify an attacker-supplied certificate. No process in the Liquibase Secure runtime path does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pm8w-jq9r-x5rp",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14831",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8043-1",
+          "title": "Ubuntu Security Notice USN-8043-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14831",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The denial of service needs a process that uses GnuTLS to verify an attacker-supplied X.509 certificate carrying a large number of name constraints and subject alternative names. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, and the image ships no gnutls-bin. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The Liquibase CLI runs on the JVM, which verifies certificates with its own Java TLS implementation and does not load GnuTLS, so no certificate presented to Liquibase reaches the GnuTLS verifier. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-3832",
       "description": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted Online Certificate Status Protocol (OCSP) response during a TLS handshake. Due to a logic error in how gnutls processes multi-record OCSP responses, a client with OCSP verification enabled may incorrectly accept a revoked server certificate, potentially leading to a compromise of trust.",
       "recommendation": "No action required. Liquibase Secure does not use GnuTLS for TLS or certificate validation at runtime.",

@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-db7b5d437bf10ae4d55fb182b68c4833c7f5187ee710a3bd5a0a0a370faa55ab",
+  "@id": "merged-vex-4b924e26f3d1752555e4302e0ca387e647c1a64e7eb5c9d5df2f4d6b42c7e192",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:26.340211099Z",
+  "timestamp": "2026-10-14T17:56:55.943273493Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-18401",
+        "aliases": [
+          "GHSA-72hv-8253-57qq"
+        ]
+      },
+      "timestamp": "2026-10-14T17:56:55.928125692Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The non-blocking (asynchronous) JSON parser in jackson-core does not enforce the maxNumberLength constraint of StreamReadConstraints (default 1000 characters). The async parsing path in NonBlockingUtf8JsonParserBase accumulates number digits into the TextBuffer without a length check and completes the token without calling the methods that validate integer and floating-point length. A JSON document with an arbitrarily long number supplied to an application that uses the async parser API causes unbounded allocation and an OutOfMemoryError, and a later getBigIntegerValue() or getDecimalValue() call adds quadratic BigInteger parsing time. The synchronous parsers enforce the limit correctly.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Fixed in jackson-core 2.18.6 and 2.21.1. Every published Liquibase Secure image from 5.0.0 through 5.1.0 carries in-range copies, so this assessment does not rest on version: the core Liquibase Secure jar carries 2.20.0 in 5.0.x and 2.21.0 in 5.1.0, the license-tracking application in the 5.x ZIP carries 2.20.0 in 5.0.0 through 5.0.2, 2.20.1 in 5.0.3 and 2.21.0 in 5.1.0, and the AWS, Azure, BigQuery, Cassandra and Couchbase extensions carry copies between 2.17.2 and 2.21.0, with further copies relocated inside the Databricks and Snowflake JDBC drivers and the AWS SDK. The missing number-length check is only in the non-blocking parser, which Jackson creates only through JsonFactory.createNonBlockingByteArrayParser() or createNonBlockingByteBufferParser(). A bytecode scan of every class in every shipped jar, the license-tracking application included, found one caller outside Jackson itself: the Couchbase SDK's JsonStreamParser, bundled in the Couchbase extension from 5.1.0, which uses it to read query responses streamed from the configured Couchbase cluster. That input comes from the database the operator pointed Liquibase at, not from an untrusted party, and Liquibase does not rely on StreamReadConstraints as a security boundary (see the assessment of GHSA-2m67-wjpj-xhg9). Liquibase itself, the other extensions and the license-tracking application (Spring MVC, blocking parser) parse JSON only through the blocking parsers, which enforce the limit."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-89407",
@@ -12,7 +30,7 @@
           "GHSA-p6pp-m3f8-5c89"
         ]
       },
-      "timestamp": "2026-10-14T13:37:26.277424496Z",
+      "timestamp": "2026-10-14T17:56:55.853014683Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
@@ -30,7 +48,7 @@
           "GHSA-7hhh-6rmp-j9qf"
         ]
       },
-      "timestamp": "2026-10-14T13:37:26.323322288Z",
+      "timestamp": "2026-10-14T17:56:55.890174193Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
@@ -48,7 +66,7 @@
           "CVE-2026-68494"
         ]
       },
-      "timestamp": "2026-10-14T13:37:26.231239631Z",
+      "timestamp": "2026-10-14T17:56:55.816855642Z",
       "products": [
         {
           "@id": "pkg:maven/com.fasterxml.jackson.core/jackson-core"

@@ -1,10 +1,46 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-124b19acc02822c29576d8bc34742df0d87085ee09b6b05006299af0471ef93d",
+  "@id": "merged-vex-fea0326d412c0a9e2c9d1582cf7d3a721ee789372ec47439c250173bf59827c4",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:34.931647535Z",
+  "timestamp": "2026-10-14T17:57:03.159618882Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22735",
+        "aliases": [
+          "GHSA-6hcq-hmm3-jj3c"
+        ]
+      },
+      "timestamp": "2026-10-14T17:57:03.110032314Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE). This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The stream corruption occurs only in an application that streams Server-Sent Events. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream or WebFlux usage: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so the SSE writing path is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22737",
+        "aliases": [
+          "GHSA-4773-3jfm-qmx3"
+        ]
+      },
+      "timestamp": "2026-10-14T17:57:03.145365348Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Use of Java scripting engine enabled (e.g. JRuby, Jython) template views in Spring MVC and Spring WebFlux applications can result in disclosure of content from files outside the configured locations for script template views. This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The advisory requires an application that renders script template views (ScriptTemplateView) through a Java scripting engine such as JRuby or Jython. A source review of the application found no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so no script template view is configured."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-22741",
@@ -12,7 +48,7 @@
           "GHSA-wg35-8jpf-2xv3"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.870638589Z",
+      "timestamp": "2026-10-14T17:57:03.03720241Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -30,7 +66,7 @@
           "GHSA-6p4f-wcwh-5vvm"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.914254734Z",
+      "timestamp": "2026-10-14T17:57:03.07366483Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -48,7 +84,7 @@
           "GHSA-mq64-j8f9-9gcj"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.734737643Z",
+      "timestamp": "2026-10-14T17:57:02.928329821Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -66,7 +102,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.463170188Z",
+      "timestamp": "2026-10-14T17:57:02.703541642Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -84,7 +120,7 @@
           "GHSA-72pg-x5f8-j25j"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.779589147Z",
+      "timestamp": "2026-10-14T17:57:02.964488127Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -102,7 +138,7 @@
           "GHSA-h3qp-gqrc-q736"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.644824385Z",
+      "timestamp": "2026-10-14T17:57:02.855173902Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -120,7 +156,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.50806749Z",
+      "timestamp": "2026-10-14T17:57:02.741317798Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -138,7 +174,7 @@
           "GHSA-957g-f97v-vppc"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.689301853Z",
+      "timestamp": "2026-10-14T17:57:02.891662254Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -156,7 +192,7 @@
           "GHSA-cjpg-rgq5-fr37"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.825045333Z",
+      "timestamp": "2026-10-14T17:57:03.001230384Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -174,7 +210,7 @@
           "GHSA-pc63-qcmh-9cmg"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.554832872Z",
+      "timestamp": "2026-10-14T17:57:02.77923327Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -192,7 +228,7 @@
           "GHSA-j9f9-w8pj-32f8"
         ]
       },
-      "timestamp": "2026-10-14T13:37:34.599660696Z",
+      "timestamp": "2026-10-14T17:57:02.816952859Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
