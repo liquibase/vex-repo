@@ -33252,6 +33252,528 @@
       ]
     },
     {
+      "id": "CVE-2025-10148",
+      "description": "curl's WebSocket code did not update the 32-bit mask pattern for each new outgoing frame as the specification says. Instead it used a fixed mask that persisted and was used throughout the entire connection. A predictable mask pattern allows for a malicious server to induce traffic between the two communicating parties that could be interpreted by an involved proxy (configured or transparent) as genuine, real, HTTP traffic with content and thereby poison its cache. That cached poisoned content could then be served to all users of that proxy.",
+      "recommendation": "No action required. Liquibase Secure never makes curl or libcurl WebSocket transfers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a curl or libcurl WebSocket connection that Liquibase Secure never makes. curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        340
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxvq-c3r3-8gwq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-10148",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-10148.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-10148",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "curl's WebSocket client reused one 32-bit mask for every outgoing frame of a connection, so a malicious WebSocket server could induce traffic that an intermediate proxy might cache as genuine HTTP; upstream fixed it in 8.16.0 and considers only 8.11.0 through 8.15.0 affected, because WebSocket was experimental before 8.11.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or to WebSocket transfers through curl. Ubuntu lists the 22.04 package (7.81.0, in the 5.0.0 and 5.0.1 images) as not affected because the code is not present there, and published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-10148",
+      "description": "curl's WebSocket code did not update the 32-bit mask pattern for each new outgoing frame as the specification says. Instead it used a fixed mask that persisted and was used throughout the entire connection. A predictable mask pattern allows for a malicious server to induce traffic between the two communicating parties that could be interpreted by an involved proxy (configured or transparent) as genuine, real, HTTP traffic with content and thereby poison its cache. That cached poisoned content could then be served to all users of that proxy.",
+      "recommendation": "No action required. Liquibase Secure never makes curl or libcurl WebSocket transfers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a curl or libcurl WebSocket connection that Liquibase Secure never makes. curl is present only as an inherited base-image package.\n"
+        }
+      ],
+      "cwes": [
+        340
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cxvq-c3r3-8gwq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-10148",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-10148.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-10148",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the fixed WebSocket mask matters only to a curl or libcurl WebSocket client, and nothing in the runtime path uses curl or libcurl: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the JRE does not link libcurl, and lpm is a statically linked Go binary. Upstream considers only 8.11.0 through 8.15.0 affected; Ubuntu published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14819",
+      "description": "When doing TLS related transfers with reused easy or multi handles and altering the CURLSSLOPT_NO_PARTIALCHAIN option, libcurl could accidentally reuse a CA store cached in memory for which the partial chain option was reversed. Contrary to the user's wishes and expectations. This could make libcurl find and accept a trust chain that it otherwise would not.",
+      "recommendation": "No action required. Liquibase Secure does not use libcurl or change its TLS partial-chain option.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl handles that are reused for TLS transfers with a changed CURLSSLOPT_NO_PARTIALCHAIN setting. Liquibase Secure never does this, and the curl command-line tool is the only libcurl consumer in the image.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vqhr-m87q-9jqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14819",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14819.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14819",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl could reuse a cached CA store whose CURLSSLOPT_NO_PARTIALCHAIN setting differed from the current transfer's when an application reused easy or multi handles for TLS transfers and changed that option between them; upstream fixed it in 8.18.0, the affected range is 7.87.0 through 8.17.0, and the curl command-line tool itself is not affected, only applications that call the libcurl API. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or CURLSSLOPT_NO_PARTIALCHAIN. Ubuntu lists the 22.04 package (7.81.0, in the 5.0.0 and 5.0.1 images) as not affected because the code is not present there, and published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-14819",
+      "description": "When doing TLS related transfers with reused easy or multi handles and altering the CURLSSLOPT_NO_PARTIALCHAIN option, libcurl could accidentally reuse a CA store cached in memory for which the partial chain option was reversed. Contrary to the user's wishes and expectations. This could make libcurl find and accept a trust chain that it otherwise would not.",
+      "recommendation": "No action required. Liquibase Secure does not use libcurl or change its TLS partial-chain option.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl handles that are reused for TLS transfers with a changed CURLSSLOPT_NO_PARTIALCHAIN setting. Liquibase Secure never does this, and the curl command-line tool is the only libcurl consumer in the image.\n"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-vqhr-m87q-9jqh",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14819",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2025-14819.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8062-1",
+          "title": "Ubuntu Security Notice USN-8062-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-14819",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the CA store mix-up needs an application that reuses libcurl handles for TLS transfers and changes CURLSSLOPT_NO_PARTIALCHAIN between them, which the curl command-line tool never does, and nothing in the runtime path uses curl or libcurl: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the JRE does not link libcurl, and lpm is a statically linked Go binary. Ubuntu published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libcurl4t64",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34478",
+      "description": "Apache Log4j Core's Rfc5424Layout, in versions 2.21.0 through 2.25.3, is vulnerable to log injection via CRLF sequences due to undocumented renames of security-relevant configuration attributes. Two distinct issues affect users of stream-based syslog services who configure Rfc5424Layout directly: the newLineEscape attribute was silently renamed, causing newline escaping to stop working for users of TCP framing (RFC 6587), exposing them to CRLF injection in log output; and the useTlsMessageFormat attribute was silently renamed, causing users of TLS framing (RFC 5425) to be silently downgraded to unframed TCP (RFC 6587), without newline escaping. Users of the SyslogAppender are not affected, as its configuration attributes were not modified. Users are advised to upgrade to Apache Log4j Core 2.25.4, which corrects this issue.",
+      "recommendation": "No action required. No shipped component configures Log4j's Rfc5424Layout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The injection occurs only through a directly configured Rfc5424Layout; no shipped Log4j configuration uses it. Apache rates this CVE 6.9 Medium under CVSS 4.0.\n"
+        }
+      ],
+      "cwes": [
+        117,
+        684
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-445c-vh5m-36rj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34478",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CRLF log injection in Log4j Core's Rfc5424Layout: the newLineEscape and useTlsMessageFormat attributes were silently renamed in 2.21.0, so newline escaping and TLS framing stopped working for a directly configured Rfc5424Layout; affects 2.21.0 through 2.25.3 and is fixed in 2.25.4. It matters only when a Log4j configuration declares Rfc5424Layout directly and sends it to a stream-based syslog service; SyslogAppender users are not affected. Docker images 5.0.0 through 5.0.3 have no standalone log4j-core. The Databricks JDBC driver inside liquibase-commercial-databricks.jar bundles a copy relocated to com.databricks.client.jdbc42.internal.apache.logging.log4j, whose class set matches 2.20.0, below the 2.21.0 rename that introduced the flaw, and the jar carries no Log4j configuration file. From 5.1.0 that copy is gone, and log4j-core is bundled unrelocated in the liquibase-checks extension for the Phileas library: 2.25.3 in 5.1.0 and 5.1.1, in range, then the fixed 2.25.4 in 5.2.0 and 2.26.1 in 5.2.1 through 6.0.0. The build strips Phileas's log4j2.xml, a single Console appender with a PatternLayout, from that jar, so log4j-core runs with its built-in default configuration, which writes only to the console. The license-tracking application archived under /liquibase/dist carries only log4j-api with the log4j-to-slf4j bridge and logs through logback. No shipped jar contains a Log4j configuration that declares Rfc5424Layout or a syslog appender, a source review found no programmatic Log4j configuration in this repository, and Liquibase's own logging does not use Log4j.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.21.0|<2.25.4|>=3.0.0-beta1|<=3.0.0-beta3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34480",
+      "description": "Apache Log4j Core's XmlLayout, in versions up to and including 2.25.3, fails to sanitize characters forbidden by the XML 1.0 specification producing invalid XML output whenever a log message or MDC value contains such characters. The impact depends on the StAX implementation in use. JRE built-in StAX: forbidden characters are silently written to the output, producing malformed XML. Conforming parsers must reject such documents with a fatal error, which may cause downstream log-processing systems to drop the affected records. Alternative StAX implementations (e.g., Woodstox, a transitive dependency of the Jackson XML Dataformat module): an exception is thrown during the logging call, and the log event is never delivered to its intended appender, only to Log4j's internal status logger. Users are advised to upgrade to Apache Log4j Core 2.25.4, which corrects this issue by sanitizing forbidden characters before XML output.",
+      "recommendation": "No action required. No shipped component configures Log4j's XmlLayout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Malformed output and dropped events occur only through XmlLayout; no shipped Log4j configuration uses it. Apache rates this CVE 6.9 Medium under CVSS 4.0.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34480",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Log4j Core's XmlLayout did not strip characters forbidden by XML 1.0, so a log message or MDC value containing one produced malformed XML or, with a strict StAX implementation such as Woodstox, an exception that dropped the event; affects every version up to 2.25.3 and is fixed in 2.25.4. It matters only when a Log4j configuration uses XmlLayout. Docker images 5.0.0 through 5.0.3 have no standalone log4j-core. The Databricks JDBC driver inside liquibase-commercial-databricks.jar bundles a copy relocated to com.databricks.client.jdbc42.internal.apache.logging.log4j, whose class set matches 2.20.0, in range, and the jar carries no Log4j configuration file. From 5.1.0 that copy is gone, and log4j-core is bundled unrelocated in the liquibase-checks extension for the Phileas library: 2.25.3 in 5.1.0 and 5.1.1, in range, then the fixed 2.25.4 in 5.2.0 and 2.26.1 in 5.2.1 through 6.0.0. The build strips Phileas's log4j2.xml, a single Console appender with a PatternLayout, from that jar, so log4j-core runs with its built-in default configuration, which writes only to the console. The license-tracking application archived under /liquibase/dist carries only log4j-api with the log4j-to-slf4j bridge and logs through logback. No shipped jar contains a Log4j configuration that declares XmlLayout, a source review found no programmatic Log4j configuration in this repository, and Liquibase's own logging does not use Log4j.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.0-alpha1|<2.25.4|>=3.0.0-alpha1|<=3.0.0-beta3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43514",
+      "description": "Observable Timing Discrepancy vulnerability when comparing AJP secret in Apache Tomcat. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Older unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118 which fix the issue.",
+      "recommendation": "No action required. No shipped component configures a Tomcat AJP connector.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The timing discrepancy exists only in AJP secret comparison; no shipped component configures an AJP connector, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9m89-8frq-c98c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43514",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Non-constant-time comparison of the AJP connector secret, a timing side channel that lets an attacker on the local network recover the secret; fixed in Tomcat 11.0.22, 10.1.55 and 9.0.118. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs an AJP connector configured with a secret. Spring Boot exposes no property that enables AJP and starts only an HTTP connector; an AJP connector must be added in code through a web server factory customizer. The application sets no server properties, and none of its classes references the Tomcat API, a connector or a web server factory customizer. A source review found no AJP connector configuration anywhere in this repository.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/<9.0.118|>=10.1.0-M1|<10.1.55|>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-59890",
+      "description": "setuptools is a package that allows users to download, build, install, upgrade, and uninstall Python packages. Prior to 83.0.0, FileList applied MANIFEST.in exclude, global-exclude, recursive-exclude, and prune directives by matching compiled glob patterns against on-disk file names without Unicode normalization, so on macOS APFS or HFS+ an NFD file name could bypass an NFC exclusion rule and be packed into a source distribution. This issue is fixed in version 83.0.0.",
+      "recommendation": "No action required. Liquibase Secure never runs setuptools at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The embedded setuptools copy is never executed by Liquibase, so the source distribution build the flaw requires never occurs.\n"
+        }
+      ],
+      "cwes": [
+        176,
+        697
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h35f-9h28-mq5c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59890",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "setuptools ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or setuptools. In Docker images 5.0.0 through 5.1.1, setuptools 65.5.0 is installed in the embedded virtual environment, and its 65.5.0 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips setuptools from the virtual environment, but the ensurepip wheel stays in 5.2.0 through 5.2.2, at META-INF/resources/libpython/ensurepip/_bundled; 6.0.0 ships no setuptools at all. Every copy is in range. Liquibase never runs setuptools or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports setuptools or builds packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs setuptools to build a source distribution whose MANIFEST.in exclusions are matched against file names on a normalization-preserving filesystem such as macOS APFS or HFS+, which never happens, and the Docker images run on Linux.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools",
+          "versions": [
+            {
+              "range": "vers:pypi/<83.0.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-48989",
       "analysis": {
         "state": "not_affected",
@@ -33266,6 +33788,665 @@
       ]
     },
     {
+      "id": "CVE-2026-6357",
+      "description": "pip prior to version 26.1 would run self-update check functionality after installing wheel files which required importing well-known Python modules names. These module imports were intentionally deferred to increase startup time of the pip CLI. The patch changes self-update functionality to run before wheels are installed to prevent newly-installed modules from being imported shortly after the installation of a wheel package. Users should still review package contents prior to installation.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Python Software Foundation"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:A/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:A/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the wheel installation and self-update check the flaw requires never occur.\n"
+        }
+      ],
+      "cwes": [
+        829
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jp4c-xjxw-mgf9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6357",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a wheel and then run its self-update check, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8643",
+      "description": "pip would treat console_scripts and gui_scripts as paths instead of file names without sanitizing the resolved absolute path to the installation directory, leading to entry points being installed outside the installation directory.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the package installation the flaw requires never occurs.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wf93-45jw-7689",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8643",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package whose console_scripts or gui_scripts entry points carry path-traversal names, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-9820",
+      "description": "A flaw was found in the GnuTLS library, specifically in the gnutls_pkcs11_token_init() function that handles PKCS#11 token initialization. When a token label longer than expected is processed, the function writes past the end of a fixed-size stack buffer. This programming error can cause the application using GnuTLS to crash or, in certain conditions, be exploited for code execution. As a result, systems or applications relying on GnuTLS may be vulnerable to a denial of service or local privilege escalation attacks.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or initialize PKCS#11 tokens at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a caller to initialize a PKCS#11 token through GnuTLS. No process in the Liquibase Secure image does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-337w-h8w7-m899",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-9820",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2025-11-18",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2025-11-18"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8043-1",
+          "title": "Ubuntu Security Notice USN-8043-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-9820",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS stack buffer overflow in gnutls_pkcs11_token_init(), reached only when an application initializes a PKCS#11 token with a label longer than 32 characters; GnuTLS rates it low and fixed it in 3.8.11. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, none of them initializes PKCS#11 tokens, and the image ships no gnutls-bin. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30",
+          "versions": [
+            {
+              "range": "vers:deb/<3.7.3-4ubuntu1.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-9820",
+      "description": "A flaw was found in the GnuTLS library, specifically in the gnutls_pkcs11_token_init() function that handles PKCS#11 token initialization. When a token label longer than expected is processed, the function writes past the end of a fixed-size stack buffer. This programming error can cause the application using GnuTLS to crash or, in certain conditions, be exploited for code execution. As a result, systems or applications relying on GnuTLS may be vulnerable to a denial of service or local privilege escalation attacks.",
+      "recommendation": "No action required. Liquibase Secure does not use GnuTLS or initialize PKCS#11 tokens at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a caller to initialize a PKCS#11 token through GnuTLS. No process in the Liquibase Secure image does this, and the Liquibase runtime does not load GnuTLS.\n"
+        }
+      ],
+      "cwes": [
+        121
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-337w-h8w7-m899",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-9820",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.gnutls.org/security-new.html#GNUTLS-SA-2025-11-18",
+          "title": "GnuTLS Security Advisory GNUTLS-SA-2025-11-18"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8043-1",
+          "title": "Ubuntu Security Notice USN-8043-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-9820",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "GnuTLS stack buffer overflow in gnutls_pkcs11_token_init(), reached only when an application initializes a PKCS#11 token with a label longer than 32 characters; GnuTLS rates it low and fixed it in 3.8.11. Liquibase Secure inherits libgnutls30t64 from the Ubuntu 24.04 base image of the 5.0.2 and later images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, none of them initializes PKCS#11 tokens, and the image ships no gnutls-bin. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 24.04 as 3.8.3-1.1ubuntu3.5 (USN-8043-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 3.8.3-1.1ubuntu3.4; 5.1.1 and 5.2.0 carry 3.8.3-1.1ubuntu3.5, and 5.2.1 and later carry 3.8.3-1.1ubuntu3.6.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libgnutls30t64",
+          "versions": [
+            {
+              "range": "vers:deb/<3.8.3-1.1ubuntu3.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0964",
+      "description": "A malicious SCP server can send unexpected paths that could make the client application override local files outside of working directory. This could be misused to create malicious executable or configuration files and make the user execute them under specific consequences. This is the same issue as in OpenSSH, tracked as CVE-2019-6111.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session or performs SCP transfers, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9p3w-rm2q-9gxc",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0964",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/CVE-2026-0964.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-0964",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw needs a libssh client to download files over SCP from a malicious server, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0965",
+      "description": "A flaw was found in libssh where it can attempt to open arbitrary files during configuration parsing. A local attacker can exploit this by providing a malicious configuration file or when the system is misconfigured. This vulnerability could lead to a Denial of Service (DoS) by causing the system to try and access dangerous files, such as block devices or large system files, which can disrupt normal operations.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv3",
+          "vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv3",
+          "vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session, so libssh never parses a configuration file.\n"
+        }
+      ],
+      "cwes": [
+        73
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-q35q-xwh9-8pgw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0965",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/CVE-2026-0965.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-0965",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw is in libssh configuration-file parsing, which only runs when a libssh session is set up, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0966",
+      "description": "A flaw was found in libssh. The API function ssh_get_hexa() is vulnerable to a denial of service when processing zero-length input. This can be exploited remotely by an attacker during GSSAPI (Generic Security Service Application Program Interface) authentication if the server's logging verbosity is set to SSH_LOG_PACKET (3) or higher. Successful exploitation could lead to a self-Denial of Service of the per-connection daemon process.",
+      "recommendation": "No action required. Liquibase Secure does not run an SSH server or open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a libssh-based SSH server. Nothing in the Liquibase Secure image runs one, and no process opens a libssh session.\n"
+        }
+      ],
+      "cwes": [
+        124
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wcqf-w94x-4wg2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0966",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/CVE-2026-0966.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-0966",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The remote trigger needs a libssh-based SSH server performing GSSAPI authentication with packet-level logging enabled, and the local one needs a caller to pass zero-length input to ssh_get_hexa() or ssh_get_fingerprint_hash(). Nothing in the image runs an SSH server or calls libssh, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0967",
+      "description": "A flaw was found in libssh. A remote attacker, by controlling client configuration files or known_hosts files, could craft specific hostnames that when processed by the match_pattern() function can lead to inefficient regular expression backtracking. This can cause timeouts and resource exhaustion, resulting in a Denial of Service (DoS) for the client.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6jpg-fr24-wpvf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0967",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/CVE-2026-0967.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-0967",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The vulnerable match_pattern() function only runs when a libssh client matches hostnames from its configuration or known_hosts files, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-0968",
+      "description": "A flaw was found in libssh in which a malicious SFTP (SSH File Transfer Protocol) server can exploit this by sending a malformed 'longname' field within an SSH_FXP_NAME message during a file listing operation. This missing null check can lead to reading beyond allocated memory on the heap. This can cause unexpected behavior or lead to a denial of service (DoS) due to application crashes.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh SFTP session, so the vulnerable code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6w3m-r3qq-cr2h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-0968",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.libssh.org/security/advisories/CVE-2026-0968.txt",
+          "title": "libssh Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-0968",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw needs a libssh SFTP client to list a directory on a malicious server, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-21925",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: RMI). Supported versions that are affected are Oracle Java SE: 8u471, 8u471-b50, 8u471-perf, 11.0.29, 17.0.17, 21.0.9, 25.0.1; Oracle GraalVM for JDK: 17.0.17 and 21.0.9; Oracle GraalVM Enterprise Edition: 21.3.16. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data as well as unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
+      "recommendation": "No action required for Liquibase Secure 5.1.0 and later, which ship a fixed JRE. Earlier releases never use Java RMI. Upgrading to 5.1.0 or later removes the reliance on that condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 4.8,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure exports no RMI object and makes no RMI call, so the vulnerable component is never reached, and 5.1.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jhg6-g5fp-536p",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-21925",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujan2026.html",
+          "title": "Oracle Critical Patch Update Advisory - January 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-01-20",
+          "title": "OpenJDK Vulnerability Advisory 2026-01-20"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE RMI component issue from the January 2026 Critical Patch Update, fixed in OpenJDK 21.0.10. The scan reported Temurin 21.0.8. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, both in range, and 21.0.10 or later from 5.1.0 onward, so 5.1.0 and later already carry the fix. For the earlier images, exploitation needs the JVM to export or call RMI objects over the network. Liquibase Secure runs as a short-lived outbound command-line client: it exports no RMI object, starts no RMI registry and enables no remote JMX, and a source review found no use of the java.rmi or javax.management.remote APIs in Liquibase Secure. The container runs no sandboxed Java Web Start or applet runtime either, so no attacker-supplied data reaches the RMI component.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.10",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-52520",
       "analysis": {
         "state": "not_affected",
@@ -33276,6 +34457,68 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-21933",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE: 8u471, 8u471-b50, 8u471-perf, 11.0.29, 17.0.17, 21.0.9, 25.0.1; Oracle GraalVM for JDK: 17.0.17 and 21.0.9; Oracle GraalVM Enterprise Edition: 21.3.16. Easily exploitable vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks require human interaction from a person other than the attacker and while the vulnerability is in Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition, attacks may significantly impact additional products (scope change). Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data as well as unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data.",
+      "recommendation": "No action required for Liquibase Secure 5.1.0 and later, which ship a fixed JRE. Earlier releases are not exposed in their intended command-line use. Upgrading to 5.1.0 or later removes the reliance on that deployment condition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "Exploitation needs user interaction with a sandboxed Java client or a service that feeds untrusted data to the Networking APIs. Neither matches the Liquibase Secure container deployment, and 5.1.0 and later ship the fixed JRE.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5rm3-299f-6m9v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-21933",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpujan2026.html",
+          "title": "Oracle Critical Patch Update Advisory - January 2026"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-01-20",
+          "title": "OpenJDK Vulnerability Advisory 2026-01-20"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Networking component issue from the January 2026 Critical Patch Update, fixed in OpenJDK 21.0.10. The scan reported Temurin 21.0.8. The JRE in each published Liquibase Secure image is 21.0.8 in 5.0.0 and 5.0.1, 21.0.9 in 5.0.2 and 5.0.3, both in range, and 21.0.10 or later from 5.1.0 onward, so 5.1.0 and later already carry the fix. For the earlier images, exploitation needs a person other than the attacker to interact with a Java runtime that processes attacker-controlled data, typically a sandboxed Java Web Start or applet client running untrusted code, or a web service that passes untrusted data to the Networking APIs. Liquibase Secure runs as a non-interactive outbound command-line client that connects only to the database, secret store and HTTPS endpoints the operator configures. It runs no sandboxed client runtime and exposes no network service, so the required environment is absent.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.10",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },

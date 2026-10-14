@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-f106688b6ac9bd980774208b3aa004cccaf0ca5564c31c1745afcaf43c2b6149",
+  "@id": "merged-vex-1ba89a2ca125464d9515344e5b3c3caa4f6a13c774f4020d9c8c353309b363ac",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T22:15:45.467822368Z",
+  "timestamp": "2026-10-14T13:37:36.012890438Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "PYSEC-2023-228"
         ]
       },
-      "timestamp": "2026-10-13T22:15:45.311827009Z",
+      "timestamp": "2026-10-14T13:37:35.725833399Z",
       "products": [
         {
           "@id": "pkg:pypi/pip"
@@ -32,7 +32,7 @@
           "PYSEC-2026-1795"
         ]
       },
-      "timestamp": "2026-10-13T22:15:45.346964624Z",
+      "timestamp": "2026-10-14T13:37:35.770571664Z",
       "products": [
         {
           "@id": "pkg:pypi/pip"
@@ -51,7 +51,7 @@
           "PYSEC-2026-3721"
         ]
       },
-      "timestamp": "2026-10-13T22:15:45.382419997Z",
+      "timestamp": "2026-10-14T13:37:35.815989948Z",
       "products": [
         {
           "@id": "pkg:pypi/pip"
@@ -70,7 +70,7 @@
           "PYSEC-2026-1796"
         ]
       },
-      "timestamp": "2026-10-13T22:15:45.417967781Z",
+      "timestamp": "2026-10-14T13:37:35.8605397Z",
       "products": [
         {
           "@id": "pkg:pypi/pip"
@@ -89,7 +89,7 @@
           "PYSEC-2026-2875"
         ]
       },
-      "timestamp": "2026-10-13T22:15:45.452694691Z",
+      "timestamp": "2026-10-14T13:37:35.906645519Z",
       "products": [
         {
           "@id": "pkg:pypi/pip"
@@ -99,6 +99,44 @@
       "status_notes": "pip handles concatenated tar and ZIP files as ZIP files regardless of filename or whether a file is both a tar and ZIP file. This behavior could result in confusing installation behavior, such as installing \"incorrect\" files according to the filename of the archive. New behavior only proceeds with installation if the file identifies uniquely as a ZIP or tar archive, not as both.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0, at META-INF/resources/libpython/ensurepip/_bundled. Every copy, including the 24.3.1 wheel in 6.0.0, is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package from an archive that is both a valid tar and a valid ZIP file, which never happens."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-6357",
+        "aliases": [
+          "GHSA-jp4c-xjxw-mgf9",
+          "PYSEC-2026-2876"
+        ]
+      },
+      "timestamp": "2026-10-14T13:37:35.951056316Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "pip prior to version 26.1 would run self-update check functionality after installing wheel files which required importing well-known Python modules names. These module imports were intentionally deferred to increase startup time of the pip CLI. The patch changes self-update functionality to run before wheels are installed to prevent newly-installed modules from being imported shortly after the installation of a wheel package. Users should still review package contents prior to installation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a wheel and then run its self-update check, which never happens."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-8643",
+        "aliases": [
+          "GHSA-wf93-45jw-7689",
+          "PYSEC-2026-196"
+        ]
+      },
+      "timestamp": "2026-10-14T13:37:35.995081665Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/pip"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "pip would treat console_scripts and gui_scripts as paths instead of file names without sanitizing the resolved absolute path to the installation directory, leading to entry points being installed outside the installation directory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package whose console_scripts or gui_scripts entry points carry path-traversal names, which never happens."
     }
   ]
 }

@@ -1,15 +1,90 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-967bab1dede9f16e08f4bc72d15f40b26a3d09c6a7050e474b22757c0c64113e",
+  "@id": "merged-vex-417e48a0207145c91b6e156b99c53de43b93a6e6187ab0275785d135656fbd7d",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-13T22:15:28.230695528Z",
+  "timestamp": "2026-10-14T13:37:13.848759309Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-0964"
+      },
+      "timestamp": "2026-10-14T13:37:13.652690582Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A malicious SCP server can send unexpected paths that could make the client application override local files outside of working directory. This could be misused to create malicious executable or configuration files and make the user execute them under specific consequences. This is the same issue as in OpenSSH, tracked as CVE-2019-6111.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw needs a libssh client to download files over SCP from a malicious server, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0965"
+      },
+      "timestamp": "2026-10-14T13:37:13.697473884Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh where it can attempt to open arbitrary files during configuration parsing. A local attacker can exploit this by providing a malicious configuration file or when the system is misconfigured. This vulnerability could lead to a Denial of Service (DoS) by causing the system to try and access dangerous files, such as block devices or large system files, which can disrupt normal operations.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw is in libssh configuration-file parsing, which only runs when a libssh session is set up, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0966"
+      },
+      "timestamp": "2026-10-14T13:37:13.74091802Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. The API function ssh_get_hexa() is vulnerable to a denial of service when processing zero-length input. This can be exploited remotely by an attacker during GSSAPI (Generic Security Service Application Program Interface) authentication if the server's logging verbosity is set to SSH_LOG_PACKET (3) or higher. Successful exploitation could lead to a self-Denial of Service of the per-connection daemon process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The remote trigger needs a libssh-based SSH server performing GSSAPI authentication with packet-level logging enabled, and the local one needs a caller to pass zero-length input to ssh_get_hexa() or ssh_get_fingerprint_hash(). Nothing in the image runs an SSH server or calls libssh, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0967"
+      },
+      "timestamp": "2026-10-14T13:37:13.786361406Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh. A remote attacker, by controlling client configuration files or known_hosts files, could craft specific hostnames that when processed by the match_pattern() function can lead to inefficient regular expression backtracking. This can cause timeouts and resource exhaustion, resulting in a Denial of Service (DoS) for the client.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The vulnerable match_pattern() function only runs when a libssh client matches hostnames from its configuration or known_hosts files, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-0968"
+      },
+      "timestamp": "2026-10-14T13:37:13.831628966Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libssh-4"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libssh in which a malicious SFTP (SSH File Transfer Protocol) server can exploit this by sending a malformed 'longname' field within an SSH_FXP_NAME message during a file listing operation. This missing null check can lead to reading beyond allocated memory on the heap. This can cause unexpected behavior or lead to a denial of service (DoS) due to application crashes.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The flaw needs a libssh SFTP client to list a directory on a malicious server, so it is not reachable from Liquibase Secure. Upstream fixed it in libssh 0.11.4 and 0.12.0. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-3731"
       },
-      "timestamp": "2026-10-13T22:15:28.216557057Z",
+      "timestamp": "2026-10-14T13:37:13.607419825Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -24,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-59843"
       },
-      "timestamp": "2026-10-13T22:15:28.008350001Z",
+      "timestamp": "2026-10-14T13:37:13.339904008Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -39,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-59845"
       },
-      "timestamp": "2026-10-13T22:15:28.042915033Z",
+      "timestamp": "2026-10-14T13:37:13.385569717Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -54,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-59846"
       },
-      "timestamp": "2026-10-13T22:15:28.078303016Z",
+      "timestamp": "2026-10-14T13:37:13.429940038Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -69,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-59847"
       },
-      "timestamp": "2026-10-13T22:15:28.114076811Z",
+      "timestamp": "2026-10-14T13:37:13.473793792Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -84,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-59848"
       },
-      "timestamp": "2026-10-13T22:15:28.147769733Z",
+      "timestamp": "2026-10-14T13:37:13.519923483Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"
@@ -99,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-59850"
       },
-      "timestamp": "2026-10-13T22:15:28.181789353Z",
+      "timestamp": "2026-10-14T13:37:13.563420509Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libssh-4"

@@ -67,6 +67,129 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-34478",
+      "description": "Apache Log4j Core's Rfc5424Layout, in versions 2.21.0 through 2.25.3, is vulnerable to log injection via CRLF sequences due to undocumented renames of security-relevant configuration attributes. Two distinct issues affect users of stream-based syslog services who configure Rfc5424Layout directly: the newLineEscape attribute was silently renamed, causing newline escaping to stop working for users of TCP framing (RFC 6587), exposing them to CRLF injection in log output; and the useTlsMessageFormat attribute was silently renamed, causing users of TLS framing (RFC 5425) to be silently downgraded to unframed TCP (RFC 6587), without newline escaping. Users of the SyslogAppender are not affected, as its configuration attributes were not modified. Users are advised to upgrade to Apache Log4j Core 2.25.4, which corrects this issue.",
+      "recommendation": "No action required. No shipped component configures Log4j's Rfc5424Layout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The injection occurs only through a directly configured Rfc5424Layout; no shipped Log4j configuration uses it. Apache rates this CVE 6.9 Medium under CVSS 4.0.\n"
+        }
+      ],
+      "cwes": [
+        117,
+        684
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-445c-vh5m-36rj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34478",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "CRLF log injection in Log4j Core's Rfc5424Layout: the newLineEscape and useTlsMessageFormat attributes were silently renamed in 2.21.0, so newline escaping and TLS framing stopped working for a directly configured Rfc5424Layout; affects 2.21.0 through 2.25.3 and is fixed in 2.25.4. It matters only when a Log4j configuration declares Rfc5424Layout directly and sends it to a stream-based syslog service; SyslogAppender users are not affected. Docker images 5.0.0 through 5.0.3 have no standalone log4j-core. The Databricks JDBC driver inside liquibase-commercial-databricks.jar bundles a copy relocated to com.databricks.client.jdbc42.internal.apache.logging.log4j, whose class set matches 2.20.0, below the 2.21.0 rename that introduced the flaw, and the jar carries no Log4j configuration file. From 5.1.0 that copy is gone, and log4j-core is bundled unrelocated in the liquibase-checks extension for the Phileas library: 2.25.3 in 5.1.0 and 5.1.1, in range, then the fixed 2.25.4 in 5.2.0 and 2.26.1 in 5.2.1 through 6.0.0. The build strips Phileas's log4j2.xml, a single Console appender with a PatternLayout, from that jar, so log4j-core runs with its built-in default configuration, which writes only to the console. The license-tracking application archived under /liquibase/dist carries only log4j-api with the log4j-to-slf4j bridge and logs through logback. No shipped jar contains a Log4j configuration that declares Rfc5424Layout or a syslog appender, a source review found no programmatic Log4j configuration in this repository, and Liquibase's own logging does not use Log4j.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.21.0|<2.25.4|>=3.0.0-beta1|<=3.0.0-beta3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-34480",
+      "description": "Apache Log4j Core's XmlLayout, in versions up to and including 2.25.3, fails to sanitize characters forbidden by the XML 1.0 specification producing invalid XML output whenever a log message or MDC value contains such characters. The impact depends on the StAX implementation in use. JRE built-in StAX: forbidden characters are silently written to the output, producing malformed XML. Conforming parsers must reject such documents with a fatal error, which may cause downstream log-processing systems to drop the affected records. Alternative StAX implementations (e.g., Woodstox, a transitive dependency of the Jackson XML Dataformat module): an exception is thrown during the logging call, and the log event is never delivered to its intended appender, only to Log4j's internal status logger. Users are advised to upgrade to Apache Log4j Core 2.25.4, which corrects this issue by sanitizing forbidden characters before XML output.",
+      "recommendation": "No action required. No shipped component configures Log4j's XmlLayout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Malformed output and dropped events occur only through XmlLayout; no shipped Log4j configuration uses it. Apache rates this CVE 6.9 Medium under CVSS 4.0.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3pxv-7cmr-fjr4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34480",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Log4j Core's XmlLayout did not strip characters forbidden by XML 1.0, so a log message or MDC value containing one produced malformed XML or, with a strict StAX implementation such as Woodstox, an exception that dropped the event; affects every version up to 2.25.3 and is fixed in 2.25.4. It matters only when a Log4j configuration uses XmlLayout. Docker images 5.0.0 through 5.0.3 have no standalone log4j-core. The Databricks JDBC driver inside liquibase-commercial-databricks.jar bundles a copy relocated to com.databricks.client.jdbc42.internal.apache.logging.log4j, whose class set matches 2.20.0, in range, and the jar carries no Log4j configuration file. From 5.1.0 that copy is gone, and log4j-core is bundled unrelocated in the liquibase-checks extension for the Phileas library: 2.25.3 in 5.1.0 and 5.1.1, in range, then the fixed 2.25.4 in 5.2.0 and 2.26.1 in 5.2.1 through 6.0.0. The build strips Phileas's log4j2.xml, a single Console appender with a PatternLayout, from that jar, so log4j-core runs with its built-in default configuration, which writes only to the console. The license-tracking application archived under /liquibase/dist carries only log4j-api with the log4j-to-slf4j bridge and logs through logback. No shipped jar contains a Log4j configuration that declares XmlLayout, a source review found no programmatic Log4j configuration in this repository, and Liquibase's own logging does not use Log4j.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.0-alpha1|<2.25.4|>=3.0.0-alpha1|<=3.0.0-beta3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

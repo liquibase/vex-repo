@@ -287,6 +287,120 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-6357",
+      "description": "pip prior to version 26.1 would run self-update check functionality after installing wheel files which required importing well-known Python modules names. These module imports were intentionally deferred to increase startup time of the pip CLI. The patch changes self-update functionality to run before wheels are installed to prevent newly-installed modules from being imported shortly after the installation of a wheel package. Users should still review package contents prior to installation.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Python Software Foundation"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:A/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:A/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the wheel installation and self-update check the flaw requires never occur.\n"
+        }
+      ],
+      "cwes": [
+        829
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jp4c-xjxw-mgf9",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6357",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a wheel and then run its self-update check, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-8643",
+      "description": "pip would treat console_scripts and gui_scripts as paths instead of file names without sanitizing the resolved absolute path to the installation directory, leading to entry points being installed outside the installation directory.",
+      "recommendation": "No action required. Liquibase Secure never runs pip at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The embedded pip copies are never executed by Liquibase, so the package installation the flaw requires never occurs.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wf93-45jw-7689",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8643",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "pip ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or pip. In Docker images 5.0.0 through 5.1.1, pip 23.2.1 is installed in the embedded virtual environment, and its 23.2.1 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips pip from the virtual environment, but the ensurepip wheel stays: pip 23.2.1 in 5.2.0 through 5.2.2 and pip 24.3.1 in 6.0.0. Every copy is in range. Liquibase never runs pip or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports pip or installs packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs pip to install a package whose console_scripts or gui_scripts entry points carry path-traversal names, which never happens.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip",
+          "versions": [
+            {
+              "range": "vers:pypi/<26.1.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
