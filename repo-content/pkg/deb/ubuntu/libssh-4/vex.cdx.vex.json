@@ -255,6 +255,128 @@
       ]
     },
     {
+      "id": "CVE-2025-8277",
+      "description": "A flaw was found in libssh's handling of key exchange (KEX) processes when a client repeatedly sends incorrect KEX guesses. The library fails to free memory during these rekey operations, which can gradually exhaust system memory. This issue can lead to crashes on the client side, particularly when using libgcrypt, which impacts application stability and availability.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Red Hat"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session, so the leaking key exchange code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        401
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-39mw-228p-wr6v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-8277",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8051-1",
+          "title": "Ubuntu Security Notice USN-8051-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-8277",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The image entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The memory leak is in libssh's key exchange and rekey handling, which runs only inside an open libssh session, so it is not reachable from Liquibase Secure. Ubuntu fixed the issue in 0.9.6-2ubuntu0.22.04.6 (jammy) and 0.10.6-2ubuntu0.3 (noble) (USN-8051-1). Docker images 5.0.0 and 5.0.1 (jammy, 0.9.6-2ubuntu0.22.04.4) and 5.0.2 through 5.1.0 (noble, 0.10.6-2ubuntu0.2) carry unfixed builds; 5.1.1 through 5.2.1 carry 0.10.6-2ubuntu0.4, and 5.2.2 and 6.0.0 carry 0.10.6-2ubuntu0.5.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.6|>=0.10|<0.10.6-2ubuntu0.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-8114",
+      "description": "A flaw was found in libssh, a library that implements the SSH protocol. When calculating the session ID during the key exchange (KEX) process, an allocation failure in cryptographic functions may lead to a NULL pointer dereference. This issue can cause the client or server to crash.",
+      "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.7,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the Liquibase Secure runtime path opens a libssh session, so the key-exchange code is never reached.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-8114",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-8114",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libssh-4 is present only as a dependency of libcurl, which links it for scp and sftp URL support. The image ships no ssh, scp or sftp client, nothing in the runtime path invokes curl, and the JRE does not link libssh, so no libssh session is ever opened by Liquibase Secure. The NULL pointer dereference happens while computing the session ID during an SSH key exchange, so it needs an active libssh session and is not reachable from Liquibase Secure. Fixed in Ubuntu libssh-4 0.9.6-2ubuntu0.22.04.5 (jammy) and 0.10.6-2ubuntu0.2 (noble). Docker images 5.0.0 and 5.0.1 carry the unfixed 0.9.6-2ubuntu0.22.04.4; the noble images 5.0.2 and later already carry 0.10.6-2ubuntu0.2 or newer.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libssh-4",
+          "versions": [
+            {
+              "range": "vers:deb/<0.9.6-2ubuntu0.22.04.5|>=0.10|<0.10.6-2ubuntu0.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-59846",
       "description": "A flaw was found in libssh. A malicious username expanded through %r in ProxyCommand handling can inject shell metacharacters, exposing environment variables and causing unintended shell behavior.",
       "recommendation": "No action required. Liquibase Secure does not open libssh sessions at runtime.",

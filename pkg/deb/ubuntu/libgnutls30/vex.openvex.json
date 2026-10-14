@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-cd1139518e687e901b245cc8a4c1db070bf532f7b933ed6ab2eefdf0b0aeff62",
+  "@id": "merged-vex-00b27137636b0bbb117f144ecf230539132c521687eb6f32f1b3f7065a08a204",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T13:37:09.560318001Z",
+  "timestamp": "2026-10-14T17:56:41.568649447Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-14831"
+      },
+      "timestamp": "2026-10-14T17:56:41.553542365Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in GnuTLS. This vulnerability allows a denial of service (DoS) by excessive CPU (Central Processing Unit) and memory consumption via specially crafted malicious certificates containing a large number of name constraints and subject alternative names (SANs).",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The denial of service needs a process that uses GnuTLS to verify an attacker-supplied X.509 certificate carrying a large number of name constraints and subject alternative names. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, and the image ships no gnutls-bin. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The Liquibase CLI runs on the JVM, which verifies certificates with its own Java TLS implementation and does not load GnuTLS, so no certificate presented to Liquibase reaches the GnuTLS verifier. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-9820"
       },
-      "timestamp": "2026-10-14T13:37:09.542437232Z",
+      "timestamp": "2026-10-14T17:56:41.516116943Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -24,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-14T13:37:09.005069381Z",
+      "timestamp": "2026-10-14T17:56:41.077458582Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-14T13:37:09.049786517Z",
+      "timestamp": "2026-10-14T17:56:41.114096938Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -54,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-14T13:37:09.093562465Z",
+      "timestamp": "2026-10-14T17:56:41.150509366Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -69,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-14T13:37:09.138123831Z",
+      "timestamp": "2026-10-14T17:56:41.187319761Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -84,7 +99,7 @@
       "vulnerability": {
         "name": "CVE-2026-42009"
       },
-      "timestamp": "2026-10-14T13:37:09.22873832Z",
+      "timestamp": "2026-10-14T17:56:41.260292004Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -99,7 +114,7 @@
       "vulnerability": {
         "name": "CVE-2026-42010"
       },
-      "timestamp": "2026-10-14T13:37:09.272528662Z",
+      "timestamp": "2026-10-14T17:56:41.296441655Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-42011"
       },
-      "timestamp": "2026-10-14T13:37:09.317286865Z",
+      "timestamp": "2026-10-14T17:56:41.3333037Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-42012"
       },
-      "timestamp": "2026-10-14T13:37:09.361172237Z",
+      "timestamp": "2026-10-14T17:56:41.369702063Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-42013"
       },
-      "timestamp": "2026-10-14T13:37:09.40638257Z",
+      "timestamp": "2026-10-14T17:56:41.405658739Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-42014"
       },
-      "timestamp": "2026-10-14T13:37:09.451405068Z",
+      "timestamp": "2026-10-14T17:56:41.442662439Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -174,7 +189,7 @@
       "vulnerability": {
         "name": "CVE-2026-42015"
       },
-      "timestamp": "2026-10-14T13:37:09.498157213Z",
+      "timestamp": "2026-10-14T17:56:41.479334665Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -189,7 +204,7 @@
       "vulnerability": {
         "name": "CVE-2026-5260"
       },
-      "timestamp": "2026-10-14T13:37:09.183614379Z",
+      "timestamp": "2026-10-14T17:56:41.223903281Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
