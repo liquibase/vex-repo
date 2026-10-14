@@ -35660,6 +35660,63 @@
       ]
     },
     {
+      "id": "CVE-2025-50181",
+      "description": "urllib3 is a user-friendly HTTP client library for Python. Prior to 2.5.0, it is possible to disable redirects for all requests by instantiating a PoolManager and specifying retries in a way that disable redirects. By default, requests and botocore users are not affected. An application attempting to mitigate SSRF or open redirect vulnerabilities by disabling redirects at the PoolManager level will remain vulnerable. This issue has been patched in version 2.5.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 and disables redirects through PoolManager retries, upgrade to Liquibase Secure 5.1.1 or later, which bundles a fixed urllib3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No shipped Python code uses the urllib3 HTTP client, so the redirect handling flaw is only reached by a customer-authored check script that sends requests through a PoolManager.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pq67-6m6q-mj2v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-50181",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw only matters to Python code that sends HTTP requests through a urllib3 PoolManager and relies on PoolManager-level retries to disable redirects, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/<2.5.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-55752",
       "analysis": {
         "state": "not_affected",
@@ -35670,6 +35727,613 @@
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-45803",
+      "description": "urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when an HTTP redirect response using status 301, 302, or 303 after the request had its method changed from one that could accept a request body (like POST) to GET as is required by HTTP RFCs. Both of the following conditions must be true to be affected by this vulnerability: 1. Using urllib3 and submitting sensitive information in the HTTP request body (such as form data or JSON) and 2. The origin service is compromised and starts redirecting using 301, 302, or 303 to a malicious peer or the redirected-to service becomes compromised. This issue has been addressed in versions 1.26.18 and 2.0.7.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that sends sensitive request bodies through urllib3, upgrade to Liquibase Secure 5.0.3 or later, which bundles a fixed urllib3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped Python code uses the urllib3 HTTP client, so the body leak on redirect is only reached by a customer-authored check script that sends request bodies through urllib3.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g4mx-q9vg-27p4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45803",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw needs Python code that sends sensitive data in an HTTP request body through urllib3 to a service that then redirects to a malicious peer, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/<1.26.18|>=2.0.0|<2.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-64505",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to version 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_do_quantize function when processing PNG files with malformed palette indices. The vulnerability occurs when palette_lookup array bounds are not validated against externally-supplied image data, allowing an attacker to craft a PNG file with out-of-range palette indices that trigger out-of-bounds memory access. This issue has been patched in version 1.6.51.",
+      "recommendation": "No action required. No program in the Liquibase Secure image asks the system libpng to quantize a PNG.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_set_quantize, so png_do_quantize is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-4952-h5wq-4m42",
+          "title": "libpng Security Advisory GHSA-4952-h5wq-4m42"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64505",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-64505",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The over-read is in png_do_quantize, which runs only when an application decoding a crafted PNG has asked libpng to quantize the image with png_set_quantize. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng. It uses the progressive read API (png_read_info, png_read_image) only to decode color bitmap glyphs, never calls png_set_quantize, and the image's only fonts are DejaVu TrueType fonts, which have no color bitmap glyphs. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.43-5ubuntu0.1 (noble). Docker images 5.0.2 and 5.0.3 carry the unfixed 1.6.43-5build1; 5.1.0 and 5.1.1 carry 1.6.43-5ubuntu0.5 and 5.2.0 and later carry 1.6.43-5ubuntu0.6. The 22.04 package, libpng16-16, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-64505",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to version 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_do_quantize function when processing PNG files with malformed palette indices. The vulnerability occurs when palette_lookup array bounds are not validated against externally-supplied image data, allowing an attacker to craft a PNG file with out-of-range palette indices that trigger out-of-bounds memory access. This issue has been patched in version 1.6.51.",
+      "recommendation": "No action required. No program in the Liquibase Secure image asks the system libpng to quantize a PNG.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, never calls png_set_quantize, so png_do_quantize is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-4952-h5wq-4m42",
+          "title": "libpng Security Advisory GHSA-4952-h5wq-4m42"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64505",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-64505",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The over-read is in png_do_quantize, which runs only when an application decoding a crafted PNG has asked libpng to quantize the image with png_set_quantize. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng. It uses the progressive read API (png_read_info, png_read_image) only to decode color bitmap glyphs, never calls png_set_quantize, and the image's only fonts are DejaVu TrueType fonts, which have no color bitmap glyphs. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.37-3ubuntu0.1 (jammy). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5. The 24.04 package, libpng16-16t64, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-64506",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From version 1.6.0 to before 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_write_image_8bit function when processing 8-bit images through the simplified write API with convert_to_8bit enabled. The vulnerability affects 8-bit grayscale+alpha, RGB/RGBA, and images with incomplete row data. A conditional guard incorrectly allows 8-bit input to enter code expecting 16-bit input, causing reads up to 2 bytes beyond allocated buffer boundaries. This issue has been patched in version 1.6.51.",
+      "recommendation": "No action required. No program in the Liquibase Secure image writes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, only reads PNG data and never calls the simplified write API, so png_write_image_8bit is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-qpr4-xm66-hww6",
+          "title": "libpng Security Advisory GHSA-qpr4-xm66-hww6"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64506",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-64506",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The over-read is in png_write_image_8bit, part of libpng's simplified write API (png_image_write_*), and runs only when an application encodes a PNG with convert_to_8bit enabled. libpng16-16t64 is an inherited base-image library in the Ubuntu 24.04 (noble) images used by Liquibase Secure 5.0.2 and later; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never encodes images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng, and it only reads PNG data, through the progressive read API, to decode color bitmap glyphs; it calls no libpng write function and no png_image_* function. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.43-5ubuntu0.1 (noble). Docker images 5.0.2 and 5.0.3 carry the unfixed 1.6.43-5build1; 5.1.0 and 5.1.1 carry 1.6.43-5ubuntu0.5 and 5.2.0 and later carry 1.6.43-5ubuntu0.6. The 22.04 package, libpng16-16, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16t64",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.43-5ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-64506",
+      "description": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From version 1.6.0 to before 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_write_image_8bit function when processing 8-bit images through the simplified write API with convert_to_8bit enabled. The vulnerability affects 8-bit grayscale+alpha, RGB/RGBA, and images with incomplete row data. A conditional guard incorrectly allows 8-bit input to enter code expecting 16-bit input, causing reads up to 2 bytes beyond allocated buffer boundaries. This issue has been patched in version 1.6.51.",
+      "recommendation": "No action required. No program in the Liquibase Secure image writes PNG data with the system libpng.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The only libpng user in the image, the system FreeType loaded through fontconfig, only reads PNG data and never calls the simplified write API, so png_write_image_8bit is never entered.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/pnggroup/libpng/security/advisories/GHSA-qpr4-xm66-hww6",
+          "title": "libpng Security Advisory GHSA-qpr4-xm66-hww6"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64506",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2025-64506",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The over-read is in png_write_image_8bit, part of libpng's simplified write API (png_image_write_*), and runs only when an application encodes a PNG with convert_to_8bit enabled. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never encodes images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng, and it only reads PNG data, through the progressive read API, to decode color bitmap glyphs; it calls no libpng write function and no png_image_* function. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.37-3ubuntu0.1 (jammy). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5. The 24.04 package, libpng16-16t64, is assessed separately.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpng16-16",
+          "versions": [
+            {
+              "range": "vers:deb/<1.6.37-3ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-66614",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat. Tomcat did not validate that the host name provided via the SNI extension was the same as the host name provided in the HTTP host header field. If Tomcat was configured with more than one virtual host and the TLS configuration for one of those hosts did not require client certificate authentication but another one did, it was possible for a client to bypass the client certificate authentication by sending different host names in the SNI extension and the HTTP host header field. The vulnerability only applies if client certificate authentication is only enforced at the Connector. This issue affects Apache Tomcat from 11.0.0-M1 through 11.0.14, from 10.1.0-M1 through 10.1.49, from 9.0.0-M1 through 9.0.112, and 8.5.0 through 8.5.100. Users are recommended to upgrade to version 11.0.15 or later, 10.1.50 or later or 9.0.113 or later, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures TLS virtual hosts with connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass needs multiple TLS virtual hosts with connector-level client certificate authentication; the only bundled Tomcat serves a single host over plain HTTP, and the Liquibase CLI never starts Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20,
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fpj8-gq4v-p354",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66614",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Client certificate authentication bypass through mismatched SNI and Host header names, fixed in Tomcat 11.0.15, 10.1.50 and 9.0.113. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2 and 10.1.48 in 5.0.3, both in range; 5.1.0 and later carry 11.0.15 or newer, which include the fix. The bypass needs a TLS connector serving more than one virtual host, with client certificate authentication required on the connector for one host but not another. The application sets no server properties, so its embedded Tomcat runs one default host over plain HTTP with no TLS connector and no client certificate authentication, and none of its classes references the Tomcat API or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<9.0.113|>=10.1.0-M1|<10.1.50|>=11.0.0-M1|<11.0.15",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-31650",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat. Incorrect error handling for some invalid HTTP priority headers resulted in incomplete clean-up of the failed request which created a memory leak. A large number of such requests could trigger an OutOfMemoryException resulting in a denial of service. This issue affects Apache Tomcat from 9.0.76 through 9.0.102, from 10.1.10 through 10.1.39, from 11.0.0-M2 through 11.0.5, and 8.5.90 through 8.5.100. Users are recommended to upgrade to version 9.0.104, 10.1.40 or 11.0.6 which fix the issue.",
+      "recommendation": "No action required. No shipped component enables HTTP/2 on Tomcat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The leak is in Tomcat's HTTP/2 priority handling; the only bundled Tomcat does not enable HTTP/2, and the Liquibase CLI never starts Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        459
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3p2h-wqq4-wf4h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-31650",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Memory leak on invalid HTTP priority headers, fixed in Tomcat 11.0.6, 10.1.40 and 9.0.104. The upstream fix changes only Tomcat's HTTP/2 implementation (org.apache.coyote.http2), so the leak is reachable only over HTTP/2. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 10.1.48 or newer, which include the fix. Spring Boot enables HTTP/2 only when server.http2.enabled is set; the application sets no server properties, and none of its classes references the Tomcat API or a web server factory customizer, so its connector speaks HTTP/1.1 only.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.90|<=8.5.100|>=9.0.76|<9.0.104|>=10.1.10|<10.1.40|>=11.0.0-M2|<11.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-1225",
+      "description": "ACE vulnerability in configuration file processing by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file. The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
+      "recommendation": "No action required. No shipped component reads a logback configuration file that an attacker could modify.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 1.8,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:H/UI:N/VC:L/VI:L/VA:L/SC:L/SI:L/SA:L/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:N/AU:N/R:X/V:X/RE:M/U:Green"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:H/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "Exploitation requires write access to a logback configuration file; no shipped component uses one.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qqpg-mvqg-649v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1225",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw lets an attacker who can already modify a logback configuration file instantiate classes from the class path, and is fixed in logback 1.5.25. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2 and 1.5.20 in 5.0.3, both in range; 5.1.0 and later carry 1.5.25 or newer. The application ships no logback configuration file, its start script passes no logging configuration, and it logs through Spring Boot's built-in default setup, so there is no configuration file to tamper with; exploitation needs an attacker who already has write access to the host to supply one. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.5.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-11226",
+      "description": "ACE vulnerability in conditional configuration file processing by QOS.CH logback-core up to and including version 1.5.18 in Java applications, allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution. A successful attack requires the presence of Janino library and Spring Framework to be present on the user's class path. In addition, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.",
+      "recommendation": "No action required. No shipped component uses a conditional logback configuration file or bundles Janino.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:N/VC:H/VI:H/VA:N/SC:L/SI:L/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:P/AU:N/R:X/V:X/RE:M/U:Green"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "Exploitation requires an attacker-controlled conditional logback configuration file and Janino on the class path; no shipped component has either, and planting them already requires host-level privilege.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-25qh-j22f-pwp8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-11226",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logback.qos.ch/news.html",
+          "title": "Logback News"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in logback's conditional (if/then/else) configuration processing and lets an attacker who can already modify a logback configuration file, or inject an environment variable pointing to one, execute code. Conditional processing needs the Janino library on the class path, and the flaw is fixed in logback 1.5.19 and 1.3.16. The in-range logback-core comes from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries logback 1.5.16 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 1.5.20 or newer. The application does not bundle Janino, ships no logback configuration file, and logs through Spring Boot's built-in default setup, which contains no conditional processing, so exploitation needs an attacker who already has write access to the host or its environment, and who also adds Janino to the application. The Liquibase CLI shipped no logback before 6.0.0, and 6.0.0 ships logback 1.6.3, outside the affected range.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/ch.qos.logback/logback-core",
+          "versions": [
+            {
+              "range": "vers:maven/<1.3.16|>=1.4.0|<1.5.19",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-22233",
+      "description": "CVE-2024-38820 ensured Locale-independent, lowercase conversion for both the configured disallowedFields patterns and for request parameter names. However, there are still cases where it is possible to bypass the disallowedFields checks. Affected Spring Framework versions: 6.2.0 - 6.2.6, 6.1.0 - 6.1.19, 6.0.0 - 6.0.27, 5.3.0 - 5.3.42, and older, unsupported versions. Users of affected versions should upgrade to 6.2.7, 6.1.20, 6.0.28 or 5.3.43.",
+      "recommendation": "No action required. No shipped component relies on DataBinder disallowedFields to filter request parameters.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass needs request-parameter data binding guarded by disallowedFields; the only bundled Spring application binds a JSON body only and declares no disallowedFields, and the Liquibase CLI ships no Spring Framework.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4wp7-92pw-q264",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-22233",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2025-22233",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is a bypass of DataBinder's disallowedFields check and only affects applications that bind request parameters onto objects and rely on disallowedFields to block some of them; it is fixed in Spring Framework 6.2.7, 6.1.20 and 5.3.43. The Liquibase CLI ships no Spring Framework: its Spring integration declares spring-context as a provided, optional dependency for applications that embed Liquibase. spring-context ships only inside the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries spring-context 6.2.2 in 5.0.0 to 5.0.2, in range; 5.0.3 carries 6.2.12 and 5.1.0 and later carry 7.0.x, which include the fix. Its only endpoint that takes input, LicenseTrackEndpoint, accepts a JSON request body, which Spring reads through its JSON message converter rather than DataBinder field binding; its health and report endpoints take no parameters. None of its classes declares an InitBinder method or calls setDisallowedFields, so no disallowedFields check exists to bypass.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-context",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.43|>=6.0.0|<6.0.28|>=6.1.0|<6.1.20|>=6.2.0|<6.2.7",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -35727,6 +36391,63 @@
           "versions": [
             {
               "range": "vers:maven/>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-30608",
+      "description": "sqlparse contains a regular expression vulnerable to ReDoS (Regular Expression Denial of Service), introduced in commit e75e358. Parsing a crafted SQL string makes the parser spend exponential time in the regular expression, so the calling process hangs. Fixed in sqlparse 0.4.4 by commit c457abd5f.",
+      "recommendation": "No action required for the default configuration. If you run a custom Python check on Liquibase Secure 5.0.0 through 5.0.2 that calls split_statements() or tokenize() from liquibase_utilities, or imports sqlparse itself, upgrade to 5.0.3 or later, which ships sqlparse 0.5.3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No bundled check calls sqlparse. Reaching the regular expression needs a customer-written check plus a changeset authored by the attacker, who at that point already controls the deployed DDL.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-rrm6-wvj7-cwh2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-30608",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in sqlparse 0.4.4. Liquibase Secure 5.0.0 through 5.0.2 ship sqlparse 0.4.3 inside the GraalPy virtual environment of the checks extension; 5.0.3 and later ship 0.5.3, and 6.0.0 ships 0.6.0, all outside the range. sqlparse is not run by any check Liquibase bundles, but the helper module liquibase_utilities.py shipped in 5.0.0 through 5.1.1 imports it and exposes split_statements() (sqlparse.split) and tokenize() (sqlparse.parse) to customer-authored Python checks; from 5.2.0 the helper no longer imports sqlparse. The vulnerable regular expression is therefore reachable only when a customer has written and configured a custom Python check that calls those helpers, or imports sqlparse itself, on changelog SQL. The SQL it parses is the changelog the operator is deploying, so an attacker would need to author a changeset in that changelog, which already grants them DDL on the target; the impact of the ReDoS is a hung checks run on the operator's own host.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "range": "vers:pypi/>=0.1.15|<0.4.4",
               "status": "unaffected"
             }
           ]

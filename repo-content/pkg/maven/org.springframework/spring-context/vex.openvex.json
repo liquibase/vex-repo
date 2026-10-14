@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-ac1e830da240f1a95a7d83f7a6ee5042210d482ee1d7f149bb8ab25aa1439af6",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-14T19:12:54.381549978Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-22233",
+        "aliases": [
+          "GHSA-4wp7-92pw-q264"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:54.38155109Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-context"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "CVE-2024-38820 ensured Locale-independent, lowercase conversion for both the configured disallowedFields patterns and for request parameter names. However, there are still cases where it is possible to bypass the disallowedFields checks. Affected Spring Framework versions: 6.2.0 - 6.2.6, 6.1.0 - 6.1.19, 6.0.0 - 6.0.27, 5.3.0 - 5.3.42, and older, unsupported versions. Users of affected versions should upgrade to 6.2.7, 6.1.20, 6.0.28 or 5.3.43.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is a bypass of DataBinder's disallowedFields check and only affects applications that bind request parameters onto objects and rely on disallowedFields to block some of them; it is fixed in Spring Framework 6.2.7, 6.1.20 and 5.3.43. The Liquibase CLI ships no Spring Framework: its Spring integration declares spring-context as a provided, optional dependency for applications that embed Liquibase. spring-context ships only inside the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it. The application carries spring-context 6.2.2 in 5.0.0 to 5.0.2, in range; 5.0.3 carries 6.2.12 and 5.1.0 and later carry 7.0.x, which include the fix. Its only endpoint that takes input, LicenseTrackEndpoint, accepts a JSON request body, which Spring reads through its JSON message converter rather than DataBinder field binding; its health and report endpoints take no parameters. None of its classes declares an InitBinder method or calls setDisallowedFields, so no disallowedFields check exists to bypass."
+    }
+  ]
+}

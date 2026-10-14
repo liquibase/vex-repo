@@ -1,10 +1,48 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-731ae413a7e4f85c3cbeb9e4901eae21fd0b9c06a69d55a5fca0d47f82bc906f",
+  "@id": "merged-vex-7b4bba47e7300e4726b5a08c24689a0b65bcda539b8a79f554a6199050dc1da8",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T17:56:44.044665641Z",
+  "timestamp": "2026-10-14T19:12:31.562025033Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-64505",
+        "aliases": [
+          "A-463980379",
+          "ASB-A-463980379",
+          "GHSA-4952-h5wq-4m42"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:31.498371972Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpng16-16"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. Prior to version 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_do_quantize function when processing PNG files with malformed palette indices. The vulnerability occurs when palette_lookup array bounds are not validated against externally-supplied image data, allowing an attacker to craft a PNG file with out-of-range palette indices that trigger out-of-bounds memory access. This issue has been patched in version 1.6.51.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The over-read is in png_do_quantize, which runs only when an application decoding a crafted PNG has asked libpng to quantize the image with png_set_quantize. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never decodes untrusted images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng. It uses the progressive read API (png_read_info, png_read_image) only to decode color bitmap glyphs, never calls png_set_quantize, and the image's only fonts are DejaVu TrueType fonts, which have no color bitmap glyphs. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.37-3ubuntu0.1 (jammy). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5. The 24.04 package, libpng16-16t64, is assessed separately."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-64506",
+        "aliases": [
+          "GHSA-qpr4-xm66-hww6"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:31.543678347Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libpng16-16"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "LIBPNG is a reference library for use in applications that read, create, and manipulate PNG (Portable Network Graphics) raster image files. From version 1.6.0 to before 1.6.51, a heap buffer over-read vulnerability exists in libpng's png_write_image_8bit function when processing 8-bit images through the simplified write API with convert_to_8bit enabled. The vulnerability affects 8-bit grayscale+alpha, RGB/RGBA, and images with incomplete row data. A conditional guard incorrectly allows 8-bit input to enter code expecting 16-bit input, causing reads up to 2 bytes beyond allocated buffer boundaries. This issue has been patched in version 1.6.51.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The over-read is in png_write_image_8bit, part of libpng's simplified write API (png_image_write_*), and runs only when an application encodes a PNG with convert_to_8bit enabled. libpng16-16 is an inherited base-image library in the Ubuntu 22.04 (jammy) images used by Liquibase Secure 5.0.0 and 5.0.1; the only package that depends on it is libfreetype6. Liquibase is a headless command-line tool that never encodes images with the system libpng: the JDK's PNG codec in javax.imageio is pure Java, the JDK renders fonts with its own bundled FreeType, and libsplashscreen carries a statically linked libpng. The system libpng reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which pulls in the system FreeType, and with it libpng, to read font metadata. The system FreeType is the only library in the image that calls libpng, and it only reads PNG data, through the progressive read API, to decode color bitmap glyphs; it calls no libpng write function and no png_image_* function. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, and neither one calls libpng. Ubuntu fixed this in 1.6.37-3ubuntu0.1 (jammy). Docker images 5.0.0 and 5.0.1 carry the unfixed 1.6.37-3build5. The 24.04 package, libpng16-16t64, is assessed separately."
+    },
     {
       "vulnerability": {
         "name": "CVE-2025-64720",
@@ -14,7 +52,7 @@
           "GHSA-hfc7-ph9c-wcww"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.957183712Z",
+      "timestamp": "2026-10-14T19:12:31.359677758Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -34,7 +72,7 @@
           "GHSA-7wv6-48j4-hj3g"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.993345355Z",
+      "timestamp": "2026-10-14T19:12:31.406232747Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -52,7 +90,7 @@
           "GHSA-9mpm-9pxh-mg4f"
         ]
       },
-      "timestamp": "2026-10-14T17:56:44.030138014Z",
+      "timestamp": "2026-10-14T19:12:31.452697448Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -70,7 +108,7 @@
           "GHSA-mmq5-27w3-rxpp"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.808944672Z",
+      "timestamp": "2026-10-14T19:12:31.174812097Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -88,7 +126,7 @@
           "GHSA-vgjq-8cw5-ggw8"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.846432886Z",
+      "timestamp": "2026-10-14T19:12:31.22072371Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -106,7 +144,7 @@
           "GHSA-g8hp-mq4h-rqm3"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.883529803Z",
+      "timestamp": "2026-10-14T19:12:31.267734954Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -124,7 +162,7 @@
           "GHSA-m4pc-p4q3-4c7j"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.919916328Z",
+      "timestamp": "2026-10-14T19:12:31.314246079Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -144,7 +182,7 @@
           "GHSA-wjr5-c57x-95m2"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.694185661Z",
+      "timestamp": "2026-10-14T19:12:31.035059484Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -162,7 +200,7 @@
           "GHSA-6fr7-g8h7-v645"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.730536162Z",
+      "timestamp": "2026-10-14T19:12:31.080957468Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
@@ -180,7 +218,7 @@
           "GHSA-c4v6-gxrq-6g2x"
         ]
       },
-      "timestamp": "2026-10-14T17:56:43.772034625Z",
+      "timestamp": "2026-10-14T19:12:31.127752411Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libpng16-16"
