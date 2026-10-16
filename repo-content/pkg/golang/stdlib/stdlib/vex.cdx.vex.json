@@ -3208,6 +3208,136 @@
       ]
     },
     {
+      "id": "CVE-2026-39817",
+      "description": "The \"go tool pack\" subcommand (usually used only by the compiler as an internal tool with known-good inputs) does not sanitize output filenames. Extracting a malicious archive file with the \"pack\" subcommand can write files to arbitrary locations on the filesystem.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or its pack tool.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's pack tool, which is not present in the image. The only Go binary in the image is lpm.\n"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-qc64-m6c2-v4x7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39817",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4979",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the \"go tool pack\" command, which the Go vulnerability database (GO-2026-4979) lists against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0 and go1.25.8 in 5.1.1, all before the fix; 5.2.0 (go1.26.4) and later already carry it. govulncheck in source mode against the lpm sources of 5.0.0 and 5.1.1, with the matching toolchain pinned and GOOS=linux, does not report GO-2026-4979. The image does not install the Go toolchain: there is no go command and no pack tool, and the entrypoint never runs either one. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI. Fixed in Go 1.25.10 and 1.26.3.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0-0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-39819",
+      "description": "The \"go bug\" command writes to two files with predictable names in the system temporary directory (for example, \"/tmp\"). An attacker with access to the temporary directory can create a symlink in one of these names, causing \"go bug\" to overwrite the target of the symlink.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or the go command.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's go command, which is not present in the image. The only Go binary in the image is lpm.\n"
+        }
+      ],
+      "cwes": [
+        59
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5m4p-2gjx-p2g8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-39819",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-4978",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/qcCIEXso47M",
+          "title": "Go Security Announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in the \"go bug\" command, which writes predictable files under the system temporary directory; the Go vulnerability database (GO-2026-4978) lists it against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0 and go1.25.8 in 5.1.1, all before the fix; 5.2.0 (go1.26.4) and later already carry it. govulncheck in source mode against the lpm sources of 5.0.0 and 5.1.1, with the matching toolchain pinned and GOOS=linux, does not report GO-2026-4978. The image does not install the Go toolchain, so there is no go command and \"go bug\" cannot be run. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI. Fixed in Go 1.25.10 and 1.26.3.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.10|>=1.26.0-0|<1.26.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42501",
       "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
       "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",

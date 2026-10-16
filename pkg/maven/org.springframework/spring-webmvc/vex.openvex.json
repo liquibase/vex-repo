@@ -1,10 +1,100 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-86630ae7bde5bfdf58349dbe2f43893ca8373b120b0ba97fff90d6a430ab80bb",
+  "@id": "merged-vex-4b020f972fd5aa5909cc3cfe536ce537c7e243afae015a94eada42ae81b89a9c",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:56.520987383Z",
+  "timestamp": "2026-10-14T19:12:55.439735477Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22735",
+        "aliases": [
+          "GHSA-6hcq-hmm3-jj3c"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.37742981Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE). This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The stream corruption occurs only in an application that streams Server-Sent Events. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream or WebFlux usage: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so the SSE writing path is never executed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22737",
+        "aliases": [
+          "GHSA-4773-3jfm-qmx3"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.42151045Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Use of Java scripting engine enabled (e.g. JRuby, Jython) template views in Spring MVC and Spring WebFlux applications can result in disclosure of content from files outside the configured locations for script template views. This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The advisory requires an application that renders script template views (ScriptTemplateView) through a Java scripting engine such as JRuby or Jython. A source review of the application found no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so no script template view is configured."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22741",
+        "aliases": [
+          "GHSA-wg35-8jpf-2xv3"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.285511787Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to cache poisoning when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is configuring the resource chain support with caching enabled; the application adds support for encoded resources resolution; the resource cache must be empty when the attacker has access to the application. When all the conditions above are met, the attacker can send malicious requests and poison the resource cache with resources using the wrong encoding. This can cause a denial of service by breaking the front-end application for clients.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to configure the Spring resource chain with caching enabled and to add encoded resource resolution. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler or resource resolver. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-22745",
+        "aliases": [
+          "GHSA-6p4f-wcwh-5vvm"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.33239976Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Denial of Service attacks when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is serving static resources from the file system; the application is running on a Windows platform. When all the conditions above are met, the attacker can send malicious requests that are slow to resolve and that can keep HTTP connections in use. This can cause a Denial of Service on the application.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to serve static resources from the file system and to run on Windows. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler, so it serves nothing from the file system; Spring Boot's default static locations are classpath locations only. The Docker images run on Linux. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41841",
+        "aliases": [
+          "GHSA-mq64-j8f9-9gcj"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.143223464Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Information Disclosure attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs several resource handlers with different locations, at least one of which requires authentication, sharing one resource cache, so that a public resource resolved and cached first is served in place of a protected one with the same name. The application has no Spring Security or other authentication, so no resource is protected. It packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-41842",
@@ -12,7 +102,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.295656173Z",
+      "timestamp": "2026-10-14T19:12:54.87006681Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -25,12 +115,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41843",
+        "aliases": [
+          "GHSA-72pg-x5f8-j25j"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.190832434Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Path Traversal attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs static resources served from the file system with versioned resource support configured. The application serves nothing from the file system: it sets no spring.web.resources properties, so only Spring Boot's default classpath locations are mapped, and it packages no static resources there. None of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry, and Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-41844",
         "aliases": [
           "GHSA-h3qp-gqrc-q736"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.462424852Z",
+      "timestamp": "2026-10-14T19:12:55.052648936Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -48,7 +156,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.336461526Z",
+      "timestamp": "2026-10-14T19:12:54.916572591Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -66,7 +174,7 @@
           "GHSA-957g-f97v-vppc"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.503519559Z",
+      "timestamp": "2026-10-14T19:12:55.097331546Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -79,12 +187,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-41853",
+        "aliases": [
+          "GHSA-cjpg-rgq5-fr37"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:55.238464862Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring MVC and WebFlux applications are vulnerable to Multipart request smuggling attacks. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs an application that accepts multipart requests and sits behind a web application firewall or proxy that parses multipart bodies and makes security decisions on their content, so that a request the firewall reads as harmless is parsed differently by Spring. Spring Boot registers its standard multipart resolver by default and the application does not turn it off, but no handler accepts multipart content. Its only controllers are three @RestController classes: v1/track takes a JSON @RequestBody, and v1/report and v1/health are GET methods without parameters. None of its classes references MultipartFile, @RequestPart, @RequestParam, a MultipartResolver or the servlet request, and it sets no spring.servlet.multipart properties. Liquibase ships no firewall or proxy in front of it."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-47884",
         "aliases": [
           "GHSA-pc63-qcmh-9cmg"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.377926123Z",
+      "timestamp": "2026-10-14T19:12:54.96133662Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -102,7 +228,7 @@
           "GHSA-j9f9-w8pj-32f8"
         ]
       },
-      "timestamp": "2026-10-09T15:32:56.418323749Z",
+      "timestamp": "2026-10-14T19:12:55.007662488Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"

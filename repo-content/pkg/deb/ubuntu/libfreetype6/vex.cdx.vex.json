@@ -69,6 +69,74 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-23865",
+      "description": "An integer overflow in the tt_var_load_item_variation_store function of the Freetype library in versions 2.13.2 and 2.13.3 may allow for an out of bounds read operation when parsing HVAR/VVAR/MVAR tables in OpenType variable fonts. This issue is fixed in version 2.14.2.",
+      "recommendation": "No action required. No font in the Liquibase Secure image is a variable font.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Meta"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The system FreeType, loaded only through fontconfig, parses the variation tables only for variable fonts, and the image's only fonts are static TrueType fonts.\n"
+        }
+      ],
+      "cwes": [
+        125
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-878v-mxg6-vj8f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23865",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-23865",
+          "title": "Ubuntu Security Tracker"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2026/03/03/8",
+          "title": "FreeType 2.14.2 announcement"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The integer overflow is in FreeType's tt_var_load_item_variation_store and is reached only while FreeType parses the HVAR, VVAR or MVAR table of an OpenType variable font. libfreetype6 is an inherited base-image library. The JDK rasterises text with its own bundled FreeType, not this one. The system FreeType reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses the system FreeType to read the font files it lists, from the system font directories, owned by root, and from per-user font directories that only the account running Liquibase can write. The image's only installed fonts are the DejaVu TrueType fonts under /usr/share/fonts/truetype/dejavu, which are static fonts with no fvar, HVAR, VVAR or MVAR table. The fc-* tools that also link it are never run by the image. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 2.13.2+dfsg-1ubuntu0.1 (noble); the jammy package (2.11.1) does not contain the code. Docker images 5.0.2 through 5.1.0 carry the unfixed 2.13.2+dfsg-1build3; 5.1.1 and later carry 2.13.2+dfsg-1ubuntu0.1.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libfreetype6",
+          "versions": [
+            {
+              "range": "vers:deb/>=2.13.2|<2.13.2+dfsg-1ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -32,6 +32,120 @@
       ]
     },
     {
+      "id": "CVE-2025-50181",
+      "description": "urllib3 is a user-friendly HTTP client library for Python. Prior to 2.5.0, it is possible to disable redirects for all requests by instantiating a PoolManager and specifying retries in a way that disable redirects. By default, requests and botocore users are not affected. An application attempting to mitigate SSRF or open redirect vulnerabilities by disabling redirects at the PoolManager level will remain vulnerable. This issue has been patched in version 2.5.0.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 and disables redirects through PoolManager retries, upgrade to Liquibase Secure 5.1.1 or later, which bundles a fixed urllib3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "No shipped Python code uses the urllib3 HTTP client, so the redirect handling flaw is only reached by a customer-authored check script that sends requests through a PoolManager.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-pq67-6m6q-mj2v",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-50181",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw only matters to Python code that sends HTTP requests through a urllib3 PoolManager and relies on PoolManager-level retries to disable redirects, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/<2.5.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-45803",
+      "description": "urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when an HTTP redirect response using status 301, 302, or 303 after the request had its method changed from one that could accept a request body (like POST) to GET as is required by HTTP RFCs. Both of the following conditions must be true to be affected by this vulnerability: 1. Using urllib3 and submitting sensitive information in the HTTP request body (such as form data or JSON) and 2. The origin service is compromised and starts redirecting using 301, 302, or 303 to a malicious peer or the redirected-to service becomes compromised. This issue has been addressed in versions 1.26.18 and 2.0.7.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that sends sensitive request bodies through urllib3, upgrade to Liquibase Secure 5.0.3 or later, which bundles a fixed urllib3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 4.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped Python code uses the urllib3 HTTP client, so the body leak on redirect is only reached by a customer-authored check script that sends request bodies through urllib3.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-g4mx-q9vg-27p4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45803",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw needs Python code that sends sensitive data in an HTTP request body through urllib3 to a service that then redirects to a malicious peer, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/<1.26.18|>=2.0.0|<2.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-21441",
       "analysis": {
         "state": "not_affected",
@@ -265,6 +379,63 @@
           "versions": [
             {
               "range": "vers:pypi/>=1.10.3|<2.8.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-37891",
+      "description": "urllib3 is a user-friendly HTTP client library for Python. When using urllib3's proxy support with ProxyManager, the Proxy-Authorization header is only sent to the configured proxy, as expected. However, when sending HTTP requests without using urllib3's proxy support, it's possible to accidentally configure the Proxy-Authorization header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the Proxy-Authorization HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects. Exploitation requires setting the Proxy-Authorization header without using urllib3's built-in proxy support, not disabling HTTP redirects, and either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin. Users are advised to update to either version 1.26.19 or version 2.2.2.",
+      "recommendation": "No action required for the default configuration. If you author a custom check script that uses urllib3 and sets a Proxy-Authorization header by hand, upgrade to Liquibase Secure 5.1.1 or later, which bundles a fixed urllib3.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No shipped Python code uses the urllib3 HTTP client, so the redirect path that forwards the Proxy-Authorization header is only reached by a customer-authored check script that sets that header by hand.\n"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-34jh-p97f-mpxf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37891",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The header leak is only reached when Python code sets a Proxy-Authorization header by hand without urllib3's ProxyManager and follows a cross-origin redirect, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3",
+          "versions": [
+            {
+              "range": "vers:pypi/<1.26.19|>=2.0.0|<2.2.2",
               "status": "unaffected"
             }
           ]

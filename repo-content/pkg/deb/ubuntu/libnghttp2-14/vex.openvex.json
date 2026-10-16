@@ -1,15 +1,33 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-7b674ac2f2b5fc983b3f4c61914abc38efb7458bc9f8205c6be40caca6b2c6f7",
+  "@id": "merged-vex-732b33b3ea79f8a617ed2f72837e8c7bcc4ab850eb152c6030d417d35ec4b589",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:36.408509195Z",
+  "timestamp": "2026-10-14T19:12:30.011137902Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-27135",
+        "aliases": [
+          "GHSA-6933-cjhr-5qg6"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:29.993523322Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libnghttp2-14"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "nghttp2 is an implementation of the Hypertext Transfer Protocol version 2 in C. Prior to version 1.68.1, the nghttp2 library stops reading the incoming data when user facing public API nghttp2_session_terminate_session or nghttp2_session_terminate_session2 is called by the application. They might be called internally by the library when it detects the situation that is subject to connection error. Due to the missing internal state validation, the library keeps reading the rest of the data after one of those APIs is called. Then receiving a malformed frame that causes FRAME_SIZE_ERROR causes assertion failure. nghttp2 v1.68.1 adds missing state validation to avoid assertion failure. No known workarounds are available.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The assertion failure is in the libnghttp2 HTTP/2 framing library and can only abort a process that speaks HTTP/2 through it to a malicious peer. In the image the only consumer of libnghttp2.so.14 is libcurl, and the only consumer of libcurl is the curl binary. The Liquibase CLI is a Java process that makes its HTTP connections with Java HTTP clients and never loads libcurl, and lpm is a statically linked Go binary. The container entrypoint runs only the Liquibase CLI and the optional lpm helper and never invokes curl. curl runs only if an operator starts it explicitly, for example as the container command, and the impact would be an abort of that operator's own curl process. Ubuntu fixed this in 1.43.0-1ubuntu0.3 (jammy) and 1.59.0-1ubuntu0.3 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 1.43.0-1ubuntu0.2) and 5.0.2 through 5.1.1 (noble, 1.59.0-1ubuntu0.2) carry unfixed builds; 5.2.0 and 5.2.1 carry 1.59.0-1ubuntu0.3, and 5.2.2 and 6.0.0 carry 1.59.0-1ubuntu0.4."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-58055"
       },
-      "timestamp": "2026-10-09T15:32:36.408510607Z",
+      "timestamp": "2026-10-14T19:12:29.946349362Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libnghttp2-14"

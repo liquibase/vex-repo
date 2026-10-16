@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-148bc65c6c52b8d9dc0371481d9e2bf2cf477f10b1f536b0ff46be6af888be96",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-14T19:12:25.350604953Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-4878"
+      },
+      "timestamp": "2026-10-14T19:12:25.350606025Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libcap2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libcap. A local unprivileged user can exploit a Time-of-check-to-time-of-use (TOCTOU) race condition in the cap_set_file() function. This allows an attacker with write access to a parent directory to redirect file capability updates to an attacker-controlled file. By doing so, capabilities can be injected into or stripped from unintended executables, leading to privilege escalation.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libcap TOCTOU race in cap_set_file() that lets a local user with write access to a parent directory redirect a file-capability update to a file they control. Ubuntu fixed it in libcap2 1:2.44-1ubuntu0.22.04.3 (jammy) and 1:2.66-5ubuntu2.4 (noble). The affected builds are jammy libcap2 1:2.44-1ubuntu0.22.04.2 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble libcap2 1:2.66-5ubuntu2.2 in the 5.0.2 to 5.1.1 tags. Tags from 5.2.0 ship the fixed 1:2.66-5ubuntu2.4. libcap2 is present only as a dependency of the systemd libraries (libsystemd0, and libudev1 on 24.04). The image does not install libcap2-bin, so there is no setcap binary. cap_set_file() is only used when a privileged process writes file capabilities, and nothing in the image does that: the entrypoint and the liquibase launcher never set file capabilities, the Liquibase CLI runs on the JVM and does not call libcap, and lpm is a statically linked Go binary. A source review found no references to cap_set_file, setcap or libcap in Liquibase Secure. The image runs as the unprivileged liquibase user (uid 1001) by default, which cannot write file capabilities, so there is no privileged capability update for an attacker to redirect."
+    }
+  ]
+}

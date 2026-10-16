@@ -1,15 +1,45 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-6d15083d127b98484f7cb59660d58bab0b16f78054c356145be8bcd1cab58de4",
+  "@id": "merged-vex-906a334dd515cabf594fea7f366d22c2ec21d18c61c43339fda9f4fc549163ef",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:35.481789156Z",
+  "timestamp": "2026-10-14T19:12:28.448468141Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2025-14831"
+      },
+      "timestamp": "2026-10-14T19:12:28.430821995Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in GnuTLS. This vulnerability allows a denial of service (DoS) by excessive CPU (Central Processing Unit) and memory consumption via specially crafted malicious certificates containing a large number of name constraints and subject alternative names (SANs).",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The denial of service needs a process that uses GnuTLS to verify an attacker-supplied X.509 certificate carrying a large number of name constraints and subject alternative names. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, and the image ships no gnutls-bin. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The Liquibase CLI runs on the JVM, which verifies certificates with its own Java TLS implementation and does not load GnuTLS, so no certificate presented to Liquibase reaches the GnuTLS verifier. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-9820"
+      },
+      "timestamp": "2026-10-14T19:12:28.384936496Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in the GnuTLS library, specifically in the gnutls_pkcs11_token_init() function that handles PKCS#11 token initialization. When a token label longer than expected is processed, the function writes past the end of a fixed-size stack buffer. This programming error can cause the application using GnuTLS to crash or, in certain conditions, be exploited for code execution. As a result, systems or applications relying on GnuTLS may be vulnerable to a denial of service or local privilege escalation attacks.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS stack buffer overflow in gnutls_pkcs11_token_init(), reached only when an application initializes a PKCS#11 token with a label longer than 32 characters; GnuTLS rates it low and fixed it in 3.8.11. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images (3.7.3-4ubuntu1.7), where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI, none of them initializes PKCS#11 tokens, and the image ships no gnutls-bin. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.8 (USN-8043-1). The 24.04 package, libgnutls30t64, is assessed separately."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-33845"
       },
-      "timestamp": "2026-10-09T15:32:35.337284012Z",
+      "timestamp": "2026-10-14T19:12:27.837852536Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -24,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-33846"
       },
-      "timestamp": "2026-10-09T15:32:35.378915425Z",
+      "timestamp": "2026-10-14T19:12:27.885123566Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -39,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-3832"
       },
-      "timestamp": "2026-10-09T15:32:35.421763294Z",
+      "timestamp": "2026-10-14T19:12:27.930905489Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -54,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-3833"
       },
-      "timestamp": "2026-10-09T15:32:35.463101343Z",
+      "timestamp": "2026-10-14T19:12:27.977301713Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgnutls30"
@@ -64,6 +94,126 @@
       "status_notes": "A flaw was found in gnutls. This vulnerability occurs because gnutls performs case-sensitive comparisons of nameConstraints labels, specifically for dNSName (DNS) or rfc822Name (email) constraints within excludedSubtrees or permittedSubtrees. A remote attacker can exploit this by crafting a leaf certificate with casing differences in the Subject Alternative Name (SAN), leading to a policy bypass where a certificate that should be rejected is instead accepted. This could result in unauthorized access or information disclosure.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GnuTLS case-sensitive nameConstraints comparison that can let a certificate violating a CA's name constraints be accepted. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published fixed packages (3.8.3-1.1ubuntu3.6 for 24.04, 3.7.3-4ubuntu1.9 for 22.04); image builds from 5.2.1 onward carry the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42009"
+      },
+      "timestamp": "2026-10-14T19:12:28.067452208Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. A remote attacker could exploit an issue in the Datagram Transport Layer Security (DTLS) packet reordering logic. The comparator function, responsible for ordering DTLS packets by sequence numbers, did not correctly handle packets with duplicate sequence numbers. This could lead to unstable packet ordering or undefined behavior, resulting in a denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A flaw in GnuTLS's DTLS packet reordering, where duplicate sequence numbers are mishandled. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these use TLS over TCP, not DTLS, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42010"
+      },
+      "timestamp": "2026-10-14T19:12:28.112110444Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. Servers configured with RSA-PSK (Rivest Shamir Adleman - Pre-Shared Key) wrongfully matched usernames containing a NUL character with truncated usernames. A remote attacker could exploit this by sending a specially crafted username, leading to an authentication bypass. This vulnerability allows an attacker to gain unauthorized access by circumventing the authentication process.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A GnuTLS authentication bypass in servers configured for RSA-PSK key exchange, where usernames containing a NUL character match truncated usernames. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these are TLS clients, not RSA-PSK servers, and none is invoked by the entrypoint or the CLI. Nothing in the image runs a GnuTLS server. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42011"
+      },
+      "timestamp": "2026-10-14T19:12:28.157959097Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. This vulnerability occurs because permitted name constraints were incorrectly ignored when previous Certificate Authorities (CAs) only had excluded name constraints. A remote attacker could exploit this to bypass critical name constraint checks during certificate validation. This bypass could lead to the acceptance of invalid certificates, potentially enabling spoofing or man-in-the-middle attacks against affected systems.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS ignores permitted name constraints when earlier CAs in the chain carry only excluded name constraints, so a certificate that violates a CA's constraints can be accepted. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which validates certificates with its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42012"
+      },
+      "timestamp": "2026-10-14T19:12:28.203584682Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. A remote attacker could exploit this vulnerability by presenting a specially crafted certificate that contains Uniform Resource Identifier (URI) or Service (SRV) Subject Alternative Names (SANs). This could cause the certificate validation process to incorrectly fall back to checking DNS hostnames against the Common Name (CN), potentially allowing the attacker to spoof legitimate services or intercept sensitive information.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS X.509 hostname verification incorrectly falls back to matching the Common Name when a certificate carries only URI or SRV Subject Alternative Names. The flaw is only reachable by a process that verifies a peer certificate hostname through GnuTLS. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and its own certificate hostname checks and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42013"
+      },
+      "timestamp": "2026-10-14T19:12:28.248636796Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. When validating certificates, an oversized Subject Alternative Name (SAN) could cause the validation process to incorrectly fall back to checking the Common Name (CN) field. This could allow a remote attacker to bypass proper certificate validation, potentially leading to spoofing or man-in-the-middle attacks.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS X.509 hostname verification incorrectly falls back to matching the Common Name when a certificate carries an oversized Subject Alternative Name. The flaw is only reachable by a process that verifies a peer certificate hostname through GnuTLS. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and its own certificate hostname checks and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42014"
+      },
+      "timestamp": "2026-10-14T19:12:28.294364758Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in GnuTLS. The gnutls_pkcs11_token_set_pin function, used for changing the Security Officer PIN, can lead to a use-after-free vulnerability. This occurs when an attacker attempts to change the PIN with a NULL old PIN for a token that lacks a protected authentication path.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Use-after-free in gnutls_pkcs11_token_set_pin() when changing a PKCS#11 token's Security Officer PIN with a NULL old PIN. The flaw is local and only reachable by a program that calls this GnuTLS PKCS#11 PIN-change API, such as p11tool, which the image does not install. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these changes PKCS#11 token PINs, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM and does not load GnuTLS. A source review found no references to GnuTLS or its PKCS#11 API in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-42015"
+      },
+      "timestamp": "2026-10-14T19:12:28.338827544Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in gnutls. An off-by-one error exists in the PKCS#12 bag element bounds check. This vulnerability allows a remote attacker to write past the internal array of a PKCS#12 bag when appending to a bag that already contains 32 elements. This memory corruption could lead to a denial of service (DoS) or potentially other unspecified impacts.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Off-by-one in the GnuTLS PKCS#12 bag element bounds check, allowing a write past the bag's internal array when a 33rd element is appended. The flaw is only reachable by a program that builds PKCS#12 bags through the GnuTLS PKCS#12 API, such as certtool, which the image does not install. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04 base image of the 5.0.0 and 5.0.1 images, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. None of these builds PKCS#12 bags, and none is invoked by the entrypoint or the CLI. The Liquibase CLI runs on the JVM, which handles any PKCS#12 keystores with its own Java implementation and does not load GnuTLS. A source review found no references to GnuTLS in Liquibase Secure. Ubuntu has published the fixed package 3.7.3-4ubuntu1.9 for 22.04 in USN-8284-1."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-5260"
+      },
+      "timestamp": "2026-10-14T19:12:28.022949124Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgnutls30"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in libgnutls. A remote attacker, by sending an extremely short premaster secret during an RSA key exchange to a server using an RSA key backed by a PKCS#11 token, could trigger a short heap overread. This memory corruption vulnerability could lead to information disclosure.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "GnuTLS short heap overread when a TLS server using an RSA key held on a PKCS#11 token receives a very short premaster secret during RSA key exchange. Liquibase Secure inherits libgnutls30 from the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, where only OS tooling uses it: apt's HTTP(S) method and gpg's dirmngr link it directly, and curl loads it indirectly through librtmp and libldap. All of these are TLS clients, and none is invoked by the entrypoint or the CLI. The flaw is in the server side of RSA key exchange, and nothing in the image runs a GnuTLS TLS server or uses a PKCS#11-backed server key. The Liquibase CLI runs on the JVM, which uses its own Java TLS implementation and does not load GnuTLS. A source review found no references to GnuTLS or PKCS#11 in Liquibase Secure. Ubuntu published the fix for 22.04 as 3.7.3-4ubuntu1.9 (USN-8284-1)."
     }
   ]
 }

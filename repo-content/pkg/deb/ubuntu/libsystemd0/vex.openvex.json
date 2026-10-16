@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-d3afefed696d6d683467c378ca8fa66d591c42065f4b8d7678d1f36a617f6b56",
+  "@id": "merged-vex-3b1699ac09cc9d89406877cfb91ece68d29b386f32e4c09584d6923bc9789f59",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:40.725582053Z",
+  "timestamp": "2026-10-14T19:12:36.379411085Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-10-09T15:32:40.579062792Z",
+      "timestamp": "2026-10-14T19:12:36.130053257Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-10-09T15:32:40.621167933Z",
+      "timestamp": "2026-10-14T19:12:36.176035894Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -37,12 +37,48 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-29111",
+        "aliases": [
+          "GHSA-gx6q-6f99-m764"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:36.36164906Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "systemd, a system and service manager, (as PID 1) hits an assert and freezes execution when an unprivileged IPC API call is made with spurious data. On version v249 and older the effect is not an assert, but stack overwriting, with the attacker controlled content. From version v250 and newer this is not possible as the safety check causes an assert instead. This IPC call was added in v239, so versions older than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11 contain patches. No known workarounds are available.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in systemd running as PID 1, which mishandles a crafted unprivileged IPC call: from v250 onward it hits an assert and freezes, and in v249 and older it overwrites its stack with attacker-controlled content. Exploitation needs systemd to be the running service manager. In Ubuntu, the service manager ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of the PID 1 code. No Liquibase Secure image installs the systemd, systemd-sysv, udev or init packages, there is no systemd binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-40225",
+        "aliases": [
+          "GHSA-vpfq-8p5f-jcqx"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:36.315110003Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In udev in systemd before 260, local root execution can occur via malicious hardware devices and unsanitized kernel output.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in udev's scsi_id and v4l_id helpers, which pass device properties from the kernel to the udev daemon without sanitizing them, so a malicious USB or SCSI device can make udev run a command or start a unit as root. Exploitation needs physical access and a running udev daemon that processes the device's events. In Ubuntu, the udev daemon and these helpers ship in the separate udev binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain none of that code. The Liquibase Secure image build installs no systemd packages of its own (it adds only unzip, removed again after use), the udev package is not installed, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. Ubuntu fixed the issue in 249.11-0ubuntu3.19 (jammy) and 255.4-1ubuntu8.14 (noble). Docker images 5.0.0 and 5.0.1 (jammy, 249.11-0ubuntu3.16) and 5.0.2 through 5.1.1 (noble, 255.4-1ubuntu8.11 and 8.12) carry unfixed builds; 5.2.0 carries 255.4-1ubuntu8.15, 5.2.1 carries 8.16, and 5.2.2 and 6.0.0 carry 8.17."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-40226",
         "aliases": [
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-10-09T15:32:40.706245104Z",
+      "timestamp": "2026-10-14T19:12:36.268601796Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -57,7 +93,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-09T15:32:40.663496498Z",
+      "timestamp": "2026-10-14T19:12:36.222556695Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"

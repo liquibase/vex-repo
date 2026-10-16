@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-7cee5b5ee092eb23f57c3d7c5212585d519cfe95802c9fde12644a4c65f2c705",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-14T19:12:54.79057924Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41854",
+        "aliases": [
+          "GHSA-7m2p-62gw-p8qq"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:54.790580442Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-web"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Due to incorrect host parsing, applications that rely on UriComponentsBuilder to parse and validate an externally provided URL string may be exposed to a server-side request forgery (SSRF) attack. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI ships no Spring web code; spring-web is only an optional, compile-time dependency of liquibase-core and is not bundled. The scanner reports spring-web from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries Spring Framework 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory applies only to applications that use UriComponentsBuilder to parse and validate an externally provided URL string. A full source review of the application found no use of UriComponentsBuilder, ServletUriComponentsBuilder or any other URI builder, and no HTTP client (RestTemplate, RestClient, WebClient, java.net.URL or HttpClient). Of its three REST controllers, only the license-track one takes input, JSON license-tracking batches whose JDBC URL field is stored and reported as an opaque string and never parsed as a URL or dereferenced; the report and health endpoints take no parameters. The application makes no outbound requests, so no server-side request forgery path exists."
+    }
+  ]
+}

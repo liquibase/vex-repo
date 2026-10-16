@@ -168,6 +168,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-18401",
+      "description": "The non-blocking (asynchronous) JSON parser in jackson-core does not enforce the maxNumberLength constraint of StreamReadConstraints (default 1000 characters). The async parsing path in NonBlockingUtf8JsonParserBase accumulates number digits into the TextBuffer without a length check and completes the token without calling the methods that validate integer and floating-point length. A JSON document with an arbitrarily long number supplied to an application that uses the async parser API causes unbounded allocation and an OutOfMemoryError, and a later getBigIntegerValue() or getDecimalValue() call adds quadratic BigInteger parsing time. The synchronous parsers enforce the limit correctly.",
+      "recommendation": "No action required. Only the Couchbase driver uses the async parser, and only on responses from the operator's own Couchbase cluster.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.9,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only shipped caller of the async parser reads responses from the Couchbase cluster the operator configured, so no untrusted party can feed it a document.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-72hv-8253-57qq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18401",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Fixed in jackson-core 2.18.6 and 2.21.1. Every published Liquibase Secure image from 5.0.0 through 5.1.0 carries in-range copies, so this assessment does not rest on version: the core Liquibase Secure jar carries 2.20.0 in 5.0.x and 2.21.0 in 5.1.0, the license-tracking application in the 5.x ZIP carries 2.20.0 in 5.0.0 through 5.0.2, 2.20.1 in 5.0.3 and 2.21.0 in 5.1.0, and the AWS, Azure, BigQuery, Cassandra and Couchbase extensions carry copies between 2.17.2 and 2.21.0, with further copies relocated inside the Databricks and Snowflake JDBC drivers and the AWS SDK. The missing number-length check is only in the non-blocking parser, which Jackson creates only through JsonFactory.createNonBlockingByteArrayParser() or createNonBlockingByteBufferParser(). A bytecode scan of every class in every shipped jar, the license-tracking application included, found one caller outside Jackson itself: the Couchbase SDK's JsonStreamParser, bundled in the Couchbase extension from 5.1.0, which uses it to read query responses streamed from the configured Couchbase cluster. That input comes from the database the operator pointed Liquibase at, not from an untrusted party, and Liquibase does not rely on StreamReadConstraints as a security boundary (see the assessment of GHSA-2m67-wjpj-xhg9). Liquibase itself, the other extensions and the license-tracking application (Spring MVC, blocking parser) parse JSON only through the blocking parsers, which enforce the limit.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.15.0|<2.18.6|>=2.19.0|<2.21.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

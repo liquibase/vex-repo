@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c268f5ea51e524a3c9b26e2d1157a338c3ecea0d2d69982420261e0ca33879b6",
+  "@id": "merged-vex-350f0046ad44270f2c75ba848b27497803c6bc2ae32589aa5616ad3bdbbfb5a6",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:54.817872585Z",
+  "timestamp": "2026-10-14T19:12:53.089356685Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "GHSA-83qj-6fr2-vhqg"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.223008111Z",
+      "timestamp": "2026-10-14T19:12:52.207272072Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -26,13 +26,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-31650",
+        "aliases": [
+          "BIT-tomcat-2025-31650",
+          "GHSA-3p2h-wqq4-wf4h"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:53.070902406Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper Input Validation vulnerability in Apache Tomcat. Incorrect error handling for some invalid HTTP priority headers resulted in incomplete clean-up of the failed request which created a memory leak. A large number of such requests could trigger an OutOfMemoryException resulting in a denial of service. This issue affects Apache Tomcat from 9.0.76 through 9.0.102, from 10.1.10 through 10.1.39, from 11.0.0-M2 through 11.0.5, and 8.5.90 through 8.5.100. Users are recommended to upgrade to version 9.0.104, 10.1.40 or 11.0.6 which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Memory leak on invalid HTTP priority headers, fixed in Tomcat 11.0.6, 10.1.40 and 9.0.104. The upstream fix changes only Tomcat's HTTP/2 implementation (org.apache.coyote.http2), so the leak is reachable only over HTTP/2. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 10.1.48 or newer, which include the fix. Spring Boot enables HTTP/2 only when server.http2.enabled is set; the application sets no server properties, and none of its classes references the Tomcat API or a web server factory customizer, so its connector speaks HTTP/1.1 only."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-48988",
         "aliases": [
           "BIT-tomcat-2025-48988",
           "GHSA-h3gc-qfqq-6h8f"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.263552921Z",
+      "timestamp": "2026-10-14T19:12:52.252915633Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -50,7 +69,7 @@
           "GHSA-gqp3-2cvr-x8m3"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.305416848Z",
+      "timestamp": "2026-10-14T19:12:52.298029231Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -68,7 +87,7 @@
           "GHSA-wr62-c79q-cv37"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.347027973Z",
+      "timestamp": "2026-10-14T19:12:52.342357629Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -86,7 +105,7 @@
           "GHSA-25xr-qj8w-c4vf"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.387274953Z",
+      "timestamp": "2026-10-14T19:12:52.387303028Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -104,7 +123,7 @@
           "GHSA-wmwf-9ccg-fff5"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.428082888Z",
+      "timestamp": "2026-10-14T19:12:52.432383248Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -116,13 +135,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-66614",
+        "aliases": [
+          "BIT-tomcat-2025-66614",
+          "GHSA-fpj8-gq4v-p354"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:53.023072271Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper Input Validation vulnerability in Apache Tomcat. Tomcat did not validate that the host name provided via the SNI extension was the same as the host name provided in the HTTP host header field. If Tomcat was configured with more than one virtual host and the TLS configuration for one of those hosts did not require client certificate authentication but another one did, it was possible for a client to bypass the client certificate authentication by sending different host names in the SNI extension and the HTTP host header field. The vulnerability only applies if client certificate authentication is only enforced at the Connector. This issue affects Apache Tomcat from 11.0.0-M1 through 11.0.14, from 10.1.0-M1 through 10.1.49, from 9.0.0-M1 through 9.0.112, and 8.5.0 through 8.5.100. Users are recommended to upgrade to version 11.0.15 or later, 10.1.50 or later or 9.0.113 or later, which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Client certificate authentication bypass through mismatched SNI and Host header names, fixed in Tomcat 11.0.15, 10.1.50 and 9.0.113. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2 and 10.1.48 in 5.0.3, both in range; 5.1.0 and later carry 11.0.15 or newer, which include the fix. The bypass needs a TLS connector serving more than one virtual host, with client certificate authentication required on the connector for one host but not another. The application sets no server properties, so its embedded Tomcat runs one default host over plain HTTP with no TLS connector and no client certificate authentication, and none of its classes references the Tomcat API or a web server factory customizer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-24734",
         "aliases": [
           "BIT-tomcat-2026-24734",
           "GHSA-mgp5-rv84-w37q"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.182593586Z",
+      "timestamp": "2026-10-14T19:12:52.162612893Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -140,7 +178,7 @@
           "GHSA-563x-q5rq-57qp"
         ]
       },
-      "timestamp": "2026-10-09T15:32:53.975754509Z",
+      "timestamp": "2026-10-14T19:12:51.936888386Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -152,13 +190,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-25854",
+        "aliases": [
+          "BIT-tomcat-2026-25854",
+          "GHSA-9m3c-qcxr-9x87"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:52.882101688Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Occasional URL redirection to untrusted Site ('Open Redirect') vulnerability in Apache Tomcat via the LoadBalancerDrainingValve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.18, from 10.1.0-M1 through 10.1.52, from 9.0.0.M23 through 9.0.115, from 8.5.30 through 8.5.100. Other, unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Occasional open redirect in Tomcat's LoadBalancerDrainingValve, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs LoadBalancerDrainingValve to be explicitly added to the server's pipeline, on a cluster node that a load balancer has put in the draining state. Tomcat never installs the valve by default and Spring Boot never configures it. The application sets no server properties, and none of its classes references a Tomcat valve, the Tomcat API or a web server factory customizer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-29129",
         "aliases": [
           "BIT-tomcat-2026-29129",
           "GHSA-69cc-cv78-qc8g"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.016146121Z",
+      "timestamp": "2026-10-14T19:12:51.981448875Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -176,7 +233,7 @@
           "GHSA-95jq-rwvf-vjx4"
         ]
       },
-      "timestamp": "2026-10-09T15:32:53.936101644Z",
+      "timestamp": "2026-10-14T19:12:51.892237174Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -195,7 +252,7 @@
           "GHSA-h468-7pvh-8vr8"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.057088664Z",
+      "timestamp": "2026-10-14T19:12:52.02717844Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -207,13 +264,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-32990",
+        "aliases": [
+          "BIT-tomcat-2026-32990",
+          "GHSA-8mc5-53m5-3qj2"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:52.928231148Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper Input Validation vulnerability in Apache Tomcat due to an incomplete fix of CVE-2025-66614. This issue affects Apache Tomcat: from 11.0.15 through 11.0.19, from 10.1.50 through 10.1.52, from 9.0.113 through 9.0.115. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Incomplete fix of CVE-2025-66614, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116: the strict check that the TLS SNI host name matches the HTTP Host header ignored differences in case, so it could be bypassed. It matters only when Tomcat terminates TLS itself with more than one SSLHostConfig, one of which requires client certificate authentication at the Connector while another does not. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. Only 5.1.0 (11.0.15) and 5.1.1 (11.0.18) carry an in-range version. 5.0.0 to 5.0.2 (10.1.34) and 5.0.3 (10.1.48) predate the strict SNI check, which the CVE-2025-66614 fix added in 10.1.50, and 5.2.0 and later carry 11.0.22 or newer, which include the fix. The application listens on a single plain HTTP connector with the Spring Boot defaults: it sets no server properties, ships no keystore, and none of its classes references the Tomcat API, an SSL bundle or a web server factory customizer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-34483",
         "aliases": [
           "BIT-tomcat-2026-34483",
           "GHSA-rv64-5gf8-9qq8"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.098564959Z",
+      "timestamp": "2026-10-14T19:12:52.073429842Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -231,7 +307,7 @@
           "GHSA-x4m4-345f-5h5g"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.139587152Z",
+      "timestamp": "2026-10-14T19:12:52.117846267Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -249,7 +325,7 @@
           "GHSA-gx5v-xp9w-j4cg"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.469243415Z",
+      "timestamp": "2026-10-14T19:12:52.47788489Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -268,7 +344,7 @@
           "GHSA-r29c-68gh-xp6x"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.511241933Z",
+      "timestamp": "2026-10-14T19:12:52.522917346Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -287,7 +363,7 @@
           "GHSA-fv25-8xcx-gqjc"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.552011199Z",
+      "timestamp": "2026-10-14T19:12:52.567573834Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -306,7 +382,7 @@
           "GHSA-h6fc-48rj-7qqh"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.593418048Z",
+      "timestamp": "2026-10-14T19:12:52.612568052Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -325,7 +401,7 @@
           "GHSA-5mp6-jrq3-r938"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.635376369Z",
+      "timestamp": "2026-10-14T19:12:52.657427993Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -338,13 +414,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-43514",
+        "aliases": [
+          "BIT-tomcat-2026-43514",
+          "GHSA-9m89-8frq-c98c"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:52.974347404Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Observable Timing Discrepancy vulnerability when comparing AJP secret in Apache Tomcat. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Older unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118 which fix the issue.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Non-constant-time comparison of the AJP connector secret, a timing side channel that lets an attacker on the local network recover the secret; fixed in Tomcat 11.0.22, 10.1.55 and 9.0.118. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs an AJP connector configured with a secret. Spring Boot exposes no property that enables AJP and starts only an HTTP connector; an AJP connector must be added in code through a web server factory customizer. The application sets no server properties, and none of its classes references the Tomcat API, a connector or a web server factory customizer. A source review found no AJP connector configuration anywhere in this repository."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-43515",
         "aliases": [
           "BIT-tomcat-2026-43515",
           "GHSA-5m62-pw8w-7w9f"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.676228176Z",
+      "timestamp": "2026-10-14T19:12:52.703109981Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -362,7 +457,7 @@
           "GHSA-gcx9-497g-6cp6"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.717560968Z",
+      "timestamp": "2026-10-14T19:12:52.748781617Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -381,7 +476,7 @@
           "GHSA-9xv2-5v5q-p794"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.758476888Z",
+      "timestamp": "2026-10-14T19:12:52.793912811Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -400,7 +495,7 @@
           "GHSA-h3x4-894j-xpx5"
         ]
       },
-      "timestamp": "2026-10-09T15:32:54.800420178Z",
+      "timestamp": "2026-10-14T19:12:52.837981015Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"

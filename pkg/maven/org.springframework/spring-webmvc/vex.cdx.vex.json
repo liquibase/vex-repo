@@ -126,6 +126,189 @@
       ]
     },
     {
+      "id": "CVE-2026-22745",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Denial of Service attacks when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is serving static resources from the file system; the application is running on a Windows platform. When all the conditions above are met, the attacker can send malicious requests that are slow to resolve and that can keep HTTP connections in use. This can cause a Denial of Service on the application.",
+      "recommendation": "No action required. No shipped component serves static resources from the file system.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources from the file system, and the Docker images run on Linux rather than the Windows platform the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6p4f-wcwh-5vvm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22745",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22745",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to serve static resources from the file system and to run on Windows. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler, so it serves nothing from the file system; Spring Boot's default static locations are classpath locations only. The Docker images run on Linux. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22735",
+      "description": "Spring MVC and WebFlux applications are vulnerable to stream corruption when using Server-Sent Events (SSE). This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "recommendation": "No action required. No shipped component streams Server-Sent Events.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 2.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which never emits Server-Sent Events, so the vulnerable SSE path is never executed.\n"
+        }
+      ],
+      "cwes": [
+        667
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6hcq-hmm3-jj3c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22735",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22735",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The stream corruption occurs only in an application that streams Server-Sent Events. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream or WebFlux usage: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so the SSE writing path is never executed.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.47|>=6.1.0|<6.1.26|>=6.2.0|<6.2.17|>=7.0.0|<7.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22737",
+      "description": "Use of Java scripting engine enabled (e.g. JRuby, Jython) template views in Spring MVC and Spring WebFlux applications can result in disclosure of content from files outside the configured locations for script template views. This issue affects Spring Framework: from 7.0.0 through 7.0.5, from 6.2.0 through 6.2.16, from 6.1.0 through 6.1.25, from 5.3.0 through 5.3.46.",
+      "recommendation": "No action required. No shipped component configures script template views.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which renders no Spring views and configures no script template views, so the vulnerable path resolution is never used.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4773-3jfm-qmx3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22737",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22737",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3 and 7.0.3 in 5.1.0, all in range, and the fixed 7.0.6 in 5.1.1 and later. The advisory requires an application that renders script template views (ScriptTemplateView) through a Java scripting engine such as JRuby or Jython. A source review of the application found no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies, so no script template view is configured.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.47|>=6.1.0|<6.1.26|>=6.2.0|<6.2.17|>=7.0.0|<7.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-47884",
       "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
       "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",
@@ -361,6 +544,250 @@
           "versions": [
             {
               "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41841",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Information Disclosure attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component protects static resources with authentication or enables the Spring resource chain cache.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which has no authentication, serves no static resources and does not enable the resource chain whose cache the advisory concerns.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mq64-j8f9-9gcj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41841",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41841",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs several resource handlers with different locations, at least one of which requires authentication, sharing one resource cache, so that a public resource resolved and cached first is served in place of a protected one with the same name. The application has no Spring Security or other authentication, so no resource is protected. It packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41843",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Path Traversal attacks when resolving static resources. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component configures versioned static resource support.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which does not configure the versioned static resource handling the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-72pg-x5f8-j25j",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41843",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41843",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs static resources served from the file system with versioned resource support configured. The application serves nothing from the file system: it sets no spring.web.resources properties, so only Spring Boot's default classpath locations are mapped, and it packages no static resources there. None of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry, and Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-41853",
+      "description": "Spring MVC and WebFlux applications are vulnerable to Multipart request smuggling attacks. Affected versions: Spring Framework 7.0.0 through 7.0.7; 6.2.0 through 6.2.18; 6.1.0 through 6.1.27; 5.3.48 and earlier.",
+      "recommendation": "No action required. No shipped component accepts multipart requests.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, whose endpoints take JSON or no input and never read multipart content, so a smuggled multipart part reaches no handler.\n"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cjpg-rgq5-fr37",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41853",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-41853",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory needs an application that accepts multipart requests and sits behind a web application firewall or proxy that parses multipart bodies and makes security decisions on their content, so that a request the firewall reads as harmless is parsed differently by Spring. Spring Boot registers its standard multipart resolver by default and the application does not turn it off, but no handler accepts multipart content. Its only controllers are three @RestController classes: v1/track takes a JSON @RequestBody, and v1/report and v1/health are GET methods without parameters. None of its classes references MultipartFile, @RequestPart, @RequestParam, a MultipartResolver or the servlet request, and it sets no spring.servlet.multipart properties. Liquibase ships no firewall or proxy in front of it.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.49|>=6.1.0|<6.1.28|>=6.2.0|<6.2.19|>=7.0.0|<7.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-22741",
+      "description": "Spring MVC and WebFlux applications are vulnerable to cache poisoning when resolving static resources. More precisely, an application can be vulnerable when all the following are true: the application is using Spring MVC or Spring WebFlux; the application is configuring the resource chain support with caching enabled; the application adds support for encoded resources resolution; the resource cache must be empty when the attacker has access to the application. When all the conditions above are met, the attacker can send malicious requests and poison the resource cache with resources using the wrong encoding. This can cause a denial of service by breaking the front-end application for clients.",
+      "recommendation": "No action required. No shipped component enables the Spring resource chain cache or encoded resource resolution.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 3.1,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which serves no static resources and enables neither the resource chain cache nor encoded resource resolution that the advisory requires.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wg35-8jpf-2xv3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-22741",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2026-22741",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0 and 7.0.6 in 5.1.1, all in range; 5.2.0 and later carry 7.0.7 or newer, which include the fix. The advisory needs the application to configure the Spring resource chain with caching enabled and to add encoded resource resolution. The application packages no static resources, sets no spring.web.resources properties, and none of its own classes registers a resource handler or resource resolver. Spring Boot's default resource handlers run without the resource chain and its cache, which Boot enables only when the resource-chain properties are set. Its only controllers are three @RestController classes with explicit v1/track, v1/report and v1/health paths.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/<5.3.48|>=6.1.0|<6.1.27|>=6.2.0|<6.2.18|>=7.0.0|<7.0.7",
               "status": "unaffected"
             }
           ]

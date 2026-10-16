@@ -1,15 +1,35 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-77a5ad6b96cb3570f11475d92f62d679d51c364d57459d20533e44f71b503a7a",
+  "@id": "merged-vex-7894cc5d79d6c3c110e00eaa2cc98c04c5480679682f043ca5337ff22b61c111",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:35.184469838Z",
+  "timestamp": "2026-10-14T19:12:27.61649672Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-23865",
+        "aliases": [
+          "BIT-java-2026-23865",
+          "BIT-java-min-2026-23865",
+          "BIT-jre-2026-23865"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:27.599770945Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libfreetype6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "An integer overflow in the tt_var_load_item_variation_store function of the Freetype library in versions 2.13.2 and 2.13.3 may allow for an out of bounds read operation when parsing HVAR/VVAR/MVAR tables in OpenType variable fonts. This issue is fixed in version 2.14.2.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The integer overflow is in FreeType's tt_var_load_item_variation_store and is reached only while FreeType parses the HVAR, VVAR or MVAR table of an OpenType variable font. libfreetype6 is an inherited base-image library. The JDK rasterises text with its own bundled FreeType, not this one. The system FreeType reaches the JVM only indirectly: when Java initialises its font subsystem, the JDK loads libfontconfig, which uses the system FreeType to read the font files it lists, from the system font directories, owned by root, and from per-user font directories that only the account running Liquibase can write. The image's only installed fonts are the DejaVu TrueType fonts under /usr/share/fonts/truetype/dejavu, which are static fonts with no fvar, HVAR, VVAR or MVAR table. The fc-* tools that also link it are never run by the image. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. Ubuntu fixed this in 2.13.2+dfsg-1ubuntu0.1 (noble); the jammy package (2.11.1) does not contain the code. Docker images 5.0.2 through 5.1.0 carry the unfixed 2.13.2+dfsg-1build3; 5.1.1 and later carry 2.13.2+dfsg-1ubuntu0.1."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-95512"
       },
-      "timestamp": "2026-10-09T15:32:35.18447087Z",
+      "timestamp": "2026-10-14T19:12:27.554737461Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libfreetype6"

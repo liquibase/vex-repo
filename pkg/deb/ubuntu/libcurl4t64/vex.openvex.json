@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-a3e8e0167ba4bd405efe679bd6352345201c091e17b8fb2ddc225687be50ea29",
+  "@id": "merged-vex-82e0f91236e5ddca40faf9ff23eedcc68bb32b4bfc9cececf62ff226d951e9d9",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:33.910895824Z",
+  "timestamp": "2026-10-14T19:12:26.103368084Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "CURL-CVE-2025-0167"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.89259533Z",
+      "timestamp": "2026-10-14T19:12:25.993688043Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -25,12 +25,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-10148",
+        "aliases": [
+          "CURL-CVE-2025-10148"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:26.039754766Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libcurl4t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "curl's WebSocket code did not update the 32-bit mask pattern for each new outgoing frame as the specification says. Instead it used a fixed mask that persisted and was used throughout the entire connection. A predictable mask pattern allows for a malicious server to induce traffic between the two communicating parties that could be interpreted by an involved proxy (configured or transparent) as genuine, real, HTTP traffic with content and thereby poison its cache. That cached poisoned content could then be served to all users of that proxy.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the fixed WebSocket mask matters only to a curl or libcurl WebSocket client, and nothing in the runtime path uses curl or libcurl: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the JRE does not link libcurl, and lpm is a statically linked Go binary. Upstream considers only 8.11.0 through 8.15.0 affected; Ubuntu published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-14017",
         "aliases": [
           "CURL-CVE-2025-14017"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.726059524Z",
+      "timestamp": "2026-10-14T19:12:25.810824706Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -48,7 +66,7 @@
           "CURL-CVE-2025-14524"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.767359957Z",
+      "timestamp": "2026-10-14T19:12:25.856416428Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -61,12 +79,30 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-14819",
+        "aliases": [
+          "CURL-CVE-2025-14819"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:26.085846534Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libcurl4t64"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "When doing TLS related transfers with reused easy or multi handles and altering the CURLSSLOPT_NO_PARTIALCHAIN option, libcurl could accidentally reuse a CA store cached in memory for which the partial chain option was reversed. Contrary to the user's wishes and expectations. This could make libcurl find and accept a trust chain that it otherwise would not.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libcurl4t64 is Ubuntu noble's time64 ABI rename of libcurl4 (Liquibase Secure 5.0.2 and later), linked only by the curl command-line tool in this image. The same rationale as the curl assessment for this CVE applies: the CA store mix-up needs an application that reuses libcurl handles for TLS transfers and changes CURLSSLOPT_NO_PARTIALCHAIN between them, which the curl command-line tool never does, and nothing in the runtime path uses curl or libcurl: the container's build steps download with wget, its entrypoint runs the Liquibase CLI, the JRE does not link libcurl, and lpm is a statically linked Go binary. Ubuntu published the fix for 24.04 as 8.5.0-2ubuntu10.7 (USN-8062-1). Docker images 5.0.2 through 5.1.0 carry the unfixed 8.5.0-2ubuntu10.6; 5.1.1 and later carry 8.5.0-2ubuntu10.8 or newer."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-15079",
         "aliases": [
           "CURL-CVE-2025-15079"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.809011967Z",
+      "timestamp": "2026-10-14T19:12:25.902073646Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -84,7 +120,7 @@
           "CURL-CVE-2025-15224"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.85041106Z",
+      "timestamp": "2026-10-14T19:12:25.947851896Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"
@@ -102,7 +138,7 @@
           "CURL-CVE-2026-1965"
         ]
       },
-      "timestamp": "2026-10-09T15:32:33.683648836Z",
+      "timestamp": "2026-10-14T19:12:25.763819457Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libcurl4t64"

@@ -616,6 +616,327 @@
       ]
     },
     {
+      "id": "CVE-2026-25854",
+      "description": "Occasional URL redirection to untrusted Site ('Open Redirect') vulnerability in Apache Tomcat via the LoadBalancerDrainingValve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.18, from 10.1.0-M1 through 10.1.52, from 9.0.0.M23 through 9.0.115, from 8.5.30 through 8.5.100. Other, unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures Tomcat's LoadBalancerDrainingValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 6.1,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "The open redirect occurs only in LoadBalancerDrainingValve, which must be explicitly configured; no shipped component adds it, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        601
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9m3c-qcxr-9x87",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25854",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Occasional open redirect in Tomcat's LoadBalancerDrainingValve, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs LoadBalancerDrainingValve to be explicitly added to the server's pipeline, on a cluster node that a load balancer has put in the draining state. Tomcat never installs the valve by default and Spring Boot never configures it. The application sets no server properties, and none of its classes references a Tomcat valve, the Tomcat API or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.30|<9.0.116|>=10.1.0-M1|<10.1.53|>=11.0.0-M1|<11.0.20",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32990",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat due to an incomplete fix of CVE-2025-66614. This issue affects Apache Tomcat: from 11.0.15 through 11.0.19, from 10.1.50 through 10.1.52, from 9.0.113 through 9.0.115. Users are recommended to upgrade to version 11.0.20, 10.1.53 or 9.0.116, which fix the issue.",
+      "recommendation": "No action required. Liquibase Secure does not run a Tomcat TLS connector with multiple virtual hosts or connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The SNI/Host check only matters for a TLS connector serving several virtual hosts with differing client certificate requirements. No Liquibase Secure component configures TLS, virtual hosts or connector-level client certificate authentication on Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8mc5-53m5-3qj2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32990",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix of CVE-2025-66614, fixed in Tomcat 11.0.20, 10.1.53 and 9.0.116: the strict check that the TLS SNI host name matches the HTTP Host header ignored differences in case, so it could be bypassed. It matters only when Tomcat terminates TLS itself with more than one SSLHostConfig, one of which requires client certificate authentication at the Connector while another does not. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. Only 5.1.0 (11.0.15) and 5.1.1 (11.0.18) carry an in-range version. 5.0.0 to 5.0.2 (10.1.34) and 5.0.3 (10.1.48) predate the strict SNI check, which the CVE-2025-66614 fix added in 10.1.50, and 5.2.0 and later carry 11.0.22 or newer, which include the fix. The application listens on a single plain HTTP connector with the Spring Boot defaults: it sets no server properties, ships no keystore, and none of its classes references the Tomcat API, an SSL bundle or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.113|<9.0.116|>=10.1.50|<10.1.53|>=11.0.15|<11.0.20",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-43514",
+      "description": "Observable Timing Discrepancy vulnerability when comparing AJP secret in Apache Tomcat. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Older unsupported versions may also be affected. Users are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118 which fix the issue.",
+      "recommendation": "No action required. No shipped component configures a Tomcat AJP connector.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The timing discrepancy exists only in AJP secret comparison; no shipped component configures an AJP connector, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        208
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9m89-8frq-c98c",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43514",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Non-constant-time comparison of the AJP connector secret, a timing side channel that lets an attacker on the local network recover the secret; fixed in Tomcat 11.0.22, 10.1.55 and 9.0.118. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0 and 11.0.18 in 5.1.1, all in range; 5.2.0 and later carry 11.0.22 or newer, which include the fix. The flaw needs an AJP connector configured with a secret. Spring Boot exposes no property that enables AJP and starts only an HTTP connector; an AJP connector must be added in code through a web server factory customizer. The application sets no server properties, and none of its classes references the Tomcat API, a connector or a web server factory customizer. A source review found no AJP connector configuration anywhere in this repository.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-13T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/<9.0.118|>=10.1.0-M1|<10.1.55|>=11.0.0-M1|<11.0.22",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-66614",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat. Tomcat did not validate that the host name provided via the SNI extension was the same as the host name provided in the HTTP host header field. If Tomcat was configured with more than one virtual host and the TLS configuration for one of those hosts did not require client certificate authentication but another one did, it was possible for a client to bypass the client certificate authentication by sending different host names in the SNI extension and the HTTP host header field. The vulnerability only applies if client certificate authentication is only enforced at the Connector. This issue affects Apache Tomcat from 11.0.0-M1 through 11.0.14, from 10.1.0-M1 through 10.1.49, from 9.0.0-M1 through 9.0.112, and 8.5.0 through 8.5.100. Users are recommended to upgrade to version 11.0.15 or later, 10.1.50 or later or 9.0.113 or later, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures TLS virtual hosts with connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass needs multiple TLS virtual hosts with connector-level client certificate authentication; the only bundled Tomcat serves a single host over plain HTTP, and the Liquibase CLI never starts Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20,
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fpj8-gq4v-p354",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66614",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Client certificate authentication bypass through mismatched SNI and Host header names, fixed in Tomcat 11.0.15, 10.1.50 and 9.0.113. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2 and 10.1.48 in 5.0.3, both in range; 5.1.0 and later carry 11.0.15 or newer, which include the fix. The bypass needs a TLS connector serving more than one virtual host, with client certificate authentication required on the connector for one host but not another. The application sets no server properties, so its embedded Tomcat runs one default host over plain HTTP with no TLS connector and no client certificate authentication, and none of its classes references the Tomcat API or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<9.0.113|>=10.1.0-M1|<10.1.50|>=11.0.0-M1|<11.0.15",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-31650",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat. Incorrect error handling for some invalid HTTP priority headers resulted in incomplete clean-up of the failed request which created a memory leak. A large number of such requests could trigger an OutOfMemoryException resulting in a denial of service. This issue affects Apache Tomcat from 9.0.76 through 9.0.102, from 10.1.10 through 10.1.39, from 11.0.0-M2 through 11.0.5, and 8.5.90 through 8.5.100. Users are recommended to upgrade to version 9.0.104, 10.1.40 or 11.0.6 which fix the issue.",
+      "recommendation": "No action required. No shipped component enables HTTP/2 on Tomcat.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The leak is in Tomcat's HTTP/2 priority handling; the only bundled Tomcat does not enable HTTP/2, and the Liquibase CLI never starts Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        459
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-3p2h-wqq4-wf4h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-31650",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Memory leak on invalid HTTP priority headers, fixed in Tomcat 11.0.6, 10.1.40 and 9.0.104. The upstream fix changes only Tomcat's HTTP/2 implementation (org.apache.coyote.http2), so the leak is reachable only over HTTP/2. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. No other jar in the images contains Tomcat classes. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, in range; 5.0.3 and later carry 10.1.48 or newer, which include the fix. Spring Boot enables HTTP/2 only when server.http2.enabled is set; the application sets no server properties, and none of its classes references the Tomcat API or a web server factory customizer, so its connector speaks HTTP/1.1 only.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-14T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.90|<=8.5.100|>=9.0.76|<9.0.104|>=10.1.10|<10.1.40|>=11.0.0-M2|<11.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29146",
       "analysis": {
         "state": "not_affected",

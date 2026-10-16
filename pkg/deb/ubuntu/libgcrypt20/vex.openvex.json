@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-d1d61b137606b76b24ae98d4ce200b7c055f4c07afa0169cecb805fb8da491b9",
+  "@id": "merged-vex-45574805a9da2f6f45e5180e7b0e88cd24a41d956115abdbd14df593e138c700",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:35.26117063Z",
+  "timestamp": "2026-10-14T19:12:27.757915763Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2024-2236"
       },
-      "timestamp": "2026-10-09T15:32:35.261171883Z",
+      "timestamp": "2026-10-14T19:12:27.695034609Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgcrypt20"
@@ -19,6 +19,21 @@
       "status_notes": "A timing-based side-channel flaw was found in libgcrypt's RSA implementation that may allow a remote attacker to initiate a Bleichenbacher-style attack, which can lead to the decryption of RSA ciphertexts.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "A timing side-channel in libgcrypt's RSA implementation could enable a Bleichenbacher-style decryption attack (the \"Marvin Attack\"). The container base image currently ships libgcrypt20 1.10.3-2ubuntu0.2, the fixed release (confirmed by pulling the current base image and checking installed package versions directly, since this OS package's version is not pinned by this repository — it tracks whatever the base image resolves to at build time). Independent of the version, checking the Java runtime's own library linkage shows it does not link libgcrypt at all; the package is pulled in only as a dependency of GnuPG/apt/systemd tooling (gpg, gpgv, gpg-agent, dirmngr, libapt-pkg, libsystemd0), none of which Liquibase invokes. Java uses its own JCE crypto providers, not system libgcrypt."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-41989"
+      },
+      "timestamp": "2026-10-14T19:12:27.739683882Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgcrypt20"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Libgcrypt before 1.12.2 sometimes allows a heap-based buffer overflow and denial of service via crafted ECDH ciphertext to gcry_pk_decrypt.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "A heap-based buffer overflow in libgcrypt's gcry_pk_decrypt when decrypting crafted ECDH ciphertext. Ubuntu fixed it in libgcrypt20 1.9.4-3ubuntu3.2 (jammy) and 1.10.3-2ubuntu0.1 (noble) in USN-8319-1. The affected builds are jammy libgcrypt20 1.9.4-3ubuntu3 in the Ubuntu 22.04-based 5.0.0 and 5.0.1 tags, and noble libgcrypt20 1.10.3-2build1 in the 5.0.2 to 5.2.0 tags. Tags from 5.2.1 ship a fixed build. libgcrypt20 is pulled in only as a dependency of OS tooling (GnuPG, apt's libapt-pkg and the systemd libraries). The container entrypoint runs only the Liquibase CLI, a user-supplied command, or, when INSTALL_MYSQL is set, the lpm package manager. None of these performs libgcrypt public-key decryption. The Liquibase CLI runs on the JVM, which uses its own Java cryptography providers and does not load libgcrypt. A source review found no references to libgcrypt in Liquibase Secure."
     }
   ]
 }

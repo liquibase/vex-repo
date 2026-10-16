@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-eb20eb3e81c63eef87c9033fd30fc7e4799957b5f5769fe360c0ac76405456dc",
+  "@id": "merged-vex-9d70497d2570d0a788688b94b5e58ac5cd6adf725086665a68c10bbfcb4794e9",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:57.148825302Z",
+  "timestamp": "2026-10-14T19:12:56.835368014Z",
   "version": 1,
   "statements": [
     {
@@ -14,7 +14,7 @@
           "PYSEC-2022-43012"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.050369598Z",
+      "timestamp": "2026-10-14T19:12:56.682806472Z",
       "products": [
         {
           "@id": "pkg:pypi/setuptools"
@@ -33,7 +33,7 @@
           "PYSEC-2026-1918"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.091121532Z",
+      "timestamp": "2026-10-14T19:12:56.728112113Z",
       "products": [
         {
           "@id": "pkg:pypi/setuptools"
@@ -52,7 +52,7 @@
           "PYSEC-2025-49"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.132155273Z",
+      "timestamp": "2026-10-14T19:12:56.773039523Z",
       "products": [
         {
           "@id": "pkg:pypi/setuptools"
@@ -61,6 +61,26 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GraalVM Python setuptools path traversal vulnerability. setuptools is bundled as a transitive dependency within GraalVM Python extensions but its package management functions are never invoked at runtime. This CVE requires setuptools to process package inputs; no package installation or processing occurs at runtime."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59890",
+        "aliases": [
+          "BIT-setuptools-2026-59890",
+          "GHSA-h35f-9h28-mq5c",
+          "PYSEC-2026-3447"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:56.818462837Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/setuptools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "setuptools is a package that allows users to download, build, install, upgrade, and uninstall Python packages. Prior to 83.0.0, FileList applied MANIFEST.in exclude, global-exclude, recursive-exclude, and prune directives by matching compiled glob patterns against on-disk file names without Unicode normalization, so on macOS APFS or HFS+ an NFD file name could bypass an NFC exclusion rule and be packed into a source distribution. This issue is fixed in version 83.0.0.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "setuptools ships only inside the checks extension (/liquibase/internal/extensions/liquibase-checks.jar), as part of the GraalPy runtime it embeds for Python custom policy checks; the images have no system Python or setuptools. In Docker images 5.0.0 through 5.1.1, setuptools 65.5.0 is installed in the embedded virtual environment, and its 65.5.0 wheel is also bundled in the runtime's ensurepip/_bundled folders. From 5.2.0 the build strips setuptools from the virtual environment, but the ensurepip wheel stays in 5.2.0 through 5.2.2, at META-INF/resources/libpython/ensurepip/_bundled; 6.0.0 ships no setuptools at all. Every copy is in range. Liquibase never runs setuptools or ensurepip: the extension runs its bundled checks and the operator's own check scripts against packages installed at build time, and none of its code imports setuptools or builds packages. Customers who point Liquibase at their own virtual environment install packages there with their own tools, outside Liquibase. The flaw needs setuptools to build a source distribution whose MANIFEST.in exclusions are matched against file names on a normalization-preserving filesystem such as macOS APFS or HFS+, which never happens, and the Docker images run on Linux."
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-61f30d63bd6dcb95122827446ef79bef4a01d99d7fb25ff39052b506356488e5",
+  "@id": "merged-vex-951cd0c82a4a389b1a5013c30ecc21bfa5342c64b8d11e18ab696ea569c0a234",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-09T15:32:57.937372719Z",
+  "timestamp": "2026-10-14T19:12:57.870743541Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "PYSEC-2023-192"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.708337432Z",
+      "timestamp": "2026-10-14T19:12:57.483526589Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -25,13 +25,70 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2023-45803",
+        "aliases": [
+          "GHSA-g4mx-q9vg-27p4",
+          "PYSEC-2023-212"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:57.852666094Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when an HTTP redirect response using status 301, 302, or 303 after the request had its method changed from one that could accept a request body (like POST) to GET as is required by HTTP RFCs. Both of the following conditions must be true to be affected by this vulnerability: 1. Using urllib3 and submitting sensitive information in the HTTP request body (such as form data or JSON) and 2. The origin service is compromised and starts redirecting using 301, 302, or 303 to a malicious peer or the redirected-to service becomes compromised. This issue has been addressed in versions 1.26.18 and 2.0.7.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw needs Python code that sends sensitive data in an HTTP request body through urllib3 to a service that then redirects to a malicious peer, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-37891",
+        "aliases": [
+          "GHSA-34jh-p97f-mpxf",
+          "PYSEC-2026-1995"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:57.758355655Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is a user-friendly HTTP client library for Python. When using urllib3's proxy support with ProxyManager, the Proxy-Authorization header is only sent to the configured proxy, as expected. However, when sending HTTP requests without using urllib3's proxy support, it's possible to accidentally configure the Proxy-Authorization header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the Proxy-Authorization HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects. Exploitation requires setting the Proxy-Authorization header without using urllib3's built-in proxy support, not disabling HTTP redirects, and either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin. Users are advised to update to either version 1.26.19 or version 2.2.2.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The header leak is only reached when Python code sets a Proxy-Authorization header by hand without urllib3's ProxyManager and follows a cross-origin redirect, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-50181",
+        "aliases": [
+          "GHSA-pq67-6m6q-mj2v",
+          "PYSEC-2026-1999"
+        ]
+      },
+      "timestamp": "2026-10-14T19:12:57.805840858Z",
+      "products": [
+        {
+          "@id": "pkg:pypi/urllib3"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "urllib3 is a user-friendly HTTP client library for Python. Prior to 2.5.0, it is possible to disable redirects for all requests by instantiating a PoolManager and specifying retries in a way that disable redirects. By default, requests and botocore users are not affected. An application attempting to mitigate SSRF or open redirect vulnerabilities by disabling redirects at the PoolManager level will remain vulnerable. This issue has been patched in version 2.5.0.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw only matters to Python code that sends HTTP requests through a urllib3 PoolManager and relies on PoolManager-level retries to disable redirects, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-66418",
         "aliases": [
           "GHSA-gm62-xv2j-4w53",
           "PYSEC-2026-1998"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.585155921Z",
+      "timestamp": "2026-10-14T19:12:57.347764389Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -49,7 +106,7 @@
           "PYSEC-2026-1994"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.627723383Z",
+      "timestamp": "2026-10-14T19:12:57.393328267Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -67,7 +124,7 @@
           "PYSEC-2026-1996"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.667675107Z",
+      "timestamp": "2026-10-14T19:12:57.438667955Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -85,7 +142,7 @@
           "PYSEC-2026-141"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.750050974Z",
+      "timestamp": "2026-10-14T19:12:57.528095576Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -103,7 +160,7 @@
           "PYSEC-2026-142"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.79222354Z",
+      "timestamp": "2026-10-14T19:12:57.573478382Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -121,7 +178,7 @@
           "PYSEC-2026-4175"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.833915132Z",
+      "timestamp": "2026-10-14T19:12:57.618736315Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -140,7 +197,7 @@
           "PYSEC-2026-4176"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.876035493Z",
+      "timestamp": "2026-10-14T19:12:57.664632454Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -159,7 +216,7 @@
           "PYSEC-2026-4177"
         ]
       },
-      "timestamp": "2026-10-09T15:32:57.919076294Z",
+      "timestamp": "2026-10-14T19:12:57.710814779Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
