@@ -52,7 +52,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-15T00:00:00Z"
+        "firstIssued": "2026-06-15T00:00:00Z",
+        "lastUpdated": "2026-06-15T00:00:00Z"
       },
       "affects": [
         {
@@ -112,7 +113,8 @@
         "state": "not_affected",
         "detail": "This CVE affects OpenSSL CMS password-based decryption when attacker-supplied CMS data reaches CMS_decrypt() or CMS_decrypt_set1_password(). Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, CMS_decrypt_set1_password, PWRI key unwrapping, S/MIME, or PKCS#7 processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS decryption path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-23T00:00:00Z"
+        "firstIssued": "2026-09-23T00:00:00Z",
+        "lastUpdated": "2026-09-23T00:00:00Z"
       },
       "affects": [
         {
@@ -168,7 +170,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue requires an application to use OpenSSL's EVP_Cipher one-shot API for ChaCha20-Poly1305 or AES-OCB decryption on an empty ciphertext while expecting that call to validate the AEAD tag. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD decryption helpers, and a source review found no references to EVP_Cipher, ChaCha20-Poly1305, or AES-OCB in the product runtime path.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-23T00:00:00Z"
+        "firstIssued": "2026-09-23T00:00:00Z",
+        "lastUpdated": "2026-09-23T00:00:00Z"
       },
       "affects": [
         {
@@ -224,7 +227,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when an application decrypts attacker-supplied CMS messages through OpenSSL's CMS_decrypt path. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, AES-WRAP-PAD CMS unwrapping, or related OpenSSL CMS handling in the product runtime path.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -280,7 +284,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when a long- lived CMP server reuses an OSSL_CMP_CTX across attacker-supplied requests and caches extraCerts from rejected messages. Liquibase Secure's stock container runs the Liquibase Java CLI rather than an OpenSSL CMP server, and a source review found no references to OSSL_CMP_CTX, extraCerts, or CMP request processing in the product runtime path.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -332,7 +337,8 @@
         "state": "not_affected",
         "detail": "This issue requires an application to verify attacker-supplied signed PKCS#7 data through OpenSSL's legacy PKCS#7 parsing APIs. Liquibase Secure's container runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL PKCS#7 integration or invocation of OpenSSL tooling at runtime. The vulnerable OpenSSL code path is therefore not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -384,7 +390,8 @@
         "state": "not_affected",
         "detail": "This issue affects OpenSSL clients that perform DANE TLSA-based server authentication with a specific mix of PKIX and DANE-TA usages. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL DANE/TLSA integration or other native OpenSSL client code paths. The vulnerable OpenSSL behavior is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -436,7 +443,8 @@
         "state": "not_affected",
         "detail": "This issue requires OpenSSL X.509 verification with delta-CRL processing enabled and a malformed CRL input. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL certificate-validation integration or CRL-processing path. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -488,7 +496,8 @@
         "state": "not_affected",
         "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or invocation of native tooling that would process CMS EnvelopedData. The vulnerable OpenSSL code path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -540,7 +549,8 @@
         "state": "not_affected",
         "detail": "This issue affects applications that pass attacker-controlled CMS EnvelopedData into OpenSSL's CMS_decrypt() path with RSA-OAEP transport parameters. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no OpenSSL CMS integration or native RSA-OAEP processing through OpenSSL. The vulnerable code path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -592,7 +602,8 @@
         "state": "not_affected",
         "detail": "This issue affects only 32-bit platforms when OpenSSL converts excessively large X.509 OCTET STRING values to hexadecimal text. The scanner-reported package record is for amd64, and Liquibase Secure supports only 64-bit container architectures in this runtime. The required 32-bit execution environment is therefore absent.",
         "justification": "requires_environment",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -644,7 +655,8 @@
         "state": "not_affected",
         "detail": "This issue requires an application to use OpenSSL's EVP_PKEY_encapsulate() with RSA/RSASVE on attacker-supplied public keys. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL key encapsulation integration or other OpenSSL API usage at runtime. The vulnerable code path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -704,7 +716,8 @@
         "state": "not_affected",
         "detail": "This CVE affects OpenSSL CMS AuthEnvelopedData decryption when attacker-supplied content reaches CMS_decrypt() and the application trusts the result without separate integrity enforcement. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to CMS_decrypt, AuthEnvelopedData, or related CMS processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -756,7 +769,8 @@
         "state": "not_affected",
         "detail": "This issue affects applications that pass attacker-supplied ASN.1 input into OpenSSL d2i_* decoders such as d2i_X509() or d2i_PKCS7(). Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no native OpenSSL ASN.1 decoding integration or invocation of OpenSSL tooling at runtime. The vulnerable decoder path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -808,7 +822,8 @@
         "state": "not_affected",
         "detail": "This issue affects OpenSSL DTLS endpoints that buffer future-epoch records during a handshake. Liquibase Secure's runtime is a Java CLI launched by a shell entrypoint, and a source review found no DTLS server or client implementation through OpenSSL, nor any invocation of OpenSSL networking tooling at runtime. The vulnerable DTLS code path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -864,7 +879,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The vulnerable low-level OCB encrypt and decrypt routines are therefore never called by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -920,7 +936,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_get_friendlyname() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -976,7 +993,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. TS_RESP_verify_response() is therefore never called on attacker-supplied timestamp responses by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1032,7 +1050,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. PKCS12_item_decrypt_d2i_ex() is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1088,7 +1107,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's PKCS#12 parser is therefore never called on attacker-supplied PKCS#12 data by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.7 (noble, Liquibase Secure 5.0.2 and 5.0.3); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1145,7 +1165,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. OpenSSL's CMS password-recipient decryption is therefore never performed by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.20 (jammy); only Liquibase Secure 5.0.0 (3.0.2-0ubuntu1.19) shipped an affected build, and the noble images from 5.0.2 on already carry the fix.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1201,7 +1222,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS implementation is therefore never used by Liquibase Secure, and no DTLS handshake can be in flight for the retransmission logic to act on. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1248,7 +1270,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL never receives a peer certificate from Liquibase Secure, so its X.509 extension cache and CRL distribution point processing are never exercised. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1308,7 +1331,8 @@
         "state": "not_affected",
         "detail": "This CVE affects password-based OpenSSL CMS decryption when attacker-supplied PasswordRecipientInfo content reaches the CMS implementation. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMS tooling, and a source review found no references to password-based CMS decryption or related CMS PasswordRecipientInfo processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMS path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1364,7 +1388,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs ECDSA or SM2 signing through OpenSSL; the JRE's Java providers handle any signing the product does. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1420,7 +1445,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure contains no CMP client, so OpenSSL's revocation response handling is never reached. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1476,7 +1502,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. OpenSSL's DTLS record layer is never used by Liquibase Secure, so no DTLS association exists to be torn down. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1532,7 +1559,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that do link libssl or libcrypto (the wget, curl and openssl command-line tools, plus the coreutils digest utilities on noble) are never invoked after the image is built. Liquibase Secure never performs SM2 signing through OpenSSL. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.30 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and libssl3t64 3.0.13-0ubuntu3.16 (noble, Liquibase Secure 5.0.2 through 5.2.2); every published 5.x tag ships an older build.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-30T00:00:00Z"
+        "firstIssued": "2026-09-30T00:00:00Z",
+        "lastUpdated": "2026-09-30T00:00:00Z"
       },
       "affects": [
         {
@@ -1597,7 +1625,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. The only binary in the image that references OpenSSL's CMS routines is the openssl command-line tool, so the vulnerable AuthEnvelopedData and EnvelopedData parser is never called by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {
@@ -1661,7 +1690,8 @@
         "state": "not_affected",
         "detail": "No process in the Liquibase Secure runtime path links OpenSSL: the JRE uses its own Java TLS and crypto providers and none of its native libraries link libssl or libcrypto, lpm is a statically linked Go binary, and the only binaries in the image that link libssl (the wget, curl and openssl command-line tools) are never invoked after the image is built. No binary or library in the image other than libcrypto itself references BIO_f_linebuffer, and OpenSSL's own command-line tool only uses that filter on VMS, so the vulnerable line-buffering BIO is never used by Liquibase Secure. Fixed in Ubuntu libssl3 3.0.2-0ubuntu1.21 (jammy; Liquibase Secure 5.0.0 and 5.0.1 shipped 3.0.2-0ubuntu1.19 and 3.0.2-0ubuntu1.20) and libssl3t64 3.0.13-0ubuntu3.7 (noble; Liquibase Secure 5.0.2 and 5.0.3 shipped 3.0.13-0ubuntu3.6); Liquibase Secure 5.1.0 and later ship 3.0.13-0ubuntu3.7 or newer.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {
@@ -1721,7 +1751,8 @@
         "state": "not_affected",
         "detail": "This CVE requires an OpenSSL CMP client to process attacker-controlled CMP or CRMF CertRepMessage content. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMP tooling, and a source review found no references to CMP, CRMF, CertRepMessage, or EncryptedValue processing in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable CMP client path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1781,7 +1812,8 @@
         "state": "not_affected",
         "detail": "This CVE requires an application to use OpenSSL's DHX/X9.42 key-exchange path through EVP_PKEY_derive_set_peer(), typically in specialized CMP or static DHX deployments. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL key-exchange tooling, and a source review found no references to CMP, DHX, X9.42, or EVP_PKEY_derive_set_peer in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable DHX path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1841,7 +1873,8 @@
         "state": "not_affected",
         "detail": "This CVE requires an application to drive OpenSSL AES-OCB through the EVP_Cipher() one-shot interface. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD tooling, and a source review found no references to AES-OCB, EVP_Cipher(), or related OpenSSL AEAD handling in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable AES-OCB path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1901,7 +1934,8 @@
         "state": "not_affected",
         "detail": "This CVE requires an application to use OpenSSL AES-SIV or AES-GCM-SIV through the EVP interface with empty-ciphertext message handling. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL AEAD tooling, and a source review found no references to AES-SIV, AES-GCM-SIV, or related EVP decryption handling in the product runtime path. libssl3 is inherited from the base image only, so the vulnerable AEAD path is not reachable from Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1957,7 +1991,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.29, but this issue is only reachable when an application verifies CMP password-based protection on attacker-supplied messages. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL CMP tooling, and a source review found no references to CMP, PBM, or OSSL_CMP request-processing paths in the product runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-23T00:00:00Z"
+        "firstIssued": "2026-09-23T00:00:00Z",
+        "lastUpdated": "2026-09-23T00:00:00Z"
       },
       "affects": [
         {
@@ -2013,7 +2048,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports libssl3 3.0.2-0ubuntu1.19, below Ubuntu's fixed 3.0.2-0ubuntu1.25, but this issue requires an application to call OpenSSL's ASN1_mbstring_copy or ASN1_mbstring_ncopy APIs directly, or to register a custom string type and then feed it extremely large attacker-controlled input. Liquibase Secure's stock container runs the Liquibase Java CLI rather than OpenSSL string-processing APIs, and a source review found no references to those OpenSSL ASN.1 entry points in the product runtime path.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-23T00:00:00Z"
+        "firstIssued": "2026-09-23T00:00:00Z",
+        "lastUpdated": "2026-09-23T00:00:00Z"
       },
       "affects": [
         {

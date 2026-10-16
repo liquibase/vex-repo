@@ -9,7 +9,8 @@
         "state": "not_affected",
         "detail": "sqlparse ReDoS vulnerability. sqlparse is bundled as a transitive dependency within GraalVM Python extensions but its SQL parsing functionality is never invoked at runtime. Liquibase uses its own Java SQL parser; the Python sqlparse module is never called.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
       },
       "affects": [
         {
@@ -60,7 +61,8 @@
         "state": "not_affected",
         "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-17T00:00:00Z"
       },
       "affects": [
         {
@@ -116,7 +118,8 @@
         "state": "not_affected",
         "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-17T00:00:00Z"
       },
       "affects": [
         {
@@ -173,7 +176,8 @@
         "state": "not_affected",
         "detail": "sqlparse is pinned at 0.5.3 in tools/liquibase-checks/liquibase-checks/pom.xml:864. The surrounding build plugin comment states these Python packages are only needed at build time and are never used at runtime (tools/liquibase-checks/liquibase-checks/pom.xml:893, tools/liquibase-checks/liquibase-checks/pom.xml:895), and the runtime implementation only references sqlparse in explanatory comments about a possible Python lock hang (tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:77, tools/liquibase-checks/liquibase-checks/src/main/java/com/liquibase/executor/PythonScriptExecutor.java:240). The only actual import is in a test fixture (tools/liquibase-checks/liquibase-checks/src/test/resources/scripts/badScript.py:4). NVD and GitHub both describe this as a sqlparse DoS fixed in 0.6.0, but the vulnerable parser is not reachable from the Liquibase runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-17T00:00:00Z"
       },
       "affects": [
         {
@@ -229,7 +233,8 @@
         "state": "not_affected",
         "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. The vulnerable Python/PHP output-formatting code path (sqlparse.format with output_format='python' or 'php') is only reachable if a customer authors and configures their own custom check script that imports sqlparse and calls it in one of those modes; no shipped configuration does this out of the box.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -285,7 +290,8 @@
         "state": "not_affected",
         "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. The vulnerable reindent code path (sqlparse.format(sql, reindent=True) or sqlformat --reindent) is only reachable if a customer authors and configures their own custom check script that imports sqlparse and calls it in that mode against attacker-influenced SQL; no shipped configuration does this out of the box.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -334,7 +340,8 @@
         "state": "not_affected",
         "detail": "sqlparse ships in the runtime virtual environment of the checks module's embedded Python scripting engine, which end users can use to author custom check scripts; the build only strips pip, setuptools, and their installer machinery from that environment, not sqlparse itself. None of the check scripts Liquibase bundles and runs by default import sqlparse — they use a different SQL parsing library for changeset SQL. This advisory's vulnerable tuple-list formatting code path is only reachable if a customer authors and configures their own custom check script that imports sqlparse and formats attacker-influenced SQL with it; no shipped configuration does this out of the box.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {

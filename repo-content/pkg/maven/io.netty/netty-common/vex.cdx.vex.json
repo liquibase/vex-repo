@@ -44,7 +44,8 @@
         "state": "not_affected",
         "detail": "Netty's PlatformDependent unconditionally attempts to read /etc/os-release and /usr/lib/os-release-style paths for OS identification, including on Windows where these paths don't natively exist. Exploitation requires an attacker who already has local filesystem write access sufficient to plant a >1GB file at one of these root-level paths ahead of JVM startup — a precondition that itself requires the host to already be compromised at a level exceeding what this DoS provides. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver; Liquibase does not read or configure these paths itself.",
         "justification": "requires_environment",
-        "firstIssued": "2026-08-11T00:00:00Z"
+        "firstIssued": "2026-08-11T00:00:00Z",
+        "lastUpdated": "2026-08-11T00:00:00Z"
       },
       "affects": [
         {
@@ -99,7 +100,8 @@
         "state": "not_affected",
         "detail": "Incomplete fix to CVE-2024-47535 (see above): a null-byte-filled file at the same Windows os-release-style paths causes InputStreamReader / BufferedReader to loop filling the line buffer with replacement characters without hitting a line break. Same precondition as CVE-2024-47535 — requires an attacker who already has local filesystem write access to plant the malicious file before JVM startup. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver; Liquibase does not read or configure these paths itself.",
         "justification": "requires_environment",
-        "firstIssued": "2026-08-11T00:00:00Z"
+        "firstIssued": "2026-08-11T00:00:00Z",
+        "lastUpdated": "2026-08-11T00:00:00Z"
       },
       "affects": [
         {

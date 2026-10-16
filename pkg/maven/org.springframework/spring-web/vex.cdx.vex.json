@@ -63,6 +63,67 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2025-41234",
+      "description": "In Spring Framework, versions 6.0.x as of 6.0.5, versions 6.1.x and 6.2.x, an application is vulnerable to a reflected file download (RFD) attack when it sets a \"Content-Disposition\" header with a non-ASCII charset, where the filename attribute is derived from user-supplied input. Affected versions: Spring Framework 6.2.0 through 6.2.7; 6.1.0 through 6.1.20; 6.0.5 through 6.0.28.",
+      "recommendation": "No action required. No shipped component sets a Content-Disposition header with ContentDisposition.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:N/I:N/A:N",
+          "justification": "spring-web ships only inside the 5.x license-tracking application, which never builds a Content-Disposition header, so the faulty filename encoding is never used.\n"
+        }
+      ],
+      "cwes": [
+        113
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6r3c-xf4w-jxjm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-41234",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2025-41234",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI ships no Spring web code; spring-web is only an optional, compile-time dependency of liquibase-core and is not bundled. The scanner reports spring-web from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries Spring Framework 6.2.2 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 6.2.12 or 7.0.x, which are not affected. The advisory applies only to applications that build a Content-Disposition response header with ContentDisposition.Builder#filename(String, Charset) from unsanitized user input. None of the application's classes references ContentDisposition or sets a Content-Disposition header; its three REST controllers return a health object, a license-tracking batch acknowledgement and a usage report rendered as text, JSON or HTML, never a file download.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-web",
+          "versions": [
+            {
+              "range": "vers:maven/>=6.0.5|<6.0.29|>=6.1.0|<6.1.21|>=6.2.0|<6.2.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

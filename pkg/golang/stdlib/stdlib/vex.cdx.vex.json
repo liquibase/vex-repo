@@ -9,7 +9,8 @@
         "state": "not_affected",
         "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
       },
       "affects": [
         {
@@ -23,109 +24,12 @@
         "state": "not_affected",
         "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
       },
       "affects": [
         {
           "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32282",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib internal/syscall/unix Root.Chmod symlink traversal vulnerability. Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32281",
-      "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "cwes": [
-        295
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32281",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib crypto/x509 certificate policy mapping DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2026-32283",
-      "description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
-      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "cwes": [
-        770
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32283",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib crypto/tls TLS 1.3 key update DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
-        "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-05-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
-              "status": "unaffected"
-            }
-          ]
         }
       ]
     },
@@ -173,7 +77,8 @@
         "state": "not_affected",
         "detail": "Go arithmetic-overflow compiler bug in loop induction variables is only reachable while compiling Go code with the toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not run the Go compiler or build Go code at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -233,7 +138,8 @@
         "state": "not_affected",
         "detail": "Go checksum-validation flaw in cmd/go only applies when the Go toolchain downloads modules or toolchains from an untrusted proxy or checksum database. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). This image does not execute `go`, use GOTOOLCHAIN, or perform module downloads at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -293,7 +199,8 @@
         "state": "not_affected",
         "detail": "cmd/go build-time code smuggling via `#cgo pkg-config:` arguments is only reachable when compiling Go sources with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not run cmd/go, pkg-config, or cgo builds at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -353,7 +260,8 @@
         "state": "not_affected",
         "detail": "Go compiler/cgo comment-parsing discrepancy is only reachable when building cgo binaries with the Go toolchain. Liquibase Secure installs lpm from a release ZIP (`docker/Dockerfile:39`) and the runtime entrypoint only invokes lpm to add mysql when INSTALL_MYSQL is set (`docker/docker-entrypoint.sh:4`). The image does not execute the Go compiler or perform cgo builds at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -409,7 +317,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-12T00:00:00Z",
+        "lastUpdated": "2026-05-12T00:00:00Z"
       },
       "affects": [
         {
@@ -445,7 +354,8 @@
         "state": "not_affected",
         "detail": "Go stdlib LookupCNAME double-free in the cgo DNS resolver when processing a very long CNAME response. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it downloads Liquibase extension driver JARs from GitHub release assets via HTTP. lpm never calls LookupCNAME — standard HTTP hostname resolution uses LookupIPAddr/LookupHost, not the CNAME-specific API. Additionally, the vulnerability requires the cgo DNS resolver, which is not the default on Linux; the pure-Go DNS resolver is active in the eclipse-temurin:21-jre-noble container.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-12T00:00:00Z",
+        "lastUpdated": "2026-05-12T00:00:00Z"
       },
       "affects": [
         {
@@ -481,21 +391,8 @@
         "state": "not_affected",
         "detail": "Go stdlib HTTP/2 transport infinite loop when a server sends SETTINGS_MAX_FRAME_SIZE with a value of 0. lpm (Liquibase Package Manager) is the Go binary in the Docker image; it makes HTTP/2 connections to GitHub release servers to download Liquibase extension driver JARs. Exploitation requires a server to send the malformed SETTINGS_MAX_FRAME_SIZE=0 frame. lpm only connects to trusted GitHub release CDN endpoints (URLs and checksums fixed in docker/Dockerfile:35-55); no attacker- controlled server endpoint exists in lpm's execution path.",
         "justification": "protected_by_mitigating_control",
-        "firstIssued": "2026-05-12T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61726",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
+        "firstIssued": "2026-05-12T00:00:00Z",
+        "lastUpdated": "2026-05-12T00:00:00Z"
       },
       "affects": [
         {
@@ -531,7 +428,8 @@
         "state": "not_affected",
         "detail": "Go stdlib net/mail CPU exhaustion via pathological inputs to ParseAddress, ParseAddressList, and ParseDate. lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail parsing functions are not called by lpm at any point during package installation or management operations.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-12T00:00:00Z",
+        "lastUpdated": "2026-05-12T00:00:00Z"
       },
       "affects": [
         {
@@ -567,7 +465,8 @@
         "state": "not_affected",
         "detail": "Go stdlib net/mail DoS via pathological email address inputs reaching the consumePhrase parser (RFC 5322 phrase parsing). lpm (Liquibase Package Manager) is the Go binary in the Docker image. lpm is a package manager for Liquibase extension drivers and has no email processing functionality. The vulnerable net/mail consumePhrase code path is not reachable from any lpm operation.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-12T00:00:00Z"
+        "firstIssued": "2026-05-12T00:00:00Z",
+        "lastUpdated": "2026-05-12T00:00:00Z"
       },
       "affects": [
         {
@@ -617,7 +516,8 @@
         "state": "not_affected",
         "detail": "Go stdlib Reader.ReadResponse CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ReadResponse, net/textproto, or net/http usage, so the vulnerable API is not directly reachable from lpm source.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -628,6 +528,21 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61726",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -670,7 +585,8 @@
         "state": "not_affected",
         "detail": "Go stdlib ParseAddress CPU exhaustion vulnerability fixed in Go 1.24.8 and 1.25.2. Current Docker builds install lpm 0.3.4 (docker/Dockerfile:35), download it from the liquibase-package-manager v0.3.4 release (docker/Dockerfile:49), and the corresponding upstream liquibase-package-manager/go.mod:3 declares go 1.25.10, which includes the fix. GitHub code search for liquibase-package-manager v0.3.4 found no direct ParseAddress or net/mail usage, so the vulnerable email parsing API is not reachable from lpm source.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -690,7 +606,8 @@
         "state": "not_affected",
         "detail": "Current Liquibase Secure Docker builds install lpm 0.3.5 (docker/Dockerfile:35), and the upstream liquibase-package-manager v0.3.5 go.mod declares go 1.25.11 (liquibase-package-manager/go.mod:3), which is newer than the scanner-reported Go 1.25.1 and includes the fix. GitHub code search for liquibase/liquibase-package-manager found no crypto/x509 imports or references, so the vulnerable certificate-chain path is not exercised by lpm source.",
         "justification": "vulnerable_code_not_present",
-        "firstIssued": "2026-08-05T00:00:00Z"
+        "firstIssued": "2026-08-05T00:00:00Z",
+        "lastUpdated": "2026-08-05T00:00:00Z"
       },
       "affects": [
         {
@@ -747,7 +664,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -810,7 +728,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -877,7 +796,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-08T00:00:00Z"
+        "firstIssued": "2026-06-08T00:00:00Z",
+        "lastUpdated": "2026-06-08T00:00:00Z"
       },
       "affects": [
         {
@@ -942,7 +862,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-24T00:00:00Z"
+        "firstIssued": "2026-06-24T00:00:00Z",
+        "lastUpdated": "2026-06-24T00:00:00Z"
       },
       "affects": [
         {
@@ -1002,7 +923,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1013,20 +935,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-61728",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -1079,7 +987,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-29T00:00:00Z"
+        "firstIssued": "2026-05-29T00:00:00Z",
+        "lastUpdated": "2026-05-29T00:00:00Z"
       },
       "affects": [
         {
@@ -1146,7 +1055,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-07-10T00:00:00Z"
+        "firstIssued": "2026-07-10T00:00:00Z",
+        "lastUpdated": "2026-07-10T00:00:00Z"
       },
       "affects": [
         {
@@ -1166,7 +1076,23 @@
         "state": "not_affected",
         "detail": "Go cmd/go toolchain code execution via malicious version strings is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). This repository does not invoke the go toolchain, module downloads, or GOTOOLCHAIN-based toolchain selection paths that the advisory requires.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61728",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
       },
       "affects": [
         {
@@ -1180,7 +1106,8 @@
         "state": "not_affected",
         "detail": "Go stdlib cmd/go code smuggling via SWIG file names is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). This repository does not invoke the go toolchain or any SWIG-based build path that the advisory requires.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1194,7 +1121,8 @@
         "state": "not_affected",
         "detail": "Go compiler memory corruption in pointer unwrapping is not reachable in Liquibase Secure images. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). The image does not run the Go compiler or perform cgo builds at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1208,7 +1136,8 @@
         "state": "not_affected",
         "detail": "crypto/x509 name-constraint quadratic behavior is not reachable in the Liquibase Secure container. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4). A repo-wide search found no code path that parses attacker-controlled certificate chains or invokes the affected x509 name-constraint APIs at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1222,7 +1151,8 @@
         "state": "not_affected",
         "detail": "encoding/pem quadratic parsing behavior is not reachable in the Liquibase Secure container. The secure Docker image installs lpm from a release ZIP (core/docker/Dockerfile:39) and the runtime entrypoint only uses lpm to add mysql when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh: 4). A repo-wide search found no code path that parses untrusted PEM input at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1276,7 +1206,8 @@
         "state": "not_affected",
         "detail": "Validating certificate chains with DSA public keys is not a reachable input path for Liquibase Secure. NVD fixes this in Go 1.25.2, but the Docker image only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:35-55) and the entrypoint only invokes lpm when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Upstream lpm uses a default http.Client for downloads with no custom RootCAs or PEM loading logic (/tmp/gh-aw/agent/lpm/internal/app/utils/Http.go:13-25), so the arbitrary certificate-chain path described by the advisory is not exercised here.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1336,7 +1267,8 @@
         "state": "not_affected",
         "detail": "Untrusted PEM parsing is not a reachable input path for Liquibase Secure. NVD fixes this in Go 1.25.2, but the Docker image only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:35-55) and the entrypoint only invokes lpm when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Upstream lpm uses a default http.Client for downloads with no PEM parsing or certificate-loader code (/tmp/gh-aw/agent/lpm/internal/app/utils/Http.go:13-25), so the invalid-PEM parsing path described by the advisory is not exercised here.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-06T00:00:00Z"
+        "firstIssued": "2026-08-06T00:00:00Z",
+        "lastUpdated": "2026-08-06T00:00:00Z"
       },
       "affects": [
         {
@@ -1396,7 +1328,8 @@
         "state": "not_affected",
         "detail": "Go stdlib crypto/x509 name-constraint vulnerability. NVD fixes the 1.25 line in Go 1.25.3 and the 1.24 line in Go 1.24.9; the scanner reported go1.25.1 for this image. Liquibase Secure only installs lpm 0.3.6 from a release ZIP (docker/Dockerfile:39-55), and the entrypoint only invokes it when INSTALL_MYSQL is set (docker/docker-entrypoint.sh:4-5). Repo-wide source greps found no crypto/x509, SystemCertPool, or CertPool usage in application code, so the arbitrary certificate-chain path described by the advisory is not exercised.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
+        "firstIssued": "2026-08-07T00:00:00Z",
+        "lastUpdated": "2026-08-07T00:00:00Z"
       },
       "affects": [
         {
@@ -1411,26 +1344,13 @@
       ]
     },
     {
-      "id": "CVE-2025-61729",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-39821",
       "analysis": {
         "state": "not_affected",
         "detail": "CVE-2026-39821 / GO-2026-5026 is the Go idna / net/http hostname validation issue, but the lpm helper only downloads from code-defined hosts. `cmd/populator/modules.go:20` and `cmd/populator/modules.go:25` hardcode the module registry URL, `cmd/populator/Populator.go:23` and `cmd/populator/Populator.go:29` show only the embedded package manifest is iterated, and the HTTP helpers consume those fixed URLs (`cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`, `internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`). There is no attacker-controlled hostname input path here, so the Punycode hostname-validation bug is unreachable in this deployment.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-14T00:00:00Z"
+        "firstIssued": "2026-08-14T00:00:00Z",
+        "lastUpdated": "2026-08-14T00:00:00Z"
       },
       "affects": [
         {
@@ -1444,7 +1364,8 @@
         "state": "not_affected",
         "detail": "CVE-2026-46600 / GO-2026-5942 requires the Go cgo DNS resolver and invalid SVCB/HTTPS DNS answers, but the lpm release build disables cgo (`Makefile:21`, `Makefile:22`, `Makefile:36`, and `Makefile:37` set `CGO_ENABLED=0`). The runtime code only creates ordinary HTTP clients and performs fixed-URL downloads (`internal/app/utils/Http.go:13`, `internal/app/utils/Http.go:25`, `cmd/populator/artifactory_maven.go:28`, `cmd/populator/artifactory_maven.go:30`, `cmd/populator/artifactory_github.go:31`, `cmd/populator/artifactory_github.go:32`), so the cgo resolver path used by the advisory is not reachable here.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-14T00:00:00Z"
+        "firstIssued": "2026-08-14T00:00:00Z",
+        "lastUpdated": "2026-08-14T00:00:00Z"
       },
       "affects": [
         {
@@ -1502,7 +1423,8 @@
         "state": "not_affected",
         "detail": "Go stdlib recursion-limit issue in Unmarshal. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and the runtime entrypoint only invokes lpm when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The default Liquibase runtime path executes the Java CLI directly, so the Unmarshal path that would process attacker-controlled deeply nested data is not exercised. This assessment also covers the GO-2026-5972 alias.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1513,6 +1435,21 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61729",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -1566,7 +1503,8 @@
         "state": "not_affected",
         "detail": "Go stdlib HTTP/2 preface timeout issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not an HTTP server. The secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5), so the server-side unencrypted HTTP/2 listener required by the advisory is absent.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1630,7 +1568,8 @@
         "state": "not_affected",
         "detail": "Go stdlib unescaped-slash parsing issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure's runtime path is the Java CLI plus the optional lpm helper (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The container does not parse attacker-controlled HTML/XML content through this stdlib path, so the vulnerable behavior is not exercised.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1694,7 +1633,8 @@
         "state": "not_affected",
         "detail": "Go stdlib DecodeElement depth-counter issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5), so the XML decode path that would process attacker-controlled nested elements is not reached. This assessment also covers the GO-2026-6088 alias.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1758,7 +1698,8 @@
         "state": "not_affected",
         "detail": "Go stdlib relative-path resolution quadratic complexity issue. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. The secure Docker image only executes the Java CLI by default and invokes lpm 0.3.6 only when INSTALL_MYSQL is set (core/docker/Dockerfile:34-50 and core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The vulnerable path resolution behavior is not exercised on attacker-controlled input in this deployment.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1822,7 +1763,8 @@
         "state": "not_affected",
         "detail": "Go stdlib KeyUpdate state-advance issue in TLS handshakes. The dispatch payload reports go1.26.5 and fixed versions 1.25.13, 1.26.6, and 1.27.0-rc.3. Liquibase Secure is a database migration CLI, not a TLS server; the secure Docker image installs lpm 0.3.6 from a release ZIP (core/docker/Dockerfile:34-50) and only invokes it when INSTALL_MYSQL is set (core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5). The server-side TLS handshake path required by the advisory is absent.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-17T00:00:00Z"
+        "firstIssued": "2026-08-17T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1874,7 +1816,8 @@
         "state": "not_affected",
         "detail": "Go stdlib GOSUMDB transparency-log bypass issue. NVD fixes the Go 1.25 line in 1.25.13 and the 1.26 line in 1.26.6. The scan reported installed version go1.25.1 for the bundled lpm helper. Liquibase Secure installs lpm 0.3.6 from a release ZIP in core/docker/Dockerfile:23, core/docker/Dockerfile:44, core/docker/Dockerfile:49 and only invokes it when INSTALL_MYSQL is set in core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5. The default runtime path executes the Java Liquibase CLI directly, and this repository has no go.mod, go.sum, or go mod tidy workflow that would exercise the vulnerable Go module-verification path.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-20T00:00:00Z"
+        "firstIssued": "2026-08-20T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1926,7 +1869,8 @@
         "state": "not_affected",
         "detail": "Go stdlib GOPROXY sumdb-tile forgery issue. NVD fixes the Go 1.25 line in 1.25.13 and the 1.26 line in 1.26.6. The scan reported installed versions go1.25.3 and go1.25.1 for the bundled lpm helper across the supplied image tags. Liquibase Secure installs lpm 0.3.6 from a release ZIP in core/docker/Dockerfile:23, core/docker/Dockerfile:44, core/docker/Dockerfile:49 and only invokes it when INSTALL_MYSQL is set in core/docker/docker-entrypoint.sh:4, core/docker/docker-entrypoint.sh:5. The default runtime path executes the Java Liquibase CLI directly, so the Go module-download and cache-population path described by the advisory is not exercised here.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-08-20T00:00:00Z"
+        "firstIssued": "2026-08-20T00:00:00Z",
+        "lastUpdated": "2026-08-20T00:00:00Z"
       },
       "affects": [
         {
@@ -1937,20 +1881,6 @@
               "status": "unaffected"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "CVE-2025-58183",
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -2000,7 +1930,8 @@
         "state": "not_affected",
         "detail": "Go stdlib crypto/tls Encrypted Client Hello (ECH) PSK-identity disclosure, fixed in Go 1.25.12 and 1.26.5 (GO-2026-5856). Only the latest published tag actually ships a fixed Go toolchain: extracting and inspecting the embedded Go build info of the `lpm` binary in each currently published `liquibase/liquibase-secure` tag shows 5.2.2 -> lpm 0.3.6 (go1.26.8, fixed), 5.2.1/5.2.0 -> lpm 0.3.4 (go1.26.4, unfixed), and 5.1.1/5.1.0/5.0.3/5.0.2/5.0.1 -> lpm 0.3.1/0.3.0/0.2.16/0.2.15/0.2.14 (go1.25.8/1.25.7/1.25.5/1.25.3/1.25.1, all unfixed). The current source tree's docker/Dockerfile:35 pins a newer lpm 0.3.7, itself also built with go1.26.8 (fixed) per the SHA256-pinned release artifact (lpm-0.3.7-linux.zip, sha256 329eafbe9289d1e83a62cb89844ac461bb5b9d4c5f5f184c8f26244e350e8a95). Despite most published tags running an unfixed Go toolchain by version, the vulnerable handshake path requires the TLS client to opt in by setting `crypto/tls.Config.EncryptedClientHelloConfigList` -- ECH support has been opt-in-only since its introduction in Go 1.23 (see the Go 1.23 release notes: \"This feature can be enabled by setting the Config.EncryptedClientHelloConfigList field\"). lpm's only HTTP client (internal/app/utils/Http.go) has been an unmodified bare `http.Client{}` with no custom Transport or tls.Config across every released version checked (v0.2.14 through v0.3.7), and no import of crypto/tls or reference to ECHConfigList exists anywhere in lpm's source or dependency tree. ECH is therefore never negotiated by lpm in any published Secure image, regardless of the underlying Go version, so the vulnerable code path is not reachable in any of them.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -2064,7 +1995,8 @@
         "state": "not_affected",
         "detail": "Go stdlib os.Root escape (GO-2026-4602), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The vulnerability only affects directory listings of a File opened through an os.Root (os.OpenRoot / Root.Open). A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no use of os.Root, os.OpenRoot or os.OpenInRoot: lpm lists directories through a plain os.Open followed by File.Readdir, which has no root boundary to escape. The third-party libraries linked into the lpm binary (spf13/cobra, spf13/pflag, inconshreveable/mousetrap, hashicorp/go-version) do not use os.Root either. Even where reached, the impact is limited to reading lstat metadata.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2128,7 +2060,8 @@
         "state": "not_affected",
         "detail": "Go stdlib html/template meta content URL escaping flaw (GO-2026-4603), fixed in Go 1.25.8 and 1.26.1. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2139,6 +2072,21 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-58183",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib vulnerability in the Docker base image. Liquibase is a Java application and does not execute Go code at runtime. The Go binary is part of Docker base image tooling and is not invoked by Liquibase.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -2192,7 +2140,8 @@
         "state": "not_affected",
         "detail": "Go stdlib html/template JS template literal context-tracking flaw (GO-2026-4865), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. lpm is a command-line tool that renders no HTML or JavaScript. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of html/template, and the third-party libraries linked into the lpm binary do not import it in non-test code. spf13/cobra uses only text/template for help output. The vulnerable escaper is therefore never executed.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2256,7 +2205,8 @@
         "state": "not_affected",
         "detail": "Go stdlib archive/tar unbounded allocation on old GNU sparse maps (GO-2026-4869), fixed in Go 1.25.9 and 1.26.2. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. A source review of every lpm release shipped in the published tags (v0.2.14 through v0.3.7) found no import of archive/tar. lpm downloads plain jar files and only handles archives through archive/zip. The third-party libraries linked into the lpm binary do not import archive/tar either, so tar.Reader is never used.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2317,7 +2267,8 @@
         "state": "not_affected",
         "detail": "Go stdlib net/textproto error-message injection (GO-2026-5039), fixed in Go 1.25.11 and 1.26.4. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the go1.25.1 toolchain the scanner reported comes from the lpm 0.2.14 build shipped in older 5.0.x tags. The flaw does not corrupt parsing. It only places unescaped server input into the text of returned errors. lpm reaches net/textproto through net/http when it downloads a jar or package manifest. Header parsing errors from http.Client.Get are discarded in favour of a fixed \"Unable to download from\" message, but a malformed chunked-encoding trailer is parsed by net/textproto while lpm reads the response body, and lpm prints that body-read error to the console before exiting. Injecting text therefore requires the attacker to control the HTTPS response from lpm's download endpoints (repo1.maven.org, maven.liquibase.com, github.com) or from a URL the user passes to lpm update --path, and the result is a single misleading console line with no effect on what lpm installs. In the Docker image, lpm runs only when INSTALL_MYSQL is set or a user invokes it explicitly. lpm 0.3.5 and later are built with Go 1.26.4 or newer, which escapes this text.",
         "justification": "requires_environment",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2378,7 +2329,8 @@
         "state": "not_affected",
         "detail": "Go stdlib crypto/tls TLS 1.3 handshake encryption-level flaw (GO-2026-4340), fixed in Go 1.24.12 and 1.25.6. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper; the scanner-reported go1.25.1 comes from the lpm 0.2.14 build in the 5.0.x tags (5.0.1 through 5.0.3 ship lpm built with go1.25.1 to go1.25.5). Liquibase itself is a Java application and does not use Go's crypto/tls. lpm reaches crypto/tls only as an HTTPS client when it downloads a jar or package manifest, and in the Docker image it runs only when INSTALL_MYSQL is set or a user invokes it explicitly. Exploitation requires a network-local attacker who can inject handshake records into that short-lived outbound connection, and the stated impact is minor information disclosure; the advisory describes no integrity or availability impact. Image tags from 5.1.0 on ship lpm built with go1.25.7 or newer, which includes the fix, and the current image definition installs lpm 0.3.7, whose release binary is built with go1.26.8.",
         "justification": "requires_environment",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -2573,58 +2525,6 @@
       ]
     },
     {
-      "id": "CVE-2025-61731",
-      "description": "Building a malicious file with cmd/go can cause can cause a write to an attacker-controlled file with partial control of the file content. The \"#cgo pkg-config:\" directive in a Go source file provides command-line arguments to provide to the Go pkg-config command. An attacker can provide a \"--log-file\" argument to this directive, causing pkg-config to write to an attacker-controlled location.",
-      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not run the Go toolchain at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 7.8,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The affected cmd/go build path is not exercised by the Liquibase Secure runtime. Only `lpm add mysql --global` is invoked when INSTALL_MYSQL is set, and the runtime scripts do not call `go`, `pkg-config`, or any cgo build command.\n"
-        }
-      ],
-      "cwes": [
-        88
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61731",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib cmd/go build-time smuggling vulnerability fixed in Go 1.24.12 and 1.25.6. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable cmd/go path is not reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.12|>=1.25.0|<1.25.6",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2025-58186",
       "description": "Despite HTTP headers having a default limit of 1MB, the number of cookies that can be parsed does not have a limit. By sending a lot of very small cookies such as \"a=;\", an attacker can make an HTTP server allocate a large amount of structs, causing large memory consumption.",
       "recommendation": "No action required. Liquibase does not use Go's HTTP stack, and the bundled lpm helper neither serves HTTP nor parses cookies.",
@@ -2753,6 +2653,21 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32280",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 DoS vulnerability (GO-2026-4947). Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -3008,58 +2923,6 @@
       ]
     },
     {
-      "id": "CVE-2025-61732",
-      "description": "A discrepancy between how Go and C/C++ comments were parsed allowed for code smuggling into the resulting cgo binary.",
-      "recommendation": "No action required. Liquibase Secure only invokes lpm for optional MySQL driver installation and does not perform cgo builds at runtime.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 8.6,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The cgo build path required by the advisory does not exist in the Liquibase Secure runtime. The image only shells out to lpm for optional MySQL installation and never invokes a Go compiler.\n"
-        }
-      ],
-      "cwes": [
-        94
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61732",
-          "title": "NVD Entry"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "Go stdlib cgo comment parsing vulnerability fixed in Go 1.24.13 and 1.25.7. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so no cgo compilation path is reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:golang/stdlib",
-          "versions": [
-            {
-              "range": "vers:golang/<1.24.13|>=1.25.0|<1.25.7",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-78669",
       "description": "A malicious HTTP/2 peer can cause excessive CPU consumption in the client or server by opening a large number of streams and then sending many small SETTINGS frames containing SETTINGS_INITIAL_WINDOW_SIZE values.",
       "recommendation": "No action required. lpm opens one HTTP/2 stream at a time to its download servers, and runs no HTTP server.",
@@ -3167,6 +3030,21 @@
               "status": "unaffected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32282",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib internal/syscall/unix Root.Chmod symlink traversal vulnerability. Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib"
         }
       ]
     },
@@ -3338,18 +3216,18 @@
       ]
     },
     {
-      "id": "CVE-2026-42501",
-      "description": "A malicious module proxy can exploit a flaw in the go command's validation of module checksums to bypass checksum database validation. This vulnerability affects any user using an untrusted module proxy (GOMODPROXY) or checksum database (GOSUMDB). A malicious module proxy can serve altered versions of the Go toolchain. When selecting a different version of the Go toolchain than the currently installed toolchain (due to the GOTOOLCHAIN environment variable, or a go.work or go.mod with a toolchain line), the go command will download and execute a toolchain provided by the module proxy. A malicious module proxy can bypass checksum database validation for this downloaded toolchain.",
-      "recommendation": "No action required. Liquibase Secure does not invoke the Go toolchain or toolchain download flow at runtime.",
+      "id": "CVE-2026-94444",
+      "description": "Previously, a user operating inside of a malicious Go project that defines a bogus golang.org/fips140 and operates a malicious GOMODPROXY the user chooses to connect to can serve an arbitrary module in its place. We now unpack the trusted ziphash for the bundled golang.org/fips140 module and construct its entry in the GOMODCACHE such that it can be verified by the toolchain.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or the go command.",
       "ratings": [
         {
           "source": {
-            "name": "NVD"
+            "name": "CISA-ADP"
           },
-          "score": 7.5,
+          "score": 7.8,
           "severity": "high",
           "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
         },
         {
           "source": {
@@ -3358,31 +3236,44 @@
           "score": 0,
           "severity": "none",
           "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The runtime never enters the Go toolchain or GOTOOLCHAIN-based download path described in the advisory. Only lpm is installed and invoked for optional MySQL setup.\n"
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's go command, which is not present in the image. The only Go binary in the image is lpm.\n"
         }
       ],
       "cwes": [
-        347
+        354
       ],
       "advisories": [
         {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42501",
+          "url": "https://github.com/advisories/GHSA-2f4j-3hgj-v9j7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94444",
           "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6601",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/U2fTuyDJznI",
+          "title": "Go Security Announcement"
         }
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib toolchain-download checksum validation flaw fixed in Go 1.25.10 and 1.26.3. The Secure Docker image installs lpm 0.3.6 (docker/Dockerfile:35), and the only runtime invocation is `lpm add mysql --global` behind INSTALL_MYSQL (docker/docker-entrypoint.sh:4 and docker/docker-entrypoint.sh:5). Repo-wide grep found no runtime `go build`, `go mod`, `GOTOOLCHAIN`, `GOMODPROXY`, `GOSUMDB`, `pkg-config`, or `cgo` usage, so the vulnerable toolchain-download path is not reachable.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-08-07T00:00:00Z"
+        "detail": "The flaw is in how the go command fetches the bundled golang.org/fips140 module through a GOMODPROXY; the Go vulnerability database (GO-2026-6601) lists it against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0, go1.25.8 in 5.1.1, go1.26.4 in 5.2.0 and 5.2.1, and go1.26.8 in 5.2.2 and 6.0.0, all before the fix. The image does not install the Go toolchain, so there is no go command, no module cache and no module proxy access to exploit. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI, which is a Java application and does not use Go. Fixed in Go 1.26.9 and 1.27.2.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-15T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
       },
       "affects": [
         {
           "ref": "pkg:golang/stdlib",
           "versions": [
             {
-              "range": "vers:golang/<1.25.10|>=1.26.0|<1.26.3",
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
               "status": "unaffected"
             }
           ]
@@ -3390,16 +3281,153 @@
       ]
     },
     {
-      "id": "CVE-2026-32280",
+      "id": "CVE-2026-94447",
+      "description": "Previously, a user operating inside of a malicious Go project that defines a bogus golang.org/toolchain go.sum entry and operates a malicious GOMODPROXY the user chooses to use can bypass the intended checksum. We now ensure that golang.org/toolchain always goes to the network for the canonical checksum.",
+      "recommendation": "No action required. The Liquibase Secure image does not include the Go toolchain or the go command.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code is part of the Go toolchain's go command, which is not present in the image. The only Go binary in the image is lpm.\n"
+        }
+      ],
+      "cwes": [
+        354
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-cgx4-3g64-rvr7",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94447",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6602",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/U2fTuyDJznI",
+          "title": "Go Security Announcement"
+        }
+      ],
       "analysis": {
         "state": "not_affected",
-        "detail": "Go stdlib crypto/x509 DoS vulnerability (GO-2026-4947). Detected in the compiled lpm (Liquibase Package Manager) binary built with Go 1.25.8. govulncheck symbol-level analysis confirms the vulnerable code paths are not called by lpm. Fix: DAT-22804 bumps Go to 1.25.9 in liquibase-package-manager, eliminating the vulnerability at the source.",
-        "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "detail": "The flaw is in how the go command verifies the checksum of the golang.org/toolchain module when switching toolchains through a GOMODPROXY; the Go vulnerability database (GO-2026-6602) lists it against cmd/go in the toolchain module. It belongs to the Go toolchain and is not a standard library package that gets compiled into Go programs. The scanner's stdlib component is the Go runtime embedded in the lpm package-manager helper, the only Go binary in the image: go1.25.1 in 5.0.0 and 5.0.1, go1.25.3 in 5.0.2, go1.25.5 in 5.0.3, go1.25.7 in 5.1.0, go1.25.8 in 5.1.1, go1.26.4 in 5.2.0 and 5.2.1, and go1.26.8 in 5.2.2 and 6.0.0, all before the fix. The image does not install the Go toolchain, so there is no go command and no toolchain download to subvert. The entrypoint runs lpm only as \"lpm add mysql --global\" when INSTALL_MYSQL is set, and otherwise runs the Liquibase CLI, which is a Java application and does not use Go. Fixed in Go 1.26.9 and 1.27.2.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-15T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
       },
       "affects": [
         {
-          "ref": "pkg:golang/stdlib"
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.9|>=1.27.0-0|<1.27.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32281",
+      "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        295
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32281",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 certificate policy mapping DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z",
+        "lastUpdated": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-32283",
+      "description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
+      "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32283",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/tls TLS 1.3 key update DoS vulnerability fixed in Go 1.25.9 and 1.26.2. Current Docker builds install lpm 0.3.3 (docker/Dockerfile:35), and liquibase-package-manager v0.3.3 declares go 1.25.9 (liquibase-package-manager/go.mod:3), which includes the fix.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-05-11T00:00:00Z",
+        "lastUpdated": "2026-05-11T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     }

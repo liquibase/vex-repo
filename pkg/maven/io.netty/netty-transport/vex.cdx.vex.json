@@ -39,7 +39,8 @@
         "state": "not_affected",
         "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/1.1 chunked decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
+        "firstIssued": "2026-04-28T00:00:00Z",
+        "lastUpdated": "2026-04-28T00:00:00Z"
       },
       "affects": [
         {
@@ -83,7 +84,8 @@
         "state": "not_affected",
         "detail": "Scanner over-match: the vulnerable code lives in netty-codec-http2 (see the sibling assessment above). OWASP Dependency-Check and similar CPE-based scanners propagate the CVE onto netty-transport via the broad cpe:2.3:a:netty:netty:* match. netty-transport ships no HTTP/2 frame decoder, so even if it were exposed as a server (which Liquibase is not), the affected code path would not run from this artifact.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-28T00:00:00Z"
+        "firstIssued": "2026-04-28T00:00:00Z",
+        "lastUpdated": "2026-04-28T00:00:00Z"
       },
       "affects": [
         {
@@ -133,7 +135,8 @@
         "state": "not_affected",
         "detail": "Scanner over-match: the vulnerable code lives in netty-transport-native-epoll (see the sibling assessment above). The NVD description itself scopes the bug to \"Netty's epoll transport\" — EpollSocketChannel's handling of a TCP RST received on a half-closed connection — which only exists in the native epoll(7) transport implementation. The cpe:2.3:a:netty:netty:* CPE causes CPE-based scanners to propagate the CVE onto every netty-transport-* artifact, including the base netty-transport module, which ships only the abstract channel/event-loop interfaces and the pure-Java NIO transport (NioSocketChannel) — no epoll-specific code at all. Independently, a repo-wide grep for Netty server bootstrap usage (`grep -rln \"ServerBootstrap\" --include=\"*.java\" .`) returns zero hits: Liquibase is a database migration CLI tool that never runs a network server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver, used only as a client-side transport for outbound connections, so even the genuinely-affected epoll transport has no inbound socket for an attacker to exploit.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-07-30T00:00:00Z"
+        "firstIssued": "2026-07-30T00:00:00Z",
+        "lastUpdated": "2026-07-30T00:00:00Z"
       },
       "affects": [
         {

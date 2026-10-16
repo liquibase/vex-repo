@@ -44,7 +44,8 @@
         "response": [
           "workaround_available"
         ],
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -98,7 +99,8 @@
         "state": "not_affected",
         "detail": "This util-linux mount race requires a SUID /usr/bin/mount binary plus an /etc/fstab entry with user,loop options pointing to a user-writable path. The stock Liquibase Secure container's entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no references to /etc/fstab, /usr/bin/mount, user,loop, blkid, udisks, or udev. The required loop-mount configuration is absent from the stock container.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -149,7 +151,8 @@
         "state": "not_affected",
         "detail": "util-linux fails to check mount helper exit status before running post- mount hooks, allowing unprivileged users to execute privileged operations on pre-existing files (local privilege escalation on a multi- user host). Nothing in this image's runtime calls mount or nsenter; the container runs a single fixed non-root user with no multi-user or fstab- controlled surface.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -194,7 +197,8 @@
         "state": "not_affected",
         "detail": "nsenter --join-cgroup opens the target cgroup.procs file as root and leaves the descriptor open across later namespace/credential changes and execve() (local privilege escalation). Nothing in this image's runtime calls nsenter; the container runs a single fixed non-root user with no multi-user surface.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -239,7 +243,8 @@
         "state": "not_affected",
         "detail": "The X-mount.subdir option uses a detached-tree fast path with AT_SYMLINK_NOFOLLOW that does not stop intermediate symlink traversal (local privilege escalation; Ubuntu rates Medium, upstream CVSS is High at 7.0). Nothing in this image's runtime calls mount; the container runs a single fixed non-root user with no multi-user surface.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -284,7 +289,8 @@
         "state": "not_affected",
         "detail": "Restricted bind mounts take the source path from fstab without pinning it before the privileged mount, allowing a local unprivileged user to redirect the mount target (local privilege escalation). Nothing in this image's runtime reads fstab or calls mount; the container runs a single fixed non-root user.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -309,7 +315,8 @@
         "state": "not_affected",
         "detail": "Scanner package misattribution. No CVE.org, NVD, or Ubuntu security tracker record exists yet for this ID as of 2026-09-25 (NVD totalResults: 0, cve.org returns CVE_RECORD_DNE, and ubuntu.com/security/CVE-2026-53612 404s), but the util-linux 2.39.3-9ubuntu6.6 changelog (changelogs.ubuntu.com/changelogs/pool/main/u/util-linux) confirms the fix: \"Local Privilege Escalation via TOCTOU in mount\" -- debian/patches/CVE-2026-53612.patch, \"libmount: use fd-based fchownat/chmod in hook_owner\", touching libmount/src/hook_owner.c. That file is compiled into the libmount1 shared library and the mount binary package, not bsdutils. Confirmed directly: `dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2 lists only logger, renice, script, scriptlive, scriptreplay, and wall -- no mount-related binary or libmount.so. The scanner's SBOM appears to attribute a util-linux-source-package-level fix to every binary package built from that source, including bsdutils, which does not contain the patched code. Even setting misattribution aside, this is a local TOCTOU privilege-escalation bug in a setuid `mount` invocation -- not something Liquibase Secure's headless CLI runtime triggers.",
         "justification": "code_not_present",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -340,7 +347,8 @@
         "state": "not_affected",
         "detail": "Same scanner package misattribution as CVE-2026-53612. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Another local Privilege Escalation via TOCTOU in mount\" -- debian/patches/CVE-2026-53613[-pre1].patch, adding ul_open_no_symlinks() and an fd_target field to libmount's mount context (lib/fileutils.c, libmount/src/context.c, libmount/src/context_mount.c, libmount/src/hook_mount.c, libmount/src/hook_mount_legacy.c) -- all libmount1/mount package files, confirmed absent from bsdutils's file list (`dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2: logger, renice, script, scriptlive, scriptreplay, wall only). Same local-TOCTOU- in-setuid-mount threat model as CVE-2026-53612, which Liquibase Secure's headless CLI runtime does not exercise.",
         "justification": "code_not_present",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -371,7 +379,8 @@
         "state": "not_affected",
         "detail": "Same scanner package misattribution as CVE-2026-53612/53613. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Local Privilege Escalation via LIBMOUNT_FORCE_MOUNT2 Environment Variable\" -- debian/patches/CVE-2026-53614.patch, fixing a SUID bypass via LIBMOUNT_FORCE_MOUNT2 in the legacy mount path (libmount/src/hook_mount.c, libmount/src/hook_mount_legacy.c) -- again libmount1/mount package files, confirmed absent from bsdutils's file list. Exploitation requires setting an environment variable ahead of invoking a setuid `mount` binary; Liquibase Secure never invokes `mount` and does not ship a setuid mount binary as part of its own application surface.",
         "justification": "code_not_present",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -402,7 +411,8 @@
         "state": "not_affected",
         "detail": "Same scanner package misattribution as the other three util-linux CVEs in this batch. No CVE.org, NVD, or Ubuntu security tracker record exists yet as of 2026-09-25. Per the util-linux 2.39.3-9ubuntu6.6 changelog: \"Integer Overflow or Wraparound in dos.c\" -- debian/patches/CVE-2026-53615.patch, \"libblkid: dos: validate EBR data and links within extended partition\", touching libblkid/src/partitions/dos.c. That file is compiled into the libblkid1 shared library, not bsdutils -- confirmed absent from bsdutils's file list (`dpkg -L bsdutils` inside liquibase/liquibase-secure:5.2.2: logger, renice, script, scriptlive, scriptreplay, wall only; libblkid1 is a separate installed package). Exploitation requires libblkid to probe a crafted block device's MBR/extended-partition (EBR) table, e.g. via `blkid`/`lsblk`/udev device probing. Liquibase Secure's runtime never probes block devices or partition tables.",
         "justification": "code_not_present",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {

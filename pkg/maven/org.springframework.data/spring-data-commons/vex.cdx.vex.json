@@ -50,7 +50,7 @@
         "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The vulnerable cache is filled only when a caller passes externally supplied strings to MappingContext.getPersistentPropertyPath(String, ...), as Spring Data REST and store-specific query mappers do. A bytecode scan of the application found no caller of that method outside spring-data-commons itself, and Spring Data REST is not bundled. Its HTTP endpoints accept only fixed JSON request bodies and no sort, filter or property-path parameters.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-10-01T00:00:00Z",
-        "lastUpdated": "2026-10-05T00:00:00Z"
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -111,7 +111,7 @@
         "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-data-commons from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-data-commons 3.4.2 in 5.0.0 to 5.0.2, 3.5.5 in 5.0.3, 4.0.2 in 5.1.0, 4.0.4 in 5.1.1 and 4.0.5 in 5.2.0, all in range, and 4.1.0, outside the range, in 5.2.1 and 5.2.2. The advisory names two routes from HTTP input into the PropertyPath.from cache: Querydsl web bindings and @ProjectedPayload form binding through MapDataBinder. Querydsl is not bundled, so the Querydsl argument resolver is never registered. The application declares no @ProjectedPayload type, and its endpoints bind only concrete JSON request-body classes, with no Sort, Pageable or projection parameters.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-10-01T00:00:00Z",
-        "lastUpdated": "2026-10-05T00:00:00Z"
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {

@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-a8ca8a23788943a61338dd43375d15929265d049ff4ad7c3cfaca445517f810d",
+  "@id": "merged-vex-0faac894b0e6932af1b712c871fea9acb71ee68522f26539bf74c40e24f51320",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:36.466134534Z",
+  "timestamp": "2026-10-16T13:24:24.227826792Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2021-46848"
+      },
+      "timestamp": "2026-10-16T13:24:24.21441546Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libtasn1-6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "GNU Libtasn1 before 4.19.0 has an ETYPE_OK off-by-one array size check that affects asn1_encode_simple_der.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The off-by-one is in libtasn1's ETYPE_OK check as used by asn1_encode_simple_der, reached only when a program encodes ASN.1 DER data with the system libtasn1. libtasn1-6 is an inherited base-image library in the Ubuntu images used by Liquibase Secure; its users are GnuTLS and p11-kit, which serve OS tooling such as apt and gpg's dirmngr. None of these is invoked by the entrypoint or the CLI, and the image does not start p11-kit. The container entrypoint runs only the Liquibase CLI and the optional lpm helper, a statically linked Go binary. The Liquibase CLI runs on the JVM, which encodes and parses certificates and other ASN.1 data with its own Java code and loads neither GnuTLS nor libtasn1. Ubuntu fixed the issue in 4.18.0-4ubuntu0.2 (jammy) (USN-7954-1) and lists Ubuntu 24.04 (noble) as not affected, because its libtasn1 4.19.0 already contains the upstream fix. Docker images 5.0.0 and 5.0.1 (jammy) carry the unfixed 4.18.0-4ubuntu0.1; 5.0.2 and later (noble) carry 4.19.0 builds and are not in range."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-13151"
       },
-      "timestamp": "2026-10-14T19:12:36.466135596Z",
+      "timestamp": "2026-10-16T13:24:24.181158186Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libtasn1-6"

@@ -9,7 +9,8 @@
         "state": "not_affected",
         "detail": "PostgreSQL JDBC driver channel binding bypass. The vulnerability only triggers when the JDBC connection property channelBinding is explicitly set to \"require\" (default is \"prefer\"). Liquibase does not configure channelBinding=require in any default configuration. The vulnerable enforcement code path in ConnectionFactoryImpl.doAuthentication() is not reachable under Liquibase's default configuration.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -60,7 +61,8 @@
         "state": "not_affected",
         "detail": "pgjdbc channel-binding downgrade: connections configured with channelBinding=require can be silently downgraded from SCRAM-SHA-256-PLUS (with channel binding) to plain SCRAM-SHA-256 (without it) when the server presents a certificate with an unsupported signature algorithm, defeating the MITM protection channelBinding=require is meant to provide. Fixed in pgjdbc 42.7.12. channelBinding is a pgjdbc JDBC URL/connection property; a repo-wide grep (`grep -rn \"channelBinding\" --include=\"*.java\" --include=\"*.properties\" --include=\"*.yml\" .`) confirms Liquibase's own code never sets it. However, the --url argument is a raw user-supplied JDBC URL passed straight through with no property filtering (DbUrlConnectionCommandStep.java:107-120: `url = commandScope.getArgumentValue(URL_ARG)` flows unmodified into createDatabaseObject()), so a deployment where the user has appended channelBinding=require to their own connection URL — a deliberate, security-conscious choice some users make — remains exposed to this downgrade until the resolved pgjdbc version is 42.7.12+. This is therefore not reachable in Liquibase's *default* configuration, but is reachable if a user opts into channelBinding=require. Independently, the current source already pins the fix by default: pom.xml:62 sets postgresql.version to 42.7.13, and dist/pom.xml:123 consumes that managed version — the scanner reported 42.7.11 on the published 5.2.0 image (built before this version bump).",
         "justification": "requires_configuration",
-        "firstIssued": "2026-07-30T00:00:00Z"
+        "firstIssued": "2026-07-30T00:00:00Z",
+        "lastUpdated": "2026-07-30T00:00:00Z"
       },
       "affects": [
         {
@@ -109,7 +111,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-05-07T00:00:00Z"
+        "firstIssued": "2026-05-07T00:00:00Z",
+        "lastUpdated": "2026-05-08T00:00:00Z"
       },
       "affects": [
         {

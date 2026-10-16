@@ -44,7 +44,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -99,7 +100,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -155,7 +157,8 @@
         "state": "not_affected",
         "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Uncompress::Unzip on attacker-supplied zip input so the vulnerable fastForward path is exercised. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Uncompress::Unzip. The vulnerable Perl zip extraction path is therefore not reachable from the stock runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -212,7 +215,8 @@
         "state": "not_affected",
         "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and a fix level of 5.38.2-3.2ubuntu0.4. This issue requires an application to invoke Perl's IO::Compress output-glob handling so attacker-controlled glob text reaches File::GlobMapper and eval STRING. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles, entrypoint scripts, and application sources found no Perl invocation and no use of IO::Compress or File::GlobMapper. The vulnerable Perl compression path is therefore not reachable from the stock runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-25T00:00:00Z"
+        "firstIssued": "2026-09-25T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
       },
       "affects": [
         {
@@ -269,7 +273,8 @@
         "state": "not_affected",
         "detail": "perl-base is an Essential Ubuntu package, so /usr/bin/perl is present in every Liquibase Secure image, but nothing in the runtime path executes it: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The vulnerable pack and unpack template parser only runs inside a Perl process handed an attacker-controlled template, so it is not reachable from Liquibase Secure. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 5.38.2-3.2ubuntu0.4 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 5.38.2-3.2ubuntu0.6.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -325,7 +330,8 @@
         "state": "not_affected",
         "detail": "perl-base is an Essential Ubuntu package, so /usr/bin/perl is present in every Liquibase Secure image, but nothing in the runtime path executes it: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. The vulnerable Storable deserializer only runs inside a Perl process that thaws attacker-controlled data, so it is not reachable from Liquibase Secure. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.8 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 5.38.2-3.2ubuntu0.4 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 5.38.2-3.2ubuntu0.6.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -385,7 +391,8 @@
         "state": "not_affected",
         "detail": "Scanner package misattribution. The vulnerable code is the HTTP::Tiny module, which Ubuntu ships in perl-modules (and libhttp-tiny-perl), not in perl-base. Neither package is installed in any Liquibase Secure image: perl-base carries only the interpreter and a minimal core module set, there is no HTTP/Tiny.pm anywhere on the image, and loading HTTP::Tiny fails with \"Can't locate HTTP/Tiny.pm\". The scanner matched a fix in the perl source package to perl-base, which does not contain the vulnerable module. Even setting that aside, nothing in the runtime path executes perl. Ubuntu fixes this in perl 5.38.2-3.2ubuntu0.4 (noble); jammy has no fix yet.",
         "justification": "code_not_present",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {
@@ -445,7 +452,8 @@
         "state": "not_affected",
         "detail": "The heap overflow only exists on 32-bit Perl builds compiling an attacker-controlled regular expression. Liquibase Secure images are published only for linux/amd64 and linux/arm64, and the shipped perl is a 64-bit build (pointer size 8). In addition, nothing in the runtime path executes perl: the container entrypoint and the liquibase launcher script contain no perl invocation, the Liquibase CLI is a Java process, and lpm is a statically linked Go binary. Fixed in Ubuntu perl-base 5.34.0-3ubuntu1.7 (jammy, Liquibase Secure 5.0.0 and 5.0.1 shipped 5.34.0-3ubuntu1.5) and 5.38.2-3.2ubuntu0.3 (noble, Liquibase Secure 5.0.2 through 5.2.1 shipped 5.38.2-3.2ubuntu0.2); Liquibase Secure 5.2.2 and later ship 5.38.2-3.2ubuntu0.6.",
         "justification": "requires_environment",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {
@@ -505,7 +513,8 @@
         "state": "not_affected",
         "detail": "Scanner package misattribution. The vulnerable code is the Archive::Tar module, which Ubuntu ships in perl-modules, not in perl-base. perl-modules is not installed in any Liquibase Secure image: perl-base carries only the interpreter and a minimal core module set, there is no Archive/Tar.pm anywhere on the image, and loading Archive::Tar fails with \"Can't locate Archive/Tar.pm\". The scanner matched a fix in the perl source package to perl-base, which does not contain the vulnerable module. Even setting that aside, nothing in the runtime path executes perl. Ubuntu fixes this in perl 5.38.2-3.2ubuntu0.4 (noble); jammy has no fix yet.",
         "justification": "code_not_present",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {
@@ -560,7 +569,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -614,7 +624,8 @@
         "state": "not_affected",
         "detail": "This regex-engine heap read/write flaw is reachable only when an application performs Perl regular-expression matching on attacker supplied subject strings. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is therefore not reachable from the stock Liquibase Secure runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -666,7 +677,8 @@
         "state": "not_affected",
         "detail": "This incorrect-match issue affects Perl's regex prescan logic and is relevant only when an application performs Perl regular-expression matching on attacker-controlled data and then makes a security decision from the result. The container entrypoint execs only the Liquibase Java CLI directly (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`), and a focused grep across the runtime Dockerfiles and entrypoint scripts found no perl invocation. The vulnerable Perl regex path is not reachable in the stock runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -717,7 +729,8 @@
         "state": "not_affected",
         "detail": "Pod::Text (bundled with perl-base) CPU/memory exhaustion formatting a crafted POD document. Nothing in this repository or docker-entrypoint.sh shells out to perl or invokes POD formatting (pod2text/perldoc); the entrypoint does its own pattern matching with bash case/glob syntax.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -743,7 +756,8 @@
         "state": "not_affected",
         "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-14803, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -769,7 +783,8 @@
         "state": "not_affected",
         "detail": "NVD/Ubuntu list this id as REJECTED -- a duplicate of CVE-2026-15747, which describes an issue in libmojolicious-perl, not perl-base (likely a scanner package mismatch). Regardless, nothing in this repository or docker-entrypoint.sh shells out to perl.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -820,7 +835,8 @@
         "state": "not_affected",
         "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and the Ubuntu fix level is 5.38.2-3.2ubuntu0.3. This issue requires an application to invoke Perl Archive::Tar extraction on attacker-controlled archives so a crafted symlink target is created outside the extraction directory. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles and entrypoint scripts found no Perl invocation or Perl-based tar extraction path. The vulnerable Archive::Tar symlink-extraction path is therefore not reachable from the stock runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -877,7 +893,8 @@
         "state": "not_affected",
         "detail": "The scanner reported perl-base 5.38.2-3.2ubuntu0.2 and the Ubuntu fix level is 5.38.2-3.2ubuntu0.3. This issue requires an application to invoke Perl Archive::Tar extraction on attacker-controlled archives so a crafted hardlink is created outside the extraction directory. Liquibase Secure's stock container starts the Java CLI directly, and a review of the runtime Dockerfiles and entrypoint scripts found no Perl invocation or Perl-based tar extraction path. The vulnerable Archive::Tar hardlink-extraction path is therefore not reachable from the stock runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {

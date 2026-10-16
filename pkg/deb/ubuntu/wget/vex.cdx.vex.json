@@ -42,7 +42,8 @@
         "state": "not_affected",
         "detail": "The scanned image reports wget 1.21.4-1ubuntu4.1, below Ubuntu's fixed 1.21.4-1ubuntu4.4, but this issue requires Wget to follow an attacker-controlled FTP passive-mode data connection. Liquibase Secure uses wget only during image build to fetch its release tarball and the lpm zip over HTTPS, and it does not invoke wget at container runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-23T00:00:00Z"
+        "firstIssued": "2026-09-23T00:00:00Z",
+        "lastUpdated": "2026-09-23T00:00:00Z"
       },
       "affects": [
         {
@@ -93,7 +94,8 @@
         "state": "not_affected",
         "detail": "wget path-traversal-via-redirect issue (Authorization header leaked cross-origin on redirect). wget is only invoked at Docker build time against hardcoded repo.liquibase.com/GitHub URLs that are sha256-verified after download (docker/Dockerfile:27, docker/Dockerfile:55). No runtime code in docker-entrypoint.sh or the Liquibase CLI invokes wget.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -138,7 +140,8 @@
         "state": "not_affected",
         "detail": "wget FTP OPIE/S-KEY authentication denial-of-service issue, with an upstream patch not yet backported to Ubuntu noble. wget is only invoked at Docker build time against hardcoded, sha256-verified URLs (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime, and this image never performs FTP transfers.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -183,7 +186,8 @@
         "state": "not_affected",
         "detail": "wget shorthand-URL credential-confusion issue (fixed only in Ubuntu 26.04/resolute, not noble). wget is only invoked at Docker build time against hardcoded, sha256-verified URLs with no embedded credentials (docker/Dockerfile:27, docker/Dockerfile:55); never invoked at runtime.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -233,7 +237,8 @@
         "state": "not_affected",
         "detail": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable Metalink parser only runs inside a wget process fetching attacker-controlled Metalink content, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -289,7 +294,8 @@
         "state": "not_affected",
         "detail": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable Content-Range header parser only runs inside a wget process talking to an attacker-controlled server, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -345,7 +351,8 @@
         "state": "not_affected",
         "detail": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable filename conversion only runs inside a wget process saving a server-supplied filename, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -401,7 +408,8 @@
         "state": "not_affected",
         "detail": "wget is present in the image because the Dockerfile uses it to download the Liquibase Secure release tarball and lpm while the image is built. Nothing runs it afterwards: the container entrypoint and the liquibase launcher script contain no wget invocation, the Liquibase CLI is a Java process that uses the JDK HTTP client for its own downloads, and lpm is a statically linked Go binary. The vulnerable HTML attribute encoder only runs inside a wget process converting attacker-controlled HTML, so it is not reachable from Liquibase Secure. Fixed in Ubuntu wget 1.21.2-2ubuntu1.3 (jammy, shipped by Liquibase Secure 5.0.0 and 5.0.1) and 1.21.4-1ubuntu4.3 (noble, Liquibase Secure 5.0.2 through 5.2.1); Liquibase Secure 5.2.2 ships 1.21.4-1ubuntu4.5.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {

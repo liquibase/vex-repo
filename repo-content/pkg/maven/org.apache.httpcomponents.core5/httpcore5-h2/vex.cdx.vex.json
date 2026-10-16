@@ -50,7 +50,8 @@
         "state": "not_affected",
         "detail": "Apache HttpComponents Core HTTP/2 HPACK decoder memory exhaustion before the SETTINGS acknowledgement (GHSA-v3jc-474w-2wm6), fixed in httpcore5-h2 5.4.3 and 5.5-beta2. The scanned Liquibase Secure images carry httpcore5-h2 5.2.4 (Cassandra extension), and the Databricks extension carries a relocated copy below 5.4.3. The HPACK decoder only runs on HTTP/2 connections, and HttpComponents only negotiates HTTP/2 through its asynchronous client and server stacks (H2AsyncClientBuilder, HttpAsyncClients, H2 servers). Liquibase Secure code uses only the classic HTTP/1.1 client (the AWS SDK Apache client and the Ph-Eye filter). The Databricks JDBC driver bundled in the Databricks extension contains an HttpComponents async client that can negotiate HTTP/2, but the driver uses it only for its DBFS volume putFiles API and an unused incubator result fetcher; Liquibase calls neither, so no HTTP/2 connection is opened. The AWS extension excludes the AWS SDK's netty async client and builds its S3 client on the JDK URLConnection client. Liquibase Secure also runs no HTTP server.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {

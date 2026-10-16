@@ -50,7 +50,7 @@
         "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. The advisory requires an application that serves static resources from the file system and has versioned resource support configured. The application configures neither: it packages no static resources, sets no spring.web.resources static-location or resource-chain properties, and none of its own classes references VersionResourceResolver, ResourceChainRegistration or a resource-handler registry. Spring Boot registers versioned resource resolution only when the resource-chain strategy properties are set.",
         "justification": "requires_configuration",
         "firstIssued": "2026-10-01T00:00:00Z",
-        "lastUpdated": "2026-10-05T00:00:00Z"
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -111,7 +111,7 @@
         "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1 and 7.0.7 in 5.2.0, all in range, and the fixed 7.0.8 in 5.2.1 and 5.2.2. A bytecode scan of the application found JavaScriptUtils called only from the Spring JSP tag classes (EscapeBodyTag, EvalTag, MessageTag and UrlTag). The application bundles no JSP engine and renders no JSP views, and none of its own classes calls JavaScriptUtils.javaScriptEscape(), so the faulty escaping never runs.",
         "justification": "code_not_reachable",
         "firstIssued": "2026-10-01T00:00:00Z",
-        "lastUpdated": "2026-10-05T00:00:00Z"
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -309,6 +309,67 @@
       ]
     },
     {
+      "id": "CVE-2025-41242",
+      "description": "Spring Framework MVC applications can be vulnerable to a \"Path Traversal Vulnerability\" when deployed on a non-compliant Servlet container. An application can be vulnerable when all the following are true: the application is deployed as a WAR or with an embedded Servlet container; the Servlet container does not reject suspicious sequences; the application serves static resources with Spring resource handling. Applications deployed on Apache Tomcat or Eclipse Jetty are not vulnerable, as long as default security features are not disabled in the configuration.",
+      "recommendation": "No action required. The only shipped Spring MVC application runs on embedded Tomcat with default settings and has no static resources to serve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "VMware"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Spring MVC ships only inside the 5.x license-tracking application, which runs on default-configured Tomcat, a container that rejects the traversal sequences, and serves no static resources.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r936-gwx5-v52f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-41242",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://spring.io/security/cve-2025-41242",
+          "title": "Spring Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 6.2.12 or 7.0.x, which are not affected. The advisory needs a Servlet container that does not reject suspicious path sequences; Spring verified that applications on Apache Tomcat are not vulnerable unless its default security features are disabled. The application runs on embedded Tomcat with default settings: it sets no server properties and none of its classes references the Tomcat API. The advisory also needs static resources served through Spring resource handling. The application registers no resource handlers of its own; Spring Boot's default handler maps only the classpath locations static, public, resources and META-INF/resources, and neither the application nor any of its bundled libraries packages content there.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.springframework/spring-webmvc",
+          "versions": [
+            {
+              "range": "vers:maven/>=5.3.0|<5.3.44|>=6.0.0|<6.0.30|>=6.1.0|<6.1.22|>=6.2.0|<6.2.10",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-47884",
       "description": "Use of XsltView in a Spring MVC application can result in SSRF and RCE attack if the application has an \"/**\" mapping that results in view rendering, and where the view name is not explicitly specified. Affected versions: Spring Framework 7.0.0 - 7.0.8; 6.2.0 - 6.2.19; 6.1.0 - 6.1.28; 6.0.0 - 6.0.30; 5.3.0 - 5.3.49; 5.2.25.RELEASE and earlier.",
       "recommendation": "No action required. No shipped component renders XsltView views or maps \"/**\" to view rendering.",
@@ -354,7 +415,8 @@
         "state": "not_affected",
         "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that renders views through XsltView, has a \"/**\" mapping that leads to view rendering, and leaves the view name implicit. A source review of the application found no XsltView, XsltViewResolver, ViewResolver or ModelAndView references, no .xsl resources, no spring.mvc.view properties and no \"/**\" mapping. All three of its controllers are @RestController classes with explicit v1/track, v1/report and v1/health paths that return response bodies, never view names; its one HTML report is rendered by hand with mustache.java, not through a Spring view.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
@@ -414,7 +476,8 @@
         "state": "not_affected",
         "detail": "The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Liquibase Secure Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); the Liquibase CLI itself contains no Spring MVC code. The application bundles spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, 6.2.12 in 5.0.3, 7.0.3 in 5.1.0, 7.0.6 in 5.1.1, 7.0.7 in 5.2.0 and 7.0.8 in 5.2.1 and 5.2.2, all in range. The advisory requires an application that streams Server-Sent Events containing view fragments. A source review of the application found no SseEmitter, ServerSentEvent, text/event-stream, FragmentsRendering or WebFlux usage, and no Spring view rendering of any kind: its controllers are @RestController classes returning plain JSON, text or hand-rendered HTML bodies.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-08T00:00:00Z"
+        "firstIssued": "2026-10-08T00:00:00Z",
+        "lastUpdated": "2026-10-08T00:00:00Z"
       },
       "affects": [
         {
