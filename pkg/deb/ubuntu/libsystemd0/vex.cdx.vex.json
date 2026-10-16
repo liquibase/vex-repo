@@ -42,7 +42,8 @@
         "state": "not_affected",
         "detail": "This issue is in systemd-oomd's IPC API. The Liquibase Secure image inherits Ubuntu packages from the unversioned eclipse-temurin:21-jre-noble base image (`docker/Dockerfile:2`) and creates a static liquibase user with useradd rather than running systemd-managed services (`docker/Dockerfile:5`). The container entrypoint only execs a requested command or the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no references to oomd or systemd-oomd, so the required systemd-oomd IPC service is absent from the stock container environment.",
         "justification": "requires_environment",
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -95,7 +96,8 @@
         "state": "not_affected",
         "detail": "This privilege-escalation flaw requires systemd-homed to manage a local, logged-in user. The Liquibase Secure image creates its liquibase user statically with useradd during image build (`docker/Dockerfile:5`) and the entrypoint only execs the Liquibase CLI (`docker/docker-entrypoint.sh:8`, `docker/docker-entrypoint.sh:119`). A focused grep across the runtime Dockerfiles and entrypoint scripts found no homed or systemd-homed references, so the required systemd-homed runtime environment is absent.",
         "justification": "requires_environment",
-        "firstIssued": "2026-09-21T00:00:00Z"
+        "firstIssued": "2026-09-21T00:00:00Z",
+        "lastUpdated": "2026-09-21T00:00:00Z"
       },
       "affects": [
         {
@@ -345,6 +347,71 @@
           "versions": [
             {
               "range": "vers:deb/<249.11-0ubuntu3.19|>=255|<255.4-1ubuntu8.14",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-7008",
+      "description": "A vulnerability was found in systemd-resolved. This issue may allow systemd-resolved to accept records of DNSSEC-signed domains even when they have no signature, allowing man-in-the-middles (or the upstream DNS resolver) to manipulate records.",
+      "recommendation": "No action required. The Liquibase Secure container never runs systemd-resolved. libsystemd0 and libudev1 are present only as inherited base-image libraries.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires systemd-resolved to be running. The vulnerable code is not part of libsystemd0 or libudev1, and the Liquibase Secure container has no init system and does not install systemd-resolved.\n"
+        }
+      ],
+      "cwes": [
+        300
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-hwxf-wjq7-j3hm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-7008",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8402-1",
+          "title": "Ubuntu Security Notice USN-8402-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2023-7008",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd-resolved, the systemd DNS stub resolver daemon, which can accept unsigned records for DNSSEC-signed domains. Exploitation needs systemd-resolved to be running and answering the host's name lookups. In Ubuntu 22.04 (jammy), systemd-resolved ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no resolver code. No Liquibase Secure image installs the systemd, systemd-resolved, systemd-sysv, udev or init packages, there is no systemd-resolved binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps, and the JVM does not link either of them. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) (USN-8402-1); Ubuntu 24.04 (noble) shipped with the fix (255.2-3ubuntu1 and later). Docker images 5.0.0 and 5.0.1 (jammy) carry the unfixed 249.11-0ubuntu3.16; 5.0.2 and later (noble) carry 255.4 builds and are not in range.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-15T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0",
+          "versions": [
+            {
+              "range": "vers:deb/<249.11-0ubuntu3.21",
               "status": "unaffected"
             }
           ]

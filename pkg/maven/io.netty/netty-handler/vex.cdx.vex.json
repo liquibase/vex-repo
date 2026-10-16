@@ -9,7 +9,8 @@
         "state": "not_affected",
         "detail": "Netty SslHandler resource exhaustion vulnerability via SSLEngine. This is a server-side vulnerability requiring an attacker to send malicious SSL/TLS data to a Netty server. Liquibase is a database migration CLI tool that does not run a TLS server. Netty is a transitive dependency from Azure SDK, Cassandra driver, and MongoDB driver — used only as a client-side transport for outbound connections.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-11T00:00:00Z"
+        "firstIssued": "2026-04-11T00:00:00Z",
+        "lastUpdated": "2026-04-11T00:00:00Z"
       },
       "affects": [
         {
@@ -63,7 +64,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-08T00:00:00Z"
+        "firstIssued": "2026-06-08T00:00:00Z",
+        "lastUpdated": "2026-06-08T00:00:00Z"
       },
       "affects": [
         {
@@ -122,7 +124,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-08T00:00:00Z"
+        "firstIssued": "2026-06-08T00:00:00Z",
+        "lastUpdated": "2026-06-08T00:00:00Z"
       },
       "affects": [
         {
@@ -185,7 +188,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-06-16T00:00:00Z"
+        "firstIssued": "2026-06-16T00:00:00Z",
+        "lastUpdated": "2026-06-16T00:00:00Z"
       },
       "affects": [
         {
@@ -246,7 +250,8 @@
         "state": "not_affected",
         "detail": "SslClientHelloHandler#decode checks the wrong offset before reading the four-byte TLS handshake header, so a ClientHello whose handshake header spans records can throw IndexOutOfBoundsException and fall back to the default SslContext instead of the SNI-specific one. This only becomes an mTLS bypass in a deployment that (a) runs a Netty server accepting inbound TLS connections, (b) uses per-SNI SslContext selection as the sole mutual-TLS gate (clientAuth=REQUIRE on the SNI context, weaker on the default), and (c) has no application-layer certificate check. Liquibase never runs a Netty server: a grep across all Java sources for ServerBootstrap, NioServerSocketChannel, SniHandler, AbstractSniHandler, and SslClientHelloHandler returns zero hits: netty-handler is present only as a transitive dependency of outbound HTTP/TLS clients (Azure SDK's azure-core-http-netty, the AWS SDK, the Couchbase client, the Cassandra JDBC driver). The scanner found netty-handler below the fixed versions in five bundled jars (Docker Scan run https://github.com/liquibase/liquibase-pro/actions/runs/34365994421): liquibase-commercial-cassandra.jar 4.1.119.Final, liquibase-azure.jar 4.1.135.Final, liquibase-aws-extension.jar 4.1.136.Final, liquibase-commercial-couchbase.jar 4.2.16.Final, and liquibase-azure-deps.jar (unlabeled in the scan, same shaded copy as liquibase-azure.jar); none of them run a Netty server, so the version gap does not matter to this assessment.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-09T00:00:00Z"
+        "firstIssued": "2026-09-09T00:00:00Z",
+        "lastUpdated": "2026-09-09T00:00:00Z"
       },
       "affects": [
         {
@@ -306,7 +311,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-22T00:00:00Z"
+        "firstIssued": "2026-09-22T00:00:00Z",
+        "lastUpdated": "2026-09-22T00:00:00Z"
       },
       "affects": [
         {

@@ -43,7 +43,8 @@
         "state": "not_affected",
         "detail": "Authentication bypass due to CLIENT_CERT soft fail misconfiguration in Tomcat's OCSP validation. Requires an active HTTPS connector configured with CLIENT_CERT authentication and an OCSP responder. Liquibase is a database migration CLI tool that uses picocli for command-line parsing and never starts a Spring application context or Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No connector, no authenticator, no OCSP — the code is inert.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -57,7 +58,8 @@
         "state": "not_affected",
         "detail": "HTTP request/response smuggling via invalid chunk extension in Tomcat HTTP/1.1 parser. Requires an active HTTP listener processing inbound requests. Liquibase is a CLI tool that never starts a Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the HTTP parser is never invoked.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -71,7 +73,8 @@
         "state": "not_affected",
         "detail": "Denial of service via integer overflow in Tomcat multipart upload file size limit validation. Requires sending a crafted multipart HTTP upload to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server and never processes inbound HTTP requests or multipart uploads.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -85,7 +88,8 @@
         "state": "not_affected",
         "detail": "Denial of service via uncontrolled resource consumption in Tomcat HTTP/2 stream management. Requires an HTTP/2 client connecting to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and never binds a network port.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -99,7 +103,8 @@
         "state": "not_affected",
         "detail": "Path traversal and potential RCE via regression in Tomcat Rewrite Valve URL normalization. Requires an HTTP request to a running Tomcat server with the Rewrite Valve configured. Liquibase is a CLI tool that never starts a Tomcat server, never configures the Rewrite Valve, and never accepts HTTP requests.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -153,7 +158,8 @@
         "state": "not_affected",
         "detail": "Unbounded request body reads in Tomcat WebDAV LOCK and PROPFIND handling affect Tomcat 11.x before 11.0.22. The license utility pins tomcat-embed-core to 11.0.21 (tools/liquibase-license-utility/pom.xml:26, tools/liquibase-license-utility/pom.xml:52) through spring-boot-starter-web (tools/liquibase-license-utility/pom.xml:60) and starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20), but no WebDAV servlet, WebDAV mapping, or PROPFIND/LOCK handler is configured in tools/liquibase-license-utility/src/main or its application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1).",
         "justification": "requires_configuration",
-        "firstIssued": "2026-05-18T00:00:00Z"
+        "firstIssued": "2026-05-18T00:00:00Z",
+        "lastUpdated": "2026-05-18T00:00:00Z"
       },
       "affects": [
         {
@@ -213,7 +219,8 @@
         "state": "not_affected",
         "detail": "HTTP/2 request header validation gap in Tomcat 11.x before 11.0.22. Exploitation requires HTTP/2 connections to a running Tomcat server. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not enable HTTP/2 — application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) sets no server.http2.enabled property and declares no HTTP/2 connector, and the codebase contains no HTTP/2-specific Tomcat configuration. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26), so the fixed version is installed regardless.",
         "justification": "requires_configuration",
-        "firstIssued": "2026-05-19T00:00:00Z"
+        "firstIssued": "2026-05-19T00:00:00Z",
+        "lastUpdated": "2026-05-19T00:00:00Z"
       },
       "affects": [
         {
@@ -273,7 +280,8 @@
         "state": "not_affected",
         "detail": "Exposure of HTTP authentication headers to unexpected hosts during WebSocket authentication in Tomcat 11.x before 11.0.22. Exploitation requires a WebSocket client following an HTTP redirect during authentication. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not use the Tomcat WebSocket client or server APIs. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no WebSocket endpoint definitions, and the codebase contains no ClientEndpoint/ServerEndpoint annotations or other WebSocket-related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
         "justification": "requires_configuration",
-        "firstIssued": "2026-05-19T00:00:00Z"
+        "firstIssued": "2026-05-19T00:00:00Z",
+        "lastUpdated": "2026-05-19T00:00:00Z"
       },
       "affects": [
         {
@@ -333,7 +341,8 @@
         "state": "not_affected",
         "detail": "Authentication bypass in Tomcat digest authentication, where any unknown user presenting the password \"null\" was authenticated. Affects Tomcat 11.x before 11.0.22. Exploitation requires Tomcat to be configured to use DigestAuthenticator. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not configure any Tomcat realm or authenticator. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no realm/authenticator definitions, and the codebase contains no DigestAuthenticator or related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
         "justification": "requires_configuration",
-        "firstIssued": "2026-05-19T00:00:00Z"
+        "firstIssued": "2026-05-19T00:00:00Z",
+        "lastUpdated": "2026-05-19T00:00:00Z"
       },
       "affects": [
         {
@@ -393,7 +402,8 @@
         "state": "not_affected",
         "detail": "LockOutRealm treats user names as case-sensitive, reducing its effectiveness against brute-force attacks. Affects Tomcat 11.x before 11.0.22. Exploitation requires Tomcat to be configured to use LockOutRealm. Only the license utility includes tomcat-embed-core (tools/liquibase-license-utility/pom.xml:49-52); it starts a Spring Boot web application (tools/liquibase-license-utility/src/main/java/com/liquibase/analytics/LiquibaseLicenseTracking.java:20) but does not configure any Tomcat realm. Application configuration (tools/liquibase-license-utility/src/main/resources/application.properties:1) contains no realm definitions, and the codebase contains no LockOutRealm or related symbols. The utility also pins tomcat-embed-core to 11.0.22 (tools/liquibase-license-utility/pom.xml:26).",
         "justification": "requires_configuration",
-        "firstIssued": "2026-05-19T00:00:00Z"
+        "firstIssued": "2026-05-19T00:00:00Z",
+        "lastUpdated": "2026-05-19T00:00:00Z"
       },
       "affects": [
         {
@@ -413,7 +423,8 @@
         "state": "not_affected",
         "detail": "Repo-wide searches found no source declaration for org.apache.tomcat.embed:tomcat-embed-core; the only Tomcat references in the current tree are prior VEX notes. The active build declares unrelated dependencies such as httpcore5 5.4.3 in pom.xml:121-122 and jackson-core 2.22.1 in pom.xml:57,150-151 and community-extensions/liquibase-mongodb/pom.xml:48,90-92.",
         "justification": "code_not_present",
-        "firstIssued": "2026-08-27T00:00:00Z"
+        "firstIssued": "2026-08-27T00:00:00Z",
+        "lastUpdated": "2026-08-27T00:00:00Z"
       },
       "affects": [
         {
@@ -467,7 +478,8 @@
         "state": "not_affected",
         "detail": "Security constraint bypass when a `<security-constraint>` for a longer path is declared before a more restrictive constraint for a shorter sub-path in web.xml. Requires an active Tomcat servlet container evaluating security constraints against deployed web.xml descriptors. Liquibase is a CLI tool that uses picocli for command-line parsing and never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No servlet container is started, so no security-constraint evaluation ever occurs.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-08T00:00:00Z"
+        "firstIssued": "2026-09-08T00:00:00Z",
+        "lastUpdated": "2026-09-08T00:00:00Z"
       },
       "affects": [
         {
@@ -487,7 +499,8 @@
         "state": "not_affected",
         "detail": "TLS 1.3 cipher suite preference order not preserved in Tomcat's SSL connector configuration. Requires an active TLS connector performing cipher negotiation. Liquibase is a CLI tool that never starts a Tomcat server or binds a TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; no TLS handshakes occur.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -541,7 +554,8 @@
         "state": "not_affected",
         "detail": "Authentication bypass by capture-replay in Tomcat's DIGEST authenticator: a nonceCount on the upper boundary of the replay window can be replayed once before it ages out. Requires an active Tomcat servlet container with DIGEST authentication configured and processing inbound authenticated requests. Liquibase is a CLI tool that never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No DIGEST authenticator is ever configured or invoked.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-08T00:00:00Z"
+        "firstIssued": "2026-09-08T00:00:00Z",
+        "lastUpdated": "2026-09-08T00:00:00Z"
       },
       "affects": [
         {
@@ -601,7 +615,8 @@
         "state": "not_affected",
         "detail": "Incorrect Authorization in Tomcat's FORM authentication process allows bypassing a security constraint that limits a user to POST access on a resource (not GET). Requires an active Tomcat servlet container with FORM authentication and a POST-only security constraint configured. Liquibase is a CLI tool that never starts a Spring application context or Tomcat server (grep across core/, pro/, and all extension modules for `org.apache.catalina.startup.Tomcat`, `new Tomcat(`, `TomcatServletWebServerFactory`, and `@SpringBootApplication` returns zero hits in production source). tomcat-embed-core is a transitive dependency from spring-boot-starter-web, pulled in by the Spring Boot integration module for users who embed Liquibase in their own Spring apps. No FORM authenticator or security constraint is ever configured.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-08T00:00:00Z"
+        "firstIssued": "2026-09-08T00:00:00Z",
+        "lastUpdated": "2026-09-08T00:00:00Z"
       },
       "affects": [
         {
@@ -937,16 +952,322 @@
       ]
     },
     {
+      "id": "CVE-2025-31651",
+      "description": "Improper Neutralization of Escape, Meta, or Control Sequences vulnerability in Apache Tomcat. For a subset of unlikely rewrite rule configurations, it was possible for a specially crafted request to bypass some rewrite rules. If those rewrite rules effectively enforced security constraints, those constraints could be bypassed. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.5, from 10.1.0-M1 through 10.1.39, from 9.0.0.M1 through 9.0.102.",
+      "recommendation": "No action required. No shipped component configures a Tomcat RewriteValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass exists only in RewriteValve rule processing; no shipped component configures a RewriteValve, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ff77-26x5-69cr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-31651",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A crafted request can bypass some rewrite rules of Tomcat's RewriteValve; fixed in Tomcat 11.0.6, 10.1.40 and 9.0.104. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs a RewriteValve with rewrite rules. Spring Boot exposes no property that enables the RewriteValve; it must be added in code through a web server factory customizer together with a rewrite configuration. The application sets no server properties, packages no rewrite.config, and none of its classes references the Tomcat API or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<9.0.104|>=10.1.0-M1|<10.1.40|>=11.0.0-M1|<11.0.6",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-46701",
+      "description": "Improper Handling of Case Sensitivity vulnerability in Apache Tomcat's CGI servlet allows security constraint bypass of security constraints that apply to the pathInfo component of a URI mapped to the CGI servlet. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.6, from 10.1.0-M1 through 10.1.40, from 9.0.0.M1 through 9.0.104.",
+      "recommendation": "No action required. No shipped component enables the Tomcat CGI servlet.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass exists only for URIs mapped to the CGI servlet; no shipped component registers it, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        178
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h2fw-rfh5-95r3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-46701",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Case-sensitivity handling in Tomcat's CGI servlet allows a bypass of security constraints on the pathInfo of a URI mapped to that servlet; fixed in Tomcat 11.0.7, 10.1.41 and 9.0.105. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs the CGI servlet to be registered and mapped. Embedded Tomcat under Spring Boot does not load Tomcat's default web.xml and never registers the CGI servlet; the application registers only Spring's DispatcherServlet and none of its classes references CGIServlet or the Tomcat API.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<9.0.105|>=10.1.0-M1|<10.1.41|>=11.0.0-M1|<11.0.7",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-49124",
+      "description": "Untrusted Search Path vulnerability in Apache Tomcat installer for Windows. During installation, the Tomcat installer for Windows used icacls.exe without specifying a full path. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0 through 10.1.41, from 9.0.23 through 9.0.105.",
+      "recommendation": "No action required. Liquibase Secure does not ship the Tomcat Windows installer.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 8.4,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw is in the Tomcat Windows installer, which no Liquibase Secure artifact contains; the embedded Tomcat library has no installer code.\n"
+        }
+      ],
+      "cwes": [
+        426
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-42wg-hm62-jcwg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-49124",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The Tomcat installer for Windows ran icacls.exe without a full path during installation; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The flaw is in the Windows installer executable distributed with the full Tomcat server download, not in the tomcat-embed-core library. No Liquibase Secure artifact ships or runs the Tomcat Windows installer. tomcat-embed-core ships only as the embedded server of the 5.x license-tracking application (10.1.34 in 5.0.0 to 5.0.2, 10.1.48 or 11.0.15 and newer from 5.0.3), as a library inside that application's jar; it contains no installer code.",
+        "justification": "code_not_present",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.23|<9.0.106|>=10.1.0|<10.1.42|>=11.0.0-M1|<11.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29146",
       "analysis": {
         "state": "not_affected",
         "detail": "Information disclosure via padding oracle vulnerability in Tomcat EncryptInterceptor (clustering component). Requires Tomcat clustering with EncryptInterceptor enabled. Liquibase is a CLI tool that never starts a Tomcat server or initializes clustering. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; EncryptInterceptor is never instantiated.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
           "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-49125",
+      "description": "Authentication Bypass Using an Alternate Path or Channel vulnerability in Apache Tomcat. When using PreResources or PostResources mounted other than at the root of the web application, it was possible to access those resources via an unexpected path. That path was likely not to be protected by the same security constraints as the expected path, allowing those security constraints to be bypassed. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0-M1 through 10.1.41, from 9.0.0.M1 through 9.0.105.",
+      "recommendation": "No action required. No shipped component mounts Tomcat PreResources or PostResources.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The alternate path exists only for PreResources or PostResources mounted at a non-root path; no shipped component mounts any, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        288
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wc4r-xq3c-5cf3",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-49125",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Resources mounted as PreResources or PostResources other than at the web application root could be reached through an unexpected path that bypasses security constraints; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs PreResources or PostResources mounted at a non-root path. Spring Boot exposes no property for this; it requires code that customizes the Tomcat context's WebResourceRoot. Spring Boot's own Tomcat setup adds only resource-jar sets mounted at the web application root, and only for jars that contain META-INF/resources, which none of the application's libraries do. None of the application's classes references the Tomcat API or a web server factory customizer, and the application bundles no Spring Security and defines no security constraints.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<9.0.106|>=10.1.0-M1|<10.1.42|>=11.0.0-M1|<11.0.8",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-55668",
+      "description": "Session Fixation vulnerability in Apache Tomcat via rewrite valve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0-M1 through 10.1.41, from 9.0.0.M1 through 9.0.105.",
+      "recommendation": "No action required. No shipped component configures a Tomcat RewriteValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The session fixation exists only through the RewriteValve; no shipped component configures one, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        384
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-23hv-mwm6-g8jf",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-55668",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Session fixation through Tomcat's RewriteValve; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs a RewriteValve. Spring Boot exposes no property that enables it; it must be added in code through a web server factory customizer. None of the application's classes references the Tomcat API or a web server factory customizer. The application is a stateless REST service and creates no HTTP sessions.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-10-14T00:00:00Z",
+        "lastUpdated": "2026-10-15T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.0-M1|<9.0.106|>=10.1.0-M1|<10.1.42|>=11.0.0-M1|<11.0.8",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
@@ -956,7 +1277,8 @@
         "state": "not_affected",
         "detail": "Information disclosure via improper encoding in Tomcat JsonAccessLogValve. Requires an active HTTP connector with JsonAccessLogValve configured and non-default relaxedPathChars/relaxedQueryChars values. Liquibase is a CLI tool that never starts a Tomcat server. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; no access log valves are configured or initialized.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -970,7 +1292,8 @@
         "state": "not_affected",
         "detail": "Information disclosure via sensitive data in Tomcat log files from the Kubernetes cloud membership provider (clustering). Requires Tomcat clustering with Kubernetes membership enabled. Liquibase is a CLI tool that never starts a Tomcat server or initializes clustering. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; Kubernetes cluster membership is never initialized.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -984,7 +1307,8 @@
         "state": "not_affected",
         "detail": "Incomplete OCSP verification in Tomcat's FFM/OpenSSL TLS integration. Requires an active TLS listener with client certificate authentication and OCSP validation configured. Liquibase is a CLI tool that never starts a Tomcat server or binds any TLS connector. tomcat-embed-core is a transitive dependency from spring-boot-starter-web; the TLS and OCSP subsystems are never initialized.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -1032,7 +1356,8 @@
         "state": "not_affected",
         "detail": "Remote code execution and information disclosure via Tomcat Default Servlet partial PUT support. Requires an HTTP PUT request to a running Tomcat servlet container with partial PUT enabled. Liquibase is a CLI tool that never starts the Tomcat HTTP server, never deploys any servlet, and never opens any network port. The Default Servlet, partial PUT handling, and file session persistence code paths are never activated.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -1046,7 +1371,8 @@
         "state": "not_affected",
         "detail": "Denial of service via excessive memory consumption in Tomcat multipart upload processing. Requires sending a crafted multipart/form-data HTTP POST to a running Tomcat instance. Liquibase is a CLI tool that never starts a Tomcat server and never accepts HTTP requests. The multipart parsing code path is completely inactive.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {
@@ -1060,7 +1386,8 @@
         "state": "not_affected",
         "detail": "Denial of service via HTTP/2 stream reset memory leak in Tomcat. Requires an HTTP/2 connection to a running Tomcat server. Liquibase is a CLI tool that never starts a Tomcat server, never enables HTTP/2, and accepts no inbound network connections.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-04-16T00:00:00Z"
+        "firstIssued": "2026-04-16T00:00:00Z",
+        "lastUpdated": "2026-04-16T00:00:00Z"
       },
       "affects": [
         {

@@ -98,7 +98,8 @@
         "state": "not_affected",
         "detail": "glibc DNS stub resolver assertion-abort issue when /etc/resolv.conf or LOCALDOMAIN contains a ~200+ character search-list domain. Requires attacker control of the container's DNS configuration; not remotely triggerable against this image.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -155,7 +156,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-10-06T00:00:00Z"
+        "firstIssued": "2026-10-06T00:00:00Z",
+        "lastUpdated": "2026-10-06T00:00:00Z"
       },
       "affects": [
         {
@@ -200,7 +202,8 @@
         "state": "not_affected",
         "detail": "glibc nscd stack-overflow crash when a malicious DNS server returns an oversized response. Requires nscd running against an untrusted DNS server; this minimal image runs no nscd process at all.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -248,7 +251,8 @@
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-09-24T00:00:00Z"
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-24T00:00:00Z"
       },
       "affects": [
         {
@@ -298,7 +302,8 @@
         "state": "not_affected",
         "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH uses $ORIGIN, plus a local attacker able to hard-link it and win a race. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user. fs.protected_hardlinks, enabled by default on major distributions, also blocks the hard-link step.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-28T00:00:00Z"
+        "firstIssued": "2026-09-28T00:00:00Z",
+        "lastUpdated": "2026-09-28T00:00:00Z"
       },
       "affects": [
         {
@@ -348,7 +353,8 @@
         "state": "not_affected",
         "detail": "Exploitation needs a setuid or setgid binary whose DT_RPATH or DT_RUNPATH begins with $ORIGIN. None of the setuid/setgid binaries shipped in the Liquibase Secure image (su, passwd, mount, chsh and the other shadow and util-linux tools) contain $ORIGIN at all, and the container runs Liquibase as the unprivileged liquibase user.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-28T00:00:00Z"
+        "firstIssued": "2026-09-28T00:00:00Z",
+        "lastUpdated": "2026-09-28T00:00:00Z"
       },
       "affects": [
         {
@@ -398,7 +404,8 @@
         "state": "not_affected",
         "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable regcomp() double free needs a process that compiles a regular expression through glibc after an earlier allocation failure. An inspection of the shipped image found that neither the JVM nor any JRE native library imports regcomp; Java regular expressions are implemented in java.util.regex, not in glibc. The only importers are OS utilities such as bash, grep, tar and wget, which are either not part of the runtime path or, in the case of the bash entrypoint, do not use regular-expression matching. lpm is a statically linked Go binary.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -454,7 +461,8 @@
         "state": "not_affected",
         "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the vulnerable arithmetic in memalign, posix_memalign and aligned_alloc is triggered only when a caller passes an attacker-controlled, exceptionally large alignment. An inspection of the shipped image found that libjvm.so imports posix_memalign and libmlib_image.so imports memalign, but both pass fixed alignments chosen by the runtime (page and cache-line sizes), never a value derived from user input; no other process in the runtime path uses the memalign family, and lpm is a statically linked Go binary.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -510,7 +518,8 @@
         "state": "not_affected",
         "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the stack leak needs a process that calls getnetbyaddr() or getnetbyaddr_r() while nsswitch.conf routes the networks database to DNS. Neither condition holds in the Liquibase Secure image: an inspection found that no JRE native library imports the getnetbyaddr family (the only importers are the getent utility and the perl interpreter, neither of which runs at runtime), and /etc/nsswitch.conf configures networks: files with no dns backend. lpm is a statically linked Go binary.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -570,7 +579,8 @@
         "state": "not_affected",
         "detail": "locales (the glibc locale definitions) is built from the same glibc source package as libc-bin and carries the same version, so the scanner reports it alongside. The same rationale as the libc-bin assessment for this CVE applies: the uninitialized-memory return needs a process that calls glibc's wordexp() with both WRDE_REUSE and WRDE_APPEND. An inspection of every ELF binary and shared library in the shipped image, including the JRE's native libraries, found none that imports wordexp; the symbol appears only in libc.so.6 itself. lpm is a statically linked Go binary, so the vulnerable wordexp() path is never reached by Liquibase Secure.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-10-01T00:00:00Z"
+        "firstIssued": "2026-10-01T00:00:00Z",
+        "lastUpdated": "2026-10-01T00:00:00Z"
       },
       "affects": [
         {

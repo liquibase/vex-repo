@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7bf1df12638a9d8a6bd6173cb89e529c089a4234076711ab2bfca2f665a999e4",
+  "@id": "merged-vex-911f192a11664758f3a08f0d1142dc50204dce08a8c692df35aad33af51b5690",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:55.695983173Z",
+  "timestamp": "2026-10-16T13:24:38.40834036Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-72hv-8253-57qq"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.678497773Z",
+      "timestamp": "2026-10-16T13:24:38.395684304Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -30,13 +30,14 @@
           "GHSA-6v53-7c9g-w56r"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.539331655Z",
+      "timestamp": "2026-10-16T13:24:38.300381081Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
         }
       ],
       "status": "not_affected",
+      "status_notes": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Nesting depth constraint bypass in Jackson Core 3.x UTF8DataInputJsonParser and ReaderBasedJsonParser. maxNestingDepth from StreamReadConstraints is not enforced, allowing a deeply nested JSON document to cause StackOverflowError. Liquibase is a CLI tool that only parses JSON from trusted, operator-controlled configuration files and changelog artifacts. It does not expose any JSON parsing endpoint to remote or untrusted input. As established in the prior assessment of GHSA-2m67-wjpj-xhg9, Liquibase does not rely on StreamReadConstraints as a security boundary."
     },
@@ -47,7 +48,7 @@
           "GHSA-7hhh-6rmp-j9qf"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.632783169Z",
+      "timestamp": "2026-10-16T13:24:38.363492051Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
@@ -62,14 +63,13 @@
       "vulnerability": {
         "name": "GHSA-2m67-wjpj-xhg9"
       },
-      "timestamp": "2026-10-14T19:12:55.586357692Z",
+      "timestamp": "2026-10-16T13:24:38.332160872Z",
       "products": [
         {
           "@id": "pkg:maven/tools.jackson.core/jackson-core"
         }
       ],
       "status": "not_affected",
-      "status_notes": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
       "justification": "component_not_present",
       "impact_statement": "Repo-wide searches found no source declaration for tools.jackson.core:jackson-core. The build only references com.fasterxml.jackson.core:jackson-core 2.22.1 at pom.xml:57,150-151, community-extensions/liquibase-mongodb/pom.xml:48,90-92, and core/liquibase-dist/src/main/archive/licenses/commercial/README.txt:137. The scanner-reported 3.1.0 coordinate is not present in the codebase."
     }

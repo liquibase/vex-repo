@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-7cee5b5ee092eb23f57c3d7c5212585d519cfe95802c9fde12644a4c65f2c705",
+  "@id": "merged-vex-a11c9c8c0729849e5168333941f21d5e9ff868d8930d899a14d30c27f9588c1c",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:54.79057924Z",
+  "timestamp": "2026-10-16T13:24:37.733440142Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-41234",
+        "aliases": [
+          "GHSA-6r3c-xf4w-jxjm"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:37.719862577Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-web"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In Spring Framework, versions 6.0.x as of 6.0.5, versions 6.1.x and 6.2.x, an application is vulnerable to a reflected file download (RFD) attack when it sets a \"Content-Disposition\" header with a non-ASCII charset, where the filename attribute is derived from user-supplied input. Affected versions: Spring Framework 6.2.0 through 6.2.7; 6.1.0 through 6.1.20; 6.0.5 through 6.0.28.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Liquibase CLI ships no Spring web code; spring-web is only an optional, compile-time dependency of liquibase-core and is not bundled. The scanner reports spring-web from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries Spring Framework 6.2.2 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 6.2.12 or 7.0.x, which are not affected. The advisory applies only to applications that build a Content-Disposition response header with ContentDisposition.Builder#filename(String, Charset) from unsanitized user input. None of the application's classes references ContentDisposition or sets a Content-Disposition header; its three REST controllers return a health object, a license-tracking batch acknowledgement and a usage report rendered as text, JSON or HTML, never a file download."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-41854",
@@ -12,7 +30,7 @@
           "GHSA-7m2p-62gw-p8qq"
         ]
       },
-      "timestamp": "2026-10-14T19:12:54.790580442Z",
+      "timestamp": "2026-10-16T13:24:37.686509594Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-web"

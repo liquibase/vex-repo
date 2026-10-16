@@ -1,10 +1,28 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-4b020f972fd5aa5909cc3cfe536ce537c7e243afae015a94eada42ae81b89a9c",
+  "@id": "merged-vex-b20af1699c7d068453ce00026d0cfec7a2e35ae563c39d9c60781b080b863127",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:55.439735477Z",
+  "timestamp": "2026-10-16T13:24:38.226573185Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2025-41242",
+        "aliases": [
+          "GHSA-r936-gwx5-v52f"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:38.213450699Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.springframework/spring-webmvc"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Spring Framework MVC applications can be vulnerable to a \"Path Traversal Vulnerability\" when deployed on a non-compliant Servlet container. An application can be vulnerable when all the following are true: the application is deployed as a WAR or with an embedded Servlet container; the Servlet container does not reject suspicious sequences; the application serves static resources with Spring resource handling. Applications deployed on Apache Tomcat or Eclipse Jetty are not vulnerable, as long as default security features are not disabled in the configuration.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The Liquibase CLI contains no Spring code. The scanner reports spring-webmvc from the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries spring-webmvc 6.2.2 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 6.2.12 or 7.0.x, which are not affected. The advisory needs a Servlet container that does not reject suspicious path sequences; Spring verified that applications on Apache Tomcat are not vulnerable unless its default security features are disabled. The application runs on embedded Tomcat with default settings: it sets no server properties and none of its classes references the Tomcat API. The advisory also needs static resources served through Spring resource handling. The application registers no resource handlers of its own; Spring Boot's default handler maps only the classpath locations static, public, resources and META-INF/resources, and neither the application nor any of its bundled libraries packages content there."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-22735",
@@ -12,7 +30,7 @@
           "GHSA-6hcq-hmm3-jj3c"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.37742981Z",
+      "timestamp": "2026-10-16T13:24:38.150236574Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -30,7 +48,7 @@
           "GHSA-4773-3jfm-qmx3"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.42151045Z",
+      "timestamp": "2026-10-16T13:24:38.182375598Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -48,7 +66,7 @@
           "GHSA-wg35-8jpf-2xv3"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.285511787Z",
+      "timestamp": "2026-10-16T13:24:38.0868968Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -66,7 +84,7 @@
           "GHSA-6p4f-wcwh-5vvm"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.33239976Z",
+      "timestamp": "2026-10-16T13:24:38.119439602Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -84,7 +102,7 @@
           "GHSA-mq64-j8f9-9gcj"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.143223464Z",
+      "timestamp": "2026-10-16T13:24:37.988621806Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -102,7 +120,7 @@
           "GHSA-x23c-287f-qqv5"
         ]
       },
-      "timestamp": "2026-10-14T19:12:54.87006681Z",
+      "timestamp": "2026-10-16T13:24:37.792543564Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -120,7 +138,7 @@
           "GHSA-72pg-x5f8-j25j"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.190832434Z",
+      "timestamp": "2026-10-16T13:24:38.021767657Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -138,7 +156,7 @@
           "GHSA-h3qp-gqrc-q736"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.052648936Z",
+      "timestamp": "2026-10-16T13:24:37.92232726Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -156,7 +174,7 @@
           "GHSA-3chg-m5w7-qfv5"
         ]
       },
-      "timestamp": "2026-10-14T19:12:54.916572591Z",
+      "timestamp": "2026-10-16T13:24:37.825848285Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -174,7 +192,7 @@
           "GHSA-957g-f97v-vppc"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.097331546Z",
+      "timestamp": "2026-10-16T13:24:37.956167589Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -192,7 +210,7 @@
           "GHSA-cjpg-rgq5-fr37"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.238464862Z",
+      "timestamp": "2026-10-16T13:24:38.054870224Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -210,7 +228,7 @@
           "GHSA-pc63-qcmh-9cmg"
         ]
       },
-      "timestamp": "2026-10-14T19:12:54.96133662Z",
+      "timestamp": "2026-10-16T13:24:37.857717654Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"
@@ -228,7 +246,7 @@
           "GHSA-j9f9-w8pj-32f8"
         ]
       },
-      "timestamp": "2026-10-14T19:12:55.007662488Z",
+      "timestamp": "2026-10-16T13:24:37.889723237Z",
       "products": [
         {
           "@id": "pkg:maven/org.springframework/spring-webmvc"

@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-350f0046ad44270f2c75ba848b27497803c6bc2ae32589aa5616ad3bdbbfb5a6",
+  "@id": "merged-vex-476a1de337e1cf22a613acf93f83d41610f3df75a28c151c8003088bc7ec63f2",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:53.089356685Z",
+  "timestamp": "2026-10-16T13:24:36.31870009Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "GHSA-83qj-6fr2-vhqg"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.207272072Z",
+      "timestamp": "2026-10-16T13:24:35.503919283Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -32,7 +32,7 @@
           "GHSA-3p2h-wqq4-wf4h"
         ]
       },
-      "timestamp": "2026-10-14T19:12:53.070902406Z",
+      "timestamp": "2026-10-16T13:24:36.137373279Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -45,13 +45,51 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-31651",
+        "aliases": [
+          "BIT-tomcat-2025-31651",
+          "GHSA-ff77-26x5-69cr"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:36.170449145Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper Neutralization of Escape, Meta, or Control Sequences vulnerability in Apache Tomcat. For a subset of unlikely rewrite rule configurations, it was possible for a specially crafted request to bypass some rewrite rules. If those rewrite rules effectively enforced security constraints, those constraints could be bypassed. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.5, from 10.1.0-M1 through 10.1.39, from 9.0.0.M1 through 9.0.102.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "A crafted request can bypass some rewrite rules of Tomcat's RewriteValve; fixed in Tomcat 11.0.6, 10.1.40 and 9.0.104. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs a RewriteValve with rewrite rules. Spring Boot exposes no property that enables the RewriteValve; it must be added in code through a web server factory customizer together with a rewrite configuration. The application sets no server properties, packages no rewrite.config, and none of its classes references the Tomcat API or a web server factory customizer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-46701",
+        "aliases": [
+          "BIT-tomcat-2025-46701",
+          "GHSA-h2fw-rfh5-95r3"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:36.203492713Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Improper Handling of Case Sensitivity vulnerability in Apache Tomcat's CGI servlet allows security constraint bypass of security constraints that apply to the pathInfo component of a URI mapped to the CGI servlet. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.6, from 10.1.0-M1 through 10.1.40, from 9.0.0.M1 through 9.0.104.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Case-sensitivity handling in Tomcat's CGI servlet allows a bypass of security constraints on the pathInfo of a URI mapped to that servlet; fixed in Tomcat 11.0.7, 10.1.41 and 9.0.105. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs the CGI servlet to be registered and mapped. Embedded Tomcat under Spring Boot does not load Tomcat's default web.xml and never registers the CGI servlet; the application registers only Spring's DispatcherServlet and none of its classes references CGIServlet or the Tomcat API."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-48988",
         "aliases": [
           "BIT-tomcat-2025-48988",
           "GHSA-h3gc-qfqq-6h8f"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.252915633Z",
+      "timestamp": "2026-10-16T13:24:35.537081399Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -69,7 +107,7 @@
           "GHSA-gqp3-2cvr-x8m3"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.298029231Z",
+      "timestamp": "2026-10-16T13:24:35.570912461Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -81,13 +119,51 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-49124",
+        "aliases": [
+          "BIT-tomcat-2025-49124",
+          "GHSA-42wg-hm62-jcwg"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:36.236729389Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Untrusted Search Path vulnerability in Apache Tomcat installer for Windows. During installation, the Tomcat installer for Windows used icacls.exe without specifying a full path. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0 through 10.1.41, from 9.0.23 through 9.0.105.",
+      "justification": "component_not_present",
+      "impact_statement": "The Tomcat installer for Windows ran icacls.exe without a full path during installation; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The flaw is in the Windows installer executable distributed with the full Tomcat server download, not in the tomcat-embed-core library. No Liquibase Secure artifact ships or runs the Tomcat Windows installer. tomcat-embed-core ships only as the embedded server of the 5.x license-tracking application (10.1.34 in 5.0.0 to 5.0.2, 10.1.48 or 11.0.15 and newer from 5.0.3), as a library inside that application's jar; it contains no installer code."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2025-49125",
+        "aliases": [
+          "BIT-tomcat-2025-49125",
+          "GHSA-wc4r-xq3c-5cf3"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:36.270205339Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Authentication Bypass Using an Alternate Path or Channel vulnerability in Apache Tomcat. When using PreResources or PostResources mounted other than at the root of the web application, it was possible to access those resources via an unexpected path. That path was likely not to be protected by the same security constraints as the expected path, allowing those security constraints to be bypassed. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0-M1 through 10.1.41, from 9.0.0.M1 through 9.0.105.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Resources mounted as PreResources or PostResources other than at the web application root could be reached through an unexpected path that bypasses security constraints; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs PreResources or PostResources mounted at a non-root path. Spring Boot exposes no property for this; it requires code that customizes the Tomcat context's WebResourceRoot. Spring Boot's own Tomcat setup adds only resource-jar sets mounted at the web application root, and only for jars that contain META-INF/resources, which none of the application's libraries do. None of the application's classes references the Tomcat API or a web server factory customizer, and the application bundles no Spring Security and defines no security constraints."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-52520",
         "aliases": [
           "BIT-tomcat-2025-52520",
           "GHSA-wr62-c79q-cv37"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.342357629Z",
+      "timestamp": "2026-10-16T13:24:35.604696805Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -105,7 +181,7 @@
           "GHSA-25xr-qj8w-c4vf"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.387303028Z",
+      "timestamp": "2026-10-16T13:24:35.637581932Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -117,13 +193,32 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2025-55668",
+        "aliases": [
+          "BIT-tomcat-2025-55668",
+          "GHSA-23hv-mwm6-g8jf"
+        ]
+      },
+      "timestamp": "2026-10-16T13:24:36.303629087Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Session Fixation vulnerability in Apache Tomcat via rewrite valve. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.7, from 10.1.0-M1 through 10.1.41, from 9.0.0.M1 through 9.0.105.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Session fixation through Tomcat's RewriteValve; fixed in Tomcat 11.0.8, 10.1.42 and 9.0.106. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.0 to 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The flaw needs a RewriteValve. Spring Boot exposes no property that enables it; it must be added in code through a web server factory customizer. None of the application's classes references the Tomcat API or a web server factory customizer. The application is a stateless REST service and creates no HTTP sessions."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-55752",
         "aliases": [
           "BIT-tomcat-2025-55752",
           "GHSA-wmwf-9ccg-fff5"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.432383248Z",
+      "timestamp": "2026-10-16T13:24:35.669886677Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -141,7 +236,7 @@
           "GHSA-fpj8-gq4v-p354"
         ]
       },
-      "timestamp": "2026-10-14T19:12:53.023072271Z",
+      "timestamp": "2026-10-16T13:24:36.103695919Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -160,7 +255,7 @@
           "GHSA-mgp5-rv84-w37q"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.162612893Z",
+      "timestamp": "2026-10-16T13:24:35.470055391Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -178,7 +273,7 @@
           "GHSA-563x-q5rq-57qp"
         ]
       },
-      "timestamp": "2026-10-14T19:12:51.936888386Z",
+      "timestamp": "2026-10-16T13:24:35.305807017Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -196,7 +291,7 @@
           "GHSA-9m3c-qcxr-9x87"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.882101688Z",
+      "timestamp": "2026-10-16T13:24:36.003298419Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -215,7 +310,7 @@
           "GHSA-69cc-cv78-qc8g"
         ]
       },
-      "timestamp": "2026-10-14T19:12:51.981448875Z",
+      "timestamp": "2026-10-16T13:24:35.340049089Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -233,7 +328,7 @@
           "GHSA-95jq-rwvf-vjx4"
         ]
       },
-      "timestamp": "2026-10-14T19:12:51.892237174Z",
+      "timestamp": "2026-10-16T13:24:35.272845483Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -252,7 +347,7 @@
           "GHSA-h468-7pvh-8vr8"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.02717844Z",
+      "timestamp": "2026-10-16T13:24:35.37275041Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -270,7 +365,7 @@
           "GHSA-8mc5-53m5-3qj2"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.928231148Z",
+      "timestamp": "2026-10-16T13:24:36.036392502Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -289,7 +384,7 @@
           "GHSA-rv64-5gf8-9qq8"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.073429842Z",
+      "timestamp": "2026-10-16T13:24:35.404621501Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -307,7 +402,7 @@
           "GHSA-x4m4-345f-5h5g"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.117846267Z",
+      "timestamp": "2026-10-16T13:24:35.436634083Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -325,7 +420,7 @@
           "GHSA-gx5v-xp9w-j4cg"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.47788489Z",
+      "timestamp": "2026-10-16T13:24:35.703585391Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -344,7 +439,7 @@
           "GHSA-r29c-68gh-xp6x"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.522917346Z",
+      "timestamp": "2026-10-16T13:24:35.73728813Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -363,7 +458,7 @@
           "GHSA-fv25-8xcx-gqjc"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.567573834Z",
+      "timestamp": "2026-10-16T13:24:35.771028967Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -382,7 +477,7 @@
           "GHSA-h6fc-48rj-7qqh"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.612568052Z",
+      "timestamp": "2026-10-16T13:24:35.80434154Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -401,7 +496,7 @@
           "GHSA-5mp6-jrq3-r938"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.657427993Z",
+      "timestamp": "2026-10-16T13:24:35.83741995Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -420,7 +515,7 @@
           "GHSA-9m89-8frq-c98c"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.974347404Z",
+      "timestamp": "2026-10-16T13:24:36.069691475Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -439,7 +534,7 @@
           "GHSA-5m62-pw8w-7w9f"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.703109981Z",
+      "timestamp": "2026-10-16T13:24:35.870255231Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -457,7 +552,7 @@
           "GHSA-gcx9-497g-6cp6"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.748781617Z",
+      "timestamp": "2026-10-16T13:24:35.903521234Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -476,7 +571,7 @@
           "GHSA-9xv2-5v5q-p794"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.793912811Z",
+      "timestamp": "2026-10-16T13:24:35.93680345Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"
@@ -495,7 +590,7 @@
           "GHSA-h3x4-894j-xpx5"
         ]
       },
-      "timestamp": "2026-10-14T19:12:52.837981015Z",
+      "timestamp": "2026-10-16T13:24:35.970038928Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core"

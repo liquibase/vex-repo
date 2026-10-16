@@ -39,7 +39,8 @@
         "state": "not_affected",
         "detail": "Incomplete fix for a prior number-length constraint bypass: Jackson's async/non-blocking parser (NonBlockingJsonParser / ByteArrayFeeder) silently buffers digit characters up to maxStringLength instead of enforcing maxNumberLength when input arrives in small chunks without a terminator byte. Found in jackson-core 2.22.0 bundled into liquibase-aws-extension.jar and liquibase-azure.jar. Both extensions are outbound clients that call AWS/Azure APIs and parse the responses those services return over TLS; neither extension's own code invokes Jackson's non-blocking parser API, and neither exposes a network-facing endpoint that accepts attacker-controlled JSON. Exploiting this would require an attacker already able to forge or MITM AWS/Azure API responses, at which point far more direct attacks are already available.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-07-22T00:00:00Z"
+        "firstIssued": "2026-07-22T00:00:00Z",
+        "lastUpdated": "2026-07-22T00:00:00Z"
       },
       "affects": [
         {

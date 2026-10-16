@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-3b1699ac09cc9d89406877cfb91ece68d29b386f32e4c09584d6923bc9789f59",
+  "@id": "merged-vex-503a27012c0ac1067cd47bb2b5a0730e96bfabacd26dac514275af5fd0cfdb60",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-14T19:12:36.379411085Z",
+  "timestamp": "2026-10-16T13:24:24.116054181Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2023-7008"
+      },
+      "timestamp": "2026-10-16T13:24:24.102980155Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was found in systemd-resolved. This issue may allow systemd-resolved to accept records of DNSSEC-signed domains even when they have no signature, allowing man-in-the-middles (or the upstream DNS resolver) to manipulate records.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in systemd-resolved, the systemd DNS stub resolver daemon, which can accept unsigned records for DNSSEC-signed domains. Exploitation needs systemd-resolved to be running and answering the host's name lookups. In Ubuntu 22.04 (jammy), systemd-resolved ships in the systemd binary package; libsystemd0 and libudev1 ship one client library each (libsystemd.so.0 and libudev.so.1) and contain no resolver code. No Liquibase Secure image installs the systemd, systemd-resolved, systemd-sysv, udev or init packages, there is no systemd-resolved binary, the container has no init system, and PID 1 is the Liquibase entrypoint script, which runs only the Liquibase CLI and the optional lpm helper. The two libraries are present only as dependencies of base-image tooling such as apt, util-linux and procps, and the JVM does not link either of them. Ubuntu fixed the issue in 249.11-0ubuntu3.21 (jammy) (USN-8402-1); Ubuntu 24.04 (noble) shipped with the fix (255.2-3ubuntu1 and later). Docker images 5.0.0 and 5.0.1 (jammy) carry the unfixed 249.11-0ubuntu3.16; 5.0.2 and later (noble) carry 255.4 builds and are not in range."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-10-14T19:12:36.130053257Z",
+      "timestamp": "2026-10-16T13:24:23.913616627Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -24,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-10-14T19:12:36.176035894Z",
+      "timestamp": "2026-10-16T13:24:23.94589632Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -42,7 +57,7 @@
           "GHSA-gx6q-6f99-m764"
         ]
       },
-      "timestamp": "2026-10-14T19:12:36.36164906Z",
+      "timestamp": "2026-10-16T13:24:24.070859241Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -60,7 +75,7 @@
           "GHSA-vpfq-8p5f-jcqx"
         ]
       },
-      "timestamp": "2026-10-14T19:12:36.315110003Z",
+      "timestamp": "2026-10-16T13:24:24.039213935Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -78,7 +93,7 @@
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-10-14T19:12:36.268601796Z",
+      "timestamp": "2026-10-16T13:24:24.007799815Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -93,7 +108,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-10-14T19:12:36.222556695Z",
+      "timestamp": "2026-10-16T13:24:23.976810296Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"

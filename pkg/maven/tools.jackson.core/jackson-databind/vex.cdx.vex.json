@@ -49,7 +49,8 @@
         "state": "not_affected",
         "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Liquibase Secure ships one Jackson 3 copy, in liquibase-commercial-cassandra, and it is on the fixed 3.2.2. That was read out of the built distribution rather than from the dependency graph: internal/extensions/liquibase-commercial-cassandra.jar carries META-INF/maven/tools.jackson.core/jackson-databind/pom.properties with version=3.2.2, and the constant in tools/jackson/databind/cfg/PackageVersion agrees. jackson-core in the same jar is also 3.2.2. The reachability argument is the same as for Jackson 2 and holds independently of the version: no production code in this repository references javax.xml.datatype.Duration or XMLGregorianCalendar, so the XML datatype deserializers that carry the unbounded parse are never given a target to bind. One thing to watch rather than a present exposure: no POM here pins tools.jackson.core. The version arrives transitively from com.ing.data:cassandra-jdbc-wrapper, pinned at 5.0.3 via cassandra-jdbc.version, and only that release carries a fixed Jackson. Wrapper 5.0.2 and 5.0.1 declare 3.2.0 and wrapper 5.0.0 declares 3.1.3, both inside the affected ranges, so a wrapper change could reintroduce an affected copy with no POM edit here to signal it.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -106,7 +107,8 @@
         "state": "not_affected",
         "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Jackson 3 appears in two places in the Liquibase Secure distribution: relocated inside liquibase-commercial-cassandra on the current main build (3.2.2, already fixed) and inside the liquibase-license-tracking application (3.2.1). The reachability argument is the same as for Jackson 2 and holds independently of version: the vulnerable DefaultBaseTypeLimitingValidator path is exercised only when an application declares @JsonTypeInfo on a property or class whose base type is java.lang.Comparable and lets Jackson fall back to the default validator. An inspection of every jar in the shipped distribution, including the Jackson copies relocated inside the couchbase, databricks and snowflake drivers and the license-tracking application, found @JsonTypeInfo declared on exactly three base types, Apache Arrow's ArrowType (bundled by bigquery, databricks and snowflake) and Couchbase's AnalyticsLink and BucketConfig, plus a reflective lookup of the annotation in Azure Core's FlatteningDeserializer. None of these base types is Comparable, and all of them bind JSON that comes from the respective database or cloud service, not from Liquibase users. Liquibase Secure's own code never uses @JsonTypeInfo.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
@@ -163,7 +165,8 @@
         "state": "not_affected",
         "detail": "The same advisory covers the Jackson 3 coordinate, which is a separate artifact from com.fasterxml.jackson.core:jackson-databind and carries its own version line, so it is assessed here rather than folded into the Jackson 2 entry. Jackson 3 appears in two places in the Liquibase Secure distribution: relocated inside liquibase-commercial-cassandra on the current main build (3.2.2, already fixed) and inside the liquibase-license-tracking application (3.2.1). The reachability argument is the same as for Jackson 2 and holds independently of version: the vulnerable NioPathHelper path runs only when Jackson binds a JSON string into a java.nio.file.Path target, either directly or through a bean that declares a Path-typed property. An inspection of every jar in the shipped distribution, including the Jackson copies relocated inside the couchbase, databricks and snowflake drivers and the license-tracking application, found no Jackson-bound class with a Path-typed property. The classes that reference both Path and Jackson (the Snowflake and Databricks token caches and config parsers, Couchbase's ImportFile, Liquibase's ProJsonChangeLogParser, the Jackson 3 stream factories) use Path as a file handle for the document being read and bind its content into Map, JsonNode or their own DTOs without Path fields. Liquibase Secure's own Jackson call sites bind into Object or Map.",
         "justification": "code_not_reachable",
-        "firstIssued": "2026-09-29T00:00:00Z"
+        "firstIssued": "2026-09-29T00:00:00Z",
+        "lastUpdated": "2026-09-29T00:00:00Z"
       },
       "affects": [
         {
