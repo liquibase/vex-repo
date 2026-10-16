@@ -2,7 +2,7 @@ name: Trigger Trivy Scan
 
 # Mirror of the source repos' vex-repo-dispatch.yml in the reverse
 # direction: when published VEX content changes here, trigger the published
-# image scans in liquibase-pro and liquibase-insights so the next scan picks
+# image scans in liquibase-pro and liquibase-platform so the next scan picks
 # up the new statements without waiting for the weekday cron.
 
 on:
@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   trigger:
-    name: Trigger published image scans in liquibase-pro and liquibase-insights
+    name: Trigger published image scans in liquibase-pro and liquibase-platform
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -39,7 +39,7 @@ jobs:
             LIQUIBASE,/vault/liquibase
           parse-json-secrets: true
 
-      - name: Get GitHub App token (actions:write on liquibase-pro and liquibase-insights)
+      - name: Get GitHub App token (actions:write on liquibase-pro and liquibase-platform)
         id: get-token
         uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         with:
@@ -48,7 +48,7 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: |
             liquibase-pro
-            liquibase-insights
+            liquibase-platform
           permission-actions: write
 
       - name: Dispatch trivy-scan-published-images.yml
@@ -60,11 +60,11 @@ jobs:
           wait: 'false'
           gh-token: ${{ steps.get-token.outputs.token }}
 
-      - name: Dispatch liquibase-insights scan-published-images.yml
+      - name: Dispatch liquibase-platform scan-published-images.yml
         uses: liquibase/build-logic/.github/actions/dispatch-and-wait@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
         with:
           workflow: scan-published-images.yml
-          repo: liquibase/liquibase-insights
+          repo: liquibase/liquibase-platform
           ref: main
           wait: 'false'
           gh-token: ${{ steps.get-token.outputs.token }}
