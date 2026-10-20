@@ -37770,6 +37770,128 @@
       ]
     },
     {
+      "id": "CVE-2025-53057",
+      "description": "CVE-2025-53057 is an Oracle Java SE Security (java.security) issue from the October 2025 Critical Patch Update, fixed in OpenJDK 21.0.9 by JDK-8360937 (\"Enhance certificate handling\"). The fix changes how X.509 distinguished names are parsed and rendered (sun.security.util.DerValue and sun.security.x509.AVA): before 21.0.9, BMPString values containing surrogate characters were accepted, and the RFC 2253 string forms decoded PrintableString, IA5String, T61String and BMPString values as UTF-8 regardless of their encoding. The Java version was read from each published image with java -version: 5.0.0 and 5.0.1 ship Temurin 21.0.8+9, 5.0.2 and 5.0.3 ship 21.0.9+10, and later images ship 21.0.10 or newer. Liquibase Secure validates server certificates on TLS connections (bundled JDBC drivers, HTTPS to license and cloud service endpoints), and certificate parsing decodes these names, so the changed code is likely reached; the path through the default PKIX trust manager has not been traced end to end. Oracle has not published how the flaw leads to the integrity impact it reports, no public exploit is known, and Oracle rates the issue difficult to exploit.",
+      "recommendation": "Upgrade to the latest Liquibase Secure release. This CVE is fixed from 5.0.2 onward (Temurin 21.0.9 or newer).",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5ccw-23gm-2h2f",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-53057",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2025.html",
+          "title": "Oracle Critical Patch Update Advisory - October 2025"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2025-10-21",
+          "title": "OpenJDK Vulnerability Advisory 2025-10-21"
+        }
+      ],
+      "analysis": {
+        "state": "in_triage",
+        "detail": "Under investigation for Liquibase Secure 5.0.0 and 5.0.1, which ship Temurin 21.0.8; every release from 5.0.2 onward ships Temurin 21.0.9 or newer and includes the fix. Whether Liquibase Secure's certificate validation can be exploited through this flaw is not yet established. Upgrade to the latest Liquibase Secure release.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-10-20T00:00:00Z",
+        "lastUpdated": "2026-10-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.9",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-61748",
+      "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 21.0.8 and 25; Oracle GraalVM for JDK: 21.0.8; Oracle GraalVM Enterprise Edition: 21.3.15. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. CVSS 3.1 Base Score 3.7 (Integrity impacts).",
+      "recommendation": "No action required. Liquibase Secure 5.0.2 and later ship a JRE that includes the fix.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The fix only changes the String sub-range branch of AbstractStringBuilder.insert(int, CharSequence, int, int), and no code in the JRE or in the Liquibase Secure 5.0.0 and 5.0.1 images calls it with a String sub-range.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6ch4-24w6-v6jv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-61748",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2025.html",
+          "title": "Oracle Critical Patch Update Advisory - October 2025"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2025-10-21",
+          "title": "OpenJDK Vulnerability Advisory 2025-10-21"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Libraries (core-libs) issue, fixed in OpenJDK 21.0.9 by JDK-8359454 (\"Enhance String handling\"). The Java version was read from each published image with java -version: 5.0.0 and 5.0.1 ship Temurin 21.0.8+9, 5.0.2 and later ship 21.0.9 or newer. The fix changes a single branch of java.lang.AbstractStringBuilder.insert(int, CharSequence, int, int): the one taken when the inserted sequence is a String and only part of it is inserted. A whole String now goes through the existing putStringAt(int, String) path, which copies the same bytes as the code it replaced, so the behaviour that changed is limited to inserting a sub-range of a String. A bytecode scan of the 5.0.0 and 5.0.1 images found no caller of that form. In the JRE's lib/modules, no class other than StringBuilder, StringBuffer and AbstractStringBuilder references the four-argument insert. Across all jars under /liquibase, including nested jars and the license-tracking application, its only caller is the shaded ICU class CollationIterator$SkippedState in liquibase-checks.jar, which inserts a StringBuilder, not a String. The callers of insert(int, CharSequence), which forwards the whole sequence, are in shaded ICU and the DB2 JDBC driver and insert either a StringBuilder or a whole sequence. The changed code is therefore not executed by Liquibase Secure.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-20T00:00:00Z",
+        "lastUpdated": "2026-10-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<21.0.9",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-29062",
       "description": "Jackson Core 3.x maxNestingDepth constraint bypass in multiple parser implementations, enabling DoS via StackOverflowError from deeply nested JSON input.",
       "recommendation": "No action required. Liquibase does not parse untrusted JSON input.",
