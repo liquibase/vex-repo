@@ -1500,6 +1500,510 @@
       ]
     },
     {
+      "id": "CVE-2026-86409",
+      "description": "Setting `CURLOPT_AWS_SIGV4` to NULL does not disable SigV4 authentication, contrary to expectations and documentation. A subsequent transfer on the same handle still sends an `Authorization: AWS4-HMAC-SHA256` header to whatever URL is set next, leaking state information.",
+      "recommendation": "No action required. Liquibase Secure does not use libcurl or its SigV4 option.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application that reuses a libcurl handle with CURLOPT_AWS_SIGV4 set and then cleared. Liquibase Secure never does this, and the curl command-line tool is the only libcurl consumer in the image. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-57hx-469r-xq3r",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86409",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-86409.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86409",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Setting CURLOPT_AWS_SIGV4 to NULL did not disable SigV4 authentication on a reused libcurl handle, so a later transfer on the same handle could still send an AWS4-HMAC-SHA256 Authorization header to a different URL. Upstream rates it low and lists the affected range as 7.75.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.22.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including CURLOPT_AWS_SIGV4). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86414",
+      "description": "An HTTP proxy can trick libcurl into sending the origin's credentials (Basic password, or a Negotiate/Kerberos ticket) to the proxy itself, by answering the `CONNECT` tunnel request with 401 `WWW-Authenticate:` instead of the expected 407 `Proxy-Authenticate:`.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl for HTTP or proxied connections.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires libcurl to send credentials through a malicious HTTP proxy. Liquibase Secure never invokes curl or libcurl; its HTTP traffic, proxied or not, goes through the JDK. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-6qvf-c7g3-j256",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-86414",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-86414.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-86414",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An HTTP proxy could make libcurl send the origin's credentials (Basic password or a Negotiate/Kerberos ticket) to the proxy by answering a CONNECT tunnel request with 401 WWW-Authenticate instead of 407 Proxy-Authenticate. Upstream rates it low and lists the affected range as 7.10.8 up to the fix in 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API. Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87862",
+      "description": "Importing an `includeSubDomains` parent HSTS entry before a longer-lived child entry silently drops the child. Consequently, when the parent expires, the child's valid HSTS policy is lost, causing curl to issue unencrypted HTTP requests rather than upgrading to HTTPS.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl HSTS caching.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires curl or libcurl to load an HSTS cache file. Liquibase Secure never invokes curl or libcurl and does not configure an HSTS cache. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-29c5-pmm5-3j3x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87862",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-87862.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-87862",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "When an HSTS cache file imports an includeSubDomains parent entry before a longer-lived child entry, the child is dropped, so after the parent expires curl can issue plain HTTP requests for the child host. Upstream rates it low and lists the affected range as 8.11.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including HSTS cache files). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87863",
+      "description": "An authenticated HTTPS origin can supply an HSTS `max-age` value that the parser accepts, but time serialization later fails to process. On 64-bit systems, extreme max-age values compute an absolute expiry within standard time integer limits that exceeds calendar time structure bounds. During cache saves, the original HSTS file is truncated before writing a temporary replacement; when serialization fails, the temporary file is deleted, leaving an empty or partial cache. Because the save error is silently ignored during cleanup, curl exits successfully despite the data loss.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl HSTS caching.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires curl or libcurl to save an HSTS cache file. Liquibase Secure never invokes curl or libcurl and does not configure an HSTS cache. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        201
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-53q4-87wj-266h",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87863",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-87863.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-87863",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An HTTPS origin can send an extreme HSTS max-age value that libcurl accepts but cannot serialize, which truncates the saved HSTS cache file and silently loses its entries. Upstream rates it low and lists the affected range as 8.2.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including HSTS cache files). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16; the 22.04 package does not contain the affected code. The scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87864",
+      "description": "Enabling `CURLOPT_CRLF` causes curl to advertise the raw input byte count in the `IMAP APPEND {N}` literal while transmitting line-ending expanded data. The server reads only N bytes for the payload, causing the remaining overflow bytes to be interpreted and executed as pipelined IMAP commands within the authenticated session.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl for IMAP uploads.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an IMAP upload through curl or libcurl with CRLF conversion enabled. Liquibase Secure never invokes curl or libcurl and does not use IMAP. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        130
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mxp6-wxxv-r9rj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87864",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-87864.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-87864",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "With CURLOPT_CRLF enabled, libcurl advertised the raw byte count in an IMAP APPEND literal while sending CRLF-expanded data, so the extra bytes could be read by the server as pipelined IMAP commands. Upstream rates it low and lists the affected range as 7.30.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.22.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including CURLOPT_CRLF or IMAP). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-92388",
+      "description": "When an FTP wildcard `LIST` operation fails, libcurl omits the restoration path meant for successful listings, leaving the write callback set to the internal listing parser and the write callback data pointing directly to the easy handle. Subsequent reuse of this handle triggers an immediate crash, and cloning it via `curl_easy_duphandle()` copies this corrupted state into the duplicate. If the original handle is subsequently freed, executing a transfer on the cloned handle causes a heap use-after-free read against the dangling handle reference; alternatively, reusing the original or cloned handle while changing only `CURLOPT_WRITEDATA` (and omitting `CURLOPT_WRITEFUNCTION`) results in type confusion, forcing the internal parser to interpret incoming server response bytes into memory at the application-supplied write data pointer.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl for FTP transfers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application that reuses or duplicates a libcurl handle after a failed FTP wildcard transfer. Liquibase Secure never invokes curl or libcurl and does not use FTP. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        416
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r22r-3m6c-qv5r",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-92388",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-92388.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-92388",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "After a failed FTP wildcard LIST, libcurl left its internal listing parser installed as the write callback, so reusing or duplicating the handle could crash, read freed memory or write server data to an application pointer. Upstream rates it low and lists the affected range as 7.21.0 up to the fix in 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including FTP wildcard transfers). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-92389",
+      "description": "libcurl's TFTP state machine fails to validate state transitions against the requested transfer direction, accepting opening server responses for both reads and writes interchangeably. A malicious TFTP server can respond to a download request in a way that forces the client into transmit mode, prompting libcurl to consume and transmit data from the handle's persistent `CURLOPT_READDATA` pointer, including data remaining from unrelated prior operations, such as an HTTP POST request executed on a reused handle.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl for TFTP transfers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a TFTP download through curl or libcurl from a malicious server. Liquibase Secure never invokes curl or libcurl and does not use TFTP. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-9rxv-c97x-mrjr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-92389",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-92389.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-92389",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl's TFTP state machine did not check the transfer direction, so a malicious TFTP server could switch a download into an upload and make libcurl send data from the handle's CURLOPT_READDATA source, including data left over from earlier transfers on a reused handle. Upstream rates it low and lists the affected range as 7.15.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including TFTP transfers). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-92391",
+      "description": "A deeply nested multipart MIME structure constructed via the public API causes a stack overflow in libcurl during normal cleanup operations. An excessive recursion depth within `curl_mime_free` leads to unbounded stack frame allocation during structure traversal, ultimately crashing the host process.",
+      "recommendation": "No action required. Liquibase Secure does not use the libcurl MIME API.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application that builds deeply nested MIME structures through the libcurl API. Liquibase Secure never invokes curl or libcurl. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        674
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-gm44-4wrm-hqf2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-92391",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-92391.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-92391",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "A deeply nested multipart MIME structure built through the libcurl API causes unbounded recursion in curl_mime_free, crashing the process with a stack overflow. Upstream rates it low and lists the affected range as 7.56.0 up to the fixes in 8.14.3, 8.16.2, 8.20.2 and 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including curl_mime_free). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-94266",
+      "description": "libcurl could accidentally return a URL for `curl_easy_getinfo()`'s `CURLINFO_EFFECTIVE_URL` option containing credentials, even though neither the URL provided to libcurl nor the redirected URL did.",
+      "recommendation": "No action required. Liquibase Secure does not use curl or libcurl.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires an application that reads CURLINFO_EFFECTIVE_URL from libcurl and exposes it. Liquibase Secure never invokes curl or libcurl. NVD has not published a CVSS score; upstream curl and Ubuntu both rate it low.\n"
+        }
+      ],
+      "cwes": [
+        522
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-75f7-vf86-pvgm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94266",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://curl.se/docs/CVE-2026-94266.html",
+          "title": "curl Security Advisory"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-94266",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "libcurl could return a URL containing credentials from curl_easy_getinfo with CURLINFO_EFFECTIVE_URL even though neither the original nor the redirected URL contained them. Upstream rates it low and lists the affected range as 7.62.0 up to the fix in 8.23.0. curl is inherited from the Ubuntu base image and nothing in the runtime path uses it: the container's build steps download with wget, its entrypoint runs the Liquibase CLI (and lpm only when INSTALL_MYSQL is set), the only binary that links libcurl is the curl command-line tool itself, the JRE does not link libcurl (Liquibase's HTTP and TLS traffic goes through the JDK), and lpm is a statically linked Go binary. A source review found no reference to libcurl or its API (including CURLINFO_EFFECTIVE_URL). Ubuntu fixed the 24.04 package in 8.5.0-2ubuntu10.16 and the 22.04 package in 7.81.0-1ubuntu1.30; the scanner reported 8.5.0-2ubuntu10.15.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-21T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/curl",
+          "versions": [
+            {
+              "range": "vers:deb/<7.81.0-1ubuntu1.30|>=8.5|<8.5.0-2ubuntu10.16",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-80230",
       "description": "When CURLOPT_PINNEDPUBLICKEY is configured alongside options that disable standard peer verification (CURLOPT_SSL_VERIFYPEER = 0 and CURLOPT_SSL_VERIFYHOST = 0), libcurl fails to enforce public key pinning on connections established without a presented server certificate, allowing unauthenticated connections to succeed when they should be rejected.",
       "recommendation": "No action required. Liquibase Secure never links against or invokes libcurl at runtime.",
