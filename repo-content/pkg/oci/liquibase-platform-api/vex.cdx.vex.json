@@ -2557,6 +2557,306 @@
       ]
     },
     {
+      "id": "GHSA-2464-fhr4-w9xw",
+      "description": "A memory-related vulnerability in an upstream library used for Image Optimization can lead to remote code execution when Next.js runs on glibc-based Linux and processes SVG files. Next.js 10.0.0 through 15.5.27 and 16.0.0 through 16.4.0 are affected.",
+      "recommendation": "No action required. No image serves the Next.js Image Optimization API with sharp available.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 9.5,
+          "severity": "critical",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable image library is absent from the web image, and the api and llt images never run a Next.js server.\n"
+        }
+      ],
+      "cwes": [
+        1395
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-2464-fhr4-w9xw",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw",
+          "title": "Next.js Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw sits in the libvips library that sharp bundles, and is reached only through the Next.js Image Optimization API on glibc-based Linux. The web image is the only image that serves Next.js. It runs on Alpine (musl), never uses `next/image`, and has sharp and its libvips binaries removed from the runtime image, with a build-time check that fails if they reappear, so the image optimizer has no image library to call. The api and llt images carry Next.js only as an unused optional peer of the authentication library; they run a Node.js API service that never starts a Next.js server, so the Image Optimization API is not exposed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-23T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/next",
+          "versions": [
+            {
+              "range": "vers:npm/>=16.0.0|<16.4.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GHSA-673q-mjm6-r5xr",
+      "description": "A vulnerability in Next.js App Router applications using Cache Components can lead to remote code execution when the application has a `use cache` function that returns multiple typed arrays. Next.js 16.0.0 through 16.4.0 are affected.",
+      "recommendation": "No action required. The platform does not enable Cache Components or define any `use cache` function.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 9.5,
+          "severity": "critical",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Cache Components and `use cache` functions, which the attack requires, are not used by the platform.\n"
+        }
+      ],
+      "cwes": [
+        502
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-673q-mjm6-r5xr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr",
+          "title": "Next.js Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation requires an App Router application with Cache Components enabled and a `use cache` function that returns multiple typed arrays. The web application does not enable Cache Components and defines no `use cache` function anywhere, so the vulnerable deserialization path is never used. The api and llt images carry Next.js only as an unused optional peer of the authentication library and never start a Next.js server.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-23T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/next",
+          "versions": [
+            {
+              "range": "vers:npm/>=16.0.0|<16.4.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-94482",
+      "description": "Next.js 13.0.0 before 15.5.28 and 16.0.0 before 16.4.1 allow crafted requests targeting App Router applications with at least one Server Action to cause excessive CPU consumption and block processing of further requests in the same process. Applications using the Pages Router and App Router applications without Server Actions are not affected.",
+      "recommendation": "No action required. The platform defines no Server Actions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The web application defines no Server Action, which the attack requires.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-94482",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-p3m5-59mp-jv5r",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The excessive CPU consumption is triggered only by crafted requests to an App Router application that defines at least one Server Action. The web application is an App Router application but defines no Server Action: no module carries a `use server` directive, and it imports no library that registers one. All data access goes through the platform API instead. Without a Server Action the vulnerable request handling is never reached. The api and llt images carry Next.js only as an unused optional peer of the authentication library and never start a Next.js server.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-23T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/next",
+          "versions": [
+            {
+              "range": "vers:npm/>=16.0.0|<16.4.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-103004",
+      "description": "Next.js 16.3.0 through 16.3.7 with Cache Components enabled can key a `use cache` function incorrectly when it calls another `use cache` function that reads a root param, so a response for one root param value can serve content produced for a different value. The leaked values cannot be controlled by an attacker.",
+      "recommendation": "No action required. The platform does not enable Cache Components or use root params.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Cache Components, `use cache` functions and root params, all required for the issue, are not used by the platform.\n"
+        }
+      ],
+      "cwes": [
+        524
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-103004",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-h694-7cp9-m8p3",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The cache-key error occurs only with Cache Components enabled, in a `use cache` function that calls another `use cache` function reading a root param. The web application does not enable Cache Components, defines no `use cache` function and does not use root params, so no cached content can be served for the wrong root param value. The api and llt images carry Next.js only as an unused optional peer of the authentication library and never start a Next.js server.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-23T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/next",
+          "versions": [
+            {
+              "range": "vers:npm/>=16.3.0|<16.3.8",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-111997",
+      "description": "ip-address before 10.7.4 allows a denial of service (CPU consumption from quadratic complexity, and application stall) via many % characters followed by a line terminator in input reaching a function that uses the Address6 constructor, such as `new Address6()` or `Address6.isValid()`.",
+      "recommendation": "No action required. The platform runtime never loads ip-address.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.3,
+          "severity": "medium",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "ip-address is only reachable from install-time build tooling that the images never run.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111997",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-rxp7-6hxx-x8q5",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "ip-address 10.7.2 is present only as a deep optional dependency of the native-module build tooling (node-gyp, through its HTTP fetch and SOCKS proxy agents), pulled in by an optional SQLite driver of the database library. That tooling runs only when a native module is compiled from source at install time; nothing in the shipped images runs it, and no platform code imports ip-address or constructs an `Address6` from user input, so the quadratic zone-identifier parsing is never reached.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-23T00:00:00Z",
+        "lastUpdated": "2026-10-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/ip-address",
+          "versions": [
+            {
+              "range": "vers:npm/<10.7.4",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-80489",
       "description": "Converting crafted EUC_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
       "recommendation": "No action required. The platform never runs glibc iconv conversions.",
