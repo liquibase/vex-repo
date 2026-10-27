@@ -1,0 +1,69 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-102554",
+      "description": "CVE-2026-102554 is an uncontrolled resource allocation in Guava 4.0 through 33.7.1. Deserializing CompactHashMap, CompactHashSet or MapMakerInternalMap eagerly allocates an array sized from a value in the serialized stream, so a small crafted stream can exhaust the heap and stop the JVM with an OutOfMemoryError.",
+      "recommendation": "No action required. Liquibase does not deserialize Java objects, so the vulnerable path cannot be reached. The bundled Guava will move to a fixed version when the Google Cloud libraries BOM adopts one.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "justification": "Exploitation needs the application to Java-deserialize untrusted data. Liquibase has no Java deserialization entry point, so there is no availability impact.\n"
+        }
+      ],
+      "cwes": [
+        502,
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/google/guava/security/advisories/GHSA-xxph-c9ww-hj94",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102554",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/google/guava/releases/tag/v33.7.2",
+          "title": "Guava 33.7.2 release"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is only reachable by Java-deserializing an attacker-supplied stream (ObjectInputStream) that contains a Guava CompactHashMap, CompactHashSet or MapMakerInternalMap. Liquibase never Java-deserializes input: no production code in the CLI, Pro or any bundled extension uses ObjectInputStream, and Liquibase opens no network listener. Guava is a transitive dependency of the Google Cloud client libraries (Cloud SQL connector, Secret Manager, BigQuery) used by the GCP and BigQuery extensions, which exchange protobuf and JSON with Google APIs, not Java serialized objects; both extensions relocate it under com.liquibase.shaded.google.common. Every Liquibase Secure release to date, including 6.0.x, ships a Guava version in the affected range (33.6.0-jre as of 6.0.1, supplied by com.google.cloud:libraries-bom 26.90.0), and this assessment applies to all of them.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-27T00:00:00Z",
+        "lastUpdated": "2026-10-27T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.google.guava/guava",
+          "versions": [
+            {
+              "range": "vers:maven/>=4.0|<33.7.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
