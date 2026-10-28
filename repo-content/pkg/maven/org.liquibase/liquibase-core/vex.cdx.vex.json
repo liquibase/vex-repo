@@ -39608,6 +39608,94 @@
       ]
     },
     {
+      "id": "CVE-2026-91403",
+      "description": "Vulnerability in Oracle Java SE (component: JSSE) affecting Oracle Java SE 8u511, 11.0.33, 17.0.21, 21.0.13, 25.0.5 and 27.0.1 and the corresponding GraalVM releases. The private keys of eMudhra intermediate CA certificates were compromised, so an unauthenticated network attacker can present certificates the runtime accepts for any host and intercept or modify TLS traffic.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes JDK-8395142.",
+      "workaround": "Append the 48 fingerprints listed in docker/distrust-emsign.sh to the bundled JRE's lib/security/blocked.certs (in a Windows installation, the jre folder in the installation directory), then restart Liquibase.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91403",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/adoptium/jdk21u/commit/85974eed59",
+          "title": "OpenJDK fix (JDK-8395142, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Liquibase Secure 6.0.0 and earlier images and Windows installers bundle a Temurin 21.0.12.1 JRE that still trusts the compromised eMudhra intermediates. Builds with SECURE-1170 run docker/distrust-emsign.sh on the bundled JRE, which adds the 48 fingerprints from the upstream fix (JDK-8395142) to lib/security/blocked.certs; the JRE version string is unchanged, so scanners still report this CVE for those builds too. Until you upgrade, add the fingerprints to the bundled JRE's blocked.certs.",
+        "response": [
+          "update",
+          "workaround_available"
+        ],
+        "firstIssued": "2026-10-28T00:00:00Z",
+        "lastUpdated": "2026-10-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-114820",
+      "description": "Vulnerability in Oracle Java SE (component: JSSE) affecting Oracle Java SE 8u511-b32, 11.0.33.0.2, 17.0.21.0.2, 21.0.13.0.2, 25.0.5.0.2 and 27.0.1.0.2 and the corresponding GraalVM releases. The runtime trusts eMudhra and Comodo AAA root certificates under which compromised intermediates were issued, so an unauthenticated network attacker can present certificates the runtime accepts and intercept or modify TLS traffic.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes JDK-8395690 and does not trust emSign Root CA - G1.",
+      "workaround": "With the bundled JRE's keytool, delete every emSign and Comodo AAA entry from its cacerts (keytool -list -cacerts -storepass changeit shows them; keytool -delete -cacerts -storepass changeit -alias <alias> removes one), then restart Liquibase.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-114820",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/adoptium/jdk21u/commit/d339d5921f",
+          "title": "OpenJDK fix (JDK-8395690, jdk21u)"
+        },
+        {
+          "url": "https://bugzilla.mozilla.org/show_bug.cgi?id=2083449",
+          "title": "Mozilla bug 2083449 (eMudhra intermediate key compromise)"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Liquibase Secure 6.0.0 and earlier images and Windows installers bundle a Temurin 21.0.12.1 JRE whose cacerts still trusts the emSign roots the compromised intermediates chain to. Temurin builds cacerts from Mozilla's root store, which still trusts emSign Root CA - G1, so a Temurin update alone does not remove it. Builds with SECURE-1170 run docker/distrust-emsign.sh on the bundled JRE, which deletes every emSign and Comodo AAA root from cacerts; the JRE version string is unchanged, so scanners still report this CVE for those builds too. Until you upgrade, delete those roots from the bundled JRE's cacerts.",
+        "response": [
+          "update",
+          "workaround_available"
+        ],
+        "firstIssued": "2026-10-28T00:00:00Z",
+        "lastUpdated": "2026-10-28T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-24970",
       "analysis": {
         "state": "not_affected",
