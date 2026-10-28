@@ -39485,6 +39485,129 @@
       ]
     },
     {
+      "id": "CVE-2026-34479",
+      "description": "The Log4j1XmlLayout from the Apache Log4j 1-to-Log4j 2 bridge fails to escape characters forbidden by the XML 1.0 standard, producing malformed XML output. Conforming XML parsers are required to reject documents containing such characters with a fatal error, which may cause downstream log processing systems to drop or fail to index affected records. Two groups of users are affected: those using Log4j1XmlLayout directly in a Log4j Core 2 configuration file, and those using the Log4j 1 configuration compatibility layer with org.apache.log4j.xml.XMLLayout specified as the layout class.",
+      "recommendation": "No action required. Liquibase Secure does not ship the Log4j 1 to Log4j 2 bridge that contains the affected layout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires the Log4j 1 to Log4j 2 bridge and an XML layout from it in the logging configuration. Liquibase Secure ships neither, so the malformed-XML output cannot be produced.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h383-gmxw-35v2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34479",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html#CVE-2026-34479",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in Log4j1XmlLayout, which ships in the Apache Log4j 1-to-Log4j 2 bridge (log4j-1.2-api), and in that bridge's Log4j 1 configuration compatibility layer when org.apache.log4j.xml.XMLLayout is configured. Both affected groups of users need the bridge on the classpath. No archive in the Liquibase Secure Docker images (5.0.0 through 6.0.0) contains the bridge or any org.apache.log4j package, including shaded or relocated copies. log4j-core is bundled only inside the liquibase-checks extension, at 2.25.3 in 5.1.0 and 5.1.1, 2.25.4 in 5.2.0, and 2.26.1 in 5.2.1, 5.2.2 and 6.0.0; the 5.0.x images do not bundle it there. The configuration bundled with the extension logs to the console with a PatternLayout. A source review found no reference to Log4j1XmlLayout, XMLLayout, or the Log4j 1 API. Releases from 5.2.0 onward are also at or past the 2.25.4 fix.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-10-27T00:00:00Z",
+        "lastUpdated": "2026-10-27T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.7|<2.25.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-111497",
+      "description": "A buffer overflow vulnerability in the Brotli decoder (c/dec/decode.c) in Google Brotli versions 1.0.3 through 1.2.0 on all platforms allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory contents, cause a denial of service, or potentially execute arbitrary code using a crafted Brotli-compressed stream. Users need to update any Brotli libraries or binaries between 1.0.3 through 1.2.0 to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.",
+      "recommendation": "No action required. Liquibase Secure does not decode Brotli data; the library is present only for base-image tools that Liquibase does not run.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 9.2,
+          "severity": "critical",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a process that decodes attacker-supplied Brotli data. In the Liquibase Secure image only curl and the fontconfig/FreeType stack load the decoder, and Liquibase runs neither. The NVD score is the CNA's CVSS 4.0 rating; NVD has not published a CVSS 3.1 score.\n"
+        }
+      ],
+      "cwes": [
+        252,
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111497",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-8956-1",
+          "title": "Ubuntu Security Notice USN-8956-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-111497",
+          "title": "Ubuntu Security Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is a buffer overflow in the Brotli decoder, triggered by decoding a crafted Brotli-compressed stream. libbrotli1 is inherited from the Ubuntu base image: 1.0.9-2build6 in the 22.04-based 5.0.0 and 5.0.1 images, and 1.1.0-2build2 in the 24.04-based 5.0.2 through 6.0.0 images, both older than Ubuntu's fixes (1.0.9-2ubuntu0.1 and 1.1.0-2ubuntu0.1). No other package built from brotli is installed. In every image the decoder library is loaded only by libcurl (used by the curl command-line tool) and by the system FreeType library (used by fontconfig and its fc-* utilities). Liquibase runs none of these: the entrypoint runs the Liquibase CLI on the JVM (and lpm only when INSTALL_MYSQL is set), the image's build steps download with wget, Liquibase's HTTP traffic goes through the JDK, and lpm is a statically linked Go binary. The JRE's font manager uses the FreeType library bundled with the JDK, which does not link Brotli. A source review found no use of Java2D font or graphics APIs on any code path that can run in the image. FreeType only decodes Brotli for WOFF2 font files, so even that path would require an attacker to place a crafted font file inside the container.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-10-27T00:00:00Z",
+        "lastUpdated": "2026-10-27T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libbrotli1",
+          "versions": [
+            {
+              "range": "vers:deb/<1.1.0-2ubuntu0.1",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-24970",
       "analysis": {
         "state": "not_affected",

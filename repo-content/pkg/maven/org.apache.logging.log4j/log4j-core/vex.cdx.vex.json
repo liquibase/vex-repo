@@ -190,6 +190,67 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-34479",
+      "description": "The Log4j1XmlLayout from the Apache Log4j 1-to-Log4j 2 bridge fails to escape characters forbidden by the XML 1.0 standard, producing malformed XML output. Conforming XML parsers are required to reject documents containing such characters with a fatal error, which may cause downstream log processing systems to drop or fail to index affected records. Two groups of users are affected: those using Log4j1XmlLayout directly in a Log4j Core 2 configuration file, and those using the Log4j 1 configuration compatibility layer with org.apache.log4j.xml.XMLLayout specified as the layout class.",
+      "recommendation": "No action required. Liquibase Secure does not ship the Log4j 1 to Log4j 2 bridge that contains the affected layout.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires the Log4j 1 to Log4j 2 bridge and an XML layout from it in the logging configuration. Liquibase Secure ships neither, so the malformed-XML output cannot be produced.\n"
+        }
+      ],
+      "cwes": [
+        116
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h383-gmxw-35v2",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-34479",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://logging.apache.org/security.html#CVE-2026-34479",
+          "title": "Apache Log4j Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in Log4j1XmlLayout, which ships in the Apache Log4j 1-to-Log4j 2 bridge (log4j-1.2-api), and in that bridge's Log4j 1 configuration compatibility layer when org.apache.log4j.xml.XMLLayout is configured. Both affected groups of users need the bridge on the classpath. No archive in the Liquibase Secure Docker images (5.0.0 through 6.0.0) contains the bridge or any org.apache.log4j package, including shaded or relocated copies. log4j-core is bundled only inside the liquibase-checks extension, at 2.25.3 in 5.1.0 and 5.1.1, 2.25.4 in 5.2.0, and 2.26.1 in 5.2.1, 5.2.2 and 6.0.0; the 5.0.x images do not bundle it there. The configuration bundled with the extension logs to the console with a PatternLayout. A source review found no reference to Log4j1XmlLayout, XMLLayout, or the Log4j 1 API. Releases from 5.2.0 onward are also at or past the 2.25.4 fix.",
+        "justification": "requires_dependency",
+        "firstIssued": "2026-10-27T00:00:00Z",
+        "lastUpdated": "2026-10-27T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.7|<2.25.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
