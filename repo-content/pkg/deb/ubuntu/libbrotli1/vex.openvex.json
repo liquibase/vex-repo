@@ -1,0 +1,31 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-8d08112f1474a4b365721564afb23ffbb9ef88f83f11130fac91c0a456c70946",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-28T14:51:54.968094198Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-111497",
+        "aliases": [
+          "BIT-node-2026-111497",
+          "BIT-node-min-2026-111497",
+          "GHSA-9v8h-qqgm-4m35",
+          "PYSEC-2026-4322",
+          "PYSEC-2026-4323"
+        ]
+      },
+      "timestamp": "2026-10-28T14:51:54.96809559Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libbrotli1"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A buffer overflow vulnerability in the Brotli decoder (c/dec/decode.c) in Google Brotli versions 1.0.3 through 1.2.0 on all platforms allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory contents, cause a denial of service, or potentially execute arbitrary code using a crafted Brotli-compressed stream. Users need to update any Brotli libraries or binaries between 1.0.3 through 1.2.0 to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is a buffer overflow in the Brotli decoder, triggered by decoding a crafted Brotli-compressed stream. libbrotli1 is inherited from the Ubuntu base image: 1.0.9-2build6 in the 22.04-based 5.0.0 and 5.0.1 images, and 1.1.0-2build2 in the 24.04-based 5.0.2 through 6.0.0 images, both older than Ubuntu's fixes (1.0.9-2ubuntu0.1 and 1.1.0-2ubuntu0.1). No other package built from brotli is installed. In every image the decoder library is loaded only by libcurl (used by the curl command-line tool) and by the system FreeType library (used by fontconfig and its fc-* utilities). Liquibase runs none of these: the entrypoint runs the Liquibase CLI on the JVM (and lpm only when INSTALL_MYSQL is set), the image's build steps download with wget, Liquibase's HTTP traffic goes through the JDK, and lpm is a statically linked Go binary. The JRE's font manager uses the FreeType library bundled with the JDK, which does not link Brotli. A source review found no use of Java2D font or graphics APIs on any code path that can run in the image. FreeType only decodes Brotli for WOFF2 font files, so even that path would require an attacker to place a crafted font file inside the container."
+    }
+  ]
+}
