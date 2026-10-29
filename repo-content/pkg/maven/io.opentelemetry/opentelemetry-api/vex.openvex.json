@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-fe0f1dcd08cc65766c543e73cc7a44b06148a0932dc85ce28c367b0dc942c9fc",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-10-29T16:23:58.624626357Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-118259",
+        "aliases": [
+          "GHSA-ccrj-gw8r-854m"
+        ]
+      },
+      "timestamp": "2026-10-29T16:23:58.624627659Z",
+      "products": [
+        {
+          "@id": "pkg:maven/io.opentelemetry/opentelemetry-api"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "opentelemetry-java is the Java implementation of the OpenTelemetry API for recording telemetry, and SDK for managing telemetry recorded by the API. Prior to 1.67.0, W3CTraceContextPropagator.extract() uses regex delimiter processing that can exhibit quadratic backtracking while parsing tracestate headers containing long runs of spaces or tabs without a following comma. An unauthenticated attacker whose headers reach extraction can repeatedly block request or event-loop threads and cause excessive CPU consumption, with practical impact bounded by ingress header-size limits, proxy configuration, and threading. This issue is fixed in version 1.67.0.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The flaw is a regular-expression backtracking issue in W3CTraceContextPropagator.extract(), which parses W3C tracestate headers on inbound requests or messages. Exploitation requires an unauthenticated attacker to deliver crafted tracestate headers to a service that extracts trace context from what it receives. Liquibase Secure is a command-line client: it opens no HTTP or socket listener and accepts no inbound requests, so no attacker-supplied header reaches the propagator. opentelemetry-api 1.62.0 is present only as a transitive dependency of the Google Cloud client libraries bundled inside the BigQuery extension; Liquibase code does not reference any OpenTelemetry class, does not enable OpenTelemetry tracing in those client libraries, and does not ship the OpenTelemetry SDK, so the global propagators remain the no-op default. The only headers those libraries receive come from the authenticated, TLS-protected BigQuery API endpoints Liquibase connects to."
+    }
+  ]
+}
