@@ -1,0 +1,68 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-118259",
+      "description": "opentelemetry-java is the Java implementation of the OpenTelemetry API for recording telemetry, and SDK for managing telemetry recorded by the API. Prior to 1.67.0, W3CTraceContextPropagator.extract() uses regex delimiter processing that can exhibit quadratic backtracking while parsing tracestate headers containing long runs of spaces or tabs without a following comma. An unauthenticated attacker whose headers reach extraction can repeatedly block request or event-loop threads and cause excessive CPU consumption, with practical impact bounded by ingress header-size limits, proxy configuration, and threading. This issue is fixed in version 1.67.0.",
+      "recommendation": "No action required. Liquibase Secure does not accept inbound requests, so attacker-controlled tracestate headers cannot reach the vulnerable parser.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The attack needs crafted tracestate headers delivered to a service that extracts trace context from incoming traffic. Liquibase Secure is a client process with no network listener, and the only headers its bundled Google Cloud client libraries receive come from the authenticated BigQuery API over TLS.\n"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-ccrj-gw8r-854m",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118259",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/open-telemetry/opentelemetry-java/security/advisories/GHSA-ccrj-gw8r-854m",
+          "title": "OpenTelemetry Java Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is a regular-expression backtracking issue in W3CTraceContextPropagator.extract(), which parses W3C tracestate headers on inbound requests or messages. Exploitation requires an unauthenticated attacker to deliver crafted tracestate headers to a service that extracts trace context from what it receives. Liquibase Secure is a command-line client: it opens no HTTP or socket listener and accepts no inbound requests, so no attacker-supplied header reaches the propagator. opentelemetry-api 1.62.0 is present only as a transitive dependency of the Google Cloud client libraries bundled inside the BigQuery extension; Liquibase code does not reference any OpenTelemetry class, does not enable OpenTelemetry tracing in those client libraries, and does not ship the OpenTelemetry SDK, so the global propagators remain the no-op default. The only headers those libraries receive come from the authenticated, TLS-protected BigQuery API endpoints Liquibase connects to.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-10-29T00:00:00Z",
+        "lastUpdated": "2026-10-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/io.opentelemetry/opentelemetry-api",
+          "versions": [
+            {
+              "range": "vers:maven/<1.67.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
