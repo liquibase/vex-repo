@@ -432,6 +432,64 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-119279",
+      "description": "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases. From 3.0.0 until 3.3.7, 3.4.5, and 3.5.10, the ReadableByteBuf.readLength() and ReadableByteBuf.readIntLengthEncodedNotNull() methods narrowed the protocol's unsigned 8-byte length-encoded integer to a Java int without checking that the value fit a non-negative integer. Values above Integer.MAX_VALUE could wrap to a negative or unrelated length that downstream allocation and read paths used. A malicious or compromised server, or a machine-in-the-middle attacker, could trigger NegativeArraySizeException, out-of-bounds failures, or oversized allocation behavior in client connection handling. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.10.",
+      "recommendation": "No action required. Liquibase Secure 6.0.0 and later include the fixed driver (mariadb-java-client 3.5.10 or later).",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Only the server side of a connection Liquibase opened can send the oversized length-encoded integers, and that party can already end a Liquibase run by closing the connection. Crashing the client adds no impact.\n"
+        }
+      ],
+      "cwes": [
+        130,
+        190
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-797x-p4mc-jwpm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-119279",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The truncated lengths come from length-encoded integers in packets sent by the server, so exploitation requires a malicious or compromised MariaDB server, or a machine-in-the-middle, on the connection Liquibase opened. The only impact is an unchecked exception (NegativeArraySizeException, an out-of-bounds error) or an oversized allocation that ends the current Liquibase command. Liquibase is a short-lived command-line client, and an attacker in that position can already stop the run by refusing or dropping the connection, so the flaw gives no capability beyond what control of the connection already does. Liquibase Secure 5.0.0 through 5.2.2 bundle mariadb-java-client 3.5.6 to 3.5.9, which are in the affected range; Liquibase Secure 6.0.0 bundles 3.5.10, which includes the fix.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.3.7|>=3.4.0|<3.4.5|>=3.5.0|<3.5.10",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
