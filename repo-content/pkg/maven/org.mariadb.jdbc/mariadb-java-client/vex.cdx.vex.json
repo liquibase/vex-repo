@@ -207,6 +207,231 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-119210",
+      "description": "MariaDB Connector/J checked a server's LOAD DATA LOCAL INFILE file request by searching the command it had sent for LOAD DATA LOCAL INFILE '<file>'. The search also matched inside quoted identifiers, string literals and comments, so an identifier returned by the server and re-used in a later query, for example by DatabaseMetaData.getImportedKeys(), getExportedKeys() or updatable result sets, could satisfy it. A rogue or machine-in-the-middle server can read any file the client JVM can read. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later (mariadb-java-client 3.5.11).",
+      "workaround": "Add allowLocalInfile=false to the MariaDB JDBC URL, unless your changelogs run LOAD DATA LOCAL INFILE. Connect only to trusted MariaDB servers over TLS with server certificate verification (sslMode=verify-full).",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        20,
+        73
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-fhx5-2xqw-2cgm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-119210",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles mariadb-java-client 3.5.11. Liquibase Secure 5.0.0 through 6.0.0 bundle 3.5.6 to 3.5.10, which are affected. Liquibase never sets allowLocalInfile, so the driver default (true) applies. Commands that read foreign key metadata from a MariaDB connection (snapshot, diff, diff-changelog, generate-changelog, and foreignKeyConstraintExists preconditions) can call DatabaseMetaData.getImportedKeys() with table names returned by the server: the core snapshot does so directly, and the Pro bulk foreign key query falls back to it whenever the bulk query fails, which the server controls. A malicious or compromised MariaDB server, or a machine-in-the-middle on a connection without verified TLS (the driver default), can therefore read any file the Liquibase process can read, such as liquibase.properties, credential files and key stores, without any visible error.",
+        "response": [
+          "update",
+          "workaround_available"
+        ],
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.3.7|>=3.4.0|<3.4.5|>=3.5.0|<3.5.11",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-119276",
+      "description": "MariaDB Connector/J sized heap allocations from lengths declared by the server in OK packets before checking that those lengths fit in the packet. When CLIENT_SESSION_TRACK is negotiated (the default), a rogue or machine-in-the-middle server can make the client allocate megabytes from a packet of a few bytes, creating GC pressure up to OutOfMemoryError. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "recommendation": "No action required. Liquibase Secure 6.0.1 and later include the fixed driver (mariadb-java-client 3.5.11).",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Only the server side of a connection Liquibase opened can send the crafted OK packets, and that party can already end a Liquibase run by closing the connection. Crashing the client adds no impact.\n"
+        }
+      ],
+      "cwes": [
+        130,
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h599-m3w5-9m7x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-119276",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The oversized allocations are driven by lengths in OK packets sent by the server, so exploitation requires a malicious or compromised MariaDB server, or a machine-in-the-middle, on the connection Liquibase opened. The only impact is an OutOfMemoryError that ends the Liquibase process. Liquibase is a short-lived command-line client, and an attacker in that position can already stop the run by refusing or dropping the connection, so the flaw gives no capability beyond what control of the connection already does. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.3.7|>=3.4.0|<3.4.5|>=3.5.0|<3.5.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-119280",
+      "description": "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases. From 3.0.0 until 3.3.7, 3.4.5, and 3.5.11, the MariaDbPoolConnection.recover() and MariaDbPoolPinnedConnection.recover() implementations trusted the gtrid_length and bqual_length columns returned by XA RECOVER. The methods allocated and split Xid byte arrays without validating the lengths against Xid.MAXGTRIDSIZE, Xid.MAXBQUALSIZE, or the actual data payload. A malicious or compromised server, or a machine-in-the-middle attacker, could cause large allocations, NegativeArraySizeException, or ArrayIndexOutOfBoundsException during XA recovery. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "recommendation": "No action required. Liquibase Secure does not perform XA recovery. Liquibase Secure 6.0.1 and later also include the fixed driver (mariadb-java-client 3.5.11).",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Only XA recovery through the driver's pooled XA connections reads the untrusted Xid lengths. Liquibase Secure uses plain JDBC driver connections and never runs XA recovery, so a rogue server cannot reach the vulnerable code.\n"
+        }
+      ],
+      "cwes": [
+        20,
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-4jq2-8v3c-97w8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-119280",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in XAResource.recover() of MariaDbPoolConnection and MariaDbPoolPinnedConnection, which a distributed transaction manager calls during XA recovery. Liquibase Secure opens database connections through java.sql.Driver.connect() only. It never requests an XA or pooled connection (getXAConnection, getPooledConnection), never uses XAResource or the javax.transaction.xa API, and never issues XA RECOVER, so the vulnerable recovery code never runs. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.3.7|>=3.4.0|<3.4.5|>=3.5.0|<3.5.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-119281",
+      "description": "MariaDB Connector/J decodes every result as UTF-8 and guards character_set_client against a change to another charset, but did not guard character_set_results, and relied on the server's global session_track_system_variables list to be told about charset changes. A malicious or compromised server, or a machine-in-the-middle, could make the strings an application reads differ from the bytes the server returned, which can defeat application-side validation or escaping built on those values. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "recommendation": "No action required. Liquibase Secure 6.0.1 and later include the fixed driver (mariadb-java-client 3.5.11).",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Only the server side of the connection can switch the charset, and that party already controls every value Liquibase reads from it. Liquibase builds no security check on the decoded results.\n"
+        }
+      ],
+      "cwes": [
+        838
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-grfq-r75j-rw9x",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-119281",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Exploitation requires a malicious or compromised MariaDB server, or a machine-in-the-middle, that switches character_set_results on the connection Liquibase opened. The effect is that strings Liquibase reads differ from the bytes the server sent. Liquibase does not rely on decoding of server results for validation or escaping: the values it reads (DATABASECHANGELOG rows, snapshot metadata) come from that same server, which can already return any value it chooses, so the charset switch gives no capability beyond what control of the connection already does. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.mariadb.jdbc/mariadb-java-client",
+          "versions": [
+            {
+              "range": "vers:maven/>=3.0.0|<3.3.7|>=3.4.0|<3.4.5|>=3.5.0|<3.5.11",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

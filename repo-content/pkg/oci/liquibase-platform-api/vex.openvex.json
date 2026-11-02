@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-94a8be616cd5a6735a67e82e362b160e72341cadd82586fd15d5b400330b7847",
+  "@id": "merged-vex-ba748c1b3daeb2a59477596b25253f7c90b17223e6cfa8e438fbb0ef585dfdc4",
   "author": "Liquibase New Technologies Team",
-  "timestamp": "2026-10-29T16:24:28.575003666Z",
+  "timestamp": "2026-11-02T16:46:29.195527235Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2025-60876"
       },
-      "timestamp": "2026-10-29T16:24:27.336453647Z",
+      "timestamp": "2026-11-02T16:46:27.749335119Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -88,7 +88,7 @@
           "GHSA-r4gj-5m52-g5wh"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.635571765Z",
+      "timestamp": "2026-11-02T16:46:28.067676074Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -167,7 +167,7 @@
           "GHSA-x97p-jq2g-jp4f"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.666622762Z",
+      "timestamp": "2026-11-02T16:46:28.09945711Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -241,316 +241,12 @@
     },
     {
       "vulnerability": {
-        "name": "CVE-2026-102010"
-      },
-      "timestamp": "2026-10-29T16:24:27.697740452Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-102010"
-      },
-      "timestamp": "2026-10-29T16:24:27.727911904Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-102010"
-      },
-      "timestamp": "2026-10-29T16:24:27.757121048Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-102010"
-      },
-      "timestamp": "2026-10-29T16:24:27.786786955Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ reallocates storage when erase_if runs on a binary heap priority queue but leaves its internal entry pointer on the old block, so later use reads freed memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so erase_if on a binary-heap priority queue is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
         "name": "CVE-2026-102276",
         "aliases": [
           "GHSA-6j4f-fj2g-mc7p"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.818384551Z",
+      "timestamp": "2026-11-02T16:46:28.132842197Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -629,7 +325,7 @@
           "GHSA-qhr7-859c-m2p7"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.84861337Z",
+      "timestamp": "2026-11-02T16:46:28.16322714Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -708,7 +404,7 @@
           "GHSA-2gc4-cqfq-p2gv"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.363769808Z",
+      "timestamp": "2026-11-02T16:46:27.780915882Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -786,7 +482,7 @@
           "GHSA-h694-7cp9-m8p3"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.519467858Z",
+      "timestamp": "2026-11-02T16:46:28.731419035Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -860,12 +556,878 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-107891"
+      },
+      "timestamp": "2026-11-02T16:46:29.110160835Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:apk/alpine/musl"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "musl's regcomp performs integer arithmetic that can overflow when compiling very long regular expressions or patterns with nested repetitions, which can lead to memory corruption when the overflowed values are used to size internal buffers.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is an integer overflow in the musl POSIX regular expression compiler, regcomp, triggered when an attacker supplies a very long or deeply repeated regular expression pattern. In the web image, the Node.js server evaluates regular expressions with the V8 engine's own regex implementation, never musl's regcomp, and the runtime carries no native Node.js module that compiles POSIX regular expressions. The only POSIX regex user at runtime is the entrypoint's busybox sed call, which compiles a fixed pattern set in the image. The operator-supplied API URL is used only as the replacement text, never as the pattern. In the migrate image, Liquibase runs on the JVM, which uses Java's own regex engine, and the Liquibase entrypoint uses only shell glob matching. No attacker-controlled input reaches regcomp in either image. Images built after Alpine published musl 1.2.6-r3 also carry the fixed package, because both images apply pending Alpine updates at build time."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-109841",
+        "aliases": [
+          "GHSA-f72v-6w45-q472"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.889305638Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "undici versions 7.15.0 through 7.30.0 and 8.0.0 through 8.12.1 verify Subresource Integrity metadata in fetch() against a lowercase-only set of algorithm tokens, so a valid uppercase or mixed-case token is skipped and a response whose body does not match the pinned digest is accepted.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry undici 7.29.1, below the 7.30.1 fix. The flaw is in the Subresource Integrity check of undici's fetch(), which runs only when the caller passes integrity metadata with a request. The platform's own outbound calls use Node.js's built-in fetch with an undici connection dispatcher, so they do not run undici's fetch() logic, and none of them supplies integrity metadata. The AI SDK provider utilities that do call undici's fetch() for downloads do not set integrity metadata either, so the affected comparison is never reached."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-109924",
+        "aliases": [
+          "GHSA-4qv8-2p9j-2685"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.919620657Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/undici"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "undici versions 6.5.0 through 6.29.0, 7.0.0 through 7.30.0 and 8.0.0 through 8.12.1 contain an EventSource client whose parser retains unbounded per-field and per-chunk state, so a malicious Server-Sent Events peer can exhaust process memory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry undici 7.29.1, below the 7.30.1 fix. The flaw is in undici's EventSource client, which is only active when code constructs an EventSource connection. Nothing in the platform creates one: the service code does not use EventSource, and the AI SDK parses streamed provider responses with the separate eventsource-parser package rather than undici's EventSource client."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110095",
+        "aliases": [
+          "GHSA-xhq7-xmqj-769h"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.982843393Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "fast-uri before 2.4.8, from 3.0.0 through 3.1.8, and from 4.0.0 through 4.2.2 applies RFC 3986 dot-segment removal to the path of a relative-path reference in normalize() and serialize(), so a leading parent-directory segment can be dropped and a document-relative reference can become root-relative. An application that normalizes an untrusted relative reference and then resolves it, or uses it as a cache, deduplication or authorization key, can have the reference escape its intended directory.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry fast-uri 3.1.8, below the 3.1.9 fix. It arrives only as a dependency of the ajv JSON Schema validator, which in turn is pulled in by an OpenAPI document parser listed among the api's runtime dependencies. Nothing in the api or llt service imports that parser, ajv or fast-uri, so the vulnerable normalize() and serialize() code is never loaded and no relative reference, attacker-supplied or otherwise, is ever normalized by it. The web image does not contain fast-uri, and the migrate image is a Java application."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110180",
+        "aliases": [
+          "GHSA-wjr9-j795-jxcr"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:29.01479048Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "fast-uri from 2.4.2 through 2.4.7, from 3.1.3 through 3.1.8, and from 4.0.1 through 4.2.2 passes the parsed host of HTTP-family URIs to the WHATWG URL parser and adopts its hostname without checking that the whole input was consumed as a host, so data before an at-sign is dropped and tab, carriage-return and line-feed characters are stripped without an error. An application that enforces host-based policy on one representation can see the canonical host diverge from what it checked.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry fast-uri 3.1.8, below the 3.1.9 fix. It arrives only as a dependency of the ajv JSON Schema validator, which in turn is pulled in by an OpenAPI document parser listed among the api's runtime dependencies. Nothing in the api or llt service imports that parser, ajv or fast-uri, so the vulnerable host canonicalization code is never loaded and no host-based policy in the platform relies on fast-uri parsing. The web image does not contain fast-uri, and the migrate image is a Java application."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110306",
+        "aliases": [
+          "GHSA-w74x-v6f9-j3xg"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:29.046861913Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "fast-uri before 2.4.8, from 3.0.0 through 3.1.8, and from 4.0.0 through 4.2.2 percent-decodes the scheme component with the legacy unescape() function before validating it, so an input whose decoded scheme is a dangerous token such as javascript, data or vbscript is emitted as a live scheme. An application that screens schemes on the raw input and then stores or renders the normalized or resolved result can be exposed to cross-site scripting, and equal() treats encoded and plain schemes as the same.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry fast-uri 3.1.8, below the 3.1.9 fix. It arrives only as a dependency of the ajv JSON Schema validator, which in turn is pulled in by an OpenAPI document parser listed among the api's runtime dependencies. Nothing in the api or llt service imports that parser, ajv or fast-uri, so the vulnerable scheme decoding code is never loaded and no URL the platform stores or renders passes through it. The web image does not contain fast-uri, and the migrate image is a Java application."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110725",
+        "aliases": [
+          "GHSA-333x-w4r6-6crp"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:29.078414761Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/fast-uri"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "fast-uri before 2.4.8, from 3.0.0 through 3.1.8, and from 4.0.0 through 4.2.2, when serialize(), normalize() or resolve() are called with the non-default reference option set to suffix on a reference without an authority, can emit a relative reference with an unescaped colon in its first path segment, which reparses as an absolute URI with a scheme and can turn inert input into a javascript, data or vbscript URL.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images carry fast-uri 3.1.8, below the 3.1.9 fix. It arrives only as a dependency of the ajv JSON Schema validator, which in turn is pulled in by an OpenAPI document parser listed among the api's runtime dependencies. Nothing in the api or llt service imports that parser, ajv or fast-uri, so serialize(), normalize() and resolve() are never called, with or without the non-default suffix reference option the flaw requires. The web image does not contain fast-uri, and the migrate image is a Java application."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110861",
+        "aliases": [
+          "GHSA-44jh-23m7-hpcf"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:29.141041353Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40better-auth/drizzle-adapter"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Better Auth @better-auth/drizzle-adapter and better-auth from 1.6.17 before 1.7.7 contain a race condition in database-backed rate limiting on PostgreSQL, where the limit check is not atomic with the counter update. Remote attackers can send bursts of concurrent requests that pass the check together, exceeding configured limits on password sign-in, one-time code, password reset and other rate-limited endpoints.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The race condition affects only rate-limit records stored in a PostgreSQL database through the Drizzle adapter. The platform does not configure database storage for the authentication library's rate limiter and defines no secondary storage, so rate-limit counters are kept in process memory, the library default, which the advisory states is not affected. The platform's database schema has no rate-limit table, and the adapter's model mapping registers none. The web image uses only the authentication library's browser client and session-cookie helper and does not run the adapter."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110871",
+        "aliases": [
+          "GHSA-39m8-27wv-hr27"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.85877809Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/nodemailer"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Nodemailer from 3.0.0 before 10.0.10 contains a denial of service vulnerability in MessageParser.parseHeaders that allows users to exhaust CPU through quadratic header unfolding. Attackers can supply large recipient lists or long headers that fold into tens of thousands of continuation lines, blocking the Node.js event loop during DKIM signing.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The api and llt images use nodemailer only to send transactional emails, each addressed to a single recipient, over a plain SMTP transport. The transport and every message are created without a DKIM option, and no setting exposes one, so nodemailer never runs its DKIM signer and the vulnerable header-unfolding parser is never invoked. Current builds also ship nodemailer 10.0.12, which contains the fix; earlier releases ship 9.1.1. The web and migrate images do not contain nodemailer."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-111755",
+        "aliases": [
+          "GHSA-8r9p-f939-6h3c"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.795014353Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "follow-redirects is a Node.js HTTP and HTTPS client wrapper that automatically follows redirects. From 1.16.0 until 1.16.1, escapeRegex leaves valid header-name metacharacters unescaped in sensitiveHeaders. When an application declares a sensitive header whose name contains ^ or | and follows a cross-origin or HTTPS-to-HTTP redirect, the generated filter does not match the declared header name, and the credential header is forwarded to an attacker-controlled redirect target.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "follow-redirects 1.16.0 ships in the api and llt runtime dependency graph only as a dependency of axios. The shipped runtime does not use axios to make outbound requests: the only non-test source reference imports AxiosError for an exception filter, and the NestJS axios module is never registered. Nothing calls follow-redirects directly, and no code sets the sensitiveHeaders option whose filter is affected. Axios also removes any caller-declared sensitive headers itself, by exact case-insensitive name comparison, before follow-redirects applies its own filter, so the flawed regular expression is not the only protection even where axios is used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-111756",
+        "aliases": [
+          "GHSA-q3jh-wrc6-jgq8"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.826622904Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/follow-redirects"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "follow-redirects is a Node.js HTTP and HTTPS client wrapper that automatically follows redirects. From 1.16.0 to before 1.16.1, the routine that removes Authorization, Proxy-Authorization, Cookie and any caller-declared sensitive headers before a cross-origin or HTTPS-to-HTTP redirect assumes the headers container is a plain object. When an application passes headers as an alternating array of names and values, nothing is removed, and the credential headers are forwarded to an attacker-controlled redirect target.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "follow-redirects 1.16.0 ships in the api and llt runtime dependency graph only as a dependency of axios. The shipped runtime does not use axios to make outbound requests: the only non-test source reference imports AxiosError for an exception filter, and the NestJS axios module is never registered. Nothing calls follow-redirects directly. The flaw needs request headers passed as an alternating name/value array, and axios always hands follow-redirects a plain object keyed by header name, so the array form is not produced even where axios is used."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-111997",
         "aliases": [
           "GHSA-rxp7-6hxx-x8q5"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.550540047Z",
+      "timestamp": "2026-11-02T16:46:28.764256082Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -939,9 +1501,88 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-113872",
+        "aliases": [
+          "GHSA-q7qp-rjg7-q26m"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:28.950907751Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/multer"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "multer versions from 2.0.0 before 2.5.0, when configured with an asynchronous fileFilter, can crash the Node.js process if a request is aborted while a fileFilter callback is still pending, because the callback resumes a parsing stream that has already been torn down.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The api and llt images carry multer 2.4.0, below the 2.5.0 fix, as the upload parser behind the NestJS file interceptors. The crash requires multer to be configured with an asynchronous fileFilter. The platform has two upload endpoints: one sets no fileFilter at all, and the other uses a synchronous fileFilter that checks the file extension and calls back immediately. Uploads with a synchronous fileFilter, or none, are not affected."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-10-29T16:24:27.159882195Z",
+      "timestamp": "2026-11-02T16:46:27.555672668Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1017,7 +1658,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-10-29T16:24:26.955941566Z",
+      "timestamp": "2026-11-02T16:46:27.337240132Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1093,7 +1734,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-10-29T16:24:27.131327253Z",
+      "timestamp": "2026-11-02T16:46:27.524609417Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1169,7 +1810,7 @@
       "vulnerability": {
         "name": "CVE-2026-27171"
       },
-      "timestamp": "2026-10-29T16:24:26.927825459Z",
+      "timestamp": "2026-11-02T16:46:27.306377129Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1243,9 +1884,88 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-3449",
+        "aliases": [
+          "GHSA-vpq2-c234-7xj6"
+        ]
+      },
+      "timestamp": "2026-11-02T16:46:29.171882078Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/%40tootallnate/once"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Versions of the package @tootallnate/once before 3.0.1 are vulnerable to incorrect control flow scoping in promise resolution when the AbortSignal option is used. The promise remains pending forever after the signal is aborted, so any await on it hangs, which can stall requests, block workers or degrade availability.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "@tootallnate/once reaches the api and llt images only as part of node-gyp, the native add-on build toolchain that an optional SQLite driver declares, through the proxy agent node-gyp uses to download build headers. node-gyp runs only when a native add-on is compiled at install time; the platform runtime never invokes it, and no platform code imports @tootallnate/once or that proxy agent. The vulnerable AbortSignal handling is therefore never executed."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-10-29T16:24:26.984621661Z",
+      "timestamp": "2026-11-02T16:46:27.367664799Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1321,7 +2041,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-10-29T16:24:27.878210319Z",
+      "timestamp": "2026-11-02T16:46:28.194858943Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1397,7 +2117,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-10-29T16:24:27.909550915Z",
+      "timestamp": "2026-11-02T16:46:28.226486521Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1473,7 +2193,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-10-29T16:24:27.940903455Z",
+      "timestamp": "2026-11-02T16:46:28.258600356Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1549,7 +2269,7 @@
       "vulnerability": {
         "name": "CVE-2026-6238"
       },
-      "timestamp": "2026-10-29T16:24:27.014543284Z",
+      "timestamp": "2026-11-02T16:46:27.398980773Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1625,7 +2345,7 @@
       "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-10-29T16:24:27.279191929Z",
+      "timestamp": "2026-11-02T16:46:27.686105881Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1701,7 +2421,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-10-29T16:24:27.101783824Z",
+      "timestamp": "2026-11-02T16:46:27.49230726Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1777,7 +2497,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-10-29T16:24:27.970839342Z",
+      "timestamp": "2026-11-02T16:46:28.28929216Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1853,7 +2573,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-10-29T16:24:28.001212651Z",
+      "timestamp": "2026-11-02T16:46:28.320689925Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1929,7 +2649,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-10-29T16:24:28.030760102Z",
+      "timestamp": "2026-11-02T16:46:28.353342992Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2005,7 +2725,7 @@
       "vulnerability": {
         "name": "CVE-2026-75804"
       },
-      "timestamp": "2026-10-29T16:24:27.575713787Z",
+      "timestamp": "2026-11-02T16:46:28.005574029Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2081,7 +2801,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-10-29T16:24:27.043704306Z",
+      "timestamp": "2026-11-02T16:46:27.430009919Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2157,7 +2877,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-10-29T16:24:27.072625908Z",
+      "timestamp": "2026-11-02T16:46:27.461747498Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2233,7 +2953,7 @@
       "vulnerability": {
         "name": "CVE-2026-84782"
       },
-      "timestamp": "2026-10-29T16:24:27.605071329Z",
+      "timestamp": "2026-11-02T16:46:28.035679577Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2309,7 +3029,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-10-29T16:24:28.062211074Z",
+      "timestamp": "2026-11-02T16:46:28.384322961Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2385,7 +3105,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-10-29T16:24:28.092702832Z",
+      "timestamp": "2026-11-02T16:46:28.416167246Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2461,7 +3181,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-10-29T16:24:28.122941299Z",
+      "timestamp": "2026-11-02T16:46:28.448357308Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2537,7 +3257,7 @@
       "vulnerability": {
         "name": "CVE-2026-85091"
       },
-      "timestamp": "2026-10-29T16:24:26.899636856Z",
+      "timestamp": "2026-11-02T16:46:27.274564867Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2613,7 +3333,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-10-29T16:24:27.24856587Z",
+      "timestamp": "2026-11-02T16:46:27.653102364Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2689,7 +3409,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-10-29T16:24:27.218030256Z",
+      "timestamp": "2026-11-02T16:46:27.620338448Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2765,7 +3485,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-10-29T16:24:27.188504631Z",
+      "timestamp": "2026-11-02T16:46:27.586869221Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2844,7 +3564,7 @@
           "GHSA-jqcg-44mw-7w3h"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.153378244Z",
+      "timestamp": "2026-11-02T16:46:28.481116498Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2920,7 +3640,7 @@
       "vulnerability": {
         "name": "CVE-2026-93748"
       },
-      "timestamp": "2026-10-29T16:24:28.184023381Z",
+      "timestamp": "2026-11-02T16:46:28.512398264Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2999,7 +3719,7 @@
           "GHSA-68fv-2mgg-jv7q"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.215063779Z",
+      "timestamp": "2026-11-02T16:46:28.544877293Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3078,7 +3798,7 @@
           "GHSA-p3m5-59mp-jv5r"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.487998372Z",
+      "timestamp": "2026-11-02T16:46:28.699960469Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3152,313 +3872,9 @@
     },
     {
       "vulnerability": {
-        "name": "CVE-2026-95619"
-      },
-      "timestamp": "2026-10-29T16:24:28.246469103Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/gcc-14-base"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-95619"
-      },
-      "timestamp": "2026-10-29T16:24:28.275439754Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgcc-s1"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-95619"
-      },
-      "timestamp": "2026-10-29T16:24:28.305435648Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libgomp1"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
-        "name": "CVE-2026-95619"
-      },
-      "timestamp": "2026-10-29T16:24:28.335226008Z",
-      "products": [
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        },
-        {
-          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
-          "subcomponents": [
-            {
-              "@id": "pkg:deb/debian/libstdc%2B%2B6"
-            }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "status_notes": "libstdc++ can overflow an internal size computation in its container code, corrupting adjacent memory.",
-      "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "The affected code is in the C++ standard library's container internals. The Node.js runtime in the api and llt images links no GCC runtime library at all. Both native add-ons the images carry do link libstdc++, but reading the symbols they import shows only red-black tree helpers, the random device and the exception-throw helpers, with no heap or priority-queue symbol in either, so the same libstdc++ container internals is not linked into anything the platform runs."
-    },
-    {
-      "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-10-29T16:24:27.307943802Z",
+      "timestamp": "2026-11-02T16:46:27.716298469Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3534,7 +3950,7 @@
       "vulnerability": {
         "name": "GHSA-2464-fhr4-w9xw"
       },
-      "timestamp": "2026-10-29T16:24:28.426044643Z",
+      "timestamp": "2026-11-02T16:46:28.63935925Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3613,7 +4029,7 @@
           "CVE-2026-102599"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.391859663Z",
+      "timestamp": "2026-11-02T16:46:27.81282985Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3691,7 +4107,7 @@
           "CVE-2026-101898"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.421309565Z",
+      "timestamp": "2026-11-02T16:46:27.845037334Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3770,7 +4186,7 @@
           "CVE-2026-101901"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.451660123Z",
+      "timestamp": "2026-11-02T16:46:27.877336697Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3846,7 +4262,7 @@
       "vulnerability": {
         "name": "GHSA-673q-mjm6-r5xr"
       },
-      "timestamp": "2026-10-29T16:24:28.457240177Z",
+      "timestamp": "2026-11-02T16:46:28.669313572Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3925,7 +4341,7 @@
           "CVE-2026-101903"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.482953346Z",
+      "timestamp": "2026-11-02T16:46:27.909127242Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4004,7 +4420,7 @@
           "CVE-2026-101905"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.514084465Z",
+      "timestamp": "2026-11-02T16:46:27.941065265Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4083,7 +4499,7 @@
           "CVE-2026-101906"
         ]
       },
-      "timestamp": "2026-10-29T16:24:27.544694616Z",
+      "timestamp": "2026-11-02T16:46:27.973067058Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4159,7 +4575,7 @@
       "vulnerability": {
         "name": "GHSA-vcvr-r3jv-pc5j"
       },
-      "timestamp": "2026-10-29T16:24:28.364881783Z",
+      "timestamp": "2026-11-02T16:46:28.57586386Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4238,7 +4654,7 @@
           "CVE-2026-114111"
         ]
       },
-      "timestamp": "2026-10-29T16:24:28.395324723Z",
+      "timestamp": "2026-11-02T16:46:28.607088051Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
