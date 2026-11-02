@@ -1,10 +1,82 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-c157188c67aeb99ad381b51ad7d66e6041e38ce7f8dff825dc042315de0d1b76",
+  "@id": "merged-vex-e3181facf26e55cd68f89f65536f7d07aad9050d5f30f6801e0c4bdec83aba70",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-10-29T16:24:02.229421139Z",
+  "timestamp": "2026-11-02T16:45:56.976305026Z",
   "version": 1,
   "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-119210",
+        "aliases": [
+          "GHSA-fhx5-2xqw-2cgm"
+        ]
+      },
+      "timestamp": "2026-11-02T16:45:56.795606899Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "affected",
+      "status_notes": "MariaDB Connector/J checked a server's LOAD DATA LOCAL INFILE file request by searching the command it had sent for LOAD DATA LOCAL INFILE '<file>'. The search also matched inside quoted identifiers, string literals and comments, so an identifier returned by the server and re-used in a later query, for example by DatabaseMetaData.getImportedKeys(), getExportedKeys() or updatable result sets, could satisfy it. A rogue or machine-in-the-middle server can read any file the client JVM can read. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "action_statement": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles mariadb-java-client 3.5.11. Liquibase Secure 5.0.0 through 6.0.0 bundle 3.5.6 to 3.5.10, which are affected. Liquibase never sets allowLocalInfile, so the driver default (true) applies. Commands that read foreign key metadata from a MariaDB connection (snapshot, diff, diff-changelog, generate-changelog, and foreignKeyConstraintExists preconditions) can call DatabaseMetaData.getImportedKeys() with table names returned by the server: the core snapshot does so directly, and the Pro bulk foreign key query falls back to it whenever the bulk query fails, which the server controls. A malicious or compromised MariaDB server, or a machine-in-the-middle on a connection without verified TLS (the driver default), can therefore read any file the Liquibase process can read, such as liquibase.properties, credential files and key stores, without any visible error.",
+      "action_statement_timestamp": "2026-11-02T16:45:56.795606899Z"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-119276",
+        "aliases": [
+          "GHSA-h599-m3w5-9m7x"
+        ]
+      },
+      "timestamp": "2026-11-02T16:45:56.849083405Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "MariaDB Connector/J sized heap allocations from lengths declared by the server in OK packets before checking that those lengths fit in the packet. When CLIENT_SESSION_TRACK is negotiated (the default), a rogue or machine-in-the-middle server can make the client allocate megabytes from a packet of a few bytes, creating GC pressure up to OutOfMemoryError. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "The oversized allocations are driven by lengths in OK packets sent by the server, so exploitation requires a malicious or compromised MariaDB server, or a machine-in-the-middle, on the connection Liquibase opened. The only impact is an OutOfMemoryError that ends the Liquibase process. Liquibase is a short-lived command-line client, and an attacker in that position can already stop the run by refusing or dropping the connection, so the flaw gives no capability beyond what control of the connection already does. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-119280",
+        "aliases": [
+          "GHSA-4jq2-8v3c-97w8"
+        ]
+      },
+      "timestamp": "2026-11-02T16:45:56.902197438Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases. From 3.0.0 until 3.3.7, 3.4.5, and 3.5.11, the MariaDbPoolConnection.recover() and MariaDbPoolPinnedConnection.recover() implementations trusted the gtrid_length and bqual_length columns returned by XA RECOVER. The methods allocated and split Xid byte arrays without validating the lengths against Xid.MAXGTRIDSIZE, Xid.MAXBQUALSIZE, or the actual data payload. A malicious or compromised server, or a machine-in-the-middle attacker, could cause large allocations, NegativeArraySizeException, or ArrayIndexOutOfBoundsException during XA recovery. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The flaw is in XAResource.recover() of MariaDbPoolConnection and MariaDbPoolPinnedConnection, which a distributed transaction manager calls during XA recovery. Liquibase Secure opens database connections through java.sql.Driver.connect() only. It never requests an XA or pooled connection (getXAConnection, getPooledConnection), never uses XAResource or the javax.transaction.xa API, and never issues XA RECOVER, so the vulnerable recovery code never runs. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-119281",
+        "aliases": [
+          "GHSA-grfq-r75j-rw9x"
+        ]
+      },
+      "timestamp": "2026-11-02T16:45:56.954743705Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "MariaDB Connector/J decodes every result as UTF-8 and guards character_set_client against a change to another charset, but did not guard character_set_results, and relied on the server's global session_track_system_variables list to be told about charset changes. A malicious or compromised server, or a machine-in-the-middle, could make the strings an application reads differ from the bytes the server returned, which can defeat application-side validation or escaping built on those values. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Exploitation requires a malicious or compromised MariaDB server, or a machine-in-the-middle, that switches character_set_results on the connection Liquibase opened. The effect is that strings Liquibase reads differ from the bytes the server sent. Liquibase does not rely on decoding of server results for validation or escaping: the values it reads (DATABASECHANGELOG rows, snapshot metadata) come from that same server, which can already return any value it chooses, so the charset switch gives no capability beyond what control of the connection already does. Liquibase Secure 5.0.0 through 6.0.0 bundle mariadb-java-client 3.5.6 to 3.5.10; Liquibase Secure 6.0.1 and later bundle 3.5.11, which includes the fix."
+    },
     {
       "vulnerability": {
         "name": "CVE-2026-55856",
@@ -12,7 +84,7 @@
           "GHSA-g9jj-cgmh-9f38"
         ]
       },
-      "timestamp": "2026-10-29T16:24:02.049350254Z",
+      "timestamp": "2026-11-02T16:45:56.58315687Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -30,7 +102,7 @@
           "GHSA-qxvw-fvwx-5cp7"
         ]
       },
-      "timestamp": "2026-10-29T16:24:02.102766758Z",
+      "timestamp": "2026-11-02T16:45:56.635558826Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -48,7 +120,7 @@
           "GHSA-xvr9-35cr-46v9"
         ]
       },
-      "timestamp": "2026-10-29T16:24:02.155463767Z",
+      "timestamp": "2026-11-02T16:45:56.687589691Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -66,7 +138,7 @@
           "GHSA-wxmm-q36w-r9xj"
         ]
       },
-      "timestamp": "2026-10-29T16:24:02.208567675Z",
+      "timestamp": "2026-11-02T16:45:56.742482266Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
