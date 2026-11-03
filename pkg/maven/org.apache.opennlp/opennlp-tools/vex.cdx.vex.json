@@ -160,6 +160,60 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-82617",
+      "description": "The built-in EMAIL and URL patterns exposed by Apache OpenNLP RegexNameFinderFactory contain ambiguous nested quantifiers. Crafted input causes quadratic backtracking (EMAIL) or deep matcher recursion ending in StackOverflowError (URL), resulting in denial of service. Affects 2.0.0 through 2.5.11 and 3.0.0-M1 through 3.0.0-M5.",
+      "recommendation": "No action required for Liquibase Secure. The vulnerable OpenNLP RegexNameFinderFactory patterns are not reachable from production code.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 10,
+          "severity": "critical",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "advisories": [
+        {
+          "url": "https://lists.apache.org/thread/spzhcxxszqdpppg70m1zz2l3mv29mhl3",
+          "title": "Apache Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82617",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-f3wj-w3qw-rw57",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "OpenNLP RegexNameFinderFactory ReDoS / StackOverflowError in the built-in EMAIL and URL name-finder patterns, fixed in 2.5.12 and 3.0.0-M6. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.10 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but opennlp.tools.namefind and RegexNameFinderFactory are not imported or called. The only production OpenNLP usage found is document categorization and whitespace tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/models/ModelCache.java:18).",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-02T00:00:00Z",
+        "lastUpdated": "2026-11-02T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.opennlp/opennlp-tools",
+          "versions": [
+            {
+              "range": "vers:maven/>=2.0.0|<2.5.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

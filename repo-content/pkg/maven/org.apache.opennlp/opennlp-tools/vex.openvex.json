@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-39be6db5a2fda9b281bfe602552f5552f576c67836f0211db4da4a9f72a384dc",
+  "@id": "merged-vex-ace21c12a71dd5a8fd3427c2806e19e97388d1d09af62337ea94ae9dca257f40",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-02T17:43:27.663656407Z",
+  "timestamp": "2026-11-03T13:09:57.955453182Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-4v8g-86x5-3vrc"
         ]
       },
-      "timestamp": "2026-11-02T17:43:27.526655324Z",
+      "timestamp": "2026-11-03T13:09:57.835640413Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -30,7 +30,7 @@
           "GHSA-cx4m-2p55-rw7j"
         ]
       },
-      "timestamp": "2026-11-02T17:43:27.583462141Z",
+      "timestamp": "2026-11-03T13:09:57.870611462Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -48,7 +48,7 @@
           "GHSA-659w-93r5-9j6m"
         ]
       },
-      "timestamp": "2026-11-02T17:43:27.639679362Z",
+      "timestamp": "2026-11-03T13:09:57.905080268Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -58,6 +58,21 @@
       "status_notes": "Apache OpenNLP AbstractModelReader allocates unbounded memory when reading model files, allowing a malicious or malformed model file to cause an out-of-memory denial of service.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "Apache OpenNLP AbstractModelReader OOM denial-of-service vulnerability via unbounded memory allocation during model loading. Exploitation requires loading an attacker-controlled or malformed model file. Liquibase Secure bundles pre-packaged, trusted OpenNLP model files at build time; no model files are loaded from external or user-controlled sources at runtime. AbstractModelReader is not imported or called directly in Liquibase code."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-82617"
+      },
+      "timestamp": "2026-11-03T13:09:57.939986942Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The built-in EMAIL and URL patterns exposed by Apache OpenNLP RegexNameFinderFactory contain ambiguous nested quantifiers. Crafted input causes quadratic backtracking (EMAIL) or deep matcher recursion ending in StackOverflowError (URL), resulting in denial of service. Affects 2.0.0 through 2.5.11 and 3.0.0-M1 through 3.0.0-M5.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "OpenNLP RegexNameFinderFactory ReDoS / StackOverflowError in the built-in EMAIL and URL name-finder patterns, fixed in 2.5.12 and 3.0.0-M6. Liquibase Secure declares opennlp-tools through opennlp.version 2.5.10 (tools/liquibase-checks/phileas/pom.xml:76) in the phileas AI services dependency (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:18, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:19, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/pom.xml:20), but opennlp.tools.namefind and RegexNameFinderFactory are not imported or called. The only production OpenNLP usage found is document categorization and whitespace tokenization (tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:22, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:23, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/sentiment/OpenNLPSentimentDetector.java:24, tools/liquibase-checks/phileas/phileas-services/phileas-services-ai/src/main/java/ai/philterd/phileas/service/ai/models/ModelCache.java:18)."
     }
   ]
 }
