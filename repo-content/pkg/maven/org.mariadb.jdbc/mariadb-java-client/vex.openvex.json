@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-0e4efc599db1f2930271ff68e591e39a7050673d2882e261de7b7d21245fe983",
+  "@id": "merged-vex-fb77c74d17ba4ec4465c0b4e97eb21a8ca08efa67a0d9bd9c10b8e0ccca4f5d7",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-02T17:43:30.525774162Z",
+  "timestamp": "2026-11-03T13:09:59.781907675Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-fhx5-2xqw-2cgm"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.280601846Z",
+      "timestamp": "2026-11-03T13:09:59.627543631Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -21,7 +21,7 @@
       "status": "affected",
       "status_notes": "MariaDB Connector/J checked a server's LOAD DATA LOCAL INFILE file request by searching the command it had sent for LOAD DATA LOCAL INFILE '<file>'. The search also matched inside quoted identifiers, string literals and comments, so an identifier returned by the server and re-used in a later query, for example by DatabaseMetaData.getImportedKeys(), getExportedKeys() or updatable result sets, could satisfy it. A rogue or machine-in-the-middle server can read any file the client JVM can read. This issue is fixed in versions 3.3.7, 3.4.5, and 3.5.11.",
       "action_statement": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles mariadb-java-client 3.5.11. Liquibase Secure 5.0.0 through 6.0.0 bundle 3.5.6 to 3.5.10, which are affected. Liquibase never sets allowLocalInfile, so the driver default (true) applies. Commands that read foreign key metadata from a MariaDB connection (snapshot, diff, diff-changelog, generate-changelog, and foreignKeyConstraintExists preconditions) can call DatabaseMetaData.getImportedKeys() with table names returned by the server: the core snapshot does so directly, and the Pro bulk foreign key query falls back to it whenever the bulk query fails, which the server controls. A malicious or compromised MariaDB server, or a machine-in-the-middle on a connection without verified TLS (the driver default), can therefore read any file the Liquibase process can read, such as liquibase.properties, credential files and key stores, without any visible error.",
-      "action_statement_timestamp": "2026-11-02T17:43:30.280601846Z"
+      "action_statement_timestamp": "2026-11-03T13:09:59.627543631Z"
     },
     {
       "vulnerability": {
@@ -30,7 +30,7 @@
           "GHSA-h599-m3w5-9m7x"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.336386277Z",
+      "timestamp": "2026-11-03T13:09:59.661740837Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -48,7 +48,7 @@
           "GHSA-797x-p4mc-jwpm"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.504035887Z",
+      "timestamp": "2026-11-03T13:09:59.766734755Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -66,7 +66,7 @@
           "GHSA-4jq2-8v3c-97w8"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.392612434Z",
+      "timestamp": "2026-11-03T13:09:59.696281719Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -84,7 +84,7 @@
           "GHSA-grfq-r75j-rw9x"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.44835625Z",
+      "timestamp": "2026-11-03T13:09:59.73272341Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -102,7 +102,7 @@
           "GHSA-g9jj-cgmh-9f38"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.066519378Z",
+      "timestamp": "2026-11-03T13:09:59.482629637Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -120,7 +120,7 @@
           "GHSA-qxvw-fvwx-5cp7"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.11855879Z",
+      "timestamp": "2026-11-03T13:09:59.517101468Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -138,7 +138,7 @@
           "GHSA-xvr9-35cr-46v9"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.169633522Z",
+      "timestamp": "2026-11-03T13:09:59.557959431Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
@@ -156,7 +156,7 @@
           "GHSA-wxmm-q36w-r9xj"
         ]
       },
-      "timestamp": "2026-11-02T17:43:30.223375661Z",
+      "timestamp": "2026-11-03T13:09:59.592966661Z",
       "products": [
         {
           "@id": "pkg:maven/org.mariadb.jdbc/mariadb-java-client"
