@@ -1398,6 +1398,322 @@
       ]
     },
     {
+      "id": "CVE-2026-65637",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat due to incomplete fix for CVE-2026-32990. This issue affects Apache Tomcat: from 11.0.20 through 11.0.24, from 10.1.53 through 10.1.57, from 9.0.115 through 9.0.120. Users are recommended to upgrade to version 11.0.25, 10.1.58 or 9.0.121, which fix the issue.",
+      "recommendation": "No action required. Liquibase Secure does not run a Tomcat TLS connector with HTTP/2, multiple virtual hosts or connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass needs an HTTP/2-enabled TLS connector serving several virtual hosts with differing client certificate requirements. No Liquibase Secure component configures TLS, HTTP/2, virtual hosts or connector-level client certificate authentication on Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f525-44xv-f2qj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65637",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-9.html",
+          "title": "Apache Tomcat 9 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix of CVE-2026-32990: an HTTP/2 request without an :authority pseudo-header could bypass Tomcat's strict check that the TLS SNI host name matches the requested host; fixed in 11.0.25, 10.1.59 and 9.0.121. It matters only when Tomcat terminates TLS itself, has HTTP/2 enabled on that connector, and serves more than one SSLHostConfig with differing client certificate requirements. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it; the image entrypoint runs the Liquibase CLI. No other jar in the images contains Tomcat classes. Only 5.2.0 (11.0.22), 5.2.1 (11.0.23) and 5.2.2 (11.0.24) carry an in-range version; 5.0.0 to 5.0.3 (10.1.34, 10.1.48) and 5.1.0 and 5.1.1 (11.0.15, 11.0.18) are below the affected ranges. The application listens on a single plain HTTP connector on port 8080 with the Spring Boot defaults: its configuration sets no server.ssl or server.http2 properties, so neither TLS nor HTTP/2 is enabled, it ships no keystore, and none of its classes references the Tomcat API, an SSL bundle or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.115|<9.0.121|>=10.1.53|<10.1.59|>=11.0.20|<11.0.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55276",
+      "description": "Always-Incorrect Control Flow Implementation vulnerability in Apache Tomcat meant that special roles and empty authorisation constraints were not included when the effective web.xml was logged. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119 which fixes the issue.",
+      "recommendation": "No action required. No shipped component enables logging of the effective web.xml.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw only makes the logged copy of the effective web.xml incomplete, and that log is written only when logEffectiveWebXml is enabled. The 5.x license-tracking application never enables it and has no web.xml, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mqg3-r7h5-24x4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55276",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "When Tomcat logs the effective web.xml of a web application, the logged copy left out special roles and empty authorization constraints; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. The flaw is in the logging output only, and it shows only when the Context's logEffectiveWebXml option is enabled. That option is off by default. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0, 11.0.18 in 5.1.1 and 11.0.22 in 5.2.0, all in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The application has no web.xml and never enables logEffectiveWebXml: Spring Boot exposes no property for it, and none of the application's classes references the Tomcat API or a web server factory customizer. Its security constraints are therefore never logged, so the incomplete log output cannot occur.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-53404",
+      "description": "Always-Incorrect Control Flow Implementation vulnerability in Apache Tomcat's rewrite valve meant that if the first condition in an OR chain matched, subsequent non-OR conditions were skipped. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures a Tomcat RewriteValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw exists only in RewriteValve rule evaluation; no shipped component configures a RewriteValve, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h792-v28v-ppgr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-53404",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "In Tomcat's RewriteValve, if the first condition in an OR chain matched, the non-OR conditions after it were skipped, so a rewrite rule could apply when it should not; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0, 11.0.18 in 5.1.1 and 11.0.22 in 5.2.0, all in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The flaw needs a RewriteValve with rewrite rules. Spring Boot exposes no property that enables one; it must be added in code through a web server factory customizer. None of the application's classes references the Tomcat API or a web server factory customizer, and the application ships no rewrite configuration.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55957",
+      "description": "Missing Critical Step in Authentication vulnerability in Apache Tomcat when the JNDIRealm was configured to authenticate binds using GSSAPI allowed attackers to authenticate without provided the correct password. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.4, from 10.1.0-M1 through 10.1.36, from 9.0.0.M1 through 9.0.100, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Users are recommended to upgrade to version 11.0.5, 10.1.37 or 9.0.101, which fixes the issue.",
+      "recommendation": "No action required. The only shipped component that embeds Tomcat configures no Tomcat realm, so the JNDIRealm GSSAPI bind path is never used.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a Tomcat JNDIRealm configured for GSSAPI binds. The 5.x license-tracking application configures no Tomcat realm, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        304
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7895-gffq-w6jq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55957",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Tomcat's JNDIRealm, when configured to authenticate its LDAP binds with GSSAPI, could authenticate a user without the correct password; fixed in Tomcat 11.0.5, 10.1.37 and 9.0.101. Exploitation requires a JNDIRealm configured for GSSAPI binds. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); it runs only if a user extracts and starts it. 6.0.0 and 6.0.1 contain no Tomcat. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The application never configures a Tomcat realm of any kind: Spring Boot does not set up a realm for the embedded Tomcat, the application has no server properties, no web.xml and no web server factory customizer, and none of its classes references the Tomcat API. It bundles no LDAP, Kerberos or Spring Security library.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=7.0.0|<=7.0.109|>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.101|>=10.1.0-M1|<10.1.37|>=11.0.0-M1|<11.0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55956",
+      "description": "Improper Authorization vulnerability in Apache Tomcat leads to security constraints specified for the default servlet ignoring any method or method omission configured as part of the constraint. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119, which fix the issue.",
+      "recommendation": "No action required. The only shipped component that embeds Tomcat declares no security constraints and does not register Tomcat's default servlet.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw is in how Tomcat applies method-specific security constraints to the default servlet. The 5.x license-tracking application declares no security constraints and does not register the default servlet, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        285
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5v3h-fjv2-54fg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55956",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Security constraints that Tomcat applied to the default servlet ignored any HTTP method or method omission configured in the constraint; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. Exploitation requires an application that maps Tomcat's default servlet and protects it with method-specific security constraints. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); it runs only if a user extracts and starts it. 6.0.0 and 6.0.1 contain no Tomcat. The application carries tomcat-embed-core 10.1.34 (5.0.1, 5.0.2), 10.1.48 (5.0.3), 11.0.15 (5.1.0), 11.0.18 (5.1.1) or 11.0.22 (5.2.0), which are in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The application declares no security constraints at all: it has no web.xml, no servlet security annotations or registrations, no Spring Security library, and none of its classes references the Tomcat API. It sets no server properties, so Spring Boot's default of not registering Tomcat's default servlet applies.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=7.0.0|<=7.0.109|>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-34483",
       "analysis": {
         "state": "not_affected",

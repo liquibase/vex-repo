@@ -40109,6 +40109,466 @@
       ]
     },
     {
+      "id": "CVE-2026-111943",
+      "description": "On most platforms, Go uses the given system root certificates. However, in some narrower cases, the system trust stores may not be updated without further action. To defend against the narrower set of cases that may remain affected, a denylist was added in crypto/x509 to return an error when calling Verify with any of the known intermediate certificates that are no longer considered to be trustworthy.",
+      "recommendation": "No action required for Liquibase itself, which does not use Go's TLS stack. Avoid running \"lpm update\" on networks that could intercept its traffic until a Liquibase Secure release ships an lpm built with Go 1.26.10 or newer.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "NVD has not published a CVSS score. Liquibase runs on the JVM and never uses Go's crypto/x509. The only Go code in the image is the optional lpm helper. Exploiting it needs network interception of its outbound HTTPS and a trust store that still trusts the emSign root. On the default install path, lpm's compiled-in checksums block any substituted jar.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111943",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6809",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/66pojueaQek",
+          "title": "Go Announce"
+        },
+        {
+          "url": "https://bugzilla.mozilla.org/show_bug.cgi?id=2083449",
+          "title": "Mozilla Bugzilla (emSign intermediates distrust)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 adds a denylist so Certificate.Verify rejects emSign intermediate certificates whose private keys are now public (GO-2026-6809), fixed in Go 1.26.10 and 1.27.3. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. Every published tag ships an lpm built with a Go version older than the fix: 6.0.0 and 5.2.2 ship lpm built with go1.26.8, and the current image definition installs lpm 0.3.7, also built with go1.26.8. Liquibase itself is a Java application that validates TLS with the JDK's own trust store, not Go's crypto/x509. lpm calls Certificate.Verify only as an HTTPS client when it downloads a jar or a package manifest. In the Docker image lpm runs only when INSTALL_MYSQL is set, or when a user runs it explicitly. Exploiting this needs all of the following: an attacker who can intercept lpm's outbound HTTPS, a container trust store that still trusts the emSign ECC Root CA - G3 root, and a forged certificate chained through one of the compromised intermediates. Even then, lpm's package manifest is compiled into the binary, and every jar it downloads is checked against the manifest's checksum before it is installed. So the default \"lpm add mysql --global\" path can be made to fail, but cannot be made to install a substituted jar. A forged manifest can only reach lpm through an explicit \"lpm update\", which downloads a replacement manifest.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.10|>=1.27.0-0|<1.27.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GHSA-xmj3-9gf7-h52w",
+      "description": "On Windows, attacker-controlled content in a wheel's .dist-info/namespace_packages.txt can cause setuptools' legacy wheel installation path to create an __init__.py outside the requested destination_eggdir. The attacker can influence the destination path, but not the contents of the created file.",
+      "recommendation": "No action required. Liquibase Secure does not install Python wheels at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 1,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:A/VC:N/VI:L/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a process that installs an attacker-supplied wheel through setuptools' legacy egg conversion on Windows. Liquibase Secure never installs Python packages at runtime and never calls that code. No CVE or NVD score exists; GitHub rates it low.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xmj3-9gf7-h52w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/pypa/setuptools/security/advisories/GHSA-xmj3-9gf7-h52w",
+          "title": "setuptools Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in setuptools' legacy wheel-to-egg conversion (setuptools.wheel.Wheel.install_as_egg and _fix_namespace_packages). It only runs when a process installs a third-party wheel as an egg, and it only escapes the target directory on Windows. Liquibase Secure never installs Python packages at runtime: the Python packages used by the liquibase-checks extension are installed while the extension is built, and its embedded GraalPy file system is read-only. A source review found no reference to setuptools, pkg_resources, install_as_egg, easy_install, or ensurepip in the Java code or the bundled Python scripts. In the Liquibase Secure Docker images (5.0.0 through 6.0.0), no operating-system Python package is installed. The only Python runtime is the GraalPy interpreter embedded in the liquibase-checks extension, and the images are Ubuntu Linux, so the Windows-only path handling cannot be triggered there.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools",
+          "versions": [
+            {
+              "range": "vers:pypi/>=38.2.2|<84.1.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-65637",
+      "description": "Improper Input Validation vulnerability in Apache Tomcat due to incomplete fix for CVE-2026-32990. This issue affects Apache Tomcat: from 11.0.20 through 11.0.24, from 10.1.53 through 10.1.57, from 9.0.115 through 9.0.120. Users are recommended to upgrade to version 11.0.25, 10.1.58 or 9.0.121, which fix the issue.",
+      "recommendation": "No action required. Liquibase Secure does not run a Tomcat TLS connector with HTTP/2, multiple virtual hosts or connector-level client certificate authentication.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 9.8,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The bypass needs an HTTP/2-enabled TLS connector serving several virtual hosts with differing client certificate requirements. No Liquibase Secure component configures TLS, HTTP/2, virtual hosts or connector-level client certificate authentication on Tomcat.\n"
+        }
+      ],
+      "cwes": [
+        20
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f525-44xv-f2qj",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65637",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-9.html",
+          "title": "Apache Tomcat 9 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Incomplete fix of CVE-2026-32990: an HTTP/2 request without an :authority pseudo-header could bypass Tomcat's strict check that the TLS SNI host name matches the requested host; fixed in 11.0.25, 10.1.59 and 9.0.121. It matters only when Tomcat terminates TLS itself, has HTTP/2 enabled on that connector, and serves more than one SSLHostConfig with differing client certificate requirements. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.0 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz), and it runs only if a user extracts and starts it; the image entrypoint runs the Liquibase CLI. No other jar in the images contains Tomcat classes. Only 5.2.0 (11.0.22), 5.2.1 (11.0.23) and 5.2.2 (11.0.24) carry an in-range version; 5.0.0 to 5.0.3 (10.1.34, 10.1.48) and 5.1.0 and 5.1.1 (11.0.15, 11.0.18) are below the affected ranges. The application listens on a single plain HTTP connector on port 8080 with the Spring Boot defaults: its configuration sets no server.ssl or server.http2 properties, so neither TLS nor HTTP/2 is enabled, it ships no keystore, and none of its classes references the Tomcat API, an SSL bundle or a web server factory customizer.",
+        "justification": "requires_configuration",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=9.0.115|<9.0.121|>=10.1.53|<10.1.59|>=11.0.20|<11.0.25",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55276",
+      "description": "Always-Incorrect Control Flow Implementation vulnerability in Apache Tomcat meant that special roles and empty authorisation constraints were not included when the effective web.xml was logged. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119 which fixes the issue.",
+      "recommendation": "No action required. No shipped component enables logging of the effective web.xml.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 9.1,
+          "severity": "critical",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw only makes the logged copy of the effective web.xml incomplete, and that log is written only when logEffectiveWebXml is enabled. The 5.x license-tracking application never enables it and has no web.xml, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-mqg3-r7h5-24x4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55276",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "When Tomcat logs the effective web.xml of a web application, the logged copy left out special roles and empty authorization constraints; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. The flaw is in the logging output only, and it shows only when the Context's logEffectiveWebXml option is enabled. That option is off by default. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0, 11.0.18 in 5.1.1 and 11.0.22 in 5.2.0, all in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The application has no web.xml and never enables logEffectiveWebXml: Spring Boot exposes no property for it, and none of the application's classes references the Tomcat API or a web server factory customizer. Its security constraints are therefore never logged, so the incomplete log output cannot occur.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-53404",
+      "description": "Always-Incorrect Control Flow Implementation vulnerability in Apache Tomcat's rewrite valve meant that if the first condition in an OR chain matched, subsequent non-OR conditions were skipped. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119, which fix the issue.",
+      "recommendation": "No action required. No shipped component configures a Tomcat RewriteValve.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CISA-ADP"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw exists only in RewriteValve rule evaluation; no shipped component configures a RewriteValve, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-h792-v28v-ppgr",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-53404",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "In Tomcat's RewriteValve, if the first condition in an OR chain matched, the non-OR conditions after it were skipped, so a rewrite rule could apply when it should not; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz). It runs only if a user extracts and starts it. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, 10.1.48 in 5.0.3, 11.0.15 in 5.1.0, 11.0.18 in 5.1.1 and 11.0.22 in 5.2.0, all in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The flaw needs a RewriteValve with rewrite rules. Spring Boot exposes no property that enables one; it must be added in code through a web server factory customizer. None of the application's classes references the Tomcat API or a web server factory customizer, and the application ships no rewrite configuration.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-109518",
+      "description": "On Debian, Ubuntu, and derivative Linux distributions, an on-path attacker who can manipulate the HTTP traffic (including a malicious mirror or proxy) between an APT client and an archive server triggered by a package install can trick the client into installing an attacker-controlled unverified package and achieve remote code execution with root privileges. The vulnerability is caused by the reuse of hard links and requires the client to follow redirects and retry the download of package files. It requires the client to have a non-zero Acquire::Retries configuration setting; the value 3 is the default starting with Debian 12 (bookworm) and Ubuntu 22.04 LTS (Jammy Jellyfish), so older releases are unaffected in a default configuration.",
+      "recommendation": "No action required. Liquibase never runs APT at container runtime. If you extend the image and install packages with APT, use HTTPS archive mirrors or set Acquire::Retries to 0 until Ubuntu publishes a fixed apt.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "Exploitation needs an APT package install. APT runs only while the image is built; at runtime the image runs as an unprivileged user and nothing Liquibase runs invokes APT.\n"
+        }
+      ],
+      "cwes": [
+        62,
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-109518",
+          "title": "Ubuntu CVE Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109518",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An on-path attacker who can tamper with the HTTP traffic between an APT client and an archive (or a malicious mirror or proxy) can make APT install an unverified package while it installs packages, by reusing hard links across redirects and download retries. This entry covers the apt package itself, which ships the APT command-line tools and download methods. Every Docker image from 5.0.1 through 6.0.1 ships it: 2.4.14 on the Ubuntu 22.04 image (5.0.1) and 2.8.3 on the Ubuntu 24.04 images (5.0.2 and later). Ubuntu has not yet published a fixed apt for either release. APT runs in the image only while it is built, to install the image's own packages. In the published images only APT's own programs (apt, apt-get, apt-cache, apt-helper and the download methods) load libapt-pkg. Nothing Liquibase runs invokes them: the entrypoint starts the Liquibase CLI, and its only other program, lpm, downloads extension jars itself without APT. The image runs as the unprivileged liquibase user, and installing packages with APT needs root, so the vulnerable package-install path is never exercised at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/apt"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-109518",
+      "description": "On Debian, Ubuntu, and derivative Linux distributions, an on-path attacker who can manipulate the HTTP traffic (including a malicious mirror or proxy) between an APT client and an archive server triggered by a package install can trick the client into installing an attacker-controlled unverified package and achieve remote code execution with root privileges. The vulnerability is caused by the reuse of hard links and requires the client to follow redirects and retry the download of package files. It requires the client to have a non-zero Acquire::Retries configuration setting; the value 3 is the default starting with Debian 12 (bookworm) and Ubuntu 22.04 LTS (Jammy Jellyfish), so older releases are unaffected in a default configuration.",
+      "recommendation": "No action required. Liquibase never runs APT at container runtime. If you extend the image and install packages with APT, use HTTPS archive mirrors or set Acquire::Retries to 0 until Ubuntu publishes a fixed apt.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "Exploitation needs an APT package install. APT runs only while the image is built; at runtime the image runs as an unprivileged user and nothing Liquibase runs invokes APT.\n"
+        }
+      ],
+      "cwes": [
+        62,
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-109518",
+          "title": "Ubuntu CVE Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109518",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An on-path attacker who can tamper with the HTTP traffic between an APT client and an archive (or a malicious mirror or proxy) can make APT install an unverified package while it installs packages, by reusing hard links across redirects and download retries. This entry covers the libapt-pkg6.0t64 package, the APT library on Ubuntu 24.04, which holds the acquire code that downloads and retries package files. Docker images 5.0.2 through 6.0.1 ship it at 2.8.3. Ubuntu has not yet published a fixed apt for either release. APT runs in the image only while it is built, to install the image's own packages. In the published images only APT's own programs (apt, apt-get, apt-cache, apt-helper and the download methods) load libapt-pkg. Nothing Liquibase runs invokes them: the entrypoint starts the Liquibase CLI, and its only other program, lpm, downloads extension jars itself without APT. The image runs as the unprivileged liquibase user, and installing packages with APT needs root, so the vulnerable package-install path is never exercised at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libapt-pkg6.0t64"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-109518",
+      "description": "On Debian, Ubuntu, and derivative Linux distributions, an on-path attacker who can manipulate the HTTP traffic (including a malicious mirror or proxy) between an APT client and an archive server triggered by a package install can trick the client into installing an attacker-controlled unverified package and achieve remote code execution with root privileges. The vulnerability is caused by the reuse of hard links and requires the client to follow redirects and retry the download of package files. It requires the client to have a non-zero Acquire::Retries configuration setting; the value 3 is the default starting with Debian 12 (bookworm) and Ubuntu 22.04 LTS (Jammy Jellyfish), so older releases are unaffected in a default configuration.",
+      "recommendation": "No action required. Liquibase never runs APT at container runtime. If you extend the image and install packages with APT, use HTTPS archive mirrors or set Acquire::Retries to 0 until Ubuntu publishes a fixed apt.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "Exploitation needs an APT package install. APT runs only while the image is built; at runtime the image runs as an unprivileged user and nothing Liquibase runs invokes APT.\n"
+        }
+      ],
+      "cwes": [
+        62,
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-109518",
+          "title": "Ubuntu CVE Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109518",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An on-path attacker who can tamper with the HTTP traffic between an APT client and an archive (or a malicious mirror or proxy) can make APT install an unverified package while it installs packages, by reusing hard links across redirects and download retries. This entry covers the libapt-pkg6.0 package, the APT library on Ubuntu 22.04, which holds the acquire code that downloads and retries package files. Docker image 5.0.1 ships it at 2.4.14. Ubuntu has not yet published a fixed apt for either release. APT runs in the image only while it is built, to install the image's own packages. In the published images only APT's own programs (apt, apt-get, apt-cache, apt-helper and the download methods) load libapt-pkg. Nothing Liquibase runs invokes them: the entrypoint starts the Liquibase CLI, and its only other program, lpm, downloads extension jars itself without APT. The image runs as the unprivileged liquibase user, and installing packages with APT needs root, so the vulnerable package-install path is never exercised at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libapt-pkg6.0"
+        }
+      ]
+    },
+    {
       "id": "CVE-2025-55163",
       "analysis": {
         "state": "not_affected",
@@ -40120,6 +40580,128 @@
       "affects": [
         {
           "ref": "pkg:maven/io.netty/netty-codec-http2"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55957",
+      "description": "Missing Critical Step in Authentication vulnerability in Apache Tomcat when the JNDIRealm was configured to authenticate binds using GSSAPI allowed attackers to authenticate without provided the correct password. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.4, from 10.1.0-M1 through 10.1.36, from 9.0.0.M1 through 9.0.100, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Users are recommended to upgrade to version 11.0.5, 10.1.37 or 9.0.101, which fixes the issue.",
+      "recommendation": "No action required. The only shipped component that embeds Tomcat configures no Tomcat realm, so the JNDIRealm GSSAPI bind path is never used.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw needs a Tomcat JNDIRealm configured for GSSAPI binds. The 5.x license-tracking application configures no Tomcat realm, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        304
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-7895-gffq-w6jq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55957",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-10.html",
+          "title": "Apache Tomcat 10 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Tomcat's JNDIRealm, when configured to authenticate its LDAP binds with GSSAPI, could authenticate a user without the correct password; fixed in Tomcat 11.0.5, 10.1.37 and 9.0.101. Exploitation requires a JNDIRealm configured for GSSAPI binds. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); it runs only if a user extracts and starts it. 6.0.0 and 6.0.1 contain no Tomcat. The application carries tomcat-embed-core 10.1.34 in 5.0.1 and 5.0.2, which is in range; 5.0.3 and later carry 10.1.48 or 11.0.15 and newer, which include the fix. The application never configures a Tomcat realm of any kind: Spring Boot does not set up a realm for the embedded Tomcat, the application has no server properties, no web.xml and no web server factory customizer, and none of its classes references the Tomcat API. It bundles no LDAP, Kerberos or Spring Security library.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=7.0.0|<=7.0.109|>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.101|>=10.1.0-M1|<10.1.37|>=11.0.0-M1|<11.0.5",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-55956",
+      "description": "Improper Authorization vulnerability in Apache Tomcat leads to security constraints specified for the default servlet ignoring any method or method omission configured as part of the constraint. This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.22, from 10.1.0-M1 through 10.1.55, from 9.0.0.M1 through 9.0.118, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109. Other versions that have reached end of support may also be affected. Users are recommended to upgrade to version 11.0.23, 10.1.56 or 9.0.119, which fix the issue.",
+      "recommendation": "No action required. The only shipped component that embeds Tomcat declares no security constraints and does not register Tomcat's default servlet.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw is in how Tomcat applies method-specific security constraints to the default servlet. The 5.x license-tracking application declares no security constraints and does not register the default servlet, and the Liquibase CLI never starts a Tomcat server.\n"
+        }
+      ],
+      "cwes": [
+        285
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-5v3h-fjv2-54fg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-55956",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-11.html",
+          "title": "Apache Tomcat 11 Security"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Security constraints that Tomcat applied to the default servlet ignored any HTTP method or method omission configured in the constraint; fixed in Tomcat 11.0.23, 10.1.56 and 9.0.119. Exploitation requires an application that maps Tomcat's default servlet and protects it with method-specific security constraints. The Liquibase CLI never starts a Tomcat server. tomcat-embed-core ships only as the embedded server of the license-tracking application, a separately started Spring Boot service shipped in 5.x and removed in 6.0.0. Docker images 5.0.1 through 5.2.2 carry it as an unextracted archive under /liquibase/dist (liquibase-license-tracking-1.0.0-beta.tar.gz); it runs only if a user extracts and starts it. 6.0.0 and 6.0.1 contain no Tomcat. The application carries tomcat-embed-core 10.1.34 (5.0.1, 5.0.2), 10.1.48 (5.0.3), 11.0.15 (5.1.0), 11.0.18 (5.1.1) or 11.0.22 (5.2.0), which are in range; 5.2.1 and 5.2.2 carry 11.0.23 and 11.0.24, which include the fix. The application declares no security constraints at all: it has no web.xml, no servlet security annotations or registrations, no Spring Security library, and none of its classes references the Tomcat API. It sets no server properties, so Spring Boot's default of not registering Tomcat's default servlet applies.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core",
+          "versions": [
+            {
+              "range": "vers:maven/>=7.0.0|<=7.0.109|>=8.5.0|<=8.5.100|>=9.0.0-M1|<9.0.119|>=10.1.0-M1|<10.1.56|>=11.0.0-M1|<11.0.23",
+              "status": "unaffected"
+            }
+          ]
         }
       ]
     },
