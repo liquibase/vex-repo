@@ -1,0 +1,59 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-109518",
+      "description": "On Debian, Ubuntu, and derivative Linux distributions, an on-path attacker who can manipulate the HTTP traffic (including a malicious mirror or proxy) between an APT client and an archive server triggered by a package install can trick the client into installing an attacker-controlled unverified package and achieve remote code execution with root privileges. The vulnerability is caused by the reuse of hard links and requires the client to follow redirects and retry the download of package files. It requires the client to have a non-zero Acquire::Retries configuration setting; the value 3 is the default starting with Debian 12 (bookworm) and Ubuntu 22.04 LTS (Jammy Jellyfish), so older releases are unaffected in a default configuration.",
+      "recommendation": "No action required. Liquibase never runs APT at container runtime. If you extend the image and install packages with APT, use HTTPS archive mirrors or set Acquire::Retries to 0 until Ubuntu publishes a fixed apt.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.7,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "Exploitation needs an APT package install. APT runs only while the image is built; at runtime the image runs as an unprivileged user and nothing Liquibase runs invokes APT.\n"
+        }
+      ],
+      "cwes": [
+        62,
+        367
+      ],
+      "advisories": [
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-109518",
+          "title": "Ubuntu CVE Tracker"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109518",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "An on-path attacker who can tamper with the HTTP traffic between an APT client and an archive (or a malicious mirror or proxy) can make APT install an unverified package while it installs packages, by reusing hard links across redirects and download retries. This entry covers the apt package itself, which ships the APT command-line tools and download methods. Every Docker image from 5.0.1 through 6.0.1 ships it: 2.4.14 on the Ubuntu 22.04 image (5.0.1) and 2.8.3 on the Ubuntu 24.04 images (5.0.2 and later). Ubuntu has not yet published a fixed apt for either release. APT runs in the image only while it is built, to install the image's own packages. In the published images only APT's own programs (apt, apt-get, apt-cache, apt-helper and the download methods) load libapt-pkg. Nothing Liquibase runs invokes them: the entrypoint starts the Liquibase CLI, and its only other program, lpm, downloads extension jars itself without APT. The image runs as the unprivileged liquibase user, and installing packages with APT needs root, so the vulnerable package-install path is never exercised at runtime.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-05T00:00:00Z",
+        "lastUpdated": "2026-11-05T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/apt"
+        }
+      ]
+    }
+  ]
+}

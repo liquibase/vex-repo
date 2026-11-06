@@ -105,6 +105,63 @@
           ]
         }
       ]
+    },
+    {
+      "id": "GHSA-xmj3-9gf7-h52w",
+      "description": "On Windows, attacker-controlled content in a wheel's .dist-info/namespace_packages.txt can cause setuptools' legacy wheel installation path to create an __init__.py outside the requested destination_eggdir. The attacker can influence the destination path, but not the contents of the created file.",
+      "recommendation": "No action required. Liquibase Secure does not install Python wheels at runtime.",
+      "ratings": [
+        {
+          "source": {
+            "name": "GitHub"
+          },
+          "score": 1,
+          "severity": "low",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:L/AC:H/AT:P/PR:L/UI:A/VC:N/VI:L/VA:L/SC:N/SI:N/SA:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation requires a process that installs an attacker-supplied wheel through setuptools' legacy egg conversion on Windows. Liquibase Secure never installs Python packages at runtime and never calls that code. No CVE or NVD score exists; GitHub rates it low.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-xmj3-9gf7-h52w",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://github.com/pypa/setuptools/security/advisories/GHSA-xmj3-9gf7-h52w",
+          "title": "setuptools Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in setuptools' legacy wheel-to-egg conversion (setuptools.wheel.Wheel.install_as_egg and _fix_namespace_packages). It only runs when a process installs a third-party wheel as an egg, and it only escapes the target directory on Windows. Liquibase Secure never installs Python packages at runtime: the Python packages used by the liquibase-checks extension are installed while the extension is built, and its embedded GraalPy file system is read-only. A source review found no reference to setuptools, pkg_resources, install_as_egg, easy_install, or ensurepip in the Java code or the bundled Python scripts. In the Liquibase Secure Docker images (5.0.0 through 6.0.0), no operating-system Python package is installed. The only Python runtime is the GraalPy interpreter embedded in the liquibase-checks extension, and the images are Ubuntu Linux, so the Windows-only path handling cannot be triggered there.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:pypi/setuptools",
+          "versions": [
+            {
+              "range": "vers:pypi/>=38.2.2|<84.1.0",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -3346,6 +3346,59 @@
       ]
     },
     {
+      "id": "CVE-2026-111943",
+      "description": "On most platforms, Go uses the given system root certificates. However, in some narrower cases, the system trust stores may not be updated without further action. To defend against the narrower set of cases that may remain affected, a denylist was added in crypto/x509 to return an error when calling Verify with any of the known intermediate certificates that are no longer considered to be trustworthy.",
+      "recommendation": "No action required for Liquibase itself, which does not use Go's TLS stack. Avoid running \"lpm update\" on networks that could intercept its traffic until a Liquibase Secure release ships an lpm built with Go 1.26.10 or newer.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "NVD has not published a CVSS score. Liquibase runs on the JVM and never uses Go's crypto/x509. The only Go code in the image is the optional lpm helper. Exploiting it needs network interception of its outbound HTTPS and a trust store that still trusts the emSign root. On the default install path, lpm's compiled-in checksums block any substituted jar.\n"
+        }
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111943",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6809",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/66pojueaQek",
+          "title": "Go Announce"
+        },
+        {
+          "url": "https://bugzilla.mozilla.org/show_bug.cgi?id=2083449",
+          "title": "Mozilla Bugzilla (emSign intermediates distrust)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go stdlib crypto/x509 adds a denylist so Certificate.Verify rejects emSign intermediate certificates whose private keys are now public (GO-2026-6809), fixed in Go 1.26.10 and 1.27.3. The only Go binary in the liquibase/liquibase-secure image is the optional lpm package-manager helper. Every published tag ships an lpm built with a Go version older than the fix: 6.0.0 and 5.2.2 ship lpm built with go1.26.8, and the current image definition installs lpm 0.3.7, also built with go1.26.8. Liquibase itself is a Java application that validates TLS with the JDK's own trust store, not Go's crypto/x509. lpm calls Certificate.Verify only as an HTTPS client when it downloads a jar or a package manifest. In the Docker image lpm runs only when INSTALL_MYSQL is set, or when a user runs it explicitly. Exploiting this needs all of the following: an attacker who can intercept lpm's outbound HTTPS, a container trust store that still trusts the emSign ECC Root CA - G3 root, and a forged certificate chained through one of the compromised intermediates. Even then, lpm's package manifest is compiled into the binary, and every jar it downloads is checked against the manifest's checksum before it is installed. So the default \"lpm add mysql --global\" path can be made to fail, but cannot be made to install a substituted jar. A forged manifest can only reach lpm through an explicit \"lpm update\", which downloads a replacement manifest.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-06T00:00:00Z",
+        "lastUpdated": "2026-11-06T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.10|>=1.27.0-0|<1.27.3",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-32281",
       "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
