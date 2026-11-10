@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-34fbfdfee502733eef9166fc2e8062b4ff679157e080e6d2500bc382a3093d46",
+  "@id": "merged-vex-59884f12281f12c205d1f6d17f70c9f04a2cfeb45c3cecf4df6cbb9413d6ebd1",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-06T17:37:22.324188844Z",
+  "timestamp": "2026-11-10T15:25:41.907830031Z",
   "version": 1,
   "statements": [
     {
@@ -13,7 +13,7 @@
           "PYSEC-2023-192"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.86718609Z",
+      "timestamp": "2026-11-10T15:25:41.461867733Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -21,7 +21,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 cookie header leak vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. No HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 cookie header leak vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. No HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -31,7 +31,7 @@
           "PYSEC-2023-212"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.301231928Z",
+      "timestamp": "2026-11-10T15:25:41.884739163Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -40,7 +40,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when an HTTP redirect response using status 301, 302, or 303 after the request had its method changed from one that could accept a request body (like POST) to GET as is required by HTTP RFCs. Both of the following conditions must be true to be affected by this vulnerability: 1. Using urllib3 and submitting sensitive information in the HTTP request body (such as form data or JSON) and 2. The origin service is compromised and starts redirecting using 301, 302, or 303 to a malicious peer or the redirected-to service becomes compromised. This issue has been addressed in versions 1.26.18 and 2.0.7.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw needs Python code that sends sensitive data in an HTTP request body through urllib3 to a service that then redirects to a malicious peer, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw needs Python code that sends sensitive data in an HTTP request body through urllib3 to a service that then redirects to a malicious peer, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -50,7 +50,7 @@
           "PYSEC-2026-1995"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.193077624Z",
+      "timestamp": "2026-11-10T15:25:41.779554639Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -59,7 +59,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is a user-friendly HTTP client library for Python. When using urllib3's proxy support with ProxyManager, the Proxy-Authorization header is only sent to the configured proxy, as expected. However, when sending HTTP requests without using urllib3's proxy support, it's possible to accidentally configure the Proxy-Authorization header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the Proxy-Authorization HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects. Exploitation requires setting the Proxy-Authorization header without using urllib3's built-in proxy support, not disabling HTTP redirects, and either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin. Users are advised to update to either version 1.26.19 or version 2.2.2.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The header leak is only reached when Python code sets a Proxy-Authorization header by hand without urllib3's ProxyManager and follows a cross-origin redirect, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The header leak is only reached when Python code sets a Proxy-Authorization header by hand without urllib3's ProxyManager and follows a cross-origin redirect, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -69,7 +69,7 @@
           "PYSEC-2026-1999"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.247847524Z",
+      "timestamp": "2026-11-10T15:25:41.832098832Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -78,7 +78,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is a user-friendly HTTP client library for Python. Prior to 2.5.0, it is possible to disable redirects for all requests by instantiating a PoolManager and specifying retries in a way that disable redirects. By default, requests and botocore users are not affected. An application attempting to mitigate SSRF or open redirect vulnerabilities by disabling redirects at the PoolManager level will remain vulnerable. This issue has been patched in version 2.5.0.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw only matters to Python code that sends HTTP requests through a urllib3 PoolManager and relies on PoolManager-level retries to disable redirects, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts or Python helper modules Liquibase bundles import urllib3, and no other bundled Python package depends on it. The flaw only matters to Python code that sends HTTP requests through a urllib3 PoolManager and relies on PoolManager-level retries to disable redirects, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15 and 5.0.3 bundles 1.26.18, both inside the affected range, and 5.1.0 bundles no standalone urllib3; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 5.1.1 bundles urllib3 2.6.3, 5.2.0 through 5.2.2 bundle 2.7.0 and 6.0.0 bundles 2.8.0, all of which include the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -88,7 +88,7 @@
           "PYSEC-2026-1998"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.706557665Z",
+      "timestamp": "2026-11-10T15:25:41.305515196Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -96,7 +96,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -106,7 +106,7 @@
           "PYSEC-2026-1994"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.760220761Z",
+      "timestamp": "2026-11-10T15:25:41.358212928Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -114,7 +114,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -124,7 +124,7 @@
           "PYSEC-2026-1996"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.813238523Z",
+      "timestamp": "2026-11-10T15:25:41.409547497Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -132,7 +132,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -142,7 +142,7 @@
           "PYSEC-2026-141"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.920544348Z",
+      "timestamp": "2026-11-10T15:25:41.514866132Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -150,7 +150,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -160,7 +160,7 @@
           "PYSEC-2026-142"
         ]
       },
-      "timestamp": "2026-11-06T17:37:21.975039122Z",
+      "timestamp": "2026-11-10T15:25:41.567676674Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -168,7 +168,7 @@
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime."
+      "impact_statement": "urllib3 vulnerability. urllib3 is bundled as a transitive dependency within GraalVM Python extensions but its HTTP client functionality is never invoked at runtime. All Python packages are pre-installed at build time via Maven graalpy-maven-plugin; no HTTP requests are made via Python at runtime. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -178,7 +178,7 @@
           "PYSEC-2026-4175"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.030690743Z",
+      "timestamp": "2026-11-10T15:25:41.620161703Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -187,7 +187,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is an HTTP client library for Python. From 1.26.0 until 2.8.0, the proxy_ssl_context, proxy_assert_hostname, proxy_assert_fingerprint, ssl_context, cert_reqs, verify_mode, use_forwarding_for_https=True, and CERT_NONE configuration paths fail to remain separated because target-server TLS settings are incorrectly applied to the HTTPS proxy connection. Applying cert_reqs=CERT_NONE can overwrite proxy_ssl_context.verify_mode in place, and the mutation persists so later connections reusing the same context may connect to the HTTPS proxy without certificate verification. An attacker who intercepts and impersonates the HTTPS proxy can then observe or modify forwarded traffic or receive a target TLS client certificate. This issue is fixed in version 2.8.0.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The HTTPS-proxy TLS-setting confusion is only reached when Python code sends HTTPS requests through an HTTPS proxy with target-specific TLS settings, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The HTTPS-proxy TLS-setting confusion is only reached when Python code sends HTTPS requests through an HTTPS proxy with target-specific TLS settings, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -197,7 +197,7 @@
           "PYSEC-2026-4176"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.085748786Z",
+      "timestamp": "2026-11-10T15:25:41.672359588Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -206,7 +206,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is an HTTP client library for Python. From 2.6.2 until 2.8.0, HTTPResponse.stream and HTTPResponse.read_chunked can enter an infinite loop because the Deflate decoder retains trailing bytes as unconsumed input after reaching end-of-stream and repeatedly decodes them without progress. The issue occurs when an untrusted server sends a chunked Deflate response whose decoded body exceeds a positive finite chunk size and whose encoded body has trailing bytes. The impact is excessive CPU usage and a request that does not complete, and network read timeouts do not interrupt the loop because no further socket read occurs. This issue is fixed in version 2.8.0.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The Deflate decoder infinite loop is only reached when Python code streams a chunked, Deflate-encoded HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Only Liquibase Secure 5.1.1 (urllib3 2.6.3) and 5.2.0 through 5.2.2 (urllib3 2.7.0) bundle a version inside the affected range; 5.0.0 through 5.0.3 bundle urllib3 1.26.15 or 1.26.18, which predate the vulnerable code, 5.1.0 bundles no standalone urllib3, and the urllib3 1.26.16 vendored inside pip in 5.0.0 through 5.1.1 is also outside the range. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The Deflate decoder infinite loop is only reached when Python code streams a chunked, Deflate-encoded HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Only Liquibase Secure 5.1.1 (urllib3 2.6.3) and 5.2.0 through 5.2.2 (urllib3 2.7.0) bundle a version inside the affected range; 5.0.0 through 5.0.3 bundle urllib3 1.26.15 or 1.26.18, which predate the vulnerable code, 5.1.0 bundles no standalone urllib3, and the urllib3 1.26.16 vendored inside pip in 5.0.0 through 5.1.1 is also outside the range. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     },
     {
       "vulnerability": {
@@ -216,7 +216,7 @@
           "PYSEC-2026-4177"
         ]
       },
-      "timestamp": "2026-11-06T17:37:22.138857619Z",
+      "timestamp": "2026-11-10T15:25:41.726420695Z",
       "products": [
         {
           "@id": "pkg:pypi/urllib3"
@@ -225,7 +225,7 @@
       "status": "not_affected",
       "status_notes": "urllib3 is an HTTP client library for Python. From 1.10.3 until 2.8.0, the HTTPResponse.read_chunked and HTTPResponse.stream methods can allocate unbounded memory because the streaming chunk parser buffers the chunk-size field until newline or EOF without a length bound. A malicious server that returns Transfer-Encoding: chunked followed by a very long run of bytes without a newline can exhaust the client process's memory. This issue is fixed in version 2.8.0.",
       "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
-      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The unbounded chunk-size buffering is only reached when Python code reads a chunked HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix."
+      "impact_statement": "urllib3 ships only inside the Python virtual environment embedded in the checks extension's GraalPy scripting engine; the image has no system Python and no other copy. None of the check scripts Liquibase bundles and runs by default import urllib3, and no other bundled Python package depends on it. The unbounded chunk-size buffering is only reached when Python code reads a chunked HTTP response from a malicious server, which requires a customer to author and configure their own custom check script that does so; no shipped configuration does this out of the box. From Liquibase Secure 5.2.0 the embedded Python engine also denies scripts host socket access unless liquibase.script.python.allowHostAccess is enabled. Liquibase Secure 5.0.0 through 5.0.2 bundle urllib3 1.26.15, 5.0.3 bundles 1.26.18, 5.1.0 bundles no standalone urllib3, 5.1.1 bundles 2.6.3, and 5.2.0 through 5.2.2 bundle 2.7.0, all inside the affected range; 5.0.0 through 5.1.1 also carry urllib3 1.26.16 vendored inside pip, a build-time installer that nothing imports at runtime and that 5.2.0 removed. Liquibase Secure 6.0.0 bundles urllib3 2.8.0, which includes the fix. Liquibase Secure 6.0.2 and later ship no urllib3 at all: the checks virtual environment keeps only simplejson, sqlglot and sqlparse."
     }
   ]
 }
