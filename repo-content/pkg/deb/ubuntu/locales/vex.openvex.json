@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7b3197b931d38a3f6f8ee5b8f6ff117d0b60dfbed8cebe3fd4a4858502a887ae",
+  "@id": "merged-vex-789a87f8741dd865ca7065697cb97db8c69f21f46e552fa5292ce7d8fc985850",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-13T17:04:41.858028883Z",
+  "timestamp": "2026-11-13T17:54:30.044899306Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-11-13T17:04:41.581333268Z",
+      "timestamp": "2026-11-13T17:54:29.597419707Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2025-15281"
       },
-      "timestamp": "2026-11-13T17:04:41.802483974Z",
+      "timestamp": "2026-11-13T17:54:29.914429363Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2025-8058"
       },
-      "timestamp": "2026-11-13T17:04:41.691085004Z",
+      "timestamp": "2026-11-13T17:54:29.756850002Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0861"
       },
-      "timestamp": "2026-11-13T17:04:41.728612607Z",
+      "timestamp": "2026-11-13T17:54:29.80998997Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0915"
       },
-      "timestamp": "2026-11-13T17:04:41.765552462Z",
+      "timestamp": "2026-11-13T17:54:29.86204977Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-11-13T17:04:41.471107536Z",
+      "timestamp": "2026-11-13T17:54:29.436233826Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -97,9 +97,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-84243"
+      },
+      "timestamp": "2026-11-13T17:54:30.021604413Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/locales"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The gettext family of functions in the GNU C Library version 2.0 and later accept LANGUAGE environment variable entries that contain '/' or that are equal to \"..\", unless the program is setuid or setgid (AT_SECURE). An attacker who can set LANGUAGE in the environment of a program that uses gettext can make it load a message catalog (.mo file) from an arbitrary location in the file system. A crafted .mo file can crash the program through out-of-range offsets, or supply translations whose format directives do not match the arguments passed by the program. That causes undefined behaviour in the printf family of functions and may allow arbitrary code execution with the privileges of the program. The safety of message catalogs relies on them being installed in trusted, read-only locations, and the directory traversal bypasses this. LANGUAGE is only used when the LC_MESSAGES locale is not \"C\", \"C.<encoding>\" or \"POSIX\". Exploitation also requires that the attacker can place the crafted file in a location readable by the target program, and that the environment crosses a trust boundary without the program running as AT_SECURE, for example an SSH server that accepts LANGUAGE and LANG from clients through AcceptEnv and restricts an account to a forced command.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Every published Liquibase Secure image from 5.0.0 through 6.0.1 ships glibc below Ubuntu's fixed version (2.35-0ubuntu3.10 and 2.35-0ubuntu3.11 on the Ubuntu 22.04 images, against the fix 2.35-0ubuntu3.18; 2.39-0ubuntu8.6 through 2.39-0ubuntu8.9 on the Ubuntu 24.04 images, against the fix 2.39-0ubuntu8.12), and the Java runtime loads libc.so.6 directly. Exploitation, however, requires an attacker who can set the LANGUAGE variable in the environment of a process that runs at a higher trust level than the attacker, without that process being setuid or setgid, and who can also place a crafted message catalog where that process can read it. The image runs a single one-shot Liquibase CLI process as the unprivileged liquibase user. Its environment is chosen by whoever starts the container, and that party already decides which command the container runs. The image runs no SSH server or other service that accepts environment variables from a less trusted client, so the environment never crosses a trust boundary. The image sets LANGUAGE to the fixed value en_US:en, which contains no path."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-11-13T17:04:41.508330173Z",
+      "timestamp": "2026-11-13T17:54:29.488401214Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-11-13T17:04:41.617932563Z",
+      "timestamp": "2026-11-13T17:54:29.65080183Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-11-13T17:04:41.54508585Z",
+      "timestamp": "2026-11-13T17:54:29.544644077Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-11-13T17:04:41.654458073Z",
+      "timestamp": "2026-11-13T17:54:29.703891935Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-97399"
       },
-      "timestamp": "2026-11-13T17:04:41.839734678Z",
+      "timestamp": "2026-11-13T17:54:29.967971688Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/locales"

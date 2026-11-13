@@ -166,6 +166,67 @@
       ]
     },
     {
+      "id": "CVE-2026-84243",
+      "description": "The gettext family of functions in the GNU C Library version 2.0 and later accept LANGUAGE environment variable entries that contain '/' or that are equal to \"..\", unless the program is setuid or setgid (AT_SECURE). An attacker who can set LANGUAGE in the environment of a program that uses gettext can make it load a message catalog (.mo file) from an arbitrary location in the file system. A crafted .mo file can crash the program through out-of-range offsets, or supply translations whose format directives do not match the arguments passed by the program. That causes undefined behaviour in the printf family of functions and may allow arbitrary code execution with the privileges of the program. The safety of message catalogs relies on them being installed in trusted, read-only locations, and the directory traversal bypasses this. LANGUAGE is only used when the LC_MESSAGES locale is not \"C\", \"C.<encoding>\" or \"POSIX\". Exploitation also requires that the attacker can place the crafted file in a location readable by the target program, and that the environment crosses a trust boundary without the program running as AT_SECURE, for example an SSH server that accepts LANGUAGE and LANG from clients through AcceptEnv and restricts an account to a forced command.",
+      "recommendation": "No action required for the stock image. Do not pass a LANGUAGE value taken from an untrusted source into the container's environment.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Exploitation needs an environment that crosses a trust boundary into a non-setuid program. The image runs only the Liquibase CLI as an unprivileged user, with an environment set by the party that starts the container, and runs no service that accepts environment variables from clients.\n"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-8rvm-662m-jvqv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84243",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0025",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0025"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Every published Liquibase Secure image from 5.0.0 through 6.0.1 ships glibc below Ubuntu's fixed version (2.35-0ubuntu3.10 and 2.35-0ubuntu3.11 on the Ubuntu 22.04 images, against the fix 2.35-0ubuntu3.18; 2.39-0ubuntu8.6 through 2.39-0ubuntu8.9 on the Ubuntu 24.04 images, against the fix 2.39-0ubuntu8.12), and the Java runtime loads libc.so.6 directly. Exploitation, however, requires an attacker who can set the LANGUAGE variable in the environment of a process that runs at a higher trust level than the attacker, without that process being setuid or setgid, and who can also place a crafted message catalog where that process can read it. The image runs a single one-shot Liquibase CLI process as the unprivileged liquibase user. Its environment is chosen by whoever starts the container, and that party already decides which command the container runs. The image runs no SSH server or other service that accepts environment variables from a less trusted client, so the environment never crosses a trust boundary. The image sets LANGUAGE to the fixed value en_US:en, which contains no path.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-13T00:00:00Z",
+        "lastUpdated": "2026-11-13T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/locales",
+          "versions": [
+            {
+              "range": "vers:deb/<2.39-0ubuntu8.12",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-89092",
       "description": "The nscd service in the GNU C Library 2.3.4 onwards may crash due to a stack overflow when a malicious DNS server returns too large a response for a DNS query, resulting in degraded DNS resolution for the system. Exploitation of this bug needs a system that has nscd enabled and using an untrusted DNS server for name resolution, with the compromised DNS server being capable of processing records large enough to result in a stack overflow in an nscd thread stack. During experimentation, bind 9 was unable to handle large records, but that could change in future or with a different name server. In typical installations, nscd is executed in an isolated context as its own user without a shell, due to which any compromise of that service is isolated. There is a remote possibility of nscd cache corruption if an attacker manages to get the stack pointer into a desired point in the heap, potentially resulting in other caches in nscd being overwritten with corrupt data through the stack overflow, until the buggy code path eventually results in a crash. Finally, a crash in nscd may result in performance degradation when resolving names, but it does not result in a denial of service.",
       "recommendation": "No action required. This image does not run nscd.",

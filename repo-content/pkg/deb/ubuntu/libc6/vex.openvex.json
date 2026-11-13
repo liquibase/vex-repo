@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-7fcccab49e6a46092073c3226f4a6a49f3bee2849bf65fb4adda692c64596e24",
+  "@id": "merged-vex-b7db94db34d755349cbe8ce30436245f3aa4b68fae360e73c6ac46870f0115c6",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-13T17:04:30.684960018Z",
+  "timestamp": "2026-11-13T17:54:14.471449735Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2016-20013"
       },
-      "timestamp": "2026-11-13T17:04:30.414061228Z",
+      "timestamp": "2026-11-13T17:54:13.973009884Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2025-15281"
       },
-      "timestamp": "2026-11-13T17:04:30.631416274Z",
+      "timestamp": "2026-11-13T17:54:14.330700487Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -39,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2025-8058"
       },
-      "timestamp": "2026-11-13T17:04:30.523634535Z",
+      "timestamp": "2026-11-13T17:54:14.150082942Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -54,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-0861"
       },
-      "timestamp": "2026-11-13T17:04:30.559183421Z",
+      "timestamp": "2026-11-13T17:54:14.218874346Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-0915"
       },
-      "timestamp": "2026-11-13T17:04:30.594842184Z",
+      "timestamp": "2026-11-13T17:54:14.274134042Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -84,7 +84,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-11-13T17:04:30.306592952Z",
+      "timestamp": "2026-11-13T17:54:13.79833938Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -97,9 +97,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-84243"
+      },
+      "timestamp": "2026-11-13T17:54:14.446249803Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libc6"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The gettext family of functions in the GNU C Library version 2.0 and later accept LANGUAGE environment variable entries that contain '/' or that are equal to \"..\", unless the program is setuid or setgid (AT_SECURE). An attacker who can set LANGUAGE in the environment of a program that uses gettext can make it load a message catalog (.mo file) from an arbitrary location in the file system. A crafted .mo file can crash the program through out-of-range offsets, or supply translations whose format directives do not match the arguments passed by the program. That causes undefined behaviour in the printf family of functions and may allow arbitrary code execution with the privileges of the program. The safety of message catalogs relies on them being installed in trusted, read-only locations, and the directory traversal bypasses this. LANGUAGE is only used when the LC_MESSAGES locale is not \"C\", \"C.<encoding>\" or \"POSIX\". Exploitation also requires that the attacker can place the crafted file in a location readable by the target program, and that the environment crosses a trust boundary without the program running as AT_SECURE, for example an SSH server that accepts LANGUAGE and LANG from clients through AcceptEnv and restricts an account to a forced command.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Every published Liquibase Secure image from 5.0.0 through 6.0.1 ships glibc below Ubuntu's fixed version (2.35-0ubuntu3.10 and 2.35-0ubuntu3.11 on the Ubuntu 22.04 images, against the fix 2.35-0ubuntu3.18; 2.39-0ubuntu8.6 through 2.39-0ubuntu8.9 on the Ubuntu 24.04 images, against the fix 2.39-0ubuntu8.12), and the Java runtime loads libc.so.6 directly. Exploitation, however, requires an attacker who can set the LANGUAGE variable in the environment of a process that runs at a higher trust level than the attacker, without that process being setuid or setgid, and who can also place a crafted message catalog where that process can read it. The image runs a single one-shot Liquibase CLI process as the unprivileged liquibase user. Its environment is chosen by whoever starts the container, and that party already decides which command the container runs. The image runs no SSH server or other service that accepts environment variables from a less trusted client, so the environment never crosses a trust boundary. The image sets LANGUAGE to the fixed value en_US:en, which contains no path."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-11-13T17:04:30.343032544Z",
+      "timestamp": "2026-11-13T17:54:13.854106018Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -114,7 +129,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-11-13T17:04:30.450402787Z",
+      "timestamp": "2026-11-13T17:54:14.034999126Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -129,7 +144,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-11-13T17:04:30.378474449Z",
+      "timestamp": "2026-11-13T17:54:13.912098999Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -144,7 +159,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-11-13T17:04:30.487436392Z",
+      "timestamp": "2026-11-13T17:54:14.090445578Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
@@ -159,7 +174,7 @@
       "vulnerability": {
         "name": "CVE-2026-97399"
       },
-      "timestamp": "2026-11-13T17:04:30.66716285Z",
+      "timestamp": "2026-11-13T17:54:14.388605887Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libc6"
