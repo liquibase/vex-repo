@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-694b43871b6c73422720bb8b80e606574044a07b829e6b9c5002fa072824dcaa",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-13T17:04:56.201408654Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-59171",
+        "aliases": [
+          "GHSA-ghc9-756g-vrcv"
+        ]
+      },
+      "timestamp": "2026-11-13T17:04:56.201409806Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.json/json"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "JSONTokener.nextSimpleValue can accumulate unbounded numeric tokens, which JSONObject.stringToNumber then passes to BigInteger or BigDecimal without a length limit. An application that parses attacker-controlled JSON or XML through JSONObject, JSONArray or XML.toJSONObject can spend super-linear CPU time on it, causing a denial of service. Fixed in org.json 20260719.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Every org.json copy whose version could be established in the Liquibase Secure 5.0.1 to 6.0.1 images is within the affected range, and the rest are treated as in range, so this assessment rests on reachability, not version. Per the image inventory of all ten tags (jar-packages.tsv and jar-maven.tsv from the CVE investigation run), org.json (31 classes) is shaded into liquibase-commercial-bigquery.jar in every tag and into liquibase-commercial-cassandra.jar from 5.2.0 on. The 5.0.x and 5.1.x Cassandra jars carry no org.json. liquibase-checks.jar carries only GraalVM's relocated internal copy (org.graalvm.shadowed.org.json), which is not this artifact. The Cassandra copy is 20250107 (its pom.properties). The BigQuery copy has no version metadata. In 5.0.3 and 5.1.0 all 31 of its classes are byte-identical to org.json 20250517, and in 5.2.0, 5.2.1, 5.2.2 and 6.0.1 the BigQuery and Cassandra copies are both byte-identical to 20250107. The BigQuery copies in 5.0.1, 5.0.2, 5.1.1 and 6.0.0 were not version-checked and are treated as in range. The vulnerable path is the number parsing behind JSONObject, JSONArray and XML.toJSONObject. A class-level scan for callers of org.json was done on the BigQuery and Cassandra jars of six tags (5.0.3, 5.1.0, 5.2.0, 5.2.1, 5.2.2 and 6.0.1), each byte-identical (sha1) to the jar in that tag's image, and found the same callers in every one. The other four tags (5.0.1, 5.0.2, 5.1.1 and 6.0.0) were not class-scanned. Their inventory shows the same Simba and ESRI caller packages with the same class counts as the scanned tags (Simba client.requests 3 and dataengine 24; ESRI geometry 363 and geometry.ogc 16). In the scanned BigQuery jars the only callers are the Simba BigQuery JDBC driver and the BigQuery Storage Write API JSON classes (JsonStreamWriter, JsonToProtoMessage), which nothing in the jar calls. The Simba driver parses only JSON that the BigQuery service generates: API error messages (AbstractRequestWithRetry.parseErrorMessage) and the start and end bounds of RANGE_DATE, RANGE_DATETIME and RANGE_TIMESTAMP column values returned by the High-Throughput API (BQHTParser.convertHTRangeTypeValue). Those bounds are typed date and timestamp values, not free text a table writer controls. Feeding malicious JSON to that parser requires control of the BigQuery endpoint the user configured, or of its TLS connection. Such an attacker can already stall the Liquibase process, which is a short-lived CLI and not a request-serving server, so the CPU denial of service adds nothing. In the scanned Cassandra jars that carry org.json (5.2.0 to 6.0.1), it is used only by the ESRI geometry library's GeoJSON import, reached solely through the driver's public Point, LineString and Polygon fromGeoJson methods. Neither the driver nor Liquibase calls them: the driver's geometry codecs decode values from WKB and parse CQL literals from WKT, never JSON. From Liquibase Secure 6.0.2 the BigQuery extension ships org.json 20260814, which includes the fix, and the Cassandra extension no longer contains org.json."
+    }
+  ]
+}
