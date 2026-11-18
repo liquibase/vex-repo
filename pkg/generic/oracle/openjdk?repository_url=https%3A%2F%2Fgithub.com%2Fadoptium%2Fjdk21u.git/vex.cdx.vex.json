@@ -1945,15 +1945,11 @@
         {
           "url": "https://github.com/openjdk/jdk21u-dev/commit/a78d28924d",
           "title": "Candidate OpenJDK fix (JDK-8380715, jdk21u)"
-        },
-        {
-          "url": "https://github.com/openjdk/jdk21u-dev/commit/b887608dbb",
-          "title": "Candidate OpenJDK fix (JDK-8384165, jdk21u)"
         }
       ],
       "analysis": {
         "state": "exploitable",
-        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Security issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE. The candidates are JDK-8380715 (constant-time PKCS#5 padding removal, a padding-oracle hardening) and JDK-8384165 (an output offset error in AES-GCM with direct byte buffers). Liquibase itself never decrypts attacker-supplied data with PKCS#5 padding, but AES-GCM is the usual TLS cipher, and database drivers that run TLS over direct buffers could reach the second candidate. Because the fix cannot be pinned down, this is recorded as affected. Exploitation is hard.",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Security issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE. The candidates are JDK-8380715 (constant-time PKCS#5 padding removal, a padding-oracle hardening) and the certificate name and name-constraint checks (JDK-8383679, JDK-8384021, JDK-8392072). The AES-GCM fix in the same update (JDK-8384165) was not backported to Java 17, which this CVE also affects, so it belongs to a different CVE. Liquibase itself never decrypts attacker-supplied data with PKCS#5 padding, but certificate checks run on every HTTPS and TLS JDBC connection. Because the fix cannot be pinned down, this is recorded as affected. Exploitation is hard.",
         "response": [
           "update"
         ],
@@ -2797,6 +2793,566 @@
       ]
     },
     {
+      "id": "CVE-2026-91335",
+      "description": "Vulnerability in Oracle Java SE (component: AWT). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. A difficult to exploit vulnerability allows a low privileged attacker with network access, with human interaction from another person, to read a subset of Oracle Java SE accessible data. It applies to Java deployments, typically clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code and rely on the Java sandbox for security. It does not apply to Java deployments, typically servers, that load and run only trusted code.",
+      "recommendation": "No action required. Liquibase Secure does not run untrusted code in a Java sandbox. Upgrading to Liquibase Secure 6.0.1 or later removes the scanner finding.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 2.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:L/I:N/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "The attack needs a sandboxed Java client running untrusted code. Liquibase Secure is a command-line tool that runs only trusted code, without a Java sandbox.\n"
+        }
+      ],
+      "cwes": [
+        250
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jp97-m28p-vxx8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91335",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE AWT issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range. Oracle states that this vulnerability applies only to Java deployments that load and run untrusted code inside the Java sandbox, typically sandboxed Java Web Start applications or applets, and does not apply to deployments that load and run only trusted code. A check of the JRE in every published image from 5.0.0 to 6.0.0 confirms that none contains a Java Web Start launcher (javaws), an applet viewer, or the Java deployment plugin libraries. The container entrypoint runs the Liquibase command line, which runs only the code installed in the image or added by the operator, and Liquibase does not enable a Java sandbox or security manager. The sandboxed client environment the attack requires is not present.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87290",
+      "description": "Vulnerability in Oracle Java SE (component: JAXP). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. A difficult to exploit vulnerability allows an unauthenticated attacker with network access to read critical data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "No action required. Upgrading to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13, removes the scanner finding.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No XPath expression evaluated by Liquibase Secure or its bundled libraries comes from an attacker.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-p9mx-r8ww-77qq",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87290",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/e5843bfac0",
+          "title": "Probable OpenJDK fix (JDK-8383699, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE JAXP issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. The matching OpenJDK fix is most likely JDK-8383699 (Enhance XPath Expressions), the only JAXP fix with a confidentiality impact: it lets applications restrict the XPath system-property() function, which reads JVM system properties from inside an XPath expression. Exploitation needs an attacker to supply the XPath expression the application evaluates. Liquibase does not evaluate XPath expressions, and the bundled libraries that do (authentication libraries, cloud SDKs and JDBC drivers) evaluate expressions fixed in their own code or taken from the operator's configuration, never from a remote party.",
+        "justification": "requires_environment",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87367",
+      "description": "Vulnerability in Oracle Java SE (component: JAXP). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. A difficult to exploit vulnerability allows an unauthenticated attacker with network access to update, insert or delete some accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "No action required. Upgrading to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13, removes the scanner finding.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure never compiles an XSLT stylesheet, so no attacker stylesheet can reach the fixed code.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-m2mw-3v6r-66h4",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87367",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/2f64e30bba",
+          "title": "Probable OpenJDK fix (JDK-8384654, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE JAXP issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. The matching OpenJDK fix is most likely JDK-8384654 (Enhance Template Handling), which tightens what a compiled XSLT stylesheet (the XSLTC TemplatesImpl class) may do. Exploitation needs an attacker to supply an XSLT stylesheet that the application compiles. Liquibase uses the JDK transformer only as an identity transform to write XML it generated, and a scan of the jars in every published image from 5.0.0 to 6.0.0 found no code that compiles a stylesheet from outside input: the remaining transformer users are JDBC drivers' SQLXML types and a logging configuration writer, which also use identity transforms.",
+        "justification": "requires_environment",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87291",
+      "description": "Vulnerability in Oracle Java SE (component: Networking). Supported versions that are affected are Oracle Java SE 21.0.12.1, 25.0.4.1 and 27. An easily exploitable vulnerability allows an unauthenticated attacker with network access to read a subset of accessible data. It can only be exploited by supplying data to APIs in the specified component, such as through a web service.",
+      "recommendation": "No action required. Upgrading to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13, removes the scanner finding.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure never runs the JDK's simple file server.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-r3pr-m76q-f8wv",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87291",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/2476134591",
+          "title": "Probable OpenJDK fix (JDK-8383745, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE Networking issue from the October 2026 Critical Patch Update, affecting Java 21 and later only. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. The only Java-21-only networking security fix in OpenJDK 21.0.13 is JDK-8383745 (Enhance HTTP Server), which stops the JDK's simple file server (com.sun.net.httpserver.SimpleFileServer, the code behind the jwebserver tool) from resolving request paths that contain a file separator, a way to read files outside the served directory. Liquibase never starts that file server: a scan of the jars in every published image from 5.0.0 to 6.0.0 found no reference to SimpleFileServer, and the only users of the JDK HTTP server are loopback listeners that receive browser sign-in redirects.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91334",
+      "description": "Vulnerability in Oracle Java SE (component: ImageIO). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. A difficult to exploit vulnerability allows an unauthenticated attacker with network access to read a subset of accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "No action required. Liquibase Secure does not pass image data to the Java ImageIO APIs. Upgrading to Liquibase Secure 6.0.1 or later removes the scanner finding.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Liquibase Secure never decodes image data, so the fixed decoders are not reached.\n"
+        }
+      ],
+      "cwes": [
+        200
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-x8mv-p396-jh2r",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91334",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/4be6a507c4",
+          "title": "Candidate OpenJDK fix (JDK-8384445, jdk21u)"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/20bbe2a793",
+          "title": "Candidate OpenJDK fix (JDK-8386552, jdk21u)"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/d393549a0b",
+          "title": "Candidate OpenJDK fix (JDK-8384664, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Oracle Java SE ImageIO issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. The candidate OpenJDK fixes are JDK-8384445 (Enhance JPEG loading), JDK-8386552 (Enhance GIF loading) and JDK-8384664 (Enhance Image Handling); all need an attacker to supply image data to the javax.imageio decoders. Liquibase reads changelogs, SQL and configuration, never images. A scan of the jars in every published image from 5.0.0 to 6.0.0 found two ImageIO users: the JAXB runtime, which uses ImageIO only for JAXB-bound fields of type java.awt.Image (no class in the distribution binds one), and, from 5.1.0, the data redaction library's PDF path, which never runs because Liquibase calls that library only with plain text.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87292",
+      "description": "Vulnerability in Oracle Java SE (component: Networking). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. A difficult to exploit vulnerability allows an unauthenticated attacker with network access to update, insert or delete some accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes the October 2026 updates.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        }
+      ],
+      "cwes": [
+        287
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wfmw-xhqr-83hm",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87292",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Networking issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE, and the October update has several Networking fixes: SOCKS5 handshake length checks, the FTP and SMTP clients, DNS host name validation, and the java.net.http.HttpClient chunked response parser, redirect and authentication caching, and download file names. Liquibase Secure makes outbound HTTPS requests with the JDK's built-in HTTP client, and database drivers may use a SOCKS proxy when one is configured, so a malicious or intercepted HTTPS endpoint could reach some of this code. This is recorded as affected. The impact is limited to low integrity.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91332",
+      "description": "Vulnerability in Oracle Java SE (component: Networking). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. An easily exploitable vulnerability allows an unauthenticated attacker with network access to update, insert or delete some accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes the October 2026 updates.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-wvph-jvc9-24rg",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91332",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Networking issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE, and the October update has several Networking fixes: SOCKS5 handshake length checks, the FTP and SMTP clients, DNS host name validation, and the java.net.http.HttpClient chunked response parser, redirect and authentication caching, and download file names. Liquibase Secure makes outbound HTTPS requests with the JDK's built-in HTTP client, and database drivers may use a SOCKS proxy when one is configured, so a malicious or intercepted HTTPS endpoint could reach some of this code. This is recorded as affected. The impact is limited to low integrity.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-87294",
+      "description": "Vulnerability in Oracle Java SE (component: Security). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1, 25.0.4.1 and 27, and the corresponding GraalVM releases. An easily exploitable vulnerability allows an unauthenticated attacker with network access to read and modify a subset of accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes the October 2026 updates.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        }
+      ],
+      "cwes": [
+        284
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-f77q-p3hr-hvw8",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87294",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Security issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE. The candidates in 21.0.13 are the certificate name and name-constraint checks (JDK-8383679, JDK-8384021, JDK-8392072), PKCS#5 padding removal (JDK-8380715) and the SASL DIGEST-MD5 and NTLM mechanisms (JDK-8383281, JDK-8383076). Certificate checks run on every HTTPS and TLS JDBC connection Liquibase makes, and SASL runs when a database driver is configured for it, so this is recorded as affected.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91333",
+      "description": "Vulnerability in Oracle Java SE (component: Security). Supported versions that are affected are Oracle Java SE 21.0.12.1, 25.0.4.1 and 27. A difficult to exploit vulnerability allows an unauthenticated attacker with network access to update, insert or delete some accessible data. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes the October 2026 updates.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 3.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        }
+      ],
+      "cwes": [
+        502
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-w3cp-rgcc-6q3q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91333",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/b887608dbb",
+          "title": "Probable OpenJDK fix (JDK-8384165, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE Security issue from the October 2026 Critical Patch Update, affecting Java 21 and later only. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. The only Java-21-only cryptography fix in OpenJDK 21.0.13 is JDK-8384165 (Improve ciphertext handling), which corrects the memory range AES-GCM clears when decryption into a direct byte buffer fails authentication. TLS connections use AES-GCM, and database drivers that run TLS over direct buffers reach this code when a record fails authentication, which an attacker on the network path can cause. This is recorded as affected. The impact is limited to low integrity, and exploitation is hard.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-47063",
       "description": "Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Libraries). Supported versions that are affected are Oracle Java SE: 8u491, 8u491-perf, 11.0.31, 17.0.19, 21.0.11, 25.0.3, 26.0.1; Oracle GraalVM for JDK: 17.0.19 and 21.0.11; Oracle GraalVM Enterprise Edition: 21.3.18.",
       "recommendation": "No action required for the Liquibase Secure container. The image uses a Temurin JRE and does not run as an Oracle Java client runtime.",
@@ -2852,6 +3408,68 @@
             {
               "range": "vers:generic/oracle/openjdk/<21.0.12",
               "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-91373",
+      "description": "Vulnerability in Oracle Java SE (component: JSSE). Supported versions that are affected include Oracle Java SE 8u503, 11.0.32.1, 17.0.20.1, 21.0.12.1 and 25.0.4.1, and the corresponding GraalVM releases. An easily exploitable vulnerability allows an unauthenticated attacker with network access to cause a partial denial of service. It can be exploited by supplying data to APIs in the specified component, for example through a web service.",
+      "recommendation": "Upgrade to Liquibase Secure 6.0.1 or later, which bundles Temurin 21.0.13. When running Liquibase on your own Java (JAVA_HOME, ZIP or TAR.GZ distributions), update to a JDK that includes the October 2026 updates.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "CNA (Oracle) score; NVD had not yet published its own score at assessment time.\n"
+        }
+      ],
+      "cwes": [
+        400
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-v4m5-q3qj-q97q",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-91373",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cpuoct2026.html",
+          "title": "Oracle CPU October 2026"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/a630a3e231",
+          "title": "Candidate OpenJDK fix (JDK-8386923, jdk21u)"
+        },
+        {
+          "url": "https://github.com/openjdk/jdk21u-dev/commit/38f042701b",
+          "title": "Candidate OpenJDK fix (JDK-8384771, jdk21u)"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Upgrade to Liquibase Secure 6.0.1 or later. Oracle Java SE JSSE (TLS) partial denial-of-service issue from the October 2026 Critical Patch Update. Liquibase Secure images 5.0.0 to 6.0.0 ship Temurin 21 JREs from 21.0.8 to 21.0.12.1, all in Oracle's affected range; images from 6.0.1 ship Temurin 21.0.13, which contains the fix. Oracle does not say which OpenJDK change fixes this CVE. The candidates are JDK-8386923 (reject TLS handshake messages that repeat an extension) and JDK-8384771 (parsing of URI names in certificates). Both are in code a TLS client runs while handshaking with a server, so a malicious or intercepted database or HTTPS endpoint could trigger it. This is recorded as affected. The impact is limited to a partial denial of service of a short-lived command-line process.",
+        "response": [
+          "update"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git",
+          "versions": [
+            {
+              "range": "vers:generic/oracle/openjdk/<=21.0.12.1",
+              "status": "affected"
             }
           ]
         }
