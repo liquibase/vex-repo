@@ -40992,6 +40992,67 @@
       ]
     },
     {
+      "id": "CVE-2026-114938",
+      "description": "Vulnerability in Oracle Java SE and OpenJDK (component: HotSpot compiler) affecting OpenJDK 17.0.6 and later, including Java SE 17.0.21, 21.0.13, 25.0.5 and 27.0.1, 8u511-perf, and the corresponding GraalVM releases. Known as Java4Shell. On x86-64 CPUs with AVX-512 VBMI, the JIT-compiled java.util.Base64 decoder miscomputes the output length for malformed padded input and writes up to 62 bytes past the end of the output array. An unauthenticated attacker who can send Base64 data to an application's decoder can corrupt the heap, leak heap memory and, with an exploit built for the application, execute code.",
+      "recommendation": "Upgrade to a Liquibase Secure release that bundles Temurin 21.0.13.1 or later once one is available. When running Liquibase on your own Java (ZIP or TAR distributions, or the Liquibase libraries embedded in an application), update to a JDK that includes the November 17, 2026 OpenJDK security fixes (17.0.21.1, 21.0.13.1, 25.0.5.1, 27.0.1.1 or later).",
+      "workaround": "Start Liquibase with -XX:-UseBASE64Intrinsics, which turns off the vulnerable hardware-accelerated Base64 decoder. Set JAVA_OPTS to -XX:-UseBASE64Intrinsics before running the liquibase or liquibase.bat launcher, or pass -e JAVA_OPTS=-XX:-UseBASE64Intrinsics to docker run. For an application that embeds Liquibase, add the flag to that application's JVM options.",
+      "ratings": [
+        {
+          "source": {
+            "name": "Oracle"
+          },
+          "score": 8.1,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Calif"
+          },
+          "score": 9.2,
+          "severity": "critical",
+          "method": "CVSSv4"
+        }
+      ],
+      "cwes": [
+        787
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-114938",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openjdk.org/groups/vulnerability/advisories/2026-11-17",
+          "title": "OpenJDK Vulnerability Advisory 2026/11/17"
+        },
+        {
+          "url": "https://www.oracle.com/security-alerts/cspunov2026.html",
+          "title": "Oracle Critical Security Patch Update Advisory, November 2026"
+        },
+        {
+          "url": "https://calif.io/java4shell",
+          "title": "Calif: Java4Shell technical write-up"
+        }
+      ],
+      "analysis": {
+        "state": "exploitable",
+        "detail": "Liquibase Secure images and Windows installers bundle a Temurin 21 JRE (21.0.13 or earlier) that contains the vulnerable Base64 decoder. No Temurin release with the fix is available yet. Practical exposure is low for inbound attacks. Liquibase is a short-lived command-line process that accepts no inbound connections, and the Base64 data it decodes (license files, changelogs, loadData values) comes from the user. The published server exploits need many crafted requests to one long-running JVM, to warm up the decoder and arrange the heap. The remaining path is outbound: the researchers report a client-side exploit against a Java program that opens a TLS connection to a malicious server, so a run that connects to a database or service an attacker controls or impersonates may be exposed. Applications that embed the Liquibase libraries run on their own Java runtime and are affected through that runtime. Only x86-64 CPUs with AVX-512 VBMI (Intel Ice Lake and newer Xeon, AMD Zen 4 and newer) are affected; ARM64 is not.",
+        "response": [
+          "update",
+          "workaround_available"
+        ],
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-42583",
       "recommendation": "No action required. Liquibase does not run a Netty server.",
       "ratings": [

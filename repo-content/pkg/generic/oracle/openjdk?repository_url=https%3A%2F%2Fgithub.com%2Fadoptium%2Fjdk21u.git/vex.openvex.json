@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-92314af497579826b03cdfe6f5b8c190d27f12cf3dd59e630d864b5cd87969cf",
+  "@id": "merged-vex-40fde0ffc965f4e88c4f631b4e30a48807e4716dc8c705ca69eeffbb106cb68a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-17T17:22:59.73734652Z",
+  "timestamp": "2026-11-18T16:09:29.150875235Z",
   "version": 1,
   "statements": [
     {
@@ -14,7 +14,7 @@
           "BIT-jre-2025-53057"
         ]
       },
-      "timestamp": "2026-11-17T17:22:59.591689173Z",
+      "timestamp": "2026-11-18T16:09:28.96556908Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -34,7 +34,7 @@
           "BIT-jre-2025-53066"
         ]
       },
-      "timestamp": "2026-11-17T17:22:58.632937593Z",
+      "timestamp": "2026-11-18T16:09:28.048409077Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -54,7 +54,7 @@
           "BIT-jre-2025-61748"
         ]
       },
-      "timestamp": "2026-11-17T17:22:59.63447482Z",
+      "timestamp": "2026-11-18T16:09:29.007534069Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -69,7 +69,7 @@
       "vulnerability": {
         "name": "CVE-2026-114820"
       },
-      "timestamp": "2026-11-17T17:22:59.719080471Z",
+      "timestamp": "2026-11-18T16:09:29.090312284Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -78,7 +78,22 @@
       "status": "affected",
       "status_notes": "Vulnerability in Oracle Java SE (component: JSSE) affecting Oracle Java SE 8u511-b32, 11.0.33.0.2, 17.0.21.0.2, 21.0.13.0.2, 25.0.5.0.2 and 27.0.1.0.2 and the corresponding GraalVM releases. The runtime trusts eMudhra and Comodo AAA root certificates under which compromised intermediates were issued, so an unauthenticated network attacker can present certificates the runtime accepts and intercept or modify TLS traffic.",
       "action_statement": "Upgrade to Liquibase Secure 6.0.1 or later. Liquibase Secure 6.0.0 and earlier images and Windows installers bundle a Temurin 21.0.12.1 JRE whose cacerts still trusts the emSign roots the compromised intermediates chain to. Temurin builds cacerts from Mozilla's root store, which still trusts emSign Root CA - G1, so a Temurin update alone does not remove it. Builds with SECURE-1170 run docker/distrust-emsign.sh on the bundled JRE, which deletes every emSign and Comodo AAA root from cacerts; the JRE version string is unchanged, so scanners still report this CVE for those builds too. Until you upgrade, delete those roots from the bundled JRE's cacerts.",
-      "action_statement_timestamp": "2026-11-17T17:22:59.719080471Z"
+      "action_statement_timestamp": "2026-11-18T16:09:29.090312284Z"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-114938"
+      },
+      "timestamp": "2026-11-18T16:09:29.132726445Z",
+      "products": [
+        {
+          "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
+        }
+      ],
+      "status": "affected",
+      "status_notes": "Vulnerability in Oracle Java SE and OpenJDK (component: HotSpot compiler) affecting OpenJDK 17.0.6 and later, including Java SE 17.0.21, 21.0.13, 25.0.5 and 27.0.1, 8u511-perf, and the corresponding GraalVM releases. Known as Java4Shell. On x86-64 CPUs with AVX-512 VBMI, the JIT-compiled java.util.Base64 decoder miscomputes the output length for malformed padded input and writes up to 62 bytes past the end of the output array. An unauthenticated attacker who can send Base64 data to an application's decoder can corrupt the heap, leak heap memory and, with an exploit built for the application, execute code.",
+      "action_statement": "Liquibase Secure images and Windows installers bundle a Temurin 21 JRE (21.0.13 or earlier) that contains the vulnerable Base64 decoder. No Temurin release with the fix is available yet. Practical exposure is low for inbound attacks. Liquibase is a short-lived command-line process that accepts no inbound connections, and the Base64 data it decodes (license files, changelogs, loadData values) comes from the user. The published server exploits need many crafted requests to one long-running JVM, to warm up the decoder and arrange the heap. The remaining path is outbound: the researchers report a client-side exploit against a Java program that opens a TLS connection to a malicious server, so a run that connects to a database or service an attacker controls or impersonates may be exposed. Applications that embed the Liquibase libraries run on their own Java runtime and are affected through that runtime. Only x86-64 CPUs with AVX-512 VBMI (Intel Ice Lake and newer Xeon, AMD Zen 4 and newer) are affected; ARM64 is not.",
+      "action_statement_timestamp": "2026-11-18T16:09:29.132726445Z"
     },
     {
       "vulnerability": {
@@ -89,7 +104,7 @@
           "BIT-jre-2026-21925"
         ]
       },
-      "timestamp": "2026-11-17T17:22:59.505819943Z",
+      "timestamp": "2026-11-18T16:09:28.881591002Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -109,7 +124,7 @@
           "BIT-jre-2026-21932"
         ]
       },
-      "timestamp": "2026-11-17T17:22:58.46356931Z",
+      "timestamp": "2026-11-18T16:09:27.883701571Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -129,7 +144,7 @@
           "BIT-jre-2026-21933"
         ]
       },
-      "timestamp": "2026-11-17T17:22:59.547854952Z",
+      "timestamp": "2026-11-18T16:09:28.92300332Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -149,7 +164,7 @@
           "BIT-jre-2026-21945"
         ]
       },
-      "timestamp": "2026-11-17T17:22:58.505322502Z",
+      "timestamp": "2026-11-18T16:09:27.925369748Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -164,7 +179,7 @@
       "vulnerability": {
         "name": "CVE-2026-22007"
       },
-      "timestamp": "2026-11-17T17:22:59.291896736Z",
+      "timestamp": "2026-11-18T16:09:28.673790778Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -179,7 +194,7 @@
       "vulnerability": {
         "name": "CVE-2026-22013"
       },
-      "timestamp": "2026-11-17T17:22:59.335749364Z",
+      "timestamp": "2026-11-18T16:09:28.715812944Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -194,7 +209,7 @@
       "vulnerability": {
         "name": "CVE-2026-22016"
       },
-      "timestamp": "2026-11-17T17:22:58.549426201Z",
+      "timestamp": "2026-11-18T16:09:27.966647448Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -209,7 +224,7 @@
       "vulnerability": {
         "name": "CVE-2026-22018"
       },
-      "timestamp": "2026-11-17T17:22:59.377997734Z",
+      "timestamp": "2026-11-18T16:09:28.757433691Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -224,7 +239,7 @@
       "vulnerability": {
         "name": "CVE-2026-22021"
       },
-      "timestamp": "2026-11-17T17:22:59.420638557Z",
+      "timestamp": "2026-11-18T16:09:28.798613457Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -244,7 +259,7 @@
           "BIT-jre-2026-23865"
         ]
       },
-      "timestamp": "2026-11-17T17:22:59.463119787Z",
+      "timestamp": "2026-11-18T16:09:28.840362993Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -259,7 +274,7 @@
       "vulnerability": {
         "name": "CVE-2026-34268"
       },
-      "timestamp": "2026-11-17T17:22:59.237340314Z",
+      "timestamp": "2026-11-18T16:09:28.631961338Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -274,7 +289,7 @@
       "vulnerability": {
         "name": "CVE-2026-34282"
       },
-      "timestamp": "2026-11-17T17:22:58.591856106Z",
+      "timestamp": "2026-11-18T16:09:28.00736209Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -295,7 +310,7 @@
           "GHSA-4xp6-rcgg-m9qq"
         ]
       },
-      "timestamp": "2026-11-17T17:22:58.674081683Z",
+      "timestamp": "2026-11-18T16:09:28.088972926Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -310,7 +325,7 @@
       "vulnerability": {
         "name": "CVE-2026-46917"
       },
-      "timestamp": "2026-11-17T17:22:58.926123051Z",
+      "timestamp": "2026-11-18T16:09:28.340210342Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -325,7 +340,7 @@
       "vulnerability": {
         "name": "CVE-2026-46968"
       },
-      "timestamp": "2026-11-17T17:22:58.967652847Z",
+      "timestamp": "2026-11-18T16:09:28.381098535Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -340,7 +355,7 @@
       "vulnerability": {
         "name": "CVE-2026-47010"
       },
-      "timestamp": "2026-11-17T17:22:59.009735177Z",
+      "timestamp": "2026-11-18T16:09:28.42290378Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -355,7 +370,7 @@
       "vulnerability": {
         "name": "CVE-2026-47021"
       },
-      "timestamp": "2026-11-17T17:22:59.05232946Z",
+      "timestamp": "2026-11-18T16:09:28.46375995Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -370,7 +385,7 @@
       "vulnerability": {
         "name": "CVE-2026-47027"
       },
-      "timestamp": "2026-11-17T17:22:59.095120835Z",
+      "timestamp": "2026-11-18T16:09:28.504505623Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -385,7 +400,7 @@
       "vulnerability": {
         "name": "CVE-2026-47059"
       },
-      "timestamp": "2026-11-17T17:22:59.137347814Z",
+      "timestamp": "2026-11-18T16:09:28.546890195Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -400,7 +415,7 @@
       "vulnerability": {
         "name": "CVE-2026-47063"
       },
-      "timestamp": "2026-11-17T17:22:58.715463234Z",
+      "timestamp": "2026-11-18T16:09:28.130936735Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -415,7 +430,7 @@
       "vulnerability": {
         "name": "CVE-2026-60147"
       },
-      "timestamp": "2026-11-17T17:22:59.180250855Z",
+      "timestamp": "2026-11-18T16:09:28.588962961Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -430,7 +445,7 @@
       "vulnerability": {
         "name": "CVE-2026-60589"
       },
-      "timestamp": "2026-11-17T17:22:58.883846774Z",
+      "timestamp": "2026-11-18T16:09:28.298889838Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -445,7 +460,7 @@
       "vulnerability": {
         "name": "CVE-2026-61308"
       },
-      "timestamp": "2026-11-17T17:22:58.800955481Z",
+      "timestamp": "2026-11-18T16:09:28.215852974Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -460,7 +475,7 @@
       "vulnerability": {
         "name": "CVE-2026-62574"
       },
-      "timestamp": "2026-11-17T17:22:58.758888273Z",
+      "timestamp": "2026-11-18T16:09:28.173823448Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -475,7 +490,7 @@
       "vulnerability": {
         "name": "CVE-2026-70907"
       },
-      "timestamp": "2026-11-17T17:22:58.841862925Z",
+      "timestamp": "2026-11-18T16:09:28.257350925Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -490,7 +505,7 @@
       "vulnerability": {
         "name": "CVE-2026-91403"
       },
-      "timestamp": "2026-11-17T17:22:59.677518093Z",
+      "timestamp": "2026-11-18T16:09:29.048856021Z",
       "products": [
         {
           "@id": "pkg:generic/oracle/openjdk?repository_url=https%3A%2F%2Fgithub.com%2Fadoptium%2Fjdk21u.git"
@@ -499,7 +514,7 @@
       "status": "affected",
       "status_notes": "Vulnerability in Oracle Java SE (component: JSSE) affecting Oracle Java SE 8u511, 11.0.33, 17.0.21, 21.0.13, 25.0.5 and 27.0.1 and the corresponding GraalVM releases. The private keys of eMudhra intermediate CA certificates were compromised, so an unauthenticated network attacker can present certificates the runtime accepts for any host and intercept or modify TLS traffic.",
       "action_statement": "Upgrade to Liquibase Secure 6.0.1 or later. Liquibase Secure 6.0.0 and earlier images and Windows installers bundle a Temurin 21.0.12.1 JRE that still trusts the compromised eMudhra intermediates. Builds with SECURE-1170 run docker/distrust-emsign.sh on the bundled JRE, which adds the 48 fingerprints from the upstream fix (JDK-8395142) to lib/security/blocked.certs; the JRE version string is unchanged, so scanners still report this CVE for those builds too. Until you upgrade, add the fingerprints to the bundled JRE's blocked.certs.",
-      "action_statement_timestamp": "2026-11-17T17:22:59.677518093Z"
+      "action_statement_timestamp": "2026-11-18T16:09:29.048856021Z"
     }
   ]
 }
