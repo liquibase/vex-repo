@@ -3440,6 +3440,189 @@
       ]
     },
     {
+      "id": "CVE-2026-97035",
+      "description": "When using Clang or GCC, building a malicious package that uses cgo could cause unexpected code execution at build time or write files to arbitrary directories via \"-gen-*\" or \"-gnat*\" flags in \"#cgo\" directives. The \"-g*\" wildcard in the compiler and linker flag allowlists previously matched Clang's two-argument \"-gen-cdb-fragment-path <dir>\" flag and GCC's two-argument \"-gnatO <file>\" flag, permitting compilation database fragments and sidecar output files to be written to arbitrary directories and desynchronizing flag argument parsing between the go command and the compiler driver so that subsequent arguments could be passed as unvalidated positional inputs to the linker. \"-gen-*\" and \"-gnat*\" flags are now disallowed in \"#cgo\" compiler and linker flags.",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97035",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6856",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain cgo flag-allowlist bypass via \"-gen-*\" and \"-gnat*\" flags in \"#cgo\" directives (GO-2026-6856). The flaw is in the Go build toolchain (cmd/go) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97036",
+      "description": "On Darwin, building a malicious package that uses cgo could cause arbitrary code execution when using the Apple linker due to passing \"-l to_library <path>\" in a \"#cgo LDFLAGS\" directive. The Apple linker recombines the separated arguments \"-l\" and \"to_library\" into \"-lto_library\", which loads an arbitrary LTO plugin dynamic library at link time. The go command now disallows \"-l\" followed by \"to_library\" in \"#cgo LDFLAGS\", rejects \"-lazy_library\", \"-lazy_framework\", \"-load_hidden\", \"-library\", and \"-library-path\", and checks recombined \"-l\" arguments against disallowed linker flags and patterns.",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97036",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6855",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain cgo LDFLAGS bypass on Darwin via \"-l to_library\" with the Apple linker (GO-2026-6855). The flaw is in the Go build toolchain (cmd/go) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97037",
+      "description": "Building a malicious package that uses cgo could cause arbitrary code execution at link time by passing linker script files to the host linker via \"#cgo LDFLAGS\". Split \"-Wl,\" flags that consume a following argument (such as \"-Wl,-rpath\", \"-Wl,--just-symbols\", and \"-Wl,-undefined\") previously accepted a bare second argument without a \"-Wl,\" prefix, which the compiler driver passes directly to the linker as a positional input file. Additionally, when using GNU ld.bfd, flags such as \"-framework\", \"-Wl,-framework\", \"-Wl,-undefined\", \"-Wl,--just-symbols\", \"-Wl,-R\", \"-Wl,-subsystem\", and (on non-Darwin platforms) \"-Wl,-sectcreate\" could cause ld.bfd to interpret their arguments as linker scripts if they named a regular file on disk. The go command now requires a \"-Wl,\" prefix on the second token of split \"-Wl,\" flags (except \"-Wl,-R\"), verifies that these flags do not reference linker script files, and disallows bare \"-Wl,--warn-backrefs-exclude\".",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97037",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6854",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain cgo LDFLAGS bypass passing linker script files to the host linker (GO-2026-6854). The flaw is in the Go build toolchain (cmd/go) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-32281",
       "description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
       "recommendation": "No action required. Current Liquibase Secure Docker builds install lpm 0.3.3 built with fixed Go 1.25.9.",
@@ -3476,6 +3659,189 @@
           "versions": [
             {
               "range": "vers:golang/<1.25.9|>=1.26.0|<1.26.2",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97038",
+      "description": "Building a malicious package containing \".syso\" files or cgo linker inputs could inject arbitrary linker flags or execute arbitrary code at link time. Linker input files—including \".syso\" files, direct object or library inputs in \"#cgo LDFLAGS\", and libraries in \"-L\" directories—were passed to the external linker without validating their format or checking for embedded linker options. Across platforms, this allowed executing GNU ld implicit linker scripts disguised as libraries or \".syso\" files (or loaded via \"-l:<filename>\" or \"-l\" containing path separators), injecting unallowlisted linker flags via PE/COFF \".drectve\" sections on Windows or Mach-O \"LC_LINKER_OPTION\" load commands on Darwin, or invoking LTO plugins via GCC or LLVM LTO intermediate representation sections in ELF, PE/COFF, or Mach-O objects. The go command now verifies that \".syso\" files, direct linker inputs, and libraries in \"-L\" directories are valid binary objects or archives that do not contain unallowlisted \".drectve\" directives, \"LC_LINKER_OPTION\" load commands, or LTO IR sections, and disallows \"-l:<filename>\" and \":\", \"=\", or path separators in \"-l\" flags.",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        94
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97038",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6853",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain unvalidated linker inputs (\".syso\" files and cgo linker inputs) passed to the external linker (GO-2026-6853). The flaw is in the Go build toolchain (cmd/go) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97039",
+      "description": "Building a malicious package that uses \"#cgo pkg-config:\" directives could load untrusted pkg-config \".pc\" files or inject unvalidated compiler and linker flags. The pkg-config flag allowlist previously permitted \"--with-path=\" and \"--personality=\", allowed \"--define-variable=\" values beginning with \"=\" or \"$\" (which can rewrite paths in system \".pc\" files into sysroot-prefixed \"-L=\" or \"-L$SYSROOT\" linker search paths), and allowed package arguments ending in \".pc\" or containing path separators or \"..\", which caused pkg-config to load local \".pc\" files directly from the package directory. In addition, flags returned by \"pkg-config --cflags\" in cgoCPPFLAGS were not checked when determining whether internal linking is safe. The go command now disallows \"--with-path=\", \"--personality=\", leading \"=\" or \"$\" characters in \"--define-variable=\" values, and local \".pc\" paths in \"#cgo pkg-config:\" directives, and inspects cgoCPPFLAGS when checking internal linking compatibility.",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.3,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97039",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6852",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain \"#cgo pkg-config:\" directive bypass loading untrusted \".pc\" files (GO-2026-6852). The flaw is in the Go build toolchain (cmd/go) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
+              "status": "unaffected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-97043",
+      "description": "Building a malicious package that uses cgo could bypass \"#cgo LDFLAGS\" validation and cause unexpected code execution at build time, or cause the go command to panic, via crafted quoting in \"//go:cgo_ldflag\" directives. When \"cmd/cgo\" generates \"_cgo_gotypes.go\", it quotes each \"#cgo LDFLAGS\" argument with strconv.Quote in a \"//go:cgo_ldflag\" directive, but \"cmd/compile\" and \"cmd/go\" parsed those directives by splitting on raw quote characters without handling backslash escapes or unquoting the string. This mismatch allowed disallowed linker flags or unvalidated linker search paths to be smuggled past the go command's flag checks and passed to the external linker. In addition, deduplicating LDFLAGS in the go command could panic with an out-of-bounds slice index when a prefix of the flag list matched near the end of the slice. \"cmd/compile\" and \"cmd/go\" now properly handle backslash-escaped quotes and unquote \"//go:cgo_*\" pragma strings with strconv.Unquote, and the slice bounds check in processCgoOutputs has been fixed.",
+      "recommendation": "No action required. Liquibase Secure images do not contain or run the Go toolchain or perform cgo builds.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The vulnerable code path is in Go toolchain cgo build processing, which is not present in or executed by Liquibase Secure images.\n"
+        }
+      ],
+      "cwes": [
+        88
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-97043",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://pkg.go.dev/vuln/GO-2026-6848",
+          "title": "Go Vulnerability Database"
+        },
+        {
+          "url": "https://groups.google.com/g/golang-announce/c/iY8TY0wWgbM",
+          "title": "Go Announce"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Go toolchain \"//go:cgo_ldflag\" quoting mismatch between cmd/cgo, cmd/compile and cmd/go (GO-2026-6848). The flaw is in the Go build toolchain (cmd/go and cmd/compile) and is only triggered while building a malicious Go package with cgo; it is not part of the Go runtime library compiled into Go programs. The scanner matched the toolchain version recorded in the compiled lpm (Liquibase Package Manager) binary, the only Go binary in the Liquibase Secure images: lpm was built with Go 1.25.3 in 5.0.2, 1.25.5 in 5.0.3, 1.25.7 in 5.1.0, 1.25.8 in 5.1.1, 1.26.4 in 5.2.0 and 5.2.1, 1.26.8 in 5.2.2 and 6.0.0, and 1.26.10 in 6.0.1, all below the fixed 1.26.11. None of the 5.0.2 through 6.0.1 images ships the go command, cmd/cgo, a C compiler, a linker such as GNU ld, or pkg-config, and their image build history runs no Go builds. lpm is installed from a pre-built release archive and is only invoked at container start to add the MySQL driver when INSTALL_MYSQL is set; it does not invoke the Go toolchain.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-19T00:00:00Z",
+        "lastUpdated": "2026-11-19T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:golang/stdlib",
+          "versions": [
+            {
+              "range": "vers:golang/<1.26.11|>=1.27.0|<1.27.4",
               "status": "unaffected"
             }
           ]
