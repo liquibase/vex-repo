@@ -1,0 +1,64 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-73504",
+      "description": "cassandra-jdbc-wrapper provides a JDBC-compliant API over the Java driver for Apache Cassandra. Prior to 4.16.4 and 5.0.2, DriverUtil.toStringWithoutSensitiveValues() and DriverUtil.redactSensitiveValuesInJdbcUrl() redact the password property but not the equally sensitive token property used for DataStax Astra and other token-based authentication. When DEBUG logging is enabled, SessionHolder passes connection properties and JDBC URLs containing token through these helpers, causing the live token to be written in plaintext when connections are acquired or released. An attacker who can read those logs can use the token to access Cassandra data and operations authorized to that credential. This issue is fixed in versions 4.16.4 and 5.0.2.",
+      "recommendation": "No action required for the shipped configuration. Users of Liquibase Secure 5.x who add their own SLF4J logging backend with DEBUG enabled and connect to Cassandra with a token should upgrade to Liquibase Secure 6.0.0 or later, which ships a fixed cassandra-jdbc-wrapper.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "In the Liquibase Secure 5.x images the wrapper's DEBUG output goes to a no-op SLF4J provider and is never written, so the token cannot reach a log; the 6.x images ship a fixed wrapper version.\n"
+        }
+      ],
+      "cwes": [
+        532
+      ],
+      "advisories": [
+        {
+          "url": "https://github.com/advisories/GHSA-jc42-994r-vvwp",
+          "title": "GitHub Advisory"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-73504",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is that the wrapper's DEBUG log lines for connection properties and JDBC URLs mask the password but not the token property. Exposing a token needs two things: token-based authentication configured for the Cassandra connection, and an SLF4J logging backend that writes the wrapper's DEBUG output. The wrapper is bundled in the liquibase-commercial-cassandra extension and logs only through the SLF4J API. In the Liquibase Secure 5.0.2 through 5.2.2 images, which carry wrapper 4.16.0 (5.0.2, 5.0.3), 4.16.2 (5.1.0) and 4.16.3 (5.1.1 through 5.2.2), every SLF4J provider on the Liquibase class path is a no-op provider (slf4j-nop in 5.0.2 and 5.0.3, Liquibase's renamed liquibase-slf4j-nop from 5.1.0 on), so these log lines are discarded whatever Liquibase log level is set; no logging backend that could write them is on the Liquibase class path in those images. The Liquibase Secure 6.0.0 and 6.0.1 images carry wrapper 5.0.3 and 6.0.2 carries 5.0.5, all at or past the fixed 5.0.2, so the token is redacted there. This assessment also covers the GHSA-jc42-994r-vvwp alias.",
+        "justification": "requires_configuration",
+        "firstIssued": "2026-11-20T00:00:00Z",
+        "lastUpdated": "2026-11-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.ing.data/cassandra-jdbc-wrapper",
+          "versions": [
+            {
+              "range": "vers:maven/<4.16.4|>=5.0.0|<5.0.2",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
