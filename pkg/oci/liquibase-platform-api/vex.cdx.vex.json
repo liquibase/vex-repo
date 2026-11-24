@@ -2011,62 +2011,6 @@
       ]
     },
     {
-      "id": "GHSA-wq5f-xc86-pv6w",
-      "description": "sharp before 0.35.5 bundles a librsvg build with a memory-handling flaw that, under certain runtime conditions on glibc-based Linux, can lead to remote code execution while rendering SVG input.",
-      "recommendation": "No action required. No image renders SVG through sharp.",
-      "ratings": [
-        {
-          "source": {
-            "name": "GitHub"
-          },
-          "score": 0,
-          "severity": "high",
-          "method": "other"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "Nothing in the shipped images imports sharp or passes it SVG input.\n"
-        }
-      ],
-      "advisories": [
-        {
-          "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
-          "title": "GitHub Advisory"
-        },
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-96889",
-          "title": "NVD Entry (librsvg)"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "The api and llt images carry sharp 0.35.4 and the libvips binaries it bundles, below the 0.35.5 release that picks up the fixed librsvg. It arrives as an optional dependency of Next.js, and nothing in those images imports sharp or renders an SVG: the only Next.js surface that would load it is the image optimizer, which those images do not serve. The web image removes sharp from the standalone output before the runtime image is assembled, so it does not carry the affected code at all.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-10-06T00:00:00Z",
-        "lastUpdated": "2026-10-06T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:npm/sharp",
-          "versions": [
-            {
-              "range": "vers:npm/<0.35.5",
-              "status": "affected"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "GHSA-2464-fhr4-w9xw",
       "description": "A memory-related vulnerability in an upstream library used for Image Optimization can lead to remote code execution when Next.js runs on glibc-based Linux and processes SVG files. Next.js 10.0.0 through 15.5.27 and 16.0.0 through 16.4.0 are affected.",
       "recommendation": "No action required. No image serves the Next.js Image Optimization API with sharp available.",
@@ -2497,64 +2441,6 @@
       ]
     },
     {
-      "id": "CVE-2026-77117",
-      "description": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
-      "recommendation": "No action required. The platform never runs glibc iconv conversions.",
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD"
-          },
-          "score": 5.9,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        },
-        {
-          "source": {
-            "name": "Liquibase"
-          },
-          "score": 0,
-          "severity": "none",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The only glibc iconv caller in the images is a library the platform never loads, and no SHIFT_JISX0213 conversion is ever requested.\n"
-        }
-      ],
-      "cwes": [
-        835
-      ],
-      "advisories": [
-        {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77117",
-          "title": "NVD Entry"
-        },
-        {
-          "url": "https://security-tracker.debian.org/tracker/CVE-2026-77117",
-          "title": "Debian Security Tracker"
-        },
-        {
-          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0019",
-          "title": "glibc Security Advisory GLIBC-SA-2026-0019"
-        }
-      ],
-      "analysis": {
-        "state": "not_affected",
-        "detail": "The SHIFT_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a SHIFT_JISX0213 conversion, so the vulnerable decoder is never executed.",
-        "justification": "code_not_reachable",
-        "response": [
-          "will_not_fix"
-        ],
-        "firstIssued": "2026-09-24T00:00:00Z",
-        "lastUpdated": "2026-09-25T00:00:00Z"
-      },
-      "affects": [
-        {
-          "ref": "pkg:deb/debian/libc6"
-        }
-      ]
-    },
-    {
       "id": "CVE-2026-110871",
       "description": "Nodemailer from 3.0.0 before 10.0.10 contains a denial of service vulnerability in MessageParser.parseHeaders that allows users to exhaust CPU through quadratic header unfolding. Attackers can supply large recipient lists or long headers that fold into tens of thousands of continuation lines, blocking the Node.js event loop during DKIM signing.",
       "recommendation": "No action required. The platform does not DKIM-sign outbound email, so the vulnerable code path is never reached.",
@@ -2615,6 +2501,64 @@
               "status": "affected"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-77117",
+      "description": "Converting crafted SHIFT_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
+      "recommendation": "No action required. The platform never runs glibc iconv conversions.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The only glibc iconv caller in the images is a library the platform never loads, and no SHIFT_JISX0213 conversion is ever requested.\n"
+        }
+      ],
+      "cwes": [
+        835
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-77117",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-77117",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0019",
+          "title": "glibc Security Advisory GLIBC-SA-2026-0019"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The SHIFT_JISX0213 decoder is reached only through glibc iconv. Node.js decodes text with its bundled ICU, not glibc iconv. The only binary in the api and llt images that imports glibc iconv is libvips, which ships with the sharp image library as a transitive dependency of another package. The api and llt services never load sharp, and nothing in the platform requests a SHIFT_JISX0213 conversion, so the vulnerable decoder is never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-09-24T00:00:00Z",
+        "lastUpdated": "2026-09-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libc6"
         }
       ]
     },
@@ -3163,6 +3107,60 @@
       ]
     },
     {
+      "id": "CVE-2026-3449",
+      "description": "Versions of the package @tootallnate/once before 3.0.1 are vulnerable to incorrect control flow scoping in promise resolution when the AbortSignal option is used. The promise remains pending forever after the signal is aborted, so any await on it hangs, which can stall requests, block workers or degrade availability.",
+      "recommendation": "No action required. The vulnerable library is only used by install-time build tooling that the platform runtime never runs.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The library is only reachable from install-time build tooling that the platform runtime never runs.\n"
+        }
+      ],
+      "cwes": [
+        705
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3449",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-vpq2-c234-7xj6",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "@tootallnate/once reaches the api and llt images only as part of node-gyp, the native add-on build toolchain that an optional SQLite driver declares, through the proxy agent node-gyp uses to download build headers. node-gyp runs only when a native add-on is compiled at install time; the platform runtime never invokes it, and no platform code imports @tootallnate/once or that proxy agent. The vulnerable AbortSignal handling is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-10-29T00:00:00Z",
+        "lastUpdated": "2026-10-29T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/%40tootallnate/once"
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-80489",
       "description": "Converting crafted EUC_JISX0213 input to UCS-4 or the internal wide character encoding, for example with iconv, in the GNU C Library version 2.3 to 2.44 may result in the converter making no progress, causing the calling application to hang.",
       "recommendation": "No action required. The platform never runs glibc iconv conversions.",
@@ -3221,18 +3219,18 @@
       ]
     },
     {
-      "id": "CVE-2026-3449",
-      "description": "Versions of the package @tootallnate/once before 3.0.1 are vulnerable to incorrect control flow scoping in promise resolution when the AbortSignal option is used. The promise remains pending forever after the signal is aborted, so any await on it hangs, which can stall requests, block workers or degrade availability.",
-      "recommendation": "No action required. The vulnerable library is only used by install-time build tooling that the platform runtime never runs.",
+      "id": "CVE-2026-124709",
+      "description": "A QUIC server that rejects a stream opened by the peer may retain that stream's state for the lifetime of the connection if the peer resets the stream before the rejection is signalled. A remote client that completes a QUIC handshake can repeatedly open and reset streams, growing server memory without bound until the process runs out of memory.",
+      "recommendation": "No action required. The system OpenSSL library is not loaded by the platform runtime, and the platform has no QUIC server.",
       "ratings": [
         {
           "source": {
             "name": "NVD"
           },
-          "score": 3.3,
-          "severity": "low",
+          "score": 7.5,
+          "severity": "high",
           "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
         },
         {
           "source": {
@@ -3241,36 +3239,322 @@
           "score": 0,
           "severity": "none",
           "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
-          "justification": "The library is only reachable from install-time build tooling that the platform runtime never runs.\n"
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the api or llt image loads the system OpenSSL library, and the platform runs no QUIC server.\n"
         }
       ],
       "cwes": [
-        705
+        401
       ],
       "advisories": [
         {
-          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3449",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-124709",
           "title": "NVD Entry"
         },
         {
-          "url": "https://github.com/advisories/GHSA-vpq2-c234-7xj6",
-          "title": "GitHub Advisory"
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-124709",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261117.txt",
+          "title": "OpenSSL Security Advisory"
         }
       ],
       "analysis": {
         "state": "not_affected",
-        "detail": "@tootallnate/once reaches the api and llt images only as part of node-gyp, the native add-on build toolchain that an optional SQLite driver declares, through the proxy agent node-gyp uses to download build headers. node-gyp runs only when a native add-on is compiled at install time; the platform runtime never invokes it, and no platform code imports @tootallnate/once or that proxy agent. The vulnerable AbortSignal handling is therefore never executed.",
+        "detail": "The libssl3t64 package sits in the Debian base for the api and llt images and nothing loads it. In the 6.0.3 api image the node binary bundles its own OpenSSL and its dynamic dependencies are only libc, libm, libdl, libpthread, libstdc++ and libgcc_s. None of the native add-ons in node_modules (better-sqlite3, sqlite3, @parcel/watcher, @next/swc) links libssl or libcrypto either. The platform also starts no QUIC server, so the rejected-stream retention path cannot be entered.",
         "justification": "code_not_reachable",
         "response": [
           "will_not_fix"
         ],
-        "firstIssued": "2026-10-29T00:00:00Z",
-        "lastUpdated": "2026-10-29T00:00:00Z"
+        "firstIssued": "2026-11-18T00:00:00Z",
+        "lastUpdated": "2026-11-18T00:00:00Z"
       },
       "affects": [
         {
-          "ref": "pkg:npm/%40tootallnate/once"
+          "ref": "pkg:deb/debian/libssl3t64"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-124709",
+      "description": "A QUIC server that rejects a stream opened by the peer may retain that stream's state for the lifetime of the connection if the peer resets the stream before the rejection is signalled. A remote client that completes a QUIC handshake can repeatedly open and reset streams, growing server memory without bound and causing denial of service.",
+      "recommendation": "No action required. Neither image runs an OpenSSL QUIC server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image runs an OpenSSL QUIC server, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        401
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-124709",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261117.txt",
+          "title": "OpenSSL Security Advisory 2026-11-17"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in OpenSSL's QUIC server stream handling. The Alpine libcrypto3 package sits in the web and migrate images, but no running process loads it. The web image runs Node.js, which bundles its own OpenSSL and links only musl, libstdc++ and libgcc_s (web/Dockerfile). The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation. The only ELF consumers of the system library are apk, libapk, ssl_client and OpenSSL's own modules, none of which runs in the deployed workload or acts as a QUIC server. The stream retention path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-23T00:00:00Z",
+        "lastUpdated": "2026-11-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libcrypto3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-124709",
+      "description": "A QUIC server that rejects a stream opened by the peer may retain that stream's state for the lifetime of the connection if the peer resets the stream before the rejection is signalled. A remote client that completes a QUIC handshake can repeatedly open and reset streams, growing server memory without bound and causing denial of service.",
+      "recommendation": "No action required. Neither image runs an OpenSSL QUIC server.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image runs an OpenSSL QUIC server, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        401
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-124709",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://secdb.alpinelinux.org/v3.24/main.json",
+          "title": "Alpine Security Database"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261117.txt",
+          "title": "OpenSSL Security Advisory 2026-11-17"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in OpenSSL's QUIC server stream handling. The Alpine libssl3 package sits in the web and migrate images, but no running process loads it. The web image runs Node.js, which bundles its own OpenSSL and links only musl, libstdc++ and libgcc_s (web/Dockerfile). The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation. The only ELF consumers of the system library are apk, libapk, ssl_client and OpenSSL's own modules, none of which runs in the deployed workload or acts as a QUIC server. The stream retention path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-23T00:00:00Z",
+        "lastUpdated": "2026-11-23T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libssl3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-107494",
+      "description": "The OpenSSL QUIC stack queues a RETIRE_CONNECTION_ID frame for every retransmitted NEW_CONNECTION_ID frame it receives, with no limit on the queue. A malicious remote QUIC peer can grow it until the process runs out of memory. The earlier fix for CVE-2026-84784 was incomplete.",
+      "recommendation": "No action required. The system OpenSSL library is not loaded by the platform runtime, and the platform uses no QUIC.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in the api or llt image loads the system OpenSSL library, and the platform opens no QUIC connection.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-107494",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://security-tracker.debian.org/tracker/CVE-2026-107494",
+          "title": "Debian Security Tracker"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261124.txt",
+          "title": "OpenSSL Security Advisory 2026-11-24"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in OpenSSL's QUIC stack. The libssl3t64 package sits in the Debian base for the api and llt images and nothing loads it. In the 6.0.3 api image the node binary bundles its own OpenSSL and its dynamic dependencies are only libc, libm, libdl, libpthread, libstdc++ and libgcc_s. None of the native add-ons in node_modules (better-sqlite3, sqlite3, @parcel/watcher, @next/swc) links libssl or libcrypto either. The platform also opens no QUIC connection, as a client or as a server, so the RETIRE_CONNECTION_ID queueing path cannot be entered.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-24T00:00:00Z",
+        "lastUpdated": "2026-11-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/debian/libssl3t64"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-107494",
+      "description": "The OpenSSL QUIC stack queues a RETIRE_CONNECTION_ID frame for every retransmitted NEW_CONNECTION_ID frame it receives, with no limit on the queue. A malicious remote QUIC peer can grow it until the process runs out of memory. The earlier fix for CVE-2026-84784 was incomplete.",
+      "recommendation": "No action required. Neither image uses OpenSSL QUIC.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image uses OpenSSL's QUIC stack, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-107494",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261124.txt",
+          "title": "OpenSSL Security Advisory 2026-11-24"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in OpenSSL's QUIC stack. The Alpine libcrypto3 package sits in the web and migrate images, but no running process loads it. The web image runs Node.js, which bundles its own OpenSSL and links only musl, libstdc++ and libgcc_s (web/Dockerfile). The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation. The only ELF consumers of the system library are apk, libapk, ssl_client and OpenSSL's own modules, none of which runs in the deployed workload or speaks QUIC. The RETIRE_CONNECTION_ID queueing path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-24T00:00:00Z",
+        "lastUpdated": "2026-11-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libcrypto3"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-107494",
+      "description": "The OpenSSL QUIC stack queues a RETIRE_CONNECTION_ID frame for every retransmitted NEW_CONNECTION_ID frame it receives, with no limit on the queue. A malicious remote QUIC peer can grow it until the process runs out of memory. The earlier fix for CVE-2026-84784 was incomplete.",
+      "recommendation": "No action required. Neither image uses OpenSSL QUIC.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "No process in either image uses OpenSSL's QUIC stack, so the affected code never runs.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-107494",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://openssl-library.org/news/secadv/20261124.txt",
+          "title": "OpenSSL Security Advisory 2026-11-24"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in OpenSSL's QUIC stack. The Alpine libssl3 package sits in the web and migrate images, but no running process loads it. The web image runs Node.js, which bundles its own OpenSSL and links only musl, libstdc++ and libgcc_s (web/Dockerfile). The migrate image runs the Liquibase Java CLI, which uses the JDK's own TLS implementation. The only ELF consumers of the system library are apk, libapk, ssl_client and OpenSSL's own modules, none of which runs in the deployed workload or speaks QUIC. The RETIRE_CONNECTION_ID queueing path is therefore never executed.",
+        "justification": "code_not_reachable",
+        "response": [
+          "will_not_fix"
+        ],
+        "firstIssued": "2026-11-24T00:00:00Z",
+        "lastUpdated": "2026-11-24T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libssl3"
         }
       ]
     },
