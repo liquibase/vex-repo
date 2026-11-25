@@ -165,6 +165,12 @@ jobs:
         uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           token: ${{ steps.get-pr-token.outputs.token }}
+          # Publish generated VEX content only, not the source checkouts.
+          add-paths: |
+            index.json
+            vex-repository.json
+            pkg/
+            repo-content/
           commit-message: "chore: update VEX documents from liquibase-pro and liquibase-insights assessments"
           title: "chore: update VEX documents"
           body: |
@@ -192,6 +198,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.get-pr-token.outputs.token }}
           PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          PR_HEAD: ${{ steps.cpr.outputs.pull-request-head-sha }}
           REPO: ${{ github.repository }}
         run: |
-          gh pr merge "$PR_NUMBER" --squash --repo "$REPO"
+          gh pr merge "$PR_NUMBER" --squash --repo "$REPO" --match-head-commit "${PR_HEAD:?missing generated PR head}"
