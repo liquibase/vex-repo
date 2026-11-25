@@ -1,0 +1,46 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-e50e156c1c5d6594d002513f19adddebfde0e4c72a6313c9fdd70f12910ac5e6",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:32:23.335254267Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-106554",
+        "aliases": [
+          "GHSA-cjg7-h3pr-p927"
+        ]
+      },
+      "timestamp": "2026-11-25T19:32:23.258629196Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "One CBOR-parsing issue in jackson-dataformats-binary's CBOR module: an unbounded run of CBOR tags drives quadratic-time TagList growth (CPU/GC-exhaustion DoS, PoC-proven). PoC executed against com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.18.2; present in current 2.x and 3.x (tools.jackson.dataformat.cbor) HEAD. Distinct from the Avro and Smile/Protobuf advisories for this repo. Quadratic CPU/GC DoS from an unbounded chain of CBOR tags (PoC-proven). File: cbor/src/main/java/.../cbor/CBORParser.java (tag handling -> TagList). CBOR permits a data item to be preceded by any number of semantic tags. The CBOR parser accumulates them in a TagList whose backing array grows by a fixed increment (+8), not by doubling, and re-scans/copies on each growth. An attacker sends a value preceded by a long run of tag bytes; the fixed-increment growth makes accumulating N tags O(N^2) in time (plus GC pressure), with no cap on the number of stacked tags. PoC (executed, JDK 17): feeding a CBOR stream consisting of a long run of tag bytes (e.g. tag 0xC0+) before a trivial value forces quadratic CPU/GC; parse time grows super-linearly with the tag count, pinning a request thread with no configurable limit. Impact. Algorithmic-complexity denial of service (CWE-407): a modest input of stacked tags consumes quadratic CPU/GC, pinning a request thread; concurrent requests exhaust the pool. Fix. Grow TagList by doubling and/or cap the number of stacked tags (StreamReadConstraints-style).",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "jackson-dataformat-cbor 2.17.2 is bundled in the Liquibase Secure AWS extension and is in the affected range. The only code in that extension that uses the CBOR parser is the RPCv2-CBOR protocol support in AWS SDK for Java v1 core, which is bundled without any AWS SDK v1 service clients and is never called by any other code in the extension. The AWS SDK v2 clients the extension uses (S3, Secrets Manager, Systems Manager, STS, RDS, DynamoDB, SSO) use JSON, XML and query protocols, so no CBOR document is ever parsed."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-68495",
+        "aliases": [
+          "CVE-2026-68496",
+          "GHSA-3v8f-v6vx-fmrm"
+        ]
+      },
+      "timestamp": "2026-11-25T19:32:23.314095065Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The CBOR parser in FasterXML jackson-dataformats-binary never invokes StreamReadConstraints.validateNameLength() when decoding JSON object property names, so the maxNameLength limit is not enforced for this format. CBORParser._decodeLongerName() decodes a definite-length property name with no length check, and CBORParser._decodeChunkedName() delegates to the value-oriented _finishChunkedText() routine, which validates maxStringLength rather than maxNameLength. An attacker who can have a CBOR document parsed may therefore embed a single property name of unbounded length; the parser buffers the whole name in memory before returning it, whatever maxNameLength is configured to. Because StreamReadConstraints.maxDocumentLength is also disabled by default, nothing else bounds the name under default settings, so the only limits are the attacker's upload capacity and available heap, leading to memory exhaustion and denial of service. No privileges beyond the ability to submit data to a parsing endpoint are required, and exploitation needs only that the bytes reach CBORFactory parsing, directly or through an ObjectMapper configured with the CBOR module. jackson-core's own JSON parsers enforce maxNameLength incrementally during name decoding; this gap is specific to the binary formats. maxNameLength and validateNameLength were introduced in jackson-core 2.16.0, so releases before 2.16.0 do not contain the constraint that is left unenforced. This issue is tracked together with the Smile parser defect in the same vendor advisory, GHSA-3v8f-v6vx-fmrm, which covers both binary formats. The CBOR parser defect (jackson-dataformats-binary issue #725) is CVE-2026-68495; the Smile parser defect (issue #726) is assigned CVE-2026-68496.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "jackson-dataformat-cbor 2.17.2 is bundled in the Liquibase Secure AWS extension and is in the affected range. The only code in that extension that uses the CBOR parser is the RPCv2-CBOR protocol support in AWS SDK for Java v1 core, which is bundled without any AWS SDK v1 service clients and is never called by any other code in the extension. The AWS SDK v2 clients the extension uses (S3, Secrets Manager, Systems Manager, STS, RDS, DynamoDB, SSO) use JSON, XML and query protocols, so no CBOR document is ever parsed."
+    }
+  ]
+}

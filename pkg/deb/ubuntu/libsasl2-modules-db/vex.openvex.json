@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-38527ba06926f72d6a2ab0578c3aba165baaa515d995bbb564f958134738de21",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:31:59.920566328Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-107161"
+      },
+      "timestamp": "2026-11-25T19:31:59.92056758Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsasl2-modules-db"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A heap-based buffer overflow flaw was found in Cyrus SASL. The add_to_challenge() function in the DIGEST-MD5 plugin computes the size of the buffer needed for a challenge/response field before DIGEST-MD5 quoting is applied, but does not recompute that size when quoting (escaping special characters) makes the value longer. The under-sized buffer is then passed to strcat(), causing a heap-based out-of-bounds write whose size depends on attacker-controlled input. A malicious or on-path DIGEST-MD5 (or HTTP Digest) server can trigger this flaw in a connecting client by supplying a crafted challenge field, such as realm or nonce, most likely resulting in a crash of the client application.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The heap buffer overflow is in add_to_challenge() in the Cyrus SASL DIGEST-MD5 plugin. The liquibase/liquibase-secure 6.0.3 image installs only the SASL library and the sasldb plugin package; the DIGEST-MD5 plugin (shipped in the separate libsasl2-modules package) is not installed, so the vulnerable code is not present. Liquibase itself does not use Cyrus SASL. Ubuntu has deferred the issue pending an upstream fix."
+    }
+  ]
+}

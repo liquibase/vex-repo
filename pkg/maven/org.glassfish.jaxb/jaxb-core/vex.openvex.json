@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-857ea38c03904c26555fdd378866164f4d2dcde5c45e8ada124d9edab0b1a4e9",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:32:33.550667277Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-92877"
+      },
+      "timestamp": "2026-11-25T19:32:33.550669421Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.glassfish.jaxb/jaxb-core"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "The JAXB factory methods historically relied solely on `FEATURE_SECURE_PROCESSING` to prevent XML External Entity (XXE) resolution. On JAXP implementations where that feature alone does not block external entity resolution, an attacker who can get untrusted XML unmarshalled through JAXB can read local files via out-of-band XXE.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The issue allows XML external entity resolution when JAXB unmarshals untrusted XML. jaxb-core 4.0.9 ships in Liquibase Secure. A review of every class in the distribution and its bundled extensions found no use of an Unmarshaller outside the JAXB libraries themselves. The only other JAXB reference is AWS SDK for Java v1's Base64 helper, which creates a JAXBContext only to locate DatatypeConverter for Base64 encoding and never unmarshals XML; that SDK v1 code is also never called. Liquibase parses changelogs and other XML with SAX, not JAXB, so no XML is ever unmarshalled through JAXB."
+    }
+  ]
+}

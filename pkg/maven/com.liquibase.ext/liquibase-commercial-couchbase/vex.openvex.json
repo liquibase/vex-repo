@@ -1,0 +1,120 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-7b00b7a477949f5907e58700a7c9bd1afc89490ef0d74123fc56498548dfd7f5",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:32:25.279435378Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-110879"
+      },
+      "timestamp": "2026-11-25T19:32:24.926265442Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "jackson-databind validates the outer class of a class-name type ID but accepts attacker-selected classes inside its generic arguments, even when those classes violate the declared type or would be rejected as direct type IDs. This bypasses the generic-argument validation added for CVE-2026-54512 (GHSA-j3rv-43j4-c7qm), of which this is an incomplete fix. DatabindContext._resolveAndValidateGeneric() checks the outer class against the declared base type and then passes each argument from the type ID to _validateTypeParameter(), which validates the argument against the outer base type rather than enforcing its corresponding declared generic binding. It also invokes validators with arguments that have not passed the subtype check those validators expect. Under the default DefaultBaseTypeLimitingValidator this accepts an unrelated class inside a generic subtype even when the same class is rejected as a direct type ID. Where an allowIfBaseType(...) rule approves the outer type, Jackson substitutes LaissezFaireSubTypeValidator, so the configured validator no longer restricts the embedded arguments. The element type of a plain array type ID such as [Lpkg.Gadget; is likewise left unvalidated once the array's base type is approved. Affected paths include annotation-based class-name polymorphism with a default Jackson 3.x JsonMapper, configured default typing in both Jackson 2.x and 3.x, and integrations that expose that default typing. The default-validator case requires no application-authored validator: with @JsonTypeInfo(use = Id.CLASS), a direct gadget type ID is rejected as \"Not a subtype\", while a type ID naming a generic wrapper around the same gadget is accepted and deserialized, including attacker-supplied bean properties. Where class-name default typing permits Map, a property declared as Map<String,String> accepts HashMap<FileSystemXmlApplicationContext,String>; map-key discovery then passes the attacker-controlled JSON property name to the selected class's one-string constructor. With Spring on the classpath and attacker-controlled XML the application can load, that constructor loads the XML and invokes ProcessBuilder.start() under the application account, giving arbitrary command execution. This issue affects com.fasterxml.jackson.core:jackson-databind from 2.10.0 and tools.jackson.core:jackson-databind from 3.0.0. Releases before 2.10.0 are not affected, because PolymorphicTypeValidator was introduced in jackson-databind 2.10.0.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The Couchbase Java SDK bundled in the Liquibase Secure Couchbase extension relocates its own copy of jackson-databind. In Liquibase Secure 6.0.3 that copy is jackson-databind 2.21.7, which is inside the affected range (2.19.0 to before 2.21.8). The bypass only applies to polymorphic deserialization that uses class-name type ids (Id.CLASS or Id.MINIMAL_CLASS, or default typing). A bytecode search of every class in the Couchbase extension shipped in Liquibase Secure 6.0.3 (Couchbase Java SDK 3.13.0), excluding the relocated jackson-databind itself, found no reference to activateDefaultTyping, enableDefaultTyping or setDefaultTyping, and only two @JsonTypeInfo annotations (on the bucket-configuration and analytics-link types), both using Id.NAME with a fixed @JsonSubTypes list. Id.CLASS and Id.MINIMAL_CLASS are never used, so the vulnerable validation path is never reached."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-14683"
+      },
+      "timestamp": "2026-11-25T19:32:25.204291176Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was detected in HdrHistogram up to 2.2.2. Affected by this issue is the function org.HdrHistogram.AbstractHistogram.decodeFromCompressedByteBuffer of the file src/main/java/org/HdrHistogram/AbstractHistogram.java. The manipulation of the argument lengthOfCompressedContents results in uncontrolled memory allocation. The attack needs to be approached locally. The exploit is now public and may be used. It is still unclear if this vulnerability genuinely exists. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The issue is in AbstractHistogram.decodeFromCompressedByteBuffer and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to AbstractHistogram.decodeFromCompressedByteBuffer; the drivers only record into the standard Histogram class, so the vulnerable function is never used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-14686"
+      },
+      "timestamp": "2026-11-25T19:32:25.259329431Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was found in HdrHistogram up to 2.2.2. This issue affects the function org.HdrHistogram.DoubleHistogram.recordValue of the file src/main/java/org/HdrHistogram/DoubleHistogram.java of the component Range Check. Performing a manipulation results in incorrect comparison. The attack is only possible with local access. The exploit has been made public and could be used. The presence of this vulnerability remains uncertain at this time. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The issue is in DoubleHistogram.recordValue and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to DoubleHistogram.recordValue; the drivers only record into the standard Histogram class, so the vulnerable function is never used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47857"
+      },
+      "timestamp": "2026-11-25T19:32:25.092813966Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In Reactor Core, applications that use the Flux.windowTimeout operator with fairBackpressure enabled are vulnerable to a Denial of Service (DoS) condition. Reactor Core 3.8.0 - 3.8.6 Reactor Core 3.5.0 - 3.7.19 Reactor Core 3.4.41 and earlier",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This Reactor Core issue affects applications that use the Flux.windowTimeout operator with fair backpressure enabled. The Couchbase extension in Liquibase Secure 6.0.3 bundles reactor-core 3.8.7, which is past the fixed release (the 3.8 line is affected through 3.8.6). Independently of the version, a review of every class in the shipped extension found no call to the windowTimeout or bufferTimeout operators from the Couchbase SDK or from Liquibase code, so the vulnerable operator is never used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-47863"
+      },
+      "timestamp": "2026-11-25T19:32:25.147471031Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In Reactor Core, applications that use the Flux.bufferTimeout operator with fairBackpressure enabled are vulnerable to a Denial of Service (DoS) condition. Reactor Core 3.8.0 - 3.8.6 Reactor Core 3.7.19 and earlier",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "This Reactor Core issue affects applications that use the Flux.bufferTimeout operator with fair backpressure enabled. The Couchbase extension in Liquibase Secure 6.0.3 bundles reactor-core 3.8.7, which is past the fixed release (the 3.8 line is affected through 3.8.6). Independently of the version, a review of every class in the shipped extension found no call to the windowTimeout or bufferTimeout operators from the Couchbase SDK or from Liquibase code, so the vulnerable operator is never used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-91776",
+        "aliases": [
+          "GHSA-wv8q-qhhj-9h54"
+        ]
+      },
+      "timestamp": "2026-11-25T19:32:24.981616788Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "TypeDeserializerBase._findDeserializer() in FasterXML jackson-databind caches the resolved deserializer under the raw, attacker-supplied type ID. When name-based polymorphism is configured with a fallback, for example @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), every distinct unrecognized type ID resolves to the same fallback deserializer but is retained as its own key in the _deserializers map. That map has no configurable bound and lives for the lifetime of the type deserializer, so an attacker who can repeatedly supply fresh unknown type IDs causes monotonic memory retention across requests. The reporter observed 10,000 retained entries from 10,000 distinct unknown IDs, against a single entry for a control that repeated one unknown ID the same number of times, isolating attacker-controlled key cardinality from request volume. Exploitation requires an application that enables name-based polymorphism with a defaultImpl or equivalent fallback, accepts attacker-influenced type IDs, and reuses a long-lived ObjectMapper across requests. The fix stops caching fallback resolutions for unrecognized IDs and bounds both the number of cached entries and the length of a cacheable type ID.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The Couchbase Java SDK bundled in the Liquibase Secure Couchbase extension relocates its own copy of jackson-databind. The issue is fixed in jackson-databind 2.21.7, and Liquibase Secure 6.0.3 ships Couchbase SDK 3.13.0, whose relocated copy is jackson-databind 2.21.7. Earlier Liquibase Secure releases bundled Couchbase SDK 3.12.3 with an older copy. This entry covers scanners that report the issue against the Couchbase SDK or the Liquibase Couchbase extension rather than jackson-databind itself."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-91777",
+        "aliases": [
+          "GHSA-cxp5-3px4-pw24"
+        ]
+      },
+      "timestamp": "2026-11-25T19:32:25.037815518Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.liquibase.ext/liquibase-commercial-couchbase"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Forward-reference completion for @JsonIdentityInfo object IDs in FasterXML jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID. The affected paths are CollectionDeserializer.CollectionReferringAccumulator.resolveForwardReference() and the equivalent implementation in MapDeserializer. When a document first creates N unresolved object-ID references in an identity-enabled collection or map and then defines those same IDs in reverse order, completion performs on the order of N * (N + 1) / 2 identity comparisons, so a shallow document whose size grows linearly causes quadratic CPU work during deserialization. The reporter instrumented equals() calls on the ID class and measured exactly 2,003,000 comparisons at N = 2,000, against zero comparisons in the pending-reference lookup path for an equally sized control in which every reference was already resolved. The input requires no deep nesting and no syntactically unusual JSON. Exploitation requires an application that deserializes attacker-influenced JSON into an identity-enabled collection or map. The fix replaces the repeated linear lookup with a keyed pending-reference structure.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The Couchbase Java SDK bundled in the Liquibase Secure Couchbase extension relocates its own copy of jackson-databind. The issue is fixed in jackson-databind 2.21.7, and Liquibase Secure 6.0.3 ships Couchbase SDK 3.13.0, whose relocated copy is jackson-databind 2.21.7. Earlier Liquibase Secure releases bundled Couchbase SDK 3.12.3 with an older copy. This entry covers scanners that report the issue against the Couchbase SDK or the Liquibase Couchbase extension rather than jackson-databind itself."
+    }
+  ]
+}

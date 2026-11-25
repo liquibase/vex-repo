@@ -64,6 +64,42 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-118042",
+      "description": "In Google Guava 13.0 through 33.7.2, HashBiMap and the per-key value sets of LinkedHashMultimap use chained hash tables with no fallback for long buckets, so inserting keys or values that share a hash code makes construction quadratic (hash flooding denial of service). Fixed in 33.8.0.",
+      "recommendation": "No action required. No attacker-chosen keys reach the affected Guava collections in any bundled copy of Guava.",
+      "cwes": [
+        407
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118042",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/google/guava/security/advisories/GHSA-v5x9-67m3-7m56",
+          "title": "Guava Security Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Hash flooding makes HashBiMap and LinkedHashMultimap construction quadratic when the inserted keys or values share a hash code (Guava 13.0 through 33.7.2, fixed in 33.8.0). Liquibase Secure 6.0.3 has no standalone Guava jar; Guava copies in the affected range are relocated inside the Snowflake JDBC driver, the BigQuery, GCP, Databricks, Cassandra and Couchbase extensions. A bytecode search of every class in the distribution found that only two of them build the affected collections. The DataStax Cassandra driver keys a HashBiMap by the request stream ids it allocates itself (distinct integers, which cannot collide), and builds LinkedHashMultimap only inside its internal dependency graph and cycle detector, keyed by driver components and by user-defined type names from the database schema Liquibase is connected to. The Databricks SDK registers Jackson's Guava module, but no class in it declares a BiMap or Multimap property, so those deserializers are never used. In the Snowflake, BigQuery, GCP and Couchbase copies nothing outside Guava references either collection. No attacker-chosen keys ever reach the affected code.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.google.guava/guava",
+          "versions": [
+            {
+              "range": "vers:maven/>=13.0|<33.8.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
