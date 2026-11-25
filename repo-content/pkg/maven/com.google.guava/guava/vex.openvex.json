@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/public/vex-f5763e45b9230d7714041de2595a45ac5175e41355055e54b7d2a2e04c04a3a9",
+  "@id": "merged-vex-4601a8b8247cafbb029c49b70bdcf90ed51eba8845480f128fb8536400a3506f",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-24T15:39:26.615766529Z",
+  "timestamp": "2026-11-25T19:32:23.507063392Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-xxph-c9ww-hj94"
         ]
       },
-      "timestamp": "2026-11-24T15:39:26.61576732Z",
+      "timestamp": "2026-11-25T19:32:23.430083474Z",
       "products": [
         {
           "@id": "pkg:maven/com.google.guava/guava"
@@ -22,6 +22,21 @@
       "status_notes": "CVE-2026-102554 is an uncontrolled resource allocation in Guava 4.0 through 33.7.1. Deserializing CompactHashMap, CompactHashSet or MapMakerInternalMap eagerly allocates an array sized from a value in the serialized stream, so a small crafted stream can exhaust the heap and stop the JVM with an OutOfMemoryError.",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "The flaw is only reachable by Java-deserializing an attacker-supplied stream (ObjectInputStream) that contains a Guava CompactHashMap, CompactHashSet or MapMakerInternalMap. Liquibase never Java-deserializes input: no production code in the CLI, Pro or any bundled extension uses ObjectInputStream, and Liquibase opens no network listener. Guava is a transitive dependency of the Google Cloud client libraries (Cloud SQL connector, Secret Manager, BigQuery) used by the GCP and BigQuery extensions, which exchange protobuf and JSON with Google APIs, not Java serialized objects; both extensions relocate it under com.liquibase.shaded.google.common. Every Liquibase Secure release to date, including 6.0.x, ships a Guava version in the affected range (33.6.0-jre as of 6.0.1, supplied by com.google.cloud:libraries-bom 26.90.0), and this assessment applies to all of them."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-118042"
+      },
+      "timestamp": "2026-11-25T19:32:23.485890037Z",
+      "products": [
+        {
+          "@id": "pkg:maven/com.google.guava/guava"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "In Google Guava 13.0 through 33.7.2, HashBiMap and the per-key value sets of LinkedHashMultimap use chained hash tables with no fallback for long buckets, so inserting keys or values that share a hash code makes construction quadratic (hash flooding denial of service). Fixed in 33.8.0.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Hash flooding makes HashBiMap and LinkedHashMultimap construction quadratic when the inserted keys or values share a hash code (Guava 13.0 through 33.7.2, fixed in 33.8.0). Liquibase Secure 6.0.3 has no standalone Guava jar; Guava copies in the affected range are relocated inside the Snowflake JDBC driver, the BigQuery, GCP, Databricks, Cassandra and Couchbase extensions. A bytecode search of every class in the distribution found that only two of them build the affected collections. The DataStax Cassandra driver keys a HashBiMap by the request stream ids it allocates itself (distinct integers, which cannot collide), and builds LinkedHashMultimap only inside its internal dependency graph and cycle detector, keyed by driver components and by user-defined type names from the database schema Liquibase is connected to. The Databricks SDK registers Jackson's Guava module, but no class in it declares a BiMap or Multimap property, so those deserializers are never used. In the Snowflake, BigQuery, GCP and Couchbase copies nothing outside Guava references either collection. No attacker-chosen keys ever reach the affected code."
     }
   ]
 }

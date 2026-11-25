@@ -1,0 +1,65 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-82596",
+      "description": "A vulnerability was determined in LatencyUtils up to 2.0.3. Affected by this issue is the function LatencyStats.recordDetectedPause of the file src/main/java/org/LatencyUtils/LatencyStats.java of the component PauseDetector. Executing a manipulation can lead to memory corruption. The attack needs to be launched locally. The exploit has been publicly disclosed and may be utilized. The project was informed of the problem early through an issue report but has not responded yet.",
+      "recommendation": "No action required. Triggering the issue requires local control of the host running Liquibase.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Triggering the issue requires suspending the Liquibase process on its host for longer than the metrics range; no external input reaches the affected code.\n"
+        }
+      ],
+      "cwes": [
+        119
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82596",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/LatencyUtils/LatencyUtils/issues/22",
+          "title": "LatencyUtils issue"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "LatencyUtils 2.0.3 is bundled by the Couchbase Java SDK, whose logging meter (enabled by default) records latencies through LatencyStats, so the shared pause detector runs when the Couchbase extension is used. The defect is triggered only when the JVM is paused for longer than the histogram's highest trackable latency, which makes the pause-detector thread fail and its queue grow. No input from a database or a user reaches this code; causing such a pause requires local control of the host that runs Liquibase (for example suspending the process). The impact is limited to lost pause correction in SDK metrics logging. No fixed LatencyUtils release exists.",
+        "justification": "requires_environment",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.latencyutils/LatencyUtils",
+          "versions": [
+            {
+              "range": "vers:maven/<=2.0.3",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

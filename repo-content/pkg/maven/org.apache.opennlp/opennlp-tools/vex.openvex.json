@@ -1,8 +1,8 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-b2e342d5dab81cf2fcb5ab989a4fd7271655ad963a9007d7e1a5e3f8b9e85be3",
+  "@id": "merged-vex-7d6db4211743bbaa8b2381730cd977b394f95ecbf6485b8fe24b58d3c0420db4",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-24T15:39:31.043271559Z",
+  "timestamp": "2026-11-25T19:32:30.884960346Z",
   "version": 1,
   "statements": [
     {
@@ -12,7 +12,7 @@
           "GHSA-4v8g-86x5-3vrc"
         ]
       },
-      "timestamp": "2026-11-24T15:39:30.90306406Z",
+      "timestamp": "2026-11-25T19:32:30.640986983Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -30,7 +30,7 @@
           "GHSA-cx4m-2p55-rw7j"
         ]
       },
-      "timestamp": "2026-11-24T15:39:30.943776143Z",
+      "timestamp": "2026-11-25T19:32:30.69826112Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -48,7 +48,7 @@
           "GHSA-659w-93r5-9j6m"
         ]
       },
-      "timestamp": "2026-11-24T15:39:30.984759969Z",
+      "timestamp": "2026-11-25T19:32:30.753570795Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
@@ -61,9 +61,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-63317"
+      },
+      "timestamp": "2026-11-25T19:32:30.864220481Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Arbitrary Class Instantiation via XML Feature Generator Descriptor and Format Name in Apache OpenNLP Versions Affected: - before 2.5.10 - before 3.0.0-M5 Description: Three code paths in Apache OpenNLP load a class by its fully-qualified name via Class.forName() and invoke its no-arg constructor without any prior validation of the class name or its type. The affected paths are: (1) GeneratorFactory, which reads the class attribute of generator elements in an XML feature generator descriptor; such descriptors are embedded as artifacts in model archives (e.g. TokenNameFinder and POSTagger models) and are parsed during model loading, so an attacker who can supply a crafted model archive controls the class name directly. (2) StreamFactoryRegistry.getFactory(Class, String), which falls back to interpreting an unregistered format name as the fully-qualified class name of an ObjectStreamFactory; this is exploitable in applications that pass untrusted format names (e.g. exposing the -format parameter of the command-line tooling to external input). (3) StringInterners, which instantiates the interner implementation named by the opennlp.interner.class system property; this value is normally deployer-controlled, so it is hardened as defense in depth rather than being independently attacker-reachable. Exploitation requires a class with attacker-useful side effects in its static initializer or no-arg constructor (JNDI lookup, outbound network I/O, filesystem access) to be present on the classpath, so this is not drop-in remote code execution. Mitigation: Upgrade to a fixed release. The fix routes all three paths through ExtensionLoader.instantiateExtension(...), which consults a package-prefix allowlist before Class.forName() is invoked, so a disallowed class is never loaded, initialized, or constructed. Classes under the opennlp. prefix remain permitted by default. Deployments that load models referencing feature generator factories, object stream factories, or string interners outside opennlp.* must opt those packages in, either programmatically via ExtensionLoader.registerAllowedPackage(String) before the first model load, or by setting the OPENNLP_EXT_ALLOWED_PACKAGES system property to a comma-separated list of allowed package prefixes. Users who cannot upgrade immediately should ensure all model files and format names are sourced from trusted origins and should audit their classpath for classes with side-effecting static initializers or constructors.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The CVE record lists OpenNLP before 2.5.11 as affected, and the shipped opennlp-tools 2.5.10 still loads classes without validation in GeneratorFactory and StreamFactoryRegistry. The three affected paths are feature-generator descriptors inside name-finder and POS-tagger model archives, format names passed to the OpenNLP command line tooling, and a JVM system property naming a string interner. Liquibase Secure's sensitive-data checks only load a document-categorizer model, which does not use GeneratorFactory, never call the OpenNLP command line tooling, and do not set the interner property, so none of the affected paths is reached."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-82617"
       },
-      "timestamp": "2026-11-24T15:39:31.026885893Z",
+      "timestamp": "2026-11-25T19:32:30.808209032Z",
       "products": [
         {
           "@id": "pkg:maven/org.apache.opennlp/opennlp-tools"

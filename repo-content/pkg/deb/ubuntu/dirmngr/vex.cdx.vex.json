@@ -123,6 +123,58 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-105712",
+      "description": "gpgtar in GnuPG before 2.5.19 can allow file overwrite via crafted data in an archive. When extracting an untrusted archive with --directory (aka -C) into an existing directory containing a pre-existing symlink, gpgtar can follow that symlink and create or overwrite a file outside the selected extraction directory. The write is limited by the extraction user's filesystem permissions. An archive extracted into a fresh empty directory does not have this risk.",
+      "recommendation": "No action required. Liquibase never runs gpgtar.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 3.6,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:L",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:N",
+          "justification": "gpgtar is never run in the Liquibase image.\n"
+        }
+      ],
+      "cwes": [
+        61
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-105712",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-105712",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The file overwrite affects gpgtar when it extracts an untrusted archive with --directory into a directory that contains a pre-existing symlink. GnuPG is present in the liquibase/liquibase-secure 6.0.3 image only as a dependency of apt. Liquibase never runs gpgtar or any other GnuPG tool; the image entrypoint runs Liquibase, and runs another program only when the user passes it as the container command. Ubuntu rates the issue low priority.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr"
+        }
+      ]
     }
   ]
 }

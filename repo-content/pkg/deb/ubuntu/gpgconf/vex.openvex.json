@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-479a6cff56669bed2d5ffdc2008816575a4ebb90d5eca2a263f47a320dd7aad9",
+  "@id": "merged-vex-e9fc7ab67674db97db5365431658da4fe1660a6a8020d2dbb397db7aea24709a",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-24T15:39:00.056935553Z",
+  "timestamp": "2026-11-25T19:31:45.648287934Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2022-3219"
       },
-      "timestamp": "2026-11-24T15:39:00.041294312Z",
+      "timestamp": "2026-11-25T19:31:45.571309398Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/gpgconf"
@@ -24,7 +24,7 @@
       "vulnerability": {
         "name": "CVE-2025-68973"
       },
-      "timestamp": "2026-11-24T15:38:59.998683297Z",
+      "timestamp": "2026-11-25T19:31:45.516181755Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/gpgconf"
@@ -33,6 +33,21 @@
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
       "impact_statement": "GnuPG binary package. GnuPG is installed for build-time package signature verification only; not invoked at runtime by Liquibase."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-105712"
+      },
+      "timestamp": "2026-11-25T19:31:45.627100832Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/gpgconf"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "gpgtar in GnuPG before 2.5.19 can allow file overwrite via crafted data in an archive. When extracting an untrusted archive with --directory (aka -C) into an existing directory containing a pre-existing symlink, gpgtar can follow that symlink and create or overwrite a file outside the selected extraction directory. The write is limited by the extraction user's filesystem permissions. An archive extracted into a fresh empty directory does not have this risk.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The file overwrite affects gpgtar when it extracts an untrusted archive with --directory into a directory that contains a pre-existing symlink. GnuPG is present in the liquibase/liquibase-secure 6.0.3 image only as a dependency of apt. Liquibase never runs gpgtar or any other GnuPG tool; the image entrypoint runs Liquibase, and runs another program only when the user passes it as the container command. Ubuntu rates the issue low priority."
     }
   ]
 }

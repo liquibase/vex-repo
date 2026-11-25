@@ -417,6 +417,58 @@
           ]
         }
       ]
+    },
+    {
+      "id": "CVE-2026-121876",
+      "description": "A flaw was found in the interaction between systemd-gpt-auto-generator and confidential computing guest VM images in OpenShift Sandboxed Containers (confidential peer pods). systemd-gpt-auto-generator automatically discovers and mounts GPT partitions by type GUID at boot with no user confirmation. In the confidential computing threat model, where the host/hypervisor is the adversary, a malicious host can inject partitions into the guest's virtual disk. Most critically, injecting a swap partition causes the guest kernel to page out TEE-encrypted memory to a host-controlled block device, breaking the confidentiality guarantee of the hardware TEE (AMD SEV-SNP, Intel TDX). The PodVM images use a GPT-partitioned disk with dm-verity on the root partition. However, the roothash= kernel parameter only disables root auto-discovery — non-root partitions (swap, /home, /var, /srv, /var/tmp) are still auto-discovered and mounted. The generator is shipped unmasked in the RHEL systemd-udev subpackage, and no kernel command line parameter in the measured UKI addon disables it. Additionally, the PodVM measurement script captures PCRs 3, 9, 11, and 12, but not PCR 5 (GPT partition table), so partition table modifications are not detected by remote attestation.",
+      "recommendation": "No action required. The affected systemd generator is not present in the image.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 7.9,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:N",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:N/I:N/A:N",
+          "justification": "The affected systemd generator is not present in the image.\n"
+        }
+      ],
+      "cwes": [
+        359
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-121876",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-121876",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The flaw is in systemd-gpt-auto-generator, which discovers and mounts GPT partitions at boot on confidential-computing VM images. The liquibase/liquibase-secure 6.0.3 image contains only the libsystemd0 and libudev1 shared libraries; the generator binary and the systemd generator directory are not present, and the container does not run systemd. Ubuntu has deferred the issue.",
+        "justification": "vulnerable_code_not_present",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ]
     }
   ]
 }

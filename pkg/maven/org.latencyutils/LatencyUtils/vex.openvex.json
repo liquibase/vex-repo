@@ -1,0 +1,24 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-01c56567d75f1cdd7805c38990c375455a2d97768d53515b46130ce959c327f8",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:32:33.907663699Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-82596"
+      },
+      "timestamp": "2026-11-25T19:32:33.907664931Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.latencyutils/LatencyUtils"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was determined in LatencyUtils up to 2.0.3. Affected by this issue is the function LatencyStats.recordDetectedPause of the file src/main/java/org/LatencyUtils/LatencyStats.java of the component PauseDetector. Executing a manipulation can lead to memory corruption. The attack needs to be launched locally. The exploit has been publicly disclosed and may be utilized. The project was informed of the problem early through an issue report but has not responded yet.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "LatencyUtils 2.0.3 is bundled by the Couchbase Java SDK, whose logging meter (enabled by default) records latencies through LatencyStats, so the shared pause detector runs when the Couchbase extension is used. The defect is triggered only when the JVM is paused for longer than the histogram's highest trackable latency, which makes the pause-detector thread fail and its queue grow. No input from a database or a user reaches this code; causing such a pause requires local control of the host that runs Liquibase (for example suspending the process). The impact is limited to lost pause correction in SDK metrics logging. No fixed LatencyUtils release exists."
+    }
+  ]
+}

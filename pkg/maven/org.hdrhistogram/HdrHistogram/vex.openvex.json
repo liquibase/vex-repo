@@ -1,0 +1,39 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "merged-vex-e4896e816065defeeed9c0d498ff489e411c07085e524bb0b9ce7c50e2328410",
+  "author": "Liquibase Security Team",
+  "timestamp": "2026-11-25T19:32:33.721061655Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-14683"
+      },
+      "timestamp": "2026-11-25T19:32:33.644625962Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.hdrhistogram/HdrHistogram"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was detected in HdrHistogram up to 2.2.2. Affected by this issue is the function org.HdrHistogram.AbstractHistogram.decodeFromCompressedByteBuffer of the file src/main/java/org/HdrHistogram/AbstractHistogram.java. The manipulation of the argument lengthOfCompressedContents results in uncontrolled memory allocation. The attack needs to be approached locally. The exploit is now public and may be used. It is still unclear if this vulnerability genuinely exists. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The issue is in AbstractHistogram.decodeFromCompressedByteBuffer and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to AbstractHistogram.decodeFromCompressedByteBuffer; the drivers only record into the standard Histogram class, so the vulnerable function is never used."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-14686"
+      },
+      "timestamp": "2026-11-25T19:32:33.700465323Z",
+      "products": [
+        {
+          "@id": "pkg:maven/org.hdrhistogram/HdrHistogram"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A vulnerability was found in HdrHistogram up to 2.2.2. This issue affects the function org.HdrHistogram.DoubleHistogram.recordValue of the file src/main/java/org/HdrHistogram/DoubleHistogram.java of the component Range Check. Performing a manipulation results in incorrect comparison. The attack is only possible with local access. The exploit has been made public and could be used. The presence of this vulnerability remains uncertain at this time. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The issue is in DoubleHistogram.recordValue and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to DoubleHistogram.recordValue; the drivers only record into the standard Histogram class, so the vulnerable function is never used."
+    }
+  ]
+}

@@ -1,15 +1,30 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-ae9cfc1a1ee6ccb9cf3d6f6f5598ae79c6a220a63ac8a59458797564e037cbf9",
+  "@id": "merged-vex-6db1fc0c109c39be7a61679a1872bfd00640a8ba380718973e07d4bd5a617ea6",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-24T15:39:07.496440046Z",
+  "timestamp": "2026-11-25T19:31:56.01632549Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2026-107778"
+      },
+      "timestamp": "2026-11-25T19:31:55.995232321Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libgssapi-krb5-2"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "MIT Kerberos 5 (krb5) through 1.22.2 contains a NULL pointer dereference in make_cred_list() in rd_cred.c that allows authenticated Kerberos clients to crash services by sending mismatched KRB-CRED arrays. Attackers can send forwarded credentials with more tickets than ticket_info entries through gss_accept_sec_context() to crash GSS-API acceptor services, causing denial of service.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The NULL pointer dereference in krb5_rd_cred() is reached through gss_accept_sec_context(), so it only affects GSS-API acceptor (server) services. The liquibase/liquibase-secure 6.0.3 image runs no Kerberos or GSS-API acceptor service. No native library of the bundled Java runtime links the MIT Kerberos libraries, and Liquibase uses the JVM's own pure-Java Kerberos implementation. The libraries are loaded only by curl and libssh, which Liquibase does not run; the image entrypoint runs Liquibase, and runs another program only when the user passes it as the container command."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-11850"
       },
-      "timestamp": "2026-11-24T15:39:07.398925839Z",
+      "timestamp": "2026-11-25T19:31:55.8314463Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgssapi-krb5-2"
@@ -24,7 +39,7 @@
       "vulnerability": {
         "name": "CVE-2026-40355"
       },
-      "timestamp": "2026-11-24T15:39:07.439941831Z",
+      "timestamp": "2026-11-25T19:31:55.886252436Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgssapi-krb5-2"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-40356"
       },
-      "timestamp": "2026-11-24T15:39:07.480906141Z",
+      "timestamp": "2026-11-25T19:31:55.940795846Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libgssapi-krb5-2"

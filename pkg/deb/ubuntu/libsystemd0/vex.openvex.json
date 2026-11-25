@@ -1,15 +1,15 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-694dd968d7f40e49bc63935f7eb23d4c77c255937586bc2ce0f42540b4e57e8b",
+  "@id": "merged-vex-bf9ffd4d17828f093caa32b2d29d7e2644304b1850d1aa691a50bdba703ce938",
   "author": "Liquibase Security Team",
-  "timestamp": "2026-11-24T15:39:13.869083416Z",
+  "timestamp": "2026-11-25T19:32:04.970623581Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
         "name": "CVE-2023-7008"
       },
-      "timestamp": "2026-11-24T15:39:13.852668946Z",
+      "timestamp": "2026-11-25T19:32:04.894621395Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -22,9 +22,24 @@
     },
     {
       "vulnerability": {
+        "name": "CVE-2026-121876"
+      },
+      "timestamp": "2026-11-25T19:32:04.949545816Z",
+      "products": [
+        {
+          "@id": "pkg:deb/ubuntu/libsystemd0"
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "A flaw was found in the interaction between systemd-gpt-auto-generator and confidential computing guest VM images in OpenShift Sandboxed Containers (confidential peer pods). systemd-gpt-auto-generator automatically discovers and mounts GPT partitions by type GUID at boot with no user confirmation. In the confidential computing threat model, where the host/hypervisor is the adversary, a malicious host can inject partitions into the guest's virtual disk. Most critically, injecting a swap partition causes the guest kernel to page out TEE-encrypted memory to a host-controlled block device, breaking the confidentiality guarantee of the hardware TEE (AMD SEV-SNP, Intel TDX). The PodVM images use a GPT-partitioned disk with dm-verity on the root partition. However, the roothash= kernel parameter only disables root auto-discovery — non-root partitions (swap, /home, /var, /srv, /var/tmp) are still auto-discovered and mounted. The generator is shipped unmasked in the RHEL systemd-udev subpackage, and no kernel command line parameter in the measured UKI addon disables it. Additionally, the PodVM measurement script captures PCRs 3, 9, 11, and 12, but not PCR 5 (GPT partition table), so partition table modifications are not detected by remote attestation.",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The flaw is in systemd-gpt-auto-generator, which discovers and mounts GPT partitions at boot on confidential-computing VM images. The liquibase/liquibase-secure 6.0.3 image contains only the libsystemd0 and libudev1 shared libraries; the generator binary and the systemd generator directory are not present, and the container does not run systemd. Ubuntu has deferred the issue."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2026-15059"
       },
-      "timestamp": "2026-11-24T15:39:13.604263265Z",
+      "timestamp": "2026-11-25T19:32:04.558603592Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -39,7 +54,7 @@
       "vulnerability": {
         "name": "CVE-2026-16742"
       },
-      "timestamp": "2026-11-24T15:39:13.645344652Z",
+      "timestamp": "2026-11-25T19:32:04.615342412Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -57,7 +72,7 @@
           "GHSA-gx6q-6f99-m764"
         ]
       },
-      "timestamp": "2026-11-24T15:39:13.810949144Z",
+      "timestamp": "2026-11-25T19:32:04.839558827Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -75,7 +90,7 @@
           "GHSA-vpfq-8p5f-jcqx"
         ]
       },
-      "timestamp": "2026-11-24T15:39:13.768834898Z",
+      "timestamp": "2026-11-25T19:32:04.783737756Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -93,7 +108,7 @@
           "GHSA-9mj4-rrc3-gjcx"
         ]
       },
-      "timestamp": "2026-11-24T15:39:13.727708277Z",
+      "timestamp": "2026-11-25T19:32:04.727592744Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"
@@ -108,7 +123,7 @@
       "vulnerability": {
         "name": "CVE-2026-40228"
       },
-      "timestamp": "2026-11-24T15:39:13.686583611Z",
+      "timestamp": "2026-11-25T19:32:04.671242911Z",
       "products": [
         {
           "@id": "pkg:deb/ubuntu/libsystemd0"

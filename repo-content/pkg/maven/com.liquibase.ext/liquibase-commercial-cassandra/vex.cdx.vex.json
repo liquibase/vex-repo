@@ -1,0 +1,116 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-14683",
+      "description": "A vulnerability was detected in HdrHistogram up to 2.2.2. Affected by this issue is the function org.HdrHistogram.AbstractHistogram.decodeFromCompressedByteBuffer of the file src/main/java/org/HdrHistogram/AbstractHistogram.java. The manipulation of the argument lengthOfCompressedContents results in uncontrolled memory allocation. The attack needs to be approached locally. The exploit is now public and may be used. It is still unclear if this vulnerability genuinely exists. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "recommendation": "No action required. AbstractHistogram.decodeFromCompressedByteBuffer is never called by the bundled database drivers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "AbstractHistogram.decodeFromCompressedByteBuffer is never called by the bundled Couchbase or Cassandra drivers.\n"
+        }
+      ],
+      "cwes": [
+        400,
+        789
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14683",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The issue is in AbstractHistogram.decodeFromCompressedByteBuffer and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to AbstractHistogram.decodeFromCompressedByteBuffer; the drivers only record into the standard Histogram class, so the vulnerable function is never used.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.liquibase.ext/liquibase-commercial-cassandra",
+          "versions": [
+            {
+              "range": "vers:maven/<=2.2.2",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-14686",
+      "description": "A vulnerability was found in HdrHistogram up to 2.2.2. This issue affects the function org.HdrHistogram.DoubleHistogram.recordValue of the file src/main/java/org/HdrHistogram/DoubleHistogram.java of the component Range Check. Performing a manipulation results in incorrect comparison. The attack is only possible with local access. The exploit has been made public and could be used. The presence of this vulnerability remains uncertain at this time. This issue is disputed due to the potential lack of crossing of security boundaries and the pre-requisites for a successful attack.",
+      "recommendation": "No action required. DoubleHistogram.recordValue is never called by the bundled database drivers.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 3.3,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "DoubleHistogram.recordValue is never called by the bundled Couchbase or Cassandra drivers.\n"
+        }
+      ],
+      "cwes": [
+        697
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14686",
+          "title": "NVD Entry"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The issue is in DoubleHistogram.recordValue and is disputed by the CVE assigner (local access required, no security boundary crossed); no fixed HdrHistogram release exists. HdrHistogram is bundled by the Couchbase Java SDK (2.2.2) and the DataStax Cassandra driver (2.1.12) for internal latency metrics. A review of every class in the shipped Couchbase and Cassandra extensions found no call to DoubleHistogram.recordValue; the drivers only record into the standard Histogram class, so the vulnerable function is never used.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/com.liquibase.ext/liquibase-commercial-cassandra",
+          "versions": [
+            {
+              "range": "vers:maven/<=2.2.2",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

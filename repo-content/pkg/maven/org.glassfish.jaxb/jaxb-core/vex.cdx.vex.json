@@ -1,0 +1,59 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-92877",
+      "description": "The JAXB factory methods historically relied solely on `FEATURE_SECURE_PROCESSING` to prevent XML External Entity (XXE) resolution. On JAXP implementations where that feature alone does not block external entity resolution, an attacker who can get untrusted XML unmarshalled through JAXB can read local files via out-of-band XXE.",
+      "recommendation": "No action required. Liquibase never unmarshals XML through JAXB.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 8.3,
+          "severity": "high",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:L/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv40",
+          "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+          "justification": "Liquibase never unmarshals XML through JAXB.\n"
+        }
+      ],
+      "cwes": [
+        611
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-92877",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/eclipse-ee4j/jaxb-ri/pull/2013",
+          "title": "Eclipse jaxb-ri fix"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The issue allows XML external entity resolution when JAXB unmarshals untrusted XML. jaxb-core 4.0.9 ships in Liquibase Secure. A review of every class in the distribution and its bundled extensions found no use of an Unmarshaller outside the JAXB libraries themselves. The only other JAXB reference is AWS SDK for Java v1's Base64 helper, which creates a JAXBContext only to locate DatatypeConverter for Base64 encoding and never unmarshals XML; that SDK v1 code is also never called. Liquibase parses changelogs and other XML with SAX, not JAXB, so no XML is ever unmarshalled through JAXB.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:maven/org.glassfish.jaxb/jaxb-core"
+        }
+      ]
+    }
+  ]
+}

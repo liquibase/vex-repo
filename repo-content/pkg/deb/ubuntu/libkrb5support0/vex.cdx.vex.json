@@ -1,0 +1,59 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": [
+    {
+      "id": "CVE-2026-107778",
+      "description": "MIT Kerberos 5 (krb5) through 1.22.2 contains a NULL pointer dereference in make_cred_list() in rd_cred.c that allows authenticated Kerberos clients to crash services by sending mismatched KRB-CRED arrays. Attackers can send forwarded credentials with more tickets than ticket_info entries through gss_accept_sec_context() to crash GSS-API acceptor services, causing denial of service.",
+      "recommendation": "No action required. The image runs no GSS-API acceptor service, and Liquibase uses the Java runtime's own Kerberos implementation.",
+      "ratings": [
+        {
+          "source": {
+            "name": "CNA"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "justification": "CNA score; NVD had not yet published its own score at assessment time.\n"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "The flaw is only reachable in a GSS-API acceptor service; the image runs none and Liquibase never loads MIT Kerberos.\n"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-107778",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://ubuntu.com/security/CVE-2026-107778",
+          "title": "Ubuntu CVE Tracker"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "The NULL pointer dereference in krb5_rd_cred() is reached through gss_accept_sec_context(), so it only affects GSS-API acceptor (server) services. The liquibase/liquibase-secure 6.0.3 image runs no Kerberos or GSS-API acceptor service. No native library of the bundled Java runtime links the MIT Kerberos libraries, and Liquibase uses the JVM's own pure-Java Kerberos implementation. The libraries are loaded only by curl and libssh, which Liquibase does not run; the image entrypoint runs Liquibase, and runs another program only when the user passes it as the container command.",
+        "justification": "code_not_reachable",
+        "firstIssued": "2026-11-25T00:00:00Z",
+        "lastUpdated": "2026-11-25T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libkrb5support0"
+        }
+      ]
+    }
+  ]
+}
