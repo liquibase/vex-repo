@@ -1,15 +1,94 @@
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "merged-vex-01eeb1f3d972f70be625d972c8c4b30ab7a11741f85d70df38467f0485f662d0",
+  "@id": "merged-vex-dddd112a8fdbbc35fc0bc5e6e4c951a976201969d71163feb68519ce94f9f092",
   "author": "Liquibase New Technologies Team",
-  "timestamp": "2026-11-25T19:32:59.298917863Z",
+  "timestamp": "2026-11-26T15:55:38.683123268Z",
   "version": 1,
   "statements": [
     {
       "vulnerability": {
+        "name": "CVE-2023-54404",
+        "aliases": [
+          "GHSA-mrhx-c7xc-m3w5"
+        ]
+      },
+      "timestamp": "2026-11-26T15:55:38.51816665Z",
+      "products": [
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-api?repository_url=registry.liquibase.com%2Fliquibase-platform-api",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-web?repository_url=registry.liquibase.com%2Fliquibase-platform-web",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-migrate?repository_url=registry.liquibase.com%2Fliquibase-platform-migrate",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        },
+        {
+          "@id": "pkg:oci/liquibase-platform-llt?repository_url=registry.liquibase.com%2Fliquibase-platform-llt",
+          "subcomponents": [
+            {
+              "@id": "pkg:npm/zod"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "status_notes": "Zod schema-validation library through 4.6.5 contains an uncontrolled resource consumption vulnerability that allows attackers to exhaust memory by submitting a large array to an application using an array schema without a length constraint. The handleArrayResult parse logic in $ZodArray accumulates every validation issue for each failing element with no cap or early termination, causing the process to allocate excessive issue objects and crash due to out-of-memory conditions.",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "Every zod copy in the images carries a patch applied at build time that bounds the issue list during array and record parsing: once an invalid array or record holds 100 validation issues, the remaining elements are not parsed. This covers zod 4.3.6, which validates the api's own request bodies, and zod 4.6.7, which the authentication library validates its endpoints with. The 4.6.6 upstream fix only stops early when a schema declares a maximum length, so 4.6.7 is patched too. Both the api's request validation and the authentication library parse request bodies synchronously, which is the path the patch bounds, so the unbounded issue accumulation the advisory describes cannot happen, whether or not a schema declares a length limit. With the patch, a request carrying one million invalid array or record entries uses tens of megabytes of memory at most instead of over a gigabyte. Valid input is parsed in full."
+    },
+    {
+      "vulnerability": {
         "name": "CVE-2025-60876"
       },
-      "timestamp": "2026-11-25T19:32:57.873300557Z",
+      "timestamp": "2026-11-26T15:55:37.434527561Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -88,7 +167,7 @@
           "GHSA-r4gj-5m52-g5wh"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.156691918Z",
+      "timestamp": "2026-11-26T15:55:37.673555362Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -167,7 +246,7 @@
           "GHSA-x97p-jq2g-jp4f"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.185854324Z",
+      "timestamp": "2026-11-26T15:55:37.698102969Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -246,7 +325,7 @@
           "GHSA-6j4f-fj2g-mc7p"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.21481857Z",
+      "timestamp": "2026-11-26T15:55:37.722273931Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -325,7 +404,7 @@
           "GHSA-qhr7-859c-m2p7"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.242454617Z",
+      "timestamp": "2026-11-26T15:55:37.74624608Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -404,7 +483,7 @@
           "GHSA-2gc4-cqfq-p2gv"
         ]
       },
-      "timestamp": "2026-11-25T19:32:57.899960826Z",
+      "timestamp": "2026-11-26T15:55:37.458266101Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -482,7 +561,7 @@
           "GHSA-h694-7cp9-m8p3"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.712598821Z",
+      "timestamp": "2026-11-26T15:55:38.156119059Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -558,7 +637,7 @@
       "vulnerability": {
         "name": "CVE-2026-107494"
       },
-      "timestamp": "2026-11-25T19:32:59.21796873Z",
+      "timestamp": "2026-11-26T15:55:38.614646186Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -634,7 +713,7 @@
       "vulnerability": {
         "name": "CVE-2026-107494"
       },
-      "timestamp": "2026-11-25T19:32:59.24687546Z",
+      "timestamp": "2026-11-26T15:55:38.638667458Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -710,7 +789,7 @@
       "vulnerability": {
         "name": "CVE-2026-107494"
       },
-      "timestamp": "2026-11-25T19:32:59.274810796Z",
+      "timestamp": "2026-11-26T15:55:38.662775852Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -786,7 +865,7 @@
       "vulnerability": {
         "name": "CVE-2026-107891"
       },
-      "timestamp": "2026-11-25T19:32:59.047019794Z",
+      "timestamp": "2026-11-26T15:55:38.44445301Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -865,7 +944,7 @@
           "GHSA-f72v-6w45-q472"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.850877262Z",
+      "timestamp": "2026-11-26T15:55:38.275409787Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -944,7 +1023,7 @@
           "GHSA-4qv8-2p9j-2685"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.878509512Z",
+      "timestamp": "2026-11-26T15:55:38.299012647Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1023,7 +1102,7 @@
           "GHSA-xhq7-xmqj-769h"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.93542127Z",
+      "timestamp": "2026-11-26T15:55:38.345946019Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1102,7 +1181,7 @@
           "GHSA-wjr9-j795-jxcr"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.963092091Z",
+      "timestamp": "2026-11-26T15:55:38.371008591Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1181,7 +1260,7 @@
           "GHSA-w74x-v6f9-j3xg"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.991807812Z",
+      "timestamp": "2026-11-26T15:55:38.394677913Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1260,7 +1339,7 @@
           "GHSA-333x-w4r6-6crp"
         ]
       },
-      "timestamp": "2026-11-25T19:32:59.020020618Z",
+      "timestamp": "2026-11-26T15:55:38.419120775Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1339,7 +1418,7 @@
           "GHSA-44jh-23m7-hpcf"
         ]
       },
-      "timestamp": "2026-11-25T19:32:59.075513616Z",
+      "timestamp": "2026-11-26T15:55:38.469290464Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1418,7 +1497,7 @@
           "GHSA-39m8-27wv-hr27"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.823385829Z",
+      "timestamp": "2026-11-26T15:55:38.251882109Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1497,7 +1576,7 @@
           "GHSA-8r9p-f939-6h3c"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.768418081Z",
+      "timestamp": "2026-11-26T15:55:38.204658919Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1576,7 +1655,7 @@
           "GHSA-q3jh-wrc6-jgq8"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.796025425Z",
+      "timestamp": "2026-11-26T15:55:38.228585315Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1655,7 +1734,7 @@
           "GHSA-rxp7-6hxx-x8q5"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.740012843Z",
+      "timestamp": "2026-11-26T15:55:38.180039146Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1734,7 +1813,7 @@
           "GHSA-q7qp-rjg7-q26m"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.90607129Z",
+      "timestamp": "2026-11-26T15:55:38.322378041Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1810,7 +1889,7 @@
       "vulnerability": {
         "name": "CVE-2026-124709"
       },
-      "timestamp": "2026-11-25T19:32:59.134268114Z",
+      "timestamp": "2026-11-26T15:55:38.541870859Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1886,7 +1965,7 @@
       "vulnerability": {
         "name": "CVE-2026-124709"
       },
-      "timestamp": "2026-11-25T19:32:59.162514328Z",
+      "timestamp": "2026-11-26T15:55:38.565832778Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -1962,7 +2041,7 @@
       "vulnerability": {
         "name": "CVE-2026-124709"
       },
-      "timestamp": "2026-11-25T19:32:59.190778431Z",
+      "timestamp": "2026-11-26T15:55:38.590382618Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2038,7 +2117,7 @@
       "vulnerability": {
         "name": "CVE-2026-18374"
       },
-      "timestamp": "2026-11-25T19:32:57.710410775Z",
+      "timestamp": "2026-11-26T15:55:37.292894366Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2114,7 +2193,7 @@
       "vulnerability": {
         "name": "CVE-2026-19499"
       },
-      "timestamp": "2026-11-25T19:32:57.515048266Z",
+      "timestamp": "2026-11-26T15:55:37.127979776Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2190,7 +2269,7 @@
       "vulnerability": {
         "name": "CVE-2026-19542"
       },
-      "timestamp": "2026-11-25T19:32:57.683068075Z",
+      "timestamp": "2026-11-26T15:55:37.270077826Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2266,7 +2345,7 @@
       "vulnerability": {
         "name": "CVE-2026-27171"
       },
-      "timestamp": "2026-11-25T19:32:57.48588725Z",
+      "timestamp": "2026-11-26T15:55:37.104105431Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2345,7 +2424,7 @@
           "GHSA-vpq2-c234-7xj6"
         ]
       },
-      "timestamp": "2026-11-25T19:32:59.104635266Z",
+      "timestamp": "2026-11-26T15:55:38.493924719Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2421,7 +2500,7 @@
       "vulnerability": {
         "name": "CVE-2026-5435"
       },
-      "timestamp": "2026-11-25T19:32:57.542872106Z",
+      "timestamp": "2026-11-26T15:55:37.151090355Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2497,7 +2576,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-11-25T19:32:58.269234941Z",
+      "timestamp": "2026-11-26T15:55:37.770523168Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2573,7 +2652,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-11-25T19:32:58.2969517Z",
+      "timestamp": "2026-11-26T15:55:37.795314505Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2649,7 +2728,7 @@
       "vulnerability": {
         "name": "CVE-2026-54873"
       },
-      "timestamp": "2026-11-25T19:32:58.324241462Z",
+      "timestamp": "2026-11-26T15:55:37.820028357Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2725,7 +2804,7 @@
       "vulnerability": {
         "name": "CVE-2026-6238"
       },
-      "timestamp": "2026-11-25T19:32:57.570963445Z",
+      "timestamp": "2026-11-26T15:55:37.175103164Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2801,7 +2880,7 @@
       "vulnerability": {
         "name": "CVE-2026-6368"
       },
-      "timestamp": "2026-11-25T19:32:57.819684031Z",
+      "timestamp": "2026-11-26T15:55:37.386914227Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2877,7 +2956,7 @@
       "vulnerability": {
         "name": "CVE-2026-6791"
       },
-      "timestamp": "2026-11-25T19:32:57.654475266Z",
+      "timestamp": "2026-11-26T15:55:37.246794518Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -2953,7 +3032,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-11-25T19:32:58.350333567Z",
+      "timestamp": "2026-11-26T15:55:37.844694303Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3029,7 +3108,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-11-25T19:32:58.376973809Z",
+      "timestamp": "2026-11-26T15:55:37.868528148Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3105,7 +3184,7 @@
       "vulnerability": {
         "name": "CVE-2026-72897"
       },
-      "timestamp": "2026-11-25T19:32:58.405192935Z",
+      "timestamp": "2026-11-26T15:55:37.892060338Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3181,7 +3260,7 @@
       "vulnerability": {
         "name": "CVE-2026-75804"
       },
-      "timestamp": "2026-11-25T19:32:58.10024172Z",
+      "timestamp": "2026-11-26T15:55:37.626036527Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3257,7 +3336,7 @@
       "vulnerability": {
         "name": "CVE-2026-77117"
       },
-      "timestamp": "2026-11-25T19:32:57.598496449Z",
+      "timestamp": "2026-11-26T15:55:37.199293288Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3333,7 +3412,7 @@
       "vulnerability": {
         "name": "CVE-2026-80489"
       },
-      "timestamp": "2026-11-25T19:32:57.626101757Z",
+      "timestamp": "2026-11-26T15:55:37.223387101Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3409,7 +3488,7 @@
       "vulnerability": {
         "name": "CVE-2026-84782"
       },
-      "timestamp": "2026-11-25T19:32:58.129052855Z",
+      "timestamp": "2026-11-26T15:55:37.649604054Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3485,7 +3564,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-11-25T19:32:58.432966009Z",
+      "timestamp": "2026-11-26T15:55:37.916141503Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3561,7 +3640,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-11-25T19:32:58.459273029Z",
+      "timestamp": "2026-11-26T15:55:37.940057654Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3637,7 +3716,7 @@
       "vulnerability": {
         "name": "CVE-2026-84784"
       },
-      "timestamp": "2026-11-25T19:32:58.486539975Z",
+      "timestamp": "2026-11-26T15:55:37.964146916Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3716,7 +3795,7 @@
           "RUSTSEC-2026-0544"
         ]
       },
-      "timestamp": "2026-11-25T19:32:57.45855221Z",
+      "timestamp": "2026-11-26T15:55:37.080914324Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3792,7 +3871,7 @@
       "vulnerability": {
         "name": "CVE-2026-8674"
       },
-      "timestamp": "2026-11-25T19:32:57.793299488Z",
+      "timestamp": "2026-11-26T15:55:37.363579598Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3868,7 +3947,7 @@
       "vulnerability": {
         "name": "CVE-2026-86805"
       },
-      "timestamp": "2026-11-25T19:32:57.765870108Z",
+      "timestamp": "2026-11-26T15:55:37.33989314Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -3944,7 +4023,7 @@
       "vulnerability": {
         "name": "CVE-2026-89092"
       },
-      "timestamp": "2026-11-25T19:32:57.737886612Z",
+      "timestamp": "2026-11-26T15:55:37.31628956Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4023,7 +4102,7 @@
           "GHSA-jqcg-44mw-7w3h"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.516292356Z",
+      "timestamp": "2026-11-26T15:55:37.987903792Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4099,7 +4178,7 @@
       "vulnerability": {
         "name": "CVE-2026-93748"
       },
-      "timestamp": "2026-11-25T19:32:58.545201639Z",
+      "timestamp": "2026-11-26T15:55:38.012270513Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4178,7 +4257,7 @@
           "GHSA-68fv-2mgg-jv7q"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.573399035Z",
+      "timestamp": "2026-11-26T15:55:38.036131067Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4257,7 +4336,7 @@
           "GHSA-p3m5-59mp-jv5r"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.684962657Z",
+      "timestamp": "2026-11-26T15:55:38.132515809Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4333,7 +4412,7 @@
       "vulnerability": {
         "name": "CVE-2026-95818"
       },
-      "timestamp": "2026-11-25T19:32:57.845943443Z",
+      "timestamp": "2026-11-26T15:55:37.410226173Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4409,7 +4488,7 @@
       "vulnerability": {
         "name": "GHSA-2464-fhr4-w9xw"
       },
-      "timestamp": "2026-11-25T19:32:58.630351247Z",
+      "timestamp": "2026-11-26T15:55:38.083929349Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4488,7 +4567,7 @@
           "CVE-2026-102599"
         ]
       },
-      "timestamp": "2026-11-25T19:32:57.92873117Z",
+      "timestamp": "2026-11-26T15:55:37.481843428Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4566,7 +4645,7 @@
           "CVE-2026-101898"
         ]
       },
-      "timestamp": "2026-11-25T19:32:57.957522561Z",
+      "timestamp": "2026-11-26T15:55:37.506071474Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4645,7 +4724,7 @@
           "CVE-2026-101901"
         ]
       },
-      "timestamp": "2026-11-25T19:32:57.984927966Z",
+      "timestamp": "2026-11-26T15:55:37.529676707Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4721,7 +4800,7 @@
       "vulnerability": {
         "name": "GHSA-673q-mjm6-r5xr"
       },
-      "timestamp": "2026-11-25T19:32:58.657378914Z",
+      "timestamp": "2026-11-26T15:55:38.10846216Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4800,7 +4879,7 @@
           "CVE-2026-101903"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.011968878Z",
+      "timestamp": "2026-11-26T15:55:37.553907116Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4879,7 +4958,7 @@
           "CVE-2026-101905"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.038380523Z",
+      "timestamp": "2026-11-26T15:55:37.577759258Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -4958,7 +5037,7 @@
           "CVE-2026-101906"
         ]
       },
-      "timestamp": "2026-11-25T19:32:58.070506367Z",
+      "timestamp": "2026-11-26T15:55:37.602124406Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
@@ -5034,7 +5113,7 @@
       "vulnerability": {
         "name": "GHSA-vcvr-r3jv-pc5j"
       },
-      "timestamp": "2026-11-25T19:32:58.60153985Z",
+      "timestamp": "2026-11-26T15:55:38.059912875Z",
       "products": [
         {
           "@id": "pkg:oci/liquibase-platform-api?repository_url=ghcr.io%2Fliquibase%2Fliquibase-platform-api",
