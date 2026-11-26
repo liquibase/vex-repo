@@ -3219,6 +3219,63 @@
       ]
     },
     {
+      "id": "CVE-2023-54404",
+      "description": "Zod schema-validation library through 4.6.5 contains an uncontrolled resource consumption vulnerability that allows attackers to exhaust memory by submitting a large array to an application using an array schema without a length constraint. The handleArrayResult parse logic in $ZodArray accumulates every validation issue for each failing element with no cap or early termination, causing the process to allocate excessive issue objects and crash due to out-of-memory conditions.",
+      "recommendation": "No action required. The shipped zod is patched to stop parsing an invalid array or record after a bounded number of issues.",
+      "ratings": [
+        {
+          "source": {
+            "name": "NVD"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "Liquibase"
+          },
+          "score": 0,
+          "severity": "none",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+          "justification": "Every shipped zod stops parsing an invalid array or record after 100 issues, so an oversized input cannot exhaust memory.\n"
+        }
+      ],
+      "cwes": [
+        770
+      ],
+      "advisories": [
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-54404",
+          "title": "NVD Entry"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "title": "GitHub Advisory"
+        }
+      ],
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Every zod copy in the images carries a patch applied at build time that bounds the issue list during array and record parsing: once an invalid array or record holds 100 validation issues, the remaining elements are not parsed. This covers zod 4.3.6, which validates the api's own request bodies, and zod 4.6.7, which the authentication library validates its endpoints with. The 4.6.6 upstream fix only stops early when a schema declares a maximum length, so 4.6.7 is patched too. Both the api's request validation and the authentication library parse request bodies synchronously, which is the path the patch bounds, so the unbounded issue accumulation the advisory describes cannot happen, whether or not a schema declares a length limit. With the patch, a request carrying one million invalid array or record entries uses tens of megabytes of memory at most instead of over a gigabyte. Valid input is parsed in full.",
+        "justification": "protected_at_runtime",
+        "firstIssued": "2026-11-20T00:00:00Z",
+        "lastUpdated": "2026-11-20T00:00:00Z"
+      },
+      "affects": [
+        {
+          "ref": "pkg:npm/zod",
+          "versions": [
+            {
+              "range": "vers:npm/<4.6.6",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "CVE-2026-124709",
       "description": "A QUIC server that rejects a stream opened by the peer may retain that stream's state for the lifetime of the connection if the peer resets the stream before the rejection is signalled. A remote client that completes a QUIC handshake can repeatedly open and reset streams, growing server memory without bound until the process runs out of memory.",
       "recommendation": "No action required. The system OpenSSL library is not loaded by the platform runtime, and the platform has no QUIC server.",
